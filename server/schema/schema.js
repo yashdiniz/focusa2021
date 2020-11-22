@@ -5,7 +5,8 @@ const {
     GraphQLString, 
     GraphQLSchema, 
     GraphQLList, 
-    GraphQLInt 
+    GraphQLInt,
+    GraphQLNonNull, 
 } = graphql;
 
 const booksTable = [ // temporarily using a simple JSON lookup table
@@ -76,7 +77,7 @@ const AuthorType = new GraphQLObjectType({
 });
 
 const RootQueryType = new GraphQLObjectType({
-    name: 'RootQuery',
+    name: 'Query',
     description: "A root query.",
     fields: {
         book: {
@@ -116,6 +117,31 @@ const RootQueryType = new GraphQLObjectType({
     }
 });
 
+const Mutation = new GraphQLObjectType({
+    name: 'Mutation',
+    description: "The root mutation.",
+    fields: {
+        addBook: {
+            type: BookType,
+            description: "Add a new book.",
+            args: {
+                id: { type: GraphQLNonNull(GraphQLID) },
+                name: { type: GraphQLNonNull(GraphQLString) },
+                genre: { type: GraphQLNonNull(GraphQLString) },
+                author: { type: GraphQLNonNull(GraphQLID) },
+            },
+            resolve(parent, args) {
+                const { id, name, genre, author } = args;
+                if (booksTable.find(e => e['id'] == id)) throw Error("Duplicate: Book already exists.");
+                let book = { id, name, genre, author };
+                booksTable.push(book);  // temporary push
+                return book;
+            }
+        }
+    }
+})
+
 module.exports = new GraphQLSchema({
     query: RootQueryType,
+    mutation: Mutation,
 })
