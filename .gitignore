@@ -3,3 +3,6 @@ node_modules/
 
 # ignore VSCode workspace
 *.code-workspace
+
+# custom files to omit from future commits
+omit*.*
