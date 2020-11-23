@@ -1,11 +1,14 @@
 /**
- * This node holds all the necessary user details.
+ * The User node holds all the necessary user details.
+ * Security sensitive information like passhash and salt 
+ * have not been added in the object. 
  */
 const {
     GraphQLObjectType,
     GraphQLID,
     GraphQLString,
     GraphQLList,
+    GraphQLNonNull,
 } = require('graphql');
 const ProfileType = require('./ProfileType');
 const PostType = require('./PostType');
@@ -16,10 +19,10 @@ const UserType = new GraphQLObjectType({
     description: "This node holds all the necessary user details.",
     fields: {
         id: { 
-            type: GraphQLID,
+            type: GraphQLNonNull(GraphQLID),
         },
         name: { 
-            type: GraphQLString,
+            type: GraphQLNonNull(GraphQLString),
             description: "A unique username.",
         },
         profile: { 
@@ -42,7 +45,7 @@ const UserType = new GraphQLObjectType({
             resolve(parent, args, ctx, info) {
                 // currently stub, return null
             }
-        }
+        },
     }
 });
 
