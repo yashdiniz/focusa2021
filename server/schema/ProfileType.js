@@ -40,12 +40,12 @@ const ProfileType = new GraphQLObjectType({
             description: "URL to the display picture of the profile.",
         },
         interests: {
-            type: GraphQLList(CourseType),
+            type: GraphQLNonNull(GraphQLList(CourseType)),
             description: "The list of courses the user has subscribed to.",
             resolve(parent, args, ctx, info) {
                 // currently stub, return null
             }
-        }
+        },
     }
 });
 

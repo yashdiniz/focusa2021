@@ -33,14 +33,14 @@ const UserType = new GraphQLObjectType({
             }
         },
         posts: {
-            type: GraphQLList(PostType),
+            type: GraphQLNonNull(GraphQLList(PostType)),
             description: "Posts written by this Person.",
             resolve(parent, args, ctx, info) {
                 // currently stub, return null
             }
         },
         roles: {
-            type: GraphQLList(RoleType),
+            type: GraphQLNonNull(GraphQLList(RoleType)),
             description: "Roles that the User is assigned.",
             resolve(parent, args, ctx, info) {
                 // currently stub, return null
