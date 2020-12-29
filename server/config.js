@@ -1,8 +1,10 @@
-const port = 1896;   // using FOCUSA legacy port for testing.
-const graphiql = true;  // essentially, run graphiql at graphql endpoint
+const dotenv = require('dotenv');
+dotenv.config();
+
+const port = process.env['PORT'];   // using FOCUSA legacy port for testing.
+const graphiql = !process.env['PRODUCTION'];  // essentially, run graphiql at graphql endpoint
 
 // the dev secret which will be used for most crypto operations.
-// IN PRODUCTION, it should be `process.env.secret` with an environment variable.
-const secret = "b-3l][=08BOIHW[oH)#T)(HG{3-09g2p[i-u";
+const secret = process.env['SECRET'];
 
 module.exports = { port, graphiql, secret };
