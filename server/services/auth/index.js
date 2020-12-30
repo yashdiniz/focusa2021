@@ -1,2 +1,9 @@
 const express = require('express');
-const app = express();
+const router = express.Router();
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const session = require('express-session');
+
+router.get('/login', 
+
+)
