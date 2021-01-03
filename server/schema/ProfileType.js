@@ -31,10 +31,6 @@ const ProfileType = new GraphQLObjectType({
             type: GraphQLNonNull(GraphQLString),
             description: "The full name of the profile.",
         },
-        about: {
-            type: GraphQLNonNull(GraphQLString),
-            description: "The about paragraph of the profile.",
-        },
         display_pic: {
             type: GraphQLNonNull(GraphQLString),
             description: "URL to the display picture of the profile.",
