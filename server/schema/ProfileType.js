@@ -27,11 +27,11 @@ const ProfileType = new GraphQLObjectType({
                 // currently stub, return null
             }
         },
-        fullName: {
+        displayName: {
             type: GraphQLNonNull(GraphQLString),
             description: "The full name of the profile.",
         },
-        display_pic: {
+        displayPicture: {
             type: GraphQLNonNull(GraphQLString),
             description: "URL to the display picture of the profile.",
         },
