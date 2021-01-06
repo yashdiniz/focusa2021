@@ -7,4 +7,7 @@ const graphiql = !process.env['PRODUCTION'];  // essentially, run graphiql at gr
 // the dev secret which will be used for most crypto operations.
 const secret = process.env['SECRET'];
 
-module.exports = { port, graphiql, secret };
+// the realm stores the DNS/server name.
+const realm = process.env['REALM'];
+
+module.exports = { port, graphiql, secret, realm };
