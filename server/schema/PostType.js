@@ -26,7 +26,7 @@ const PostType = new GraphQLObjectType({
         },
         text: {
             type: GraphQLNonNull(GraphQLString),
-            description: "The Post body, written in markdown."
+            description: "The Post body, written in markdown.",
         },
         author: {
             type: GraphQLNonNull(UserType),
@@ -35,7 +35,39 @@ const PostType = new GraphQLObjectType({
                 // currently stub, return null
             }
         },
-        
+        parent: {
+            type: PostType,
+            description: "ID of the parent post. Null by default. No edits allowed.",
+            resolve(parent, args, ctx, info) {
+                // currently stub, return null
+            }
+        },
+        attachmentURL: {
+            type: GraphQLString,
+            description: "The Post attachment URL. Null by default. No edits allowed.",
+        },
+        course: {
+            type: CourseType,
+            description: "The course under which the post belongs. Null be default. No edits allowed.",
+            resolve(parent, args, ctx, info) {
+                // currently stub, return null
+            }
+        },
+        comments: {
+            type: GraphQLNonNull(GraphQLList(PostType)),
+            description: "A list containing all comments made under the Post.",
+            resolve(parent, args, ctx, info) {
+                // currently stub, return null
+            }
+        },
+        reported: {
+            type: GraphQLBoolean,
+            description: "Flag signifying the post has been reported.",
+        },
+        approved: {
+            type: GraphQLBoolean,
+            description: "Flag signifying the post has been approved.",
+        },
     }
 });
 
