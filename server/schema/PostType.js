@@ -1,5 +1,6 @@
 /**
- * 
+ * The Post node holds all Post details, and references to their comments.
+ * It includes time of publishing, post body, post parent, and course as well.
  */
 const {
     GraphQLObjectType,
@@ -34,6 +35,7 @@ const PostType = new GraphQLObjectType({
                 // currently stub, return null
             }
         },
+        
     }
 });
 

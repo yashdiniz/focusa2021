@@ -1,26 +1,29 @@
 /**
- * RoleType node stores and defines the role for a particular list of user profiles
+ * The Role node stores and defines the role for a particular list of User accounts.
  */
-const graphql = require('graphql');
-
-const {GraphQLObjectType, GraphQLID, GraphQLString, GraphQLNonNull, GraphQLList} = graphql;
-
+const {
+    GraphQLObjectType,
+    GraphQLID,
+    GraphQLString,
+    GraphQLNonNull,
+    GraphQLList
+} = require('graphql');
 const UserType = require('./UserType');
 
 const RoleType = new GraphQLObjectType({
     name: 'Role',
-    description: "This node describes a role for a list of users",
+    description: "This node describes a Role for a list of users.",
     fields: {
         id:{
             type: GraphQLNonNull(GraphQLID)
         },
-        role:{
+        name:{
             type: GraphQLNonNull(GraphQLString),
-            description:"Defines the role"
+            description:"The name of the role."
         },
         users:{
             type: GraphQLList(UserType),
-            description:"List of users that have this RoleType",
+            description:"List of users that have the role.",
             resolve(parent, args, ctx, info) {
                 // currently stub, return null
             }

@@ -1,45 +1,43 @@
 /**
- * Course node holds all the necessary course details
+ * The Course node holds all the necessary course details.
+ * This includes the list of moderator Roles, the course name, description,
+ * and Users subscribed.
  */
-
-const graphql = require('graphql');
-
 const {
     GraphQLObjectType,
     GraphQLID,
     GraphQLString,
-    GraphQLNotNull,
+    GraphQLNonNull,
     GraphQLList
-} = graphql;
-
+} = require('graphql');
 const UserType = require('./UserType');
 const RoleType = require('./RoleType');
 
 const CourseType = new GraphQLObjectType({
     name:'Course',
-    descrption: "This node stores all the possible course types",
+    descrption: "This node stores details of all the possible courses.",
     fields: {
         id: {
-            type: GraphQLNotNull(GraphQLID)
+            type: GraphQLNonNull(GraphQLID)
         },
-        course: {
-            type: GraphQLNotNull(GraphQLString),
-            description: "Name of the course"
+        name: {
+            type: GraphQLNonNull(GraphQLString),
+            description: "Name of the course."
         },
         mods:{
-            type: GraphQLNotNull(GraphQLList(GraphQLNotNull(RoleType))),
-            description: "Moderators for the course",
+            type: GraphQLNonNull(GraphQLList(GraphQLNonNull(RoleType))),
+            description: "Moderator roles for the course.",
             resolve(parent, args, ctx, info){
                 // currently stub, return null
             }
         },
         description: {
             type: GraphQLString,
-            description: "Course Description"
+            description: "Course Description."
         },
         subscribers: {
             type: GraphQLList(UserType),
-            description: "Users subscribed to the course",
+            description: "Users subscribed to the course.",
             resolve(parent, args, ctx, info){
                 // currently stub, return null
             }
