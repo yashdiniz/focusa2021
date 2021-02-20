@@ -2,7 +2,7 @@
 \documentclass[12pt]{report}
 \usepackage{setspace}
 \usepackage[utf8]{inputenc}
-\usepackage[a4paper,width=165mm,bindingoffset=6mm]{geometry}
+\usepackage[a4paper,width=150mm,top=25mm,bottom=25mm,bindingoffset=6mm]{geometry}
 \usepackage{graphicx}
 \usepackage{amsmath}
 
@@ -19,8 +19,12 @@
 
 \begin{document}
 %\maketitle
-\input{chapters/acknowledgment.tex}
+\pagenumbering{roman}
 \input{chapters/abstract.tex}
+\input{chapters/acknowledgment.tex}
+\tableofcontents
+\listoffigures
+\listoftables
 \input{chapters/1-introduction.tex}
 
 \input{chapters/references.tex}
