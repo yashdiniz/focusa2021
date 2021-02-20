@@ -1,0 +1,27 @@
+% set font size to 12pt, on A4 paper.
+\documentclass[12pt]{report}
+\usepackage{setspace}
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper,width=165mm,bindingoffset=6mm]{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath}
+
+\graphicspath{ {images/} }
+\setlength{\parskip}{\baselineskip}%
+\setlength{\parindent}{0pt}%
+
+\title{Final Year Project Report}
+\author{Yash Diniz, Alston Dias, Pranav Paranjape, Rey Dias, Imamsab Bagwan}
+\date{2021}
+
+% perform the 1.5 line-spacing for the entire document
+\spacing{1.5}
+
+\begin{document}
+%\maketitle
+\input{chapters/acknowledgment.tex}
+\input{chapters/abstract.tex}
+\input{chapters/1-introduction.tex}
+
+\input{chapters/references.tex}
+\end{document}
