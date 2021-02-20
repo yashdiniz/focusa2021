@@ -9,3 +9,6 @@ omit*.*
 
 # ignore the .env file
 .env
+
+# ignore .vscode folder
+.vscode/
