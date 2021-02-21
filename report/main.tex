@@ -6,6 +6,9 @@
 \usepackage{graphicx}
 \usepackage{amsmath}
 
+\usepackage[bookmarks=true]{hyperref}
+\usepackage{bookmark}
+
 \graphicspath{ {images/} }
 \setlength{\parskip}{\baselineskip}%
 \setlength{\parindent}{0pt}%
@@ -19,12 +22,16 @@
 
 \begin{document}
 %\maketitle
+% begin page numbering before chapters as roman numerals
 \pagenumbering{roman}
 \input{chapters/abstract.tex}
 \input{chapters/acknowledgment.tex}
+
 \tableofcontents
+\pdfbookmark{\contentsname}{Contents} % add a bookmark to Table of contents
 \listoffigures
 \listoftables
+
 \input{chapters/1-introduction.tex}
 \input{chapters/2-litsurvey.tex}
 \input{chapters/3-SRS.tex}
