@@ -18,8 +18,15 @@ const pbkdfIters = 1<<14,
     UUIDSize = 24;
 const usernamePattern = /\w+/;  // almost alphanumeric pattern(URL safe)
 
+// course-related
+const maxModRolesforCourse = 2;
+
+// profile-related
+const defaultProfilePic = 'dp.jpeg';
+
 module.exports = { 
     port, graphiql, secret, realm,
     pbkdfIters, pbkdfDigest, pbkdfLen, UUIDSize, currentPasswordScheme,
-    usernamePattern,
+    usernamePattern, maxModRolesforCourse,
+    defaultProfilePic
 };
