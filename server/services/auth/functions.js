@@ -50,7 +50,8 @@ auth.createIndex({  // creating an index for enforcing uniqueness in usernames
 const createUser = (name, password) => {
     assert(typeof name === 'string' && typeof password === 'string',
         "Invalid arguments for createUser.");
-    assert(name == name.match(usernamePattern), "User not created. name should match: " + usernamePattern);
+    assert(name == name.match(usernamePattern), 
+        "User not created. name should match: " + usernamePattern);
     let salt = generateUUID();
     return pbkdf(password, salt)    // hash the password
     .then(hash => {
