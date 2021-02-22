@@ -10,4 +10,16 @@ const secret = process.env['SECRET'];
 // the realm stores the DNS/server name.
 const realm = process.env['REALM'];
 
-module.exports = { port, graphiql, secret, realm };
+// auth-related, PBKDF arguments
+const pbkdfIters = 1<<14, 
+    pbkdfLen = 24, 
+    pbkdfDigest = 'sha256',
+    currentPasswordScheme = 'pbkdf2',
+    UUIDSize = 24;
+const usernamePattern = /\w+/;  // almost alphanumeric pattern(URL safe)
+
+module.exports = { 
+    port, graphiql, secret, realm,
+    pbkdfIters, pbkdfDigest, pbkdfLen, UUIDSize, currentPasswordScheme,
+    usernamePattern,
+};
