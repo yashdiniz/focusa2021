@@ -15,3 +15,15 @@ omit*.*
 
 # ignore everything inside db folder
 server/services/db/
+
+# LaTeX auxiliaries
+*.aux
+*.bbl
+*.blg
+*.fdb*
+*.fls
+*.lof
+*.log
+*.lot
+*.synctex.gz
+*.toc
