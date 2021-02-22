@@ -31,6 +31,8 @@ const pbkdf = (word, salt) => new Promise((resolve, reject) => 	// will return a
 
 // Use this to enforce one form of low-risk-low-conflict uniqueness.
 // Reference: https://stackoverflow.com/a/22440576/13227113
+
+// TODO: Switch to map/reduce!!
 auth.createIndex({  // creating an index for enforcing uniqueness in usernames
 	index: { 
 		fields: ['name'],
