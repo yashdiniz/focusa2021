@@ -15,12 +15,14 @@ const dbDirectory = 'db',   // the directory where DB is stored locally
 const logs = new PouchDB(path.join(dbDirectory, 'logs'));
 const roles = new PouchDB(path.join(dbDirectory, 'roles'));
 const auth = new PouchDB(path.join(dbDirectory, 'auth'));
+const courses = new PouchDB(path.join(dbDirectory, 'courses'));
 
 // initiating push-pull replication with the remote CouchDB instance.
 const syncHandlers = [
 	{db:'logs', handler:logs.sync(new PouchDB(remote + 'logs'), {live: true})},
 	{db:'auth', handler:auth.sync(new PouchDB(remote + 'auth'), {live: true})},
-	{db:'roles', handler:roles.sync(new PouchDB(remote + 'roles'), {live: true})},
+    {db:'roles', handler:roles.sync(new PouchDB(remote + 'roles'), {live: true})},
+    {db:'courses', handler:courses.sync(new PouchDB(remote + 'courses'), {live: true})},
 ];
 
 const sync = () => {
@@ -47,6 +49,6 @@ const generateUUID = (size) => crypto.rng(size || UUIDSize)
 sync();
 
 module.exports = {
-    logs, auth, roles,
+    logs, auth, roles, courses,
     assert, generateUUID
 }
