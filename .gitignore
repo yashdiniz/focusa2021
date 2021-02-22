@@ -12,3 +12,6 @@ omit*.*
 
 # ignore .vscode folder
 .vscode/
+
+# ignore everything inside db folder
+server/services/db/
