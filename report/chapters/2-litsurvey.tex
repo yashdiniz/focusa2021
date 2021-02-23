@@ -8,8 +8,8 @@ It allows audio and video communication to work inside web pages by allowing dir
 communication, eliminating the need to install plugins or download native apps.
 
 It supports video, voice, and generic data to be sent between peers, allowing developers 
-to build powerful voice- and video-communication solutions. 
- 
+to build powerful voice- and video-communication solutions.
+
 There are 3 primary components of the WebRTC API and each plays a unique role in WebRTC specification:
 
 \subsubsection{MediaStream (GetUserMedia)}
@@ -112,28 +112,28 @@ like Android and iOS applications, a library is available that provides the same
 
 Matrix is an open protocol for decentralised communication. It aims to make 
 communication platforms interoperable and federated.
- 
+
 The main idea is to make real-time communication work seamlessly between different chat 
 service providers, allowing users with accounts at one communications service provider to 
 easily communicate with users of a different service provider.
- 
+
 Users have the privilege to communicate with people outside the Matrix network through bridges, 
 which connect previously established communication networks, such as Slack and IRC, to the Matrix network.
 With bridges, you do not have to use different apps to talk to different people. Whatever Matrix 
 client you choose, you can talk to anyone inside or outside the Matrix network.
- 
+
 Matrix gives users total control over their communication by letting them run or select their own 
 server while still participating in a global network, rather than being locked in silos 
 like Signal, WhatsApp, Telegram, Slack etc. 
- 
+
 The key feature of Matrix is that no single server hosts or controls a given conversation - instead, 
 as one user communicates with another, the conversation gets replicated equally across the servers - meaning 
 all the participants equally share ownership over the conversation and its history. 
 There is never a central point of control or authority, unless everyone decides to use the same server. 
- 
+
 By default, Matrix uses simple HTTPS+JSON APIs as its baseline transport, but also embraces 
 more sophisticated transports such as WebSockets or ultra-low bandwidth Matric via CoAP+Noise.
- 
+
 Applications using the Matrix protocol, called Matrix clients, have all the features one would
 want and expect from a modern chat app: instant messaging, group chats, audio and video calls, 
 searchable message history, synchronization across all devices, as well as end to end encryption.
@@ -155,7 +155,7 @@ forced to use multiple services to communicate.
 However, since Matrix is federated, just like email, you can freely communicate across a 
 global network, without having to use specific services based on which ones your friends, 
 family, and colleagues use.
- 
+
 Another major problem with online communication today is that most of the services you
 use are operated by commercial organizations, forcing you to trust them to manage your data.
 But because Matrix is federated, you have control over where your data is stored and who has access to it. 
@@ -173,13 +173,13 @@ Equipped with an ID, a peer can create a P2P data or media stream connection to 
 
 Although WebRTC promises peer-to-peer communication, a server is still required to 
 act as a connection broker, and handle signalling.
- 
+
 PeerJS provides an open source implementation of this connection broker 
 server named PeerJS Server, written in Node.js.Users can run their own Server, 
 or are at leisure to opt for the cloud-hosted version of PeerServer provided for free.
 To broker connections, PeerJS connects to a PeerServer. The PeerJS Server acts ONLY as 
 a connection broker, and it has to be noted that no peer-to-peer data goes through the server.
- 
+
 To make the P2P connection work seamlessly, we will build the neural network encoder and 
 integrate it into WebRTC possibly using the P2P library.
 
@@ -262,17 +262,14 @@ In GraphQL on the other hand, you’d simply send a single query to the GraphQL 
 includes the concrete data requirements. The server then responds with a JSON object where t
 hese requirements are fulfilled. Therefore using GraphQL, the client can specify exactly the data 
 it needs in a query.
-   
 
 
 
 
-   
-  
-   
 
 
- 
+
+
 
 % Just added a stub.
 % TODO: Complete and fill up the literature survey!
