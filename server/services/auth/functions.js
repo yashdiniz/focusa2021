@@ -9,7 +9,7 @@
  * author: @yashdiniz
  */
 process.title = 'FOCUSA auth service';
-const { logs, auth, assert, generateUUID } = require('../databases');
+const { focusa, assert, generateUUID } = require('../databases');
 const { pbkdfDigest, pbkdfIters, pbkdfLen, usernamePattern, currentPasswordScheme } = require('../../config');
 const crypto = require('crypto');
 
@@ -33,6 +33,7 @@ const pbkdf = (word, salt) => new Promise((resolve, reject) => 	// will return a
 // Reference: https://stackoverflow.com/a/22440576/13227113
 
 // TODO: Switch to map/reduce!!
+focusa.auth
 auth.createIndex({  // creating an index for enforcing uniqueness in usernames
 	index: { 
 		fields: ['name'],
@@ -62,9 +63,5 @@ const createUser = (name, password) => {
             // 2. try to find(using auth_unique index) for another document with matching name.
             // 3. if a match is found, then delete the document just posted, and throw failure.
         )
-        return auth.find({
-            selector: { name }, // search for any users already with this name...
-            use_index:'indexes',
-        });
     })
 }
