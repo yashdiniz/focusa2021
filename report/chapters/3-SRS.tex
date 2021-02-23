@@ -25,19 +25,21 @@ automation efforts, reducing the need to manually manage multiple tools.
 
 \subsection{Hardware Requirements}
 
-Development:
+\textbf{Development:} 
 Minimum 8 GB RAM for native app development
-Production:
+\textbf{Production:} 
 As stated in the constraints the server should have at least 1 GB RAM  
 The client should be able to run the minimal version of the neural network encoder 
-(requirements will be obtained through experimentation)
+(final production requirements will be obtained through experimentation)
 
 \subsection{Software Requirements}
 
-\textbf{Recommended}
-Linux OS 4.19 kernel or later in production, Windows 10 1803 (Build 17134 or later) for development.
+\textbf{Recommended:} 
+Linux OS 4.19 kernel or later in production.
+Windows 10 1803 (Build 17134 or later) for development.
 NGINX server 1.17 or later as reverse proxy and load balancer.
-(add client part also -- client to client)
+Any smartphone or PC supporting smooth operation of the most recent 
+Google Chrome or Mozilla Firefox available at client.
 
 \subsection{Constraints}
 
@@ -69,75 +71,94 @@ NodeJS, GraphQL, CouchDB, ReactJS
 
 \subsection{Scalability}
 \begin{itemize}
+    \item Using CouchDB as a distributed database allows for simplifying 
+    horizontal scalability using eventual consistency.
+    \item Using containerized microservices further improve the scope for horizontal scalability.
     \item Scalable and simple since we are using GraphQL as our Web Services Framework and also using the ReactJS and CouchDB technology stack.
 \end{itemize}
 
 \subsection{Portability}
 \begin{itemize}
-    \item React JS is cross platform. Graphgql is platform independent
+    \item GraphQL is a platform-independent querying API, 
+    which can serve as a Web Services Framework for improved portability and integration.
+    \item ReactJS is a cross-platform framework for building reactive websites. 
+    It supports any platform that can run a modern graphical web-browser.
 \end{itemize}
 
 \subsection{Security}
 \begin{itemize}
     \item We will be using SSL for encrypting the traffic.
-    \item Servers will have firewalls SSH connections protected by password and certificate.
+    \item Servers will have firewalls, and SSH connections will be protected by password and certificates.
 \end{itemize}
 
 \subsection{Maintainability}
 \begin{itemize}
-    \item We are using micro service architecture on the server side.
-    \item On the client its reusable react components.
-    \item We will  also be using third party npm packages.
+    \item We are using a microservice architecture on the server-side. 
+    The loosely-coupled modularity offered by this architecture simplifies maintenance tasks.
+    \item The frontend will be built with reusable ReactJS components. 
+    Our goal is to maximize code reuse, and simplify maintenance.
+    \item We will also be using third-party npm packages wherever necessary.
 \end{itemize}
 
 \subsection{Performance}
 \begin{itemize}
-    \item We will be using distillation techniques for the neural networks and we will try to reduce the CPU and memory footprints as much as possible.
+    \item We will be using distillation techniques for the neural networks 
+    and we will try to reduce the CPU and memory footprints of the same as much as possible.
 \end{itemize}
 
 \section{Interface Requirements}
 
 \subsection{User Interfaces}
 \begin{itemize}
-    \item Simple and minimal User Interface
-    \item Responsive and easy to navigate User Interface
-    \item User Interface elements must be consistent
-    \item Strategic use of colors to suit the purpose
-    \item Component to navigate to and display the content pertaining to video conferencing module
-    \item Components to navigate to course subscription, profile and post, login, logout
+    \item Simple, minimal, responsive and easy to navigate User Interface.
+    \item User Interface elements must be consistent.
+    \item Strategic use of themes and colors to suit the purpose.
+    \item Component to navigate to and display the content pertaining to video conferencing module.
+    \item Components to navigate to course subscription, profile and post, login, logout.
     \item Components dealing with posting, collection and visual display of data analysis
 \end{itemize}
 
 \subsection{Hardware Interfaces}
 \begin{itemize}
-    \item SSH protocol for the server side interface
-    \item Device hardware (eg; camera) use negotiation interface
+    \item SSH protocol for the server-side interface.
+    \item Device hardware, like the camera, microphone, and others. 
+    We will use the WebRTC negotiation interface to obtain secure access to the hardware.
 \end{itemize}
 
 \subsection{Communication Interfaces}
 \begin{itemize}
-    \item WebRTC (Real-Time Communication) standards and protocols to enable real time, peer to peer audio and video communication
+    \item WebRTC (Real-Time Communication) standards and protocols to enable real time, peer to peer audio and video communication.
     \item Request/Response protocol, HTTP/1.1 (as inherent to GraphQL)
 \end{itemize}
 
 \section{Technology Used}
-\textbf{Stack} :  Frontend - ReactJS (For Webapp), React Native (for Mobile App), 
+\textbf{Stack:} 
+Frontend - ReactJS (For Webapp), React Native (for Mobile App)
+
 Middleware - NodeJS, GraphQL
+
 Backend - CouchDB, PouchDB databases 
 
 \section{Definitions, Acronyms and Abbreviations}
 \begin{itemize}
-    \item \textbf{Web Service} - either: a service offered by an electronic device to another electronic device, communicating with each other via the World Wide Web, or a server running on a computer device
-    \item \textbf{Native App} - An app to be installed and run on a device
-    \item \textbf{Neural Network Encoder} - A neural network encoder converts input into a feature vector which represents the input but taking less space then the original input
-    \item \textbf{Reverse Proxy} - ensures smooth flow of traffic between the client and the server and routes the client requests to appropriate backend server
-    \item \textbf{Load Balancing} - methodical and efficient distribution of network or application traffic across multiple servers
-    \item \textbf{Persistent Cache} - intended for intermediate term storage of documents or data objects
-    \item \textbf{Lossy Compression} - method of data compression in which the size of the file is reduced by eliminating data in the file
-    \item \textbf{SSH} - Secure Shell Protocol is a method for secure remote login from one computer to another
-    \item \textbf{WebRTC} - Web Real-Time Communication comprises of protocols, standards and JavaScript API which enable real time peer to peer communication
-    \item \textbf{Peer to Peer} - Browser to Browser or an application to application communication over the internet
-    \item \textbf{HTTP} - Hypertext Transfer Protocol gives users a way to interact with web resources such as HTML files by transmitting hypertext messages between clients and servers
+    \item \textbf{Web Service} - a service offered by an electronic device to another electronic device, 
+    communicating with each other via the World Wide Web, or a server running on a computer device.
+    \item \textbf{Native App} - An app to be installed and run on a device without using any form of emulation.
+    \item \textbf{Neural Network Encoder} - A neural network encoder converts input into a feature vector 
+    which represents the input but taking lesser space than the original input.
+    \item \textbf{Reverse Proxy} - ensures smooth flow of traffic between the client and the server 
+    and routes the client requests to appropriate backend server. Popularly used for load balancing and security.
+    \item \textbf{Load Balancing} - methodical and efficient distribution of network or application traffic 
+    across multiple servers.
+    \item \textbf{Persistent Cache} - intended for intermediate term storage of documents or data objects.
+    \item \textbf{Lossy Compression} - method of data compression in which the size of the file 
+    is reduced by eliminating data in the file.
+    \item \textbf{SSH} - Secure Shell Protocol is a method for secure remote login from 
+    one computer to another.
+    \item \textbf{WebRTC} - Web Real-Time Communication comprises of protocols, standards and 
+    JavaScript API which enable real time P2P communication.
+    \item \textbf{Peer to Peer} - Application to Application communication over the internet, 
+    where data packets always attempt to find the shortest path between devices, thus possibly reducing latency.
+    \item \textbf{HTTP} - Hypertext Transfer Protocol gives users a way to interact with web resources 
+    such as HTML files by transmitting hypertext messages between clients and servers.
 \end{itemize}
-% Just added a stub.
-% TODO: Complete and fill up the SRS!
