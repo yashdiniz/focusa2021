@@ -6,6 +6,10 @@
 const path = require('path'), crypto = require('crypto');
 const { UUIDSize, maxModRolesforCourse, defaultProfilePic } = require('../config');
 
+const RxDB = require('rxdb');
+const leveldown = require('leveldown');
+RxDB.addRxPlugin(require('pouchdb-adapter-leveldb'));
+
 const remote = 'http://admin:admin@localhost:5984/focusa';	// the remote database to sync with!
 
 // const sync = () => {
@@ -30,17 +34,6 @@ const generateUUID = (size) => crypto.rng(size || UUIDSize)
 
 // initiate the replication
 // sync();
-
-const RxDB = require('rxdb');
-const leveldown = require('leveldown');
-RxDB.addRxPlugin(require('pouchdb-adapter-leveldb'));
-
-const db = await RxDB.createRxDatabase({
-    name: 'focusa',
-    adapter: leveldown,
-    multiInstance:false,
-    eventReduce: false,
-});
 
 const authSchema = {
     name: 'auth',
@@ -210,14 +203,21 @@ const auth_rolesSchema = {
     required: ['auth_roleID'],
 };
 
-const collections = await db.addCollections({
+const db = RxDB.createRxDatabase({
+    name: 'focusa',
+    adapter: leveldown,
+    multiInstance:false,
+    eventReduce: false,
+});
+
+const collections = db.then(db=> db.addCollections({
     auth: { schema: authSchema },
     courses: { schema: coursesSchema },
     roles: { schema: rolesSchema },
     posts: { schema: postsSchema },
     profile: { schema: profileSchema },
     auth_roles: { schema: auth_rolesSchema }
-});
+}));
 
 RxDB.addRxPlugin(require('pouchdb-adapter-http'));
 
@@ -229,6 +229,6 @@ const replicationState = collections.sync({
 });
 
 module.exports = {
-    collections,
+    db, collections, replicationState,
     assert, generateUUID
 }
