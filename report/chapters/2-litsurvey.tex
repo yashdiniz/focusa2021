@@ -3,7 +3,7 @@
 \section{WebRTC}
 
 WebRTC (Web Real-Time Communication) is a free, open-source project providing web browsers and 
-mobile applications with real-time communication via simple application programming interfaces (APIs). 
+mobile applications with real-time communication via simple Application Programming Interfaces (APIs). 
 It allows audio and video communication to work inside web pages by allowing direct peer-to-peer 
 communication, eliminating the need to install plugins or download native apps.
 It supports video, voice, and generic data to be sent between peers, allowing developers 
@@ -88,7 +88,7 @@ There are three key specifications that are used in WebRTC to overcome these hur
 Before sending the media over a peer connection, it has to be compressed. 
 Raw audio and video is simply too large to send efficiently in our current Internet infrastructure.
 Likewise, after receiving media over a peer connection, it has to be decompressed. 
-For this, we make use of a media codec.
+For this, use a media codec.
 
 WebRTC has mandated three audio codecs and two video codecs:
 
@@ -103,7 +103,8 @@ WebRTC has mandated three audio codecs and two video codecs:
 The technology is available on all modern browsers as well as on native clients for
 all major platforms. The technologies behind WebRTC are implemented as an open web 
 standard and available as regular JavaScript APIs in all major browsers. For native clients, 
-like Android and iOS applications, a library is available that provides the same functionality.~\cite{UltimateGuideWebRTC}
+like Android and iOS applications, a library is available that provides the same 
+functionality.~\cite{UltimateGuideWebRTC}
 
 \section{MATRIX}
 
@@ -126,7 +127,8 @@ like Signal, WhatsApp, Telegram, Slack etc.
 The key feature of Matrix is that no single server hosts or controls a given conversation - instead, 
 as one user communicates with another, the conversation gets replicated equally across the servers - meaning 
 all the participants equally share ownership over the conversation and its history. 
-There is never a central point of control or authority, unless everyone decides to use the same server.~\cite{MATRIXorgOpenProtocol}
+There is never a central point of control or authority, 
+unless everyone decides to use the same server.~\cite{MATRIXorgOpenProtocol}
 
 By default, Matrix uses simple HTTPS+JSON APIs as its baseline transport, but also embraces 
 more sophisticated transports such as WebSockets or ultra-low bandwidth Matric via CoAP+Noise.~\cite{MATRIX}
@@ -141,7 +143,7 @@ Via Matrix, Element is able to bridge communications like IRC, Slack and Telegra
     \begin{center}
         \includegraphics[width=10cm]{matrix.png}
     \end{center}
-    \caption{Matrix Architecture}
+    \caption{An example of a Matrix Architecture, illustrated very simply using abstract coloring.}
     \label{fig:matrix}
 \end{figure}
 
@@ -180,7 +182,7 @@ a connection broker, and it has to be noted that no peer-to-peer data goes throu
 To make the P2P connection work seamlessly, we will build the neural network encoder and 
 integrate it into WebRTC possibly using the P2P library.
 
-\section{The REST API}
+\section{REST API}
 
 A REST API is an application programming interface that conforms to the constraints of the REST 
 architectural style and allows for interaction with RESTful web services.
@@ -204,7 +206,6 @@ RESTful web services. These include:
     
     \item \textbf{Layered.} The requesting client need not know whether it’s communicating 
     with the actual server, a proxy, or any other intermediary.~\cite{DevelopersRestAPI}
-    
 \end{enumerate}
 
 The working first involves sending a request from the client to the server in the form of web URLs, 
@@ -213,9 +214,9 @@ in the form of a resource which can be anything like HTML, XML, Image or JSON.~\
 
 \begin{figure}
     \begin{center}
-        \includegraphics[width=10cm]{restapi.png}
+        \includegraphics[width=8cm]{restapi.png}
     \end{center}
-    \caption{Typical REST API request-response}
+    \caption{A simple illustration of a REST API request-response.}
     \label{fig:restapi}
 \end{figure}
 
@@ -225,7 +226,7 @@ update, and delete (or CRUD) operations respectively.~\cite{GeeksRestAPI}
 
 \section{GraphQL}
 
-GraphQL is a query language and server-side runtime for application programming interfaces (APIs) 
+GraphQL is a query language and server-side runtime for Application Programming Interfaces (APIs) 
 that prioritizes giving clients exactly the data they request and nothing more. 
 GraphQL is designed to make APIs fast, flexible, and developer-friendly. It is not tied 
 to any specific database or storage engine and is instead backed by your existing code and data.
@@ -253,7 +254,9 @@ the end user.~\cite{RubrikGraphQL}
     \begin{center}
         \includegraphics[width=15cm]{graphql-rest.png}
     \end{center}
-    \caption{GraphQL can handle the tasks of multiple REST endpoints.}
+    \caption{GraphQL can handle the tasks of multiple REST endpoints, 
+    neither overfetching, nor underfetching,
+    offering the exact data format as requested by the client.}
     \label{fig:graphql}
 \end{figure}
   
@@ -303,7 +306,11 @@ With GraphQL, you can also do low-level performance monitoring of the requests t
 GraphQL uses the concept of resolver functions to collect the data that’s requested by a client. Instrumenting and measuring 
 performance of these resolvers provides crucial insights about bottlenecks in your system.~\cite{GraphQLvsREST}
 
-\section{NIVIDA MAXINE}
+\section{NVIDIA Maxine}
+
+We have added NIVIDA MAXINE as a literature survey to share that we are aware of 
+a similar service offering video conferencing services using AI. We will take 
+inspiration from NVIDIA's technology and attempt to overcome their disadvantages.
 
 NVIDIA Maxine is a fully accelerated platform SDK for developers of video 
 conferencing services to build and deploy AI-powered features that use state-of-the-art 
@@ -317,40 +324,34 @@ fully accelerated on NVIDIA GPUs to run in real time video streaming application
 
 Maxine-based applications let service providers offer the same features to every user on any device,
 including computers, tablets, and phones. Applications built with Maxine can easily be deployed as 
-microservices that scale to hundreds of thousands of streams in a Kubernetes environment.
-
-We have added NIVIDA MAXINE as a literature survey to inform that we are aware of a similar service offering 
-video conferencing services using AI. We will take inspiration from NVIDIA's technology and attempt to overcome
-the disadvantages.
+microservices that scale to hundreds of thousands of streams in a Kubernetes environment.~\cite{Maxine}
 
 \subsection{Features}
 
 \begin{itemize}
-    \item Easy to use SDK: Includes libraries, tools and example pipelines 
+    \item \textbf{Easy to use SDK}: Includes libraries, tools and example pipelines 
     for developers to quickly add AI features to their applications.
-    \item Ultra-low Bandwidth: AI Video Compression uses one-tenth the 
+    \item \textbf{Ultra-low Bandwidth}: AI Video Compression uses one-tenth the 
     bandwidth of H.264 video compression standard.
-    \item State-of-the-art AI model: Includes pre-trained models with thousands of hours 
+    \item \textbf{State-of-the-art AI model}: Includes pre-trained models with thousands of hours 
     of training on NVIDIA DGX\texttrademark A100.
-    \item Fully GPU Accelerated: Optimizes end-to-end pipelines for the highest performance 
+    \item \textbf{Fully GPU Accelerated}: Optimizes end-to-end pipelines for the highest performance 
     on NVIDIA Tensor Cores GPUs.
 \end{itemize}
 
 \subsection{Key Technologies}
 
-\subsubsection{Reduce Video Bandwidth v/s  H.264}
-With AI-based video compression technology running on NVIDIA GPUs, 
+\subsubsection{Reduce Video Bandwidth compared to H.264}
+With AI-based video compression technology running on \textbf{NVIDIA GPUs}, 
 developers can reduce bandwidth use down to one-tenth of the bandwidth needed 
-for the H.264 video compression standard.
-
-This cuts costs for providers and delivers a smoother video conferencing 
-experience for end users, who can enjoy more AI-powered services while streaming 
-less data on their computers, tablets, and phones.
+for the H.264 video compression standard. This cuts costs for providers and 
+delivers a smoother video conferencing experience for end users, who can enjoy 
+more AI-powered services while streaming less data on their computers, tablets, and phones.
 
 \subsubsection{Face Re-Animation}
 Using new AI research, you can identify key facial points of each person on a video call 
 and then use these points with a still image to reanimate a person’s face on the other side 
-of the call using generative adversarial networks (GANs).
+of the call using Generative Adversarial Networks (GANs).
 
 These key points can be used for face alignment, where faces are rotated so that
 people appear to be facing each other during a call, as well as gaze correction 
@@ -364,7 +365,7 @@ AI-based super-resolution and artifact reduction can convert lower resolutions t
 resolution videos in real time which helps to lower the bandwidth requirements for video 
 conference providers, as well as improves the call experience for users with lower bandwidth. 
 Developers can add features to filter out common background noise and frame the camera on a user’s 
-  ace for a more personal and engaging conversation.
+face for a more personal and engaging conversation.
 
 Additional AI models can help remove noise from low-light conditions creating a more appealing picture.
 
@@ -379,12 +380,15 @@ ensure everyone can understand what’s being discussed on the call.
 
 \subsection{Disadvantages}
 
-NIVIDA MAXINE needs all of its devices to have NIVIDA hardware or access the NIVIDA cloud. 
+NVIDIA Maxine needs all of its devices to have NVIDIA hardware or access to the NVIDIA cloud. 
 This reduces the customer base because of its cost and huge unavailability of GPUs.
+
+It is therefore important to understand that dependence on compute-intensive hardware could
+currently be our only barrier to building effective applications using Neural Networks.
 
 \section{Neural Discrete Representation Learning}
 
-Recent advances in generative modelling of images, audio and videos  have yielded impressive
+Recent advances in generative modelling of images, audio and videos have yielded impressive
 samples and applications. At the same time the challenges that follow these tasks are few-shot
 learning, domain adaptation, or reinforcement learning heavily rely on learnt representations from raw data.
 
@@ -396,9 +400,9 @@ Discrete representations are a natural fit for complex reasoning, planning and p
 This concept of discrete representation gave rise to the Vector Quantization-Variational Autoencoder. 
 This model relies on Vector Quantization with the combination of Variational Autoencoder framework with 
 discrete latent representations through a novel parameterisation of the posterior distribution of (discrete) 
-latents given an observation.
+latents given an observation.~\cite{oord2018neural}
 
-\subsection{Vector Quantization- Variational Autoencoder (VQ-VAE)}
+\subsection{Vector Quantization - Variational Autoencoder (VQ-VAE)}
 
 VAEs consist of the following parts: an encoder network which parameterised a posterior  
 distribution $q(z|x)$ of discrete latent random variables $z$ given the input data $x$, a prior
@@ -411,30 +415,31 @@ a new way of training, by using vector quantisation (VQ). The posterior and prio
 categorical, and the samples drawn from these distributions index an embedding table. These embeddings
 are then used as input into the decoder network.
 
- \subsection{Discrete Latent Variables}
- We define a latent embedding space $e \in R^{K \times D}$ where $K$ is the size of the discrete latent space 
- (i.e., a $K$-way categorical), and $D$ is the dimensionality of each latent embedding vector $e_{i}$.
- Note that there are $K$ embedding vectors $e_{i} \in R ^D$, $i\in{1, 2, ..., K}$.
+\subsection{Discrete Latent Variables}
 
- The discrete latent variables $z$ are then calculated by a nearest 
- neighbour look-up using the shared embedding space $e$ as shown in equation \ref{eqn:discrete}.
+Let's define a latent embedding space $e \in R^{K \times D}$ where $K$ is the size of the discrete latent space 
+(i.e., a $K$-way categorical), and $D$ is the dimensionality of each latent embedding vector $e_{i}$.
+Note that there are $K$ embedding vectors $e_{i} \in R ^D$, $i\in{1, 2, ..., K}$.
 
- \begin{equation}
-    q(z = k|x) =
-    \begin{cases}
-        1 & \text{for } k = \text{argmin}_{j} \| z_{e}(x) - e_{j} \|_{2} \\
-        0 & \text{otherwise}
-    \end{cases}
-    \label{eqn:discrete}
- \end{equation} 
+The discrete latent variables $z$ are then calculated by a nearest 
+neighbour look-up using the shared embedding space $e$ as shown in equation \ref{eqn:discrete}.
 
- where $z _e(x)$ is the output of the encoder network.
+\begin{equation}
+q(z = k|x) =
+\begin{cases}
+    1 & \text{for } k = \text{argmin}_{j} \| z_{e}(x) - e_{j} \|_{2} \\
+    0 & \text{otherwise}
+\end{cases}
+\label{eqn:discrete}
+\end{equation} 
 
- The input to the decoder is the corresponding embedding vector $e _k$ as given in equation \ref{eqn:decoder}
- \begin{equation}
-     z _q(x) = e _k, \text{where } k= \text{argmin} _j \| z _e(x) - e _j \| _2
-     \label{eqn:decoder}
- \end{equation}
+where $z _e(x)$ is the output of the encoder network.
+
+The input to the decoder is the corresponding embedding vector $e _k$ as given in equation \ref{eqn:decoder}
+\begin{equation}
+    z _q(x) = e _k, \text{where } k= \text{argmin} _j \| z _e(x) - e _j \| _2
+    \label{eqn:decoder}
+\end{equation}
 
 \subsection{Learning}
 
@@ -444,49 +449,38 @@ are then used as input into the decoder network.
     \end{center}
     \caption{Left: A figure describing the VQ-VAE. Right: Visualisation of the embedding space. The
     output of the encoder $z(x)$ is mapped to the nearest point $e _2$. The gradient $\nabla _z L$ (in red) will push the
-    encoder to change its output, which could alter the configuration in the next forward pass.}
+    encoder to change its output, which could alter the configuration in the next forward pass.~\cite{razavi2019generating}}
     \label{fig:vqvae}
 \end{figure}
 
 During forward computation the nearest embedding $z _q(x)$ \ref{eqn:decoder} is passed to the decoder,
- and during the backwards pass the gradient $\nabla _z L$ is passed unaltered to the encoder. 
- Since the output representation of the encoder and the input to the decoder share the same $D$
- dimensional space, the gradients contain useful information for how the encoder has to change its 
- output to lower the reconstruction loss.
+and during the backwards pass the gradient $\nabla _z L$ is passed unaltered to the encoder. 
+Since the output representation of the encoder and the input to the decoder share the same $D$
+dimensional space, the gradients contain useful information for how the encoder has to change its 
+output to lower the reconstruction loss.
 
- As seen on figure \ref{fig:vqvae} (right), the gradient can push the encoder’s output to be discretized 
- differently in the next forward pass, because the assignment in equation \ref{eqn:discrete} will be different
+As seen on figure \ref{fig:vqvae} (right), the gradient can push the encoder’s output to be discretized 
+differently in the next forward pass, because the assignment in equation \ref{eqn:discrete} will be different
 
- The log-likelihood of the complete model log p(x) can be evaluated as follows:
+The log-likelihood of the complete model $\log p(x)$ can be evaluated as follows:
 
- \begin{equation}
-     \log p(x) = \log \sum _k p(x|z _k) p(z _k)
-     \label{eqn:modellog}
- \end{equation}
+\begin{equation}
+    \log p(x) = \log \sum _k p(x|z _k) p(z _k)
+    \label{eqn:modellog}
+\end{equation}
 
- Because the decoder $p(x|z)$ is trained with $z = z _q(x)$ from MAP-inference, the decoder
-  should not allocate any probability mass to $p(x|z)$ for $z \neq zq(x)$ once it has fully converged.
+Because the decoder $p(x|z)$ is trained with $z = z _q(x)$ from MAP-inference, the decoder
+should not allocate any probability mass to $p(x|z)$ for $z \neq zq(x)$ once it has fully converged.
 
-  Thus, we can write
-  \begin{equation}
-      \log p(x) \approx \log p(x|z _q(x))p(z _q(x))
-  \end{equation}
+Thus, the authors concluded.~\cite{razavi2019generating, oord2018neural}
+\begin{equation}
+    \log p(x) \approx \log p(x|z _q(x))p(z _q(x))
+\end{equation}
 
-  \subsection{Prior}
+\subsection{Prior}
 
-  The prior distribution can be made autoregressive by depending on $z$ 
-  in the feature map as it is a categorical distribution over the discrete latents $p(z)$. 
-  While training the VQ-VAE the prior is kept constant and uniform. After training, we fit 
-  an autoregressive distribution over $z$, $p(z)$, so that we can generate $x$ via ancestral sampling.
-   We use a PixelCNN over the discrete latents for images, and a WaveNet for raw audio.
+The author also stated a prior distribution can be made autoregressive by depending on $z$ 
+in the feature map as it is a categorical distribution over the discrete latents $p(z)$. 
+While training the VQ-VAE the prior is kept constant and uniform. After training, fit 
+an autoregressive distribution over $z$, $p(z)$, so that it can generate $x$ via ancestral sampling.
 
-
-
-
-
-
-
-
-
-% Just added a stub.
-% TODO: Complete and fill up the literature survey!
