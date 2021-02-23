@@ -14,7 +14,7 @@ omit*.*
 .vscode/
 
 # ignore everything inside db folder
-server/services/db/
+db/
 
 # LaTeX auxiliaries
 *.aux
