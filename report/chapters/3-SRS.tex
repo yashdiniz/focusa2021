@@ -28,8 +28,8 @@ automation efforts, reducing the need to manually manage multiple tools.
 \textbf{Development:} 
 Minimum 8 GB RAM for native app development
 \textbf{Production:} 
-As stated in the constraints the server should have at least 1 GB RAM  
-The client should be able to run the minimal version of the neural network encoder 
+As stated in the constraints the server should have at least 1 GB RAM.
+The client should be able to run the minimal version of the neural network encoder.
 (final production requirements will be obtained through experimentation)
 
 \subsection{Software Requirements}
@@ -43,16 +43,18 @@ Google Chrome or Mozilla Firefox available at client.
 
 \subsection{Constraints}
 
-Needs to run in ~1GB, with 1 vCPU core at production environment
+Needs to run in ~1GB, with 1 vCPU core at production environment.
 Clients will have limited network bandwidth, mostly using mobile web browsers, but 
-have persistent cache for offline storage (which may be cleared often).
+have persistent cache for offline storage (which may be cleared often)
 
 \subsection{Assumptions}
 
 \begin{itemize}
-    \item Clients will mostly operate offline, with syncing times usually after working hours
-    \item Server will be operating in a scalable and distributed architecture, initially using college or cloud infrastructure.
-    \item Clients will operate offline-first using persistent browser cache to download and store filtered versions of the database on themselves, effectively reducing server load.
+    \item Clients will mostly operate offline, with syncing times usually after working hours.
+    \item Server will be operating in a scalable and distributed architecture, 
+    initially using college or cloud infrastructure.
+    \item Clients will operate offline-first using persistent browser cache to download and store 
+    filtered versions of the database on themselves, effectively reducing server load.
 \end{itemize}
 
 \subsection{Dependencies}
@@ -62,9 +64,12 @@ NodeJS, GraphQL, CouchDB, ReactJS
 \section{Functional Requirements}
 
 \begin{itemize}
-    \item Connecting students and teachers through subscription portals (topics), which can be made private by virtue of an authentication code if needed.
-    \item Allowing faculty and students to post content to specific groups, which are moderated by limited people.
-    \item A real-time video conferencing platform using a Experimental lossy compression algorithm involving neural networks
+    \item Connecting students and teachers through subscription portals (topics), 
+    which can be made private by virtue of an authentication code if needed.
+    \item Allowing faculty and students to post content to specific groups, 
+    which are moderated by limited people.
+    \item A real-time video conferencing platform using an Experimental 
+    lossy compression algorithm involving neural networks
 \end{itemize}
 
 \section{Non Functional Requirements}
@@ -74,7 +79,8 @@ NodeJS, GraphQL, CouchDB, ReactJS
     \item Using CouchDB as a distributed database allows for simplifying 
     horizontal scalability using eventual consistency.
     \item Using containerized microservices further improve the scope for horizontal scalability.
-    \item Scalable and simple since we are using GraphQL as our Web Services Framework and also using the ReactJS and CouchDB technology stack.
+    \item Simple since we are using GraphQL as our Web Services Framework 
+    and also using the ReactJS and CouchDB technology stack.
 \end{itemize}
 
 \subsection{Portability}
