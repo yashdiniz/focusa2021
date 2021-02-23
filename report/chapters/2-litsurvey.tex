@@ -436,7 +436,7 @@ are then used as input into the decoder network.
      \label{eqn:decoder}
  \end{equation}
 
-\section{Learning}
+\subsection{Learning}
 
 \begin{figure}[h]
     \begin{center}
@@ -445,8 +445,40 @@ are then used as input into the decoder network.
     \caption{Left: A figure describing the VQ-VAE. Right: Visualisation of the embedding space. The
     output of the encoder $z(x)$ is mapped to the nearest point $e _2$. The gradient $\nabla _z L$ (in red) will push the
     encoder to change its output, which could alter the configuration in the next forward pass.}
+    \label{fig:vqvae}
 \end{figure}
 
+During forward computation the nearest embedding $z _q(x)$ \ref{eqn:decoder} is passed to the decoder,
+ and during the backwards pass the gradient $\nabla _z L$ is passed unaltered to the encoder. 
+ Since the output representation of the encoder and the input to the decoder share the same $D$
+ dimensional space, the gradients contain useful information for how the encoder has to change its 
+ output to lower the reconstruction loss.
+
+ As seen on figure \ref{fig:vqvae} (right), the gradient can push the encoder’s output to be discretized 
+ differently in the next forward pass, because the assignment in equation \ref{eqn:discrete} will be different
+
+ The log-likelihood of the complete model log p(x) can be evaluated as follows:
+
+ \begin{equation}
+     \log p(x) = \log \sum _k p(x|z _k) p(z _k)
+     \label{eqn:modellog}
+ \end{equation}
+
+ Because the decoder $p(x|z)$ is trained with $z = z _q(x)$ from MAP-inference, the decoder
+  should not allocate any probability mass to $p(x|z)$ for $z \neq zq(x)$ once it has fully converged.
+
+  Thus, we can write
+  \begin{equation}
+      \log p(x) \approx \log p(x|z _q(x))p(z _q(x))
+  \end{equation}
+
+  \subsection{Prior}
+
+  The prior distribution can be made autoregressive by depending on $z$ 
+  in the feature map as it is a categorical distribution over the discrete latents $p(z)$. 
+  While training the VQ-VAE the prior is kept constant and uniform. After training, we fit 
+  an autoregressive distribution over $z$, $p(z)$, so that we can generate $x$ via ancestral sampling.
+   We use a PixelCNN over the discrete latents for images, and a WaveNet for raw audio.
 
 
 
