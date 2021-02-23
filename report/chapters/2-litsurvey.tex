@@ -1,20 +1,18 @@
 \chapter{Literature Survey}
 
-\pagenumbering{arabic}
-
 \section{WebRTC}
 
 WebRTC (Web Real-Time Communication) is a free, open-source project providing web browsers and 
 mobile applications with real-time communication via simple application programming interfaces (APIs). 
-It allows audio and video communication to work inside web pages by allowing direct peer-to-peer communication, 
-eliminating the need to install plugins or download native apps.
+It allows audio and video communication to work inside web pages by allowing direct peer-to-peer 
+communication, eliminating the need to install plugins or download native apps.
 
 It supports video, voice, and generic data to be sent between peers, allowing developers 
 to build powerful voice- and video-communication solutions. 
  
 There are 3 primary components of the WebRTC API and each plays a unique role in WebRTC specification:
 
-\subsubsection{MediaStream (GetUserMedia):}
+\subsubsection{MediaStream (GetUserMedia)}
 
 The MediaStream API provides a way to access device cameras and microphones using JavaScript. 
 It controls where multimedia stream data is consumed, and provides some control over the devices 
@@ -34,88 +32,86 @@ codec implementations, NAT Traversal, packet loss, bandwidth management, and med
 The RTCDataChannel API was setup to allow bi-directional data transfer of any 
 type of data - media or otherwise - directly between peers. It was designed to mimic the 
 WebSocket API, but rather than relying on a TCP connection which although reliable is high 
-in latency and prone to bottlenecks, data channels use UDP-based streams with the configurability
- of the Stream Control Transmission Protocol (SCTP) protocol. This design allows the best 
- of both worlds: reliable delivery like in TCP but with reduced congestion on the network like in UDP.
+in latency and prone to bottlenecks, data channels use UDP-based streams with the configurability 
+of the Stream Control Transmission Protocol (SCTP) protocol. This design allows the best 
+of both worlds: reliable delivery like in TCP but with reduced congestion on the network like in UDP.
 
 \subsection{Establishing the connection}
 
- Before a peer-to-peer video call can begin, a connection between the two clients
-  needs to be established. This is accomplished through signalling. Signalling falls
-   outside of the realm of the WebRTC specification but is the vital first step in establishing 
-   an audio/ video connection.
+Before a peer-to-peer video call can begin, a connection between the two clients 
+needs to be established. This is accomplished through signalling. Signalling falls 
+outside of the realm of the WebRTC specification but is the vital first step in establishing 
+an audio/video connection.
 
 \subsection{Signalling}
 
-   Signalling allows two endpoints (senders, receivers, or both) to exchange metadata to 
-   coordinate communication in order to set up a call. This call-and-response message flow 
-   contains critical details about the streaming that will take place, that is, the number 
-   and types of streams, how the media will be encoded, etc. 
+Signalling allows two endpoints (senders, receivers, or both) to exchange metadata to 
+coordinate communication in order to set up a call. This call-and-response message flow 
+contains critical details about the streaming that will take place, that is, the number 
+and types of streams, how the media will be encoded, etc. 
 
-   This is needed for two reasons: because the communicating peers do not know each other’s capabilities,
-   and the peers do not know each other’s network addresses.
+This is needed for two reasons: because the communicating peers do not know each other’s 
+capabilities, and the peers do not know each other’s network addresses.
 
-   \subsection{NAT Traversal - ICE, TURN and STUN}
+\subsection{NAT Traversal - ICE, TURN and STUN}
 
-   Once the initial signalling for a streaming connection has taken place, the two endpoints need 
-   to begin the process of NAT (Network Address Translation) traversal.
-   This assigns a public address to a computer inside a private network for setting up a real-time connection. 
-   In a WebRTC-enabled communication, unless the two endpoints are on the same local network, 
-   there will be one or more intermediary network devices (routers/gateways) between the two. 
-   There are three key specifications that are used in WebRTC to overcome these hurdles:
+Once the initial signalling for a streaming connection has taken place, the two endpoints need 
+to begin the process of NAT (Network Address Translation) traversal.
+This assigns a public address to a computer inside a private network for setting up a real-time connection. 
+In a WebRTC-enabled communication, unless the two endpoints are on the same local network, 
+there will be one or more intermediary network devices (routers/gateways) between the two. 
+There are three key specifications that are used in WebRTC to overcome these hurdles:
 
-   \begin{itemize}
-       \item \textbf{Interactive Connectivity Establishment (ICE)} - ICE is used to find all the ways 
-       for two computers to “talk to each other”. It has two main roles, gathering candidates 
-       and checking connectivity. It guarantees that if there is a path for two clients to communicate, 
-       it will find it and ensure it is the most efficient. It makes use of two protocols - STUN and TURN.
+\begin{itemize}
+    \item \textbf{Interactive Connectivity Establishment (ICE)} - ICE is used to find all the ways 
+    for two computers to “talk to each other”. It has two main roles, gathering candidates 
+    and checking connectivity. It guarantees that if there is a path for two clients to communicate, 
+    it will find it and ensure it is the most efficient. It makes use of two protocols - STUN and TURN.
 
-       \item  \textbf{Session Traversal Utilities for NAT (STUN)}  – It is a lightweight and simple 
-       method for NAT Traversal. STUN allows WebRTC clients to find out their own public IP address 
-       by making a request to a STUN server. 
+    \item  \textbf{Session Traversal Utilities for NAT (STUN)}  – It is a lightweight and simple 
+    method for NAT Traversal. STUN allows WebRTC clients to find out their own public IP address 
+    by making a request to a STUN server. 
 
-       \item  \textbf{Traversal Using Relays around NAT (TURN) }  - The TURN server assists in the NAT 
-       traversal by helping the endpoints learn about the routers on their local networks, 
-       as well as blindly relaying data for one of the endpoints where a direct connection is 
-       not possible due to firewall restrictions. 
+    \item  \textbf{Traversal Using Relays around NAT (TURN) }  - The TURN server assists in the NAT 
+    traversal by helping the endpoints learn about the routers on their local networks, 
+    as well as blindly relaying data for one of the endpoints where a direct connection is 
+    not possible due to firewall restrictions.
+\end{itemize}
 
-   \end{itemize}
+\begin{figure}
+\begin{center}
+    \includegraphics[width=10cm]{webRTC.png}
+\end{center}
+\caption{Call Service: webRTC Signalling Plane}
+\label{fig:webRTC}
+\end{figure}
 
-   \begin{figure}
-    \begin{center}
-        \includegraphics[width=10cm]{webRTC.png}
-    \end{center}
-    \caption{Call Service: webRTC Signalling Plane}
-    \label{fig:webRTC}
-   \end{figure}
+\subsection{Codecs}
 
-   \subsection{Codecs}
+Before sending the media over a peer connection, it has to be compressed. 
+Raw audio and video is simply too large to send efficiently in our current Internet infrastructure.
+Likewise, after receiving media over a peer connection, it has to be decompressed. 
+For this, we make use of a media codec.
 
-   Before sending the media over a peer connection, it has to be compressed. 
-   Raw audio and video is simply too large to send efficiently in our current Internet infrastructure.
-    Likewise, after receiving media over a peer connection, it has to be decompressed. 
-    For this, we make use of a media codec.
+WebRTC has mandated three audio codecs and two video codecs:
 
-    WebRTC has mandated three audio codecs and two video codecs:
+\begin{enumerate}
+    \item Audio - PCMU (G.711$\mu$) running at 8,000Hz with a single channel (mono).
+    \item Audio - PCMA (G.711a) running at 8,000Hz with a single channel (mono).
+    \item Audio - Opus running at 48,000Hz with two channels (stereo).
+    \item Video - VP8.
+    \item Video - H.264/AVC using Constrained Baseline Profile Level 1.2.
+\end{enumerate}
 
-    \begin{enumerate}
-        \item Audio - PCMU (G.711$\mu$) running at 8,000Hz with a single channel (mono).
-        \item Audio - PCMA (G.711a) running at 8,000Hz with a single channel (mono).
-        \item Audio - Opus running at 48,000Hz with two channels (stereo).
-        \item Video - VP8.
-        \item Video - H.264/AVC using Constrained Baseline Profile Level 1.2.
-    \end{enumerate}
+The technology is available on all modern browsers as well as on native clients for
+all major platforms. The technologies behind WebRTC are implemented as an open web 
+standard and available as regular JavaScript APIs in all major browsers. For native clients, 
+like Android and iOS applications, a library is available that provides the same functionality. 
 
-    The technology is available on all modern browsers as well as on native clients for
-     all major platforms. The technologies behind WebRTC are implemented as an open web 
-     standard and available as regular JavaScript APIs in all major browsers. For native clients, 
-     like Android and iOS applications, a library is available that provides the same functionality. 
+\section{MATRIX}
 
-
-    \section{MATRIX}
-
-     Matrix is an open protocol for decentralised communication. It aims to make 
-     communication platforms interoperable and federated.
+Matrix is an open protocol for decentralised communication. It aims to make 
+communication platforms interoperable and federated.
  
 The main idea is to make real-time communication work seamlessly between different chat 
 service providers, allowing users with accounts at one communications service provider to 
@@ -139,20 +135,20 @@ By default, Matrix uses simple HTTPS+JSON APIs as its baseline transport, but al
 more sophisticated transports such as WebSockets or ultra-low bandwidth Matric via CoAP+Noise.
  
 Applications using the Matrix protocol, called Matrix clients, have all the features one would
- want and expect from a modern chat app: instant messaging, group chats, audio and video calls, 
- searchable message history, synchronization across all devices, as well as end to end encryption.
+want and expect from a modern chat app: instant messaging, group chats, audio and video calls, 
+searchable message history, synchronization across all devices, as well as end to end encryption.
 Element is the best known Matrix client.
 Via Matrix, Element is able to bridge communications like IRC, Slack and Telegram into the app.
 
-\begin{figure}
+\begin{figure}[h]
     \begin{center}
-        \includegraphics{matrix .png}
+        \includegraphics{matrix.png}
     \end{center}
     \caption{Matrix Architecture}
     \label{fig:matrix}
 \end{figure}
 
-\subsection{Why MATRIX ?}
+\subsection{Why MATRIX?}
 
 As a result of several chat services not being interoperable with each other, people are 
 forced to use multiple services to communicate.
@@ -164,13 +160,13 @@ Another major problem with online communication today is that most of the servic
 use are operated by commercial organizations, forcing you to trust them to manage your data.
 But because Matrix is federated, you have control over where your data is stored and who has access to it. 
 
-\section{Peer JS}
+\section{PeerJS}
 
 The PeerJS library is aimed to simplify the peer-to-peer connection management. 
-PeerJS wraps the browser's WebRTC implementation to provide a complete, configurable,
- and easy-to-use peer-to-peer connection API. 
-With PeerJS, peers are identified by simply using an ID, a string that the peer
- can choose itself, or have a server generate one. 
+PeerJS wraps the browser's WebRTC implementation to provide a complete, configurable, 
+and easy-to-use peer-to-peer connection API. 
+With PeerJS, peers are identified by simply using an ID, a string that the peer 
+can choose itself, or have a server generate one. 
 Equipped with an ID, a peer can create a P2P data or media stream connection to a remote peer.
 
 \subsection{PeerJS Server}
@@ -181,93 +177,91 @@ act as a connection broker, and handle signalling.
 PeerJS provides an open source implementation of this connection broker 
 server named PeerJS Server, written in Node.js.Users can run their own Server, 
 or are at leisure to opt for the cloud-hosted version of PeerServer provided for free.
-To broker connections, PeerJS connects to a PeerServer. The PeerJS Server acts ONLY as
- a connection broker, and it has to be noted that no peer-to-peer data goes through the server.
+To broker connections, PeerJS connects to a PeerServer. The PeerJS Server acts ONLY as 
+a connection broker, and it has to be noted that no peer-to-peer data goes through the server.
  
-To make the P2P connection work seamlessly, we will build the neural network encoder and
- integrate it into WebRTC possibly using the P2P library.
+To make the P2P connection work seamlessly, we will build the neural network encoder and 
+integrate it into WebRTC possibly using the P2P library.
 
- \section{The REST API}
+\section{The REST API}
 
- A REST API is an application programming interface that conforms to the constraints of the REST 
- architectural style and allows for interaction with RESTful web services.
+A REST API is an application programming interface that conforms to the constraints of the REST 
+architectural style and allows for interaction with RESTful web services.
 
-REST is not a standard, but rather a set of recommendations and constraints for
- RESTful web services. These include:
+REST is not a standard, but rather a set of recommendations and constraints for 
+RESTful web services. These include:
 
- \begin{enumerate}
-     \item \textbf{Client-Server.} System ‘A’ makes an HTTP request to a URL hosted by 
-     System ‘B’, which returns a response.
-     It is identical to how a browser works: The application first makes a request 
-     for a specific URL, the request is then routed to a web server that returns an HTML page. 
-     This page may contain references to images, style sheets, and JavaScript, 
-     which incur further requests and responses.
+\begin{enumerate}
+    \item \textbf{Client-Server.} System ‘A’ makes an HTTP request to a URL hosted by 
+    System ‘B’, which returns a response.
+    It is identical to how a browser works: The application first makes a request 
+    for a specific URL, the request is then routed to a web server that returns an HTML page. 
+    This page may contain references to images, style sheets, and JavaScript, 
+    which incur further requests and responses.
 
-     \item \textbf{Stateless.} REST is stateless: the client request should contain all the 
-     information necessary to respond to a request. In other words, it should be possible to
-      make two or more HTTP requests in any order and the same responses will be received.
+    \item \textbf{Stateless.} REST is stateless: the client request should contain all the 
+    information necessary to respond to a request. In other words, it should be possible to
+    make two or more HTTP requests in any order and the same responses will be received.
 
-      \item \textbf{Cacheable.} A response should be defined as cacheable or not.
-      
-      \item \textbf{Layered.} The requesting client need not know whether it’s communicating 
-      with the actual server, a proxy, or any other intermediary.
-     
- \end{enumerate}
+    \item \textbf{Cacheable.} A response should be defined as cacheable or not.
+    
+    \item \textbf{Layered.} The requesting client need not know whether it’s communicating 
+    with the actual server, a proxy, or any other intermediary.
+    
+\end{enumerate}
 
- The working first involves sending a request from the client to the server in the form of web URLs, 
- using the HTTP GET, POST, PUT or DELETE methods. After that a response is retrieved from the server 
- in the form of a resource which can be anything like HTML, XML, Image or JSON.
+The working first involves sending a request from the client to the server in the form of web URLs, 
+using the HTTP GET, POST, PUT or DELETE methods. After that a response is retrieved from the server 
+in the form of a resource which can be anything like HTML, XML, Image or JSON.
 
- In HTTP there are five methods which are commonly used in a REST based Architecture i.e.,
-  POST, GET, PUT, PATCH, and DELETE. These methods correspond to create, read, update, and delete
-   (or CRUD) operations respectively.
+In HTTP there are five methods which are commonly used in a REST based Architecture 
+i.e. POST, GET, PUT, PATCH, and DELETE. These methods correspond to create, read, 
+update, and delete (or CRUD) operations respectively.
 
-   \section{GraphQL}
+\section{GraphQL}
 
-   GraphQL is a query language and server-side runtime for application programming interfaces (APIs) 
-   that prioritizes giving clients exactly the data they request and nothing more. 
-
-GraphQL is designed to make APIs fast, flexible, and developer-friendly. It is not tied
- to any specific database or storage engine and is instead backed by your existing code and data.
+GraphQL is a query language and server-side runtime for application programming interfaces (APIs) 
+that prioritizes giving clients exactly the data they request and nothing more. 
+GraphQL is designed to make APIs fast, flexible, and developer-friendly. It is not tied 
+to any specific database or storage engine and is instead backed by your existing code and data.
 
 API developers use GraphQL to create a schema to describe all the possible data that clients can query 
 through that service. This schema is made up of object types, which define which kind of object you can 
-request and what fields it has. 
-
-As queries come in, GraphQL validates the queries against the schema. GraphQL then executes 
-the validated queries.
+request and what fields it has. As queries come in, GraphQL validates the queries against the schema. 
+GraphQL then executes the validated queries.
 
 The API developer attaches each field in a schema to a function called a resolver. 
 During execution,the resolver is called to produce the value.
 
 GraphQL follows the same set of constraints as REST APIs, but it organizes data into a 
 graph using one interface. Objects are represented by nodes (defined using the GraphQL schema), 
-and the relationship between nodes is represented by edges in the graph. Each object is then backed
- by a resolver that accesses the server’s data.
+and the relationship between nodes is represented by edges in the graph. Each object is then backed 
+by a resolver that accesses the server’s data.
 
 When a GraphQL server responds to an end user’s request, it begins with the query root,
 and the resolver executes every field on the requested object. A key-value map houses each field’s
-values, and some return another object selecting another set of fields. This continues until only a
- string or a number is returned. The server then responds with a nested set of objects, as requested by
-  the end user.
+values, and some return another object selecting another set of fields. This continues until only a 
+string or a number is returned. The server then responds with a nested set of objects, as requested by 
+the end user.
 
-  \begin{figure}
-      \begin{center}
-          \includegraphics[width=15cm]{graphql-rest.png}
-      \end{center}
-      \caption{GraphQL vs. REST }
-      \label{fig:graphql}
-  \end{figure}
+\begin{figure}
+    \begin{center}
+        \includegraphics[width=15cm]{graphql-rest.png}
+    \end{center}
+    \caption{GraphQL vs. REST }
+    \label{fig:graphql}
+\end{figure}
   
 \subsection{How does GraphQL excel REST API ?}
 
-  \subsubsection{Data Fetching}
-  With a REST API, you would typically gather the data by accessing multiple endpoints. You basically 
-  end up having to make multiple requests to different endpoints to fetch the required data.
-  In GraphQL on the other hand, you’d simply send a single query to the GraphQL server that 
-  includes the concrete data requirements. The server then responds with a JSON object where t
-  hese requirements are fulfilled. Therefore using GraphQL, the client can specify exactly the data 
-  it needs in a query.
+\subsubsection{Data Fetching}
+
+With a REST API, you would typically gather the data by accessing multiple endpoints. You basically 
+end up having to make multiple requests to different endpoints to fetch the required data.
+In GraphQL on the other hand, you’d simply send a single query to the GraphQL server that 
+includes the concrete data requirements. The server then responds with a JSON object where t
+hese requirements are fulfilled. Therefore using GraphQL, the client can specify exactly the data 
+it needs in a query.
    
 
 
