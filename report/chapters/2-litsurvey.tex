@@ -7,7 +7,7 @@ mobile applications with real-time communication via simple application programm
 It allows audio and video communication to work inside web pages by allowing direct peer-to-peer 
 communication, eliminating the need to install plugins or download native apps.
 It supports video, voice, and generic data to be sent between peers, allowing developers 
-to build powerful voice- and video-communication solutions.
+to build powerful voice- and video-communication solutions.~\cite{wikiWebRTC}
 
 There are 3 primary components of the WebRTC API and each plays a unique role in WebRTC specification:
 
@@ -98,12 +98,12 @@ WebRTC has mandated three audio codecs and two video codecs:
     \item Audio - Opus running at 48,000Hz with two channels (stereo).
     \item Video - VP8.
     \item Video - H.264/AVC using Constrained Baseline Profile Level 1.2.
-\end{enumerate}
+\end{enumerate} 
 
 The technology is available on all modern browsers as well as on native clients for
 all major platforms. The technologies behind WebRTC are implemented as an open web 
 standard and available as regular JavaScript APIs in all major browsers. For native clients, 
-like Android and iOS applications, a library is available that provides the same functionality. 
+like Android and iOS applications, a library is available that provides the same functionality.~\cite{UltimateGuideWebRTC}
 
 \section{MATRIX}
 
@@ -126,16 +126,16 @@ like Signal, WhatsApp, Telegram, Slack etc.
 The key feature of Matrix is that no single server hosts or controls a given conversation - instead, 
 as one user communicates with another, the conversation gets replicated equally across the servers - meaning 
 all the participants equally share ownership over the conversation and its history. 
-There is never a central point of control or authority, unless everyone decides to use the same server. 
+There is never a central point of control or authority, unless everyone decides to use the same server.~\cite{MATRIXorgOpenProtocol}
 
 By default, Matrix uses simple HTTPS+JSON APIs as its baseline transport, but also embraces 
-more sophisticated transports such as WebSockets or ultra-low bandwidth Matric via CoAP+Noise.
+more sophisticated transports such as WebSockets or ultra-low bandwidth Matric via CoAP+Noise.~\cite{MATRIX}
 
 Applications using the Matrix protocol, called Matrix clients, have all the features one would
 want and expect from a modern chat app: instant messaging, group chats, audio and video calls, 
 searchable message history, synchronization across all devices, as well as end to end encryption.
 Element is the best known Matrix client.
-Via Matrix, Element is able to bridge communications like IRC, Slack and Telegram into the app.
+Via Matrix, Element is able to bridge communications like IRC, Slack and Telegram into the app.~\cite{RumaMATRIX}
 
 \begin{figure}[h]
     \begin{center}
@@ -155,7 +155,7 @@ family, and colleagues use.
 
 Another major problem with online communication today is that most of the services you
 use are operated by commercial organizations, forcing you to trust them to manage your data.
-But because Matrix is federated, you have control over where your data is stored and who has access to it. 
+But because Matrix is federated, you have control over where your data is stored and who has access to it.~\cite{RumaWhyMatrix} 
 
 \section{PeerJS}
 
@@ -164,7 +164,7 @@ PeerJS wraps the browser's WebRTC implementation to provide a complete, configur
 and easy-to-use peer-to-peer connection API. 
 With PeerJS, peers are identified by simply using an ID, a string that the peer 
 can choose itself, or have a server generate one. 
-Equipped with an ID, a peer can create a P2P data or media stream connection to a remote peer.
+Equipped with an ID, a peer can create a P2P data or media stream connection to a remote peer.~\cite{PeerJSsimplifiesWebRTC}
 
 \subsection{PeerJS Server}
 
@@ -175,7 +175,7 @@ PeerJS provides an open source implementation of this connection broker
 server named PeerJS Server, written in Node.js.Users can run their own Server, 
 or are at leisure to opt for the cloud-hosted version of PeerServer provided for free.
 To broker connections, PeerJS connects to a PeerServer. The PeerJS Server acts ONLY as 
-a connection broker, and it has to be noted that no peer-to-peer data goes through the server.
+a connection broker, and it has to be noted that no peer-to-peer data goes through the server.~\cite{TamingWebRTCwithPeerJS}
 
 To make the P2P connection work seamlessly, we will build the neural network encoder and 
 integrate it into WebRTC possibly using the P2P library.
@@ -203,13 +203,13 @@ RESTful web services. These include:
     \item \textbf{Cacheable.} A response should be defined as cacheable or not.
     
     \item \textbf{Layered.} The requesting client need not know whether it’s communicating 
-    with the actual server, a proxy, or any other intermediary.
+    with the actual server, a proxy, or any other intermediary.~\cite{DevelopersRestAPI}
     
 \end{enumerate}
 
 The working first involves sending a request from the client to the server in the form of web URLs, 
 using the HTTP GET, POST, PUT or DELETE methods. After that a response is retrieved from the server 
-in the form of a resource which can be anything like HTML, XML, Image or JSON.
+in the form of a resource which can be anything like HTML, XML, Image or JSON.~\cite{WhatisRESTAPI}
 
 \begin{figure}
     \begin{center}
@@ -221,7 +221,7 @@ in the form of a resource which can be anything like HTML, XML, Image or JSON.
 
 In HTTP there are five methods which are commonly used in a REST based Architecture 
 i.e. POST, GET, PUT, PATCH, and DELETE. These methods correspond to create, read, 
-update, and delete (or CRUD) operations respectively.
+update, and delete (or CRUD) operations respectively.~\cite{GeeksRestAPI}
 
 \section{GraphQL}
 
@@ -236,7 +236,7 @@ request and what fields it has. As queries come in, GraphQL validates the querie
 GraphQL then executes the validated queries.
 
 The API developer attaches each field in a schema to a function called a resolver. 
-During execution,the resolver is called to produce the value.
+During execution,the resolver is called to produce the value.~\cite{WhatisGraphQL}
 
 GraphQL follows the same set of constraints as REST APIs, but it organizes data into a 
 graph using one interface. Objects are represented by nodes (defined using the GraphQL schema), 
@@ -247,7 +247,7 @@ When a GraphQL server responds to an end user’s request, it begins with the qu
 and the resolver executes every field on the requested object. A key-value map houses each field’s
 values, and some return another object selecting another set of fields. This continues until only a 
 string or a number is returned. The server then responds with a nested set of objects, as requested by 
-the end user.
+the end user.~\cite{RubrikGraphQL}
 
 \begin{figure}
     \begin{center}
@@ -301,7 +301,7 @@ exactly what information it’s interested in, it is possible to gain a deep und
 used. This can for example help in evolving an API and deprecating specific fields that are not requested by any clients any more.
 With GraphQL, you can also do low-level performance monitoring of the requests that are processed by your server. 
 GraphQL uses the concept of resolver functions to collect the data that’s requested by a client. Instrumenting and measuring 
-performance of these resolvers provides crucial insights about bottlenecks in your system.
+performance of these resolvers provides crucial insights about bottlenecks in your system.~\cite{GraphQLvsREST}
 
 % Just added a stub.
 % TODO: Complete and fill up the literature survey!
