@@ -303,5 +303,158 @@ With GraphQL, you can also do low-level performance monitoring of the requests t
 GraphQL uses the concept of resolver functions to collect the data that’s requested by a client. Instrumenting and measuring 
 performance of these resolvers provides crucial insights about bottlenecks in your system.
 
+\section{NIVIDA MAXINE}
+
+NVIDIA Maxine is a fully accelerated platform SDK for developers of video 
+conferencing services to build and deploy AI-powered features that use state-of-the-art 
+models in their cloud. Video conferencing applications based on Maxine can reduce video 
+bandwidth usage down to one-tenth of H.264 using AI video compression, dramatically reducing costs.
+
+Maxine includes APIs for the latest innovations from NVIDIA research such as face alignment, 
+gaze correction, face re-lighting and real time translation in addition to capabilities such 
+as super-resolution, noise removal, closed captioning and virtual assistants. These capabilities are 
+fully accelerated on NVIDIA GPUs to run in real time video streaming applications in the cloud.
+
+Maxine-based applications let service providers offer the same features to every user on any device,
+including computers, tablets, and phones. Applications built with Maxine can easily be deployed as 
+microservices that scale to hundreds of thousands of streams in a Kubernetes environment.
+
+We have added NIVIDA MAXINE as a literature survey to inform that we are aware of a similar service offering 
+video conferencing services using AI. We will take inspiration from NVIDIA's technology and attempt to overcome
+the disadvantages.
+
+\subsection{Features}
+
+\begin{itemize}
+    \item Easy to use SDK: Includes libraries, tools and example pipelines 
+    for developers to quickly add AI features to their applications.
+    \item Ultra-low Bandwidth: AI Video Compression uses one-tenth the 
+    bandwidth of H.264 video compression standard.
+    \item State-of-the-art AI model: Includes pre-trained models with thousands of hours 
+    of training on NVIDIA DGX\texttrademark A100.
+    \item Fully GPU Accelerated: Optimizes end-to-end pipelines for the highest performance 
+    on NVIDIA Tensor Cores GPUs.
+\end{itemize}
+
+\subsection{Key Technologies}
+
+\subsubsection{Reduce Video Bandwidth v/s  H.264}
+With AI-based video compression technology running on NVIDIA GPUs, 
+developers can reduce bandwidth use down to one-tenth of the bandwidth needed 
+for the H.264 video compression standard.
+
+This cuts costs for providers and delivers a smoother video conferencing 
+experience for end users, who can enjoy more AI-powered services while streaming 
+less data on their computers, tablets, and phones.
+
+\subsubsection{Face Re-Animation}
+Using new AI research, you can identify key facial points of each person on a video call 
+and then use these points with a still image to reanimate a person’s face on the other side 
+of the call using generative adversarial networks (GANs).
+
+These key points can be used for face alignment, where faces are rotated so that
+people appear to be facing each other during a call, as well as gaze correction 
+to help simulate eye contact, even if a person’s camera isn’t aligned with their screen.
+
+Developers can also add features that allow call participants to choose their
+own avatars that are realistically animated in real time by their voice and emotional tone.
+
+\subsubsection{Video and Audio Effects}
+AI-based super-resolution and artifact reduction can convert lower resolutions to higher
+resolution videos in real time which helps to lower the bandwidth requirements for video 
+conference providers, as well as improves the call experience for users with lower bandwidth. 
+Developers can add features to filter out common background noise and frame the camera on a user’s 
+  ace for a more personal and engaging conversation.
+
+Additional AI models can help remove noise from low-light conditions creating a more appealing picture.
+
+\subsubsection{Conversational AI}
+Maxine-based applications can use NVIDIA Jarvis, a fully accelerated conversational
+AI framework with state-of-the-art models optimized for real time performance. Using Jarvis, 
+developers can integrate virtual assistants to take notes, set action items, and answer questions 
+in human-like voices.
+
+Additional conversational AI services such as translations, closed captioning and transcriptions help 
+ensure everyone can understand what’s being discussed on the call.
+
+\subsection{Disadvantages}
+
+NIVIDA MAXINE needs all of its devices to have NIVIDA hardware or access the NIVIDA cloud. 
+This reduces the customer base because of its cost and huge unavailability of GPUs.
+
+\section{Neural Discrete Representation Learning}
+
+Recent advances in generative modelling of images, audio and videos  have yielded impressive
+samples and applications. At the same time the challenges that follow these tasks are few-shot
+learning, domain adaptation, or reinforcement learning heavily rely on learnt representations from raw data.
+
+Learning representations with continuous features have been used in many previous 
+work but discrete representations  are potentially more natural fit for many applications. 
+Discrete representations are a natural fit for complex reasoning, planning and predictive learning
+(e.g., if it rains, I will use an umbrella).
+
+This concept of discrete representation gave rise to the Vector Quantization-Variational Autoencoder. 
+This model relies on Vector Quantization with the combination of Variational Autoencoder framework with 
+discrete latent representations through a novel parameterisation of the posterior distribution of (discrete) 
+latents given an observation.
+
+\subsection{Vector Quantization- Variational Autoencoder (VQ-VAE)}
+
+VAEs consist of the following parts: an encoder network which parameterised a posterior  
+distribution $q(z|x)$ of discrete latent random variables $z$ given the input data $x$, a prior
+distribution $p(z)$, and a decoder with a distribution $p(x|z)$ over input data.
+
+Typically, the posteriors and priors in VAEs are assumed normally distributed with diagonal 
+covariance. Extensions include autoregressive prior and posterior models, normalising flows, 
+and inverse autoregressive posteriors . VQ-VAE uses discrete latent variables which is  
+a new way of training, by using vector quantisation (VQ). The posterior and prior distributions are 
+categorical, and the samples drawn from these distributions index an embedding table. These embeddings
+are then used as input into the decoder network.
+
+ \subsection{Discrete Latent Variables}
+ We define a latent embedding space $e \in R^{K \times D}$ where $K$ is the size of the discrete latent space 
+ (i.e., a $K$-way categorical), and $D$ is the dimensionality of each latent embedding vector $e_{i}$.
+ Note that there are $K$ embedding vectors $e_{i} \in R ^D$, $i\in{1, 2, ..., K}$.
+
+ The discrete latent variables $z$ are then calculated by a nearest 
+ neighbour look-up using the shared embedding space $e$ as shown in equation \ref{eqn:discrete}.
+
+ \begin{equation}
+    q(z = k|x) =
+    \begin{cases}
+        1 & \text{for } k = \text{argmin}_{j} \| z_{e}(x) - e_{j} \|_{2} \\
+        0 & \text{otherwise}
+    \end{cases}
+    \label{eqn:discrete}
+ \end{equation} 
+
+ where $z _e(x)$ is the output of the encoder network.
+
+ The input to the decoder is the corresponding embedding vector $e _k$ as given in equation \ref{eqn:decoder}
+ \begin{equation}
+     z _q(x) = e _k, \text{where } k= \text{argmin} _j \| z _e(x) - e _j \| _2
+     \label{eqn:decoder}
+ \end{equation}
+
+\section{Learning}
+
+\begin{figure}[h]
+    \begin{center}
+        \includegraphics[width=15cm]{vqvae.png}
+    \end{center}
+    \caption{Left: A figure describing the VQ-VAE. Right: Visualisation of the embedding space. The
+    output of the encoder $z(x)$ is mapped to the nearest point $e _2$. The gradient $\nabla _z L$ (in red) will push the
+    encoder to change its output, which could alter the configuration in the next forward pass.}
+\end{figure}
+
+
+
+
+
+
+
+
+
+
 % Just added a stub.
 % TODO: Complete and fill up the literature survey!
