@@ -1,4 +1,143 @@
 \chapter{Software Requirement Specification}
 
+\section{Introduction}
+
+\subsection{Background}
+
+Colleges, schools and other educational environments have a lot of existing tools 
+which help students and teachers interact and share resources.
+These tools however are developed to serve very specific and limited purposes, and are very difficult to 
+manage manually. They fail to provide a single comprehensive platform for all 
+necessary management operations. Moreover, these existing tools fail to cater to the 
+management and analysis of data and thus are not used for generating useful 
+insights.
+
+\subsection{Project Overview}
+
+Our project aims to deliver a scalable web services framework which is easy to work 
+with for both the developer and the customers. It will allow connecting students and 
+teachers through subscription portals, by letting faculty moderators post content 
+which can be accessed by the students and synced whenever an internet connection 
+is available. Furthermore, we aim to build a real-time video conferencing platform 
+using a lossy compression algorithm involving neural networks. Finally, we plan on 
+integrating various existing services like Google Calendar and Drive, to ease 
+automation efforts, reducing the need to manually manage multiple tools.
+
+\subsection{Hardware Requirements}
+
+Development:
+Minimum 8 GB RAM for native app development
+Production:
+As stated in the constraints the server should have at least 1 GB RAM  
+The client should be able to run the minimal version of the neural network encoder 
+(requirements will be obtained through experimentation)
+
+\subsection{Software Requirements}
+
+\textbf{Recommended}
+Linux OS 4.19 kernel or later in production, Windows 10 1803 (Build 17134 or later) for development.
+NGINX server 1.17 or later as reverse proxy and load balancer.
+(add client part also -- client to client)
+
+\subsection{Constraints}
+
+Needs to run in ~1GB, with 1 vCPU core at production environment
+Clients will have limited network bandwidth, mostly using mobile web browsers, but 
+have persistent cache for offline storage (which may be cleared often).
+
+\subsection{Assumptions}
+
+\begin{itemize}
+    \item Clients will mostly operate offline, with syncing times usually after working hours
+    \item Server will be operating in a scalable and distributed architecture, initially using college or cloud infrastructure.
+    \item Clients will operate offline-first using persistent browser cache to download and store filtered versions of the database on themselves, effectively reducing server load.
+\end{itemize}
+
+\subsection{Dependencies}
+
+NodeJS, GraphQL, CouchDB, ReactJS
+
+\section{Functional Requirements}
+
+\begin{itemize}
+    \item Connecting students and teachers through subscription portals (topics), which can be made private by virtue of an authentication code if needed.
+    \item Allowing faculty and students to post content to specific groups, which are moderated by limited people.
+    \item A real-time video conferencing platform using a Experimental lossy compression algorithm involving neural networks
+\end{itemize}
+
+\section{Non Functional Requirements}
+
+\subsection{Scalability}
+\begin{itemize}
+    \item Scalable and simple since we are using GraphQL as our Web Services Framework and also using the ReactJS and CouchDB technology stack.
+\end{itemize}
+
+\subsection{Portability}
+\begin{itemize}
+    \item React JS is cross platform. Graphgql is platform independent
+\end{itemize}
+
+\subsection{Security}
+\begin{itemize}
+    \item We will be using SSL for encrypting the traffic.
+    \item Servers will have firewalls SSH connections protected by password and certificate.
+\end{itemize}
+
+\subsection{Maintainability}
+\begin{itemize}
+    \item We are using micro service architecture on the server side.
+    \item On the client its reusable react components.
+    \item We will  also be using third party npm packages.
+\end{itemize}
+
+\subsection{Performance}
+\begin{itemize}
+    \item We will be using distillation techniques for the neural networks and we will try to reduce the CPU and memory footprints as much as possible.
+\end{itemize}
+
+\section{Interface Requirements}
+
+\subsection{User Interfaces}
+\begin{itemize}
+    \item Simple and minimal User Interface
+    \item Responsive and easy to navigate User Interface
+    \item User Interface elements must be consistent
+    \item Strategic use of colors to suit the purpose
+    \item Component to navigate to and display the content pertaining to video conferencing module
+    \item Components to navigate to course subscription, profile and post, login, logout
+    \item Components dealing with posting, collection and visual display of data analysis
+\end{itemize}
+
+\subsection{Hardware Interfaces}
+\begin{itemize}
+    \item SSH protocol for the server side interface
+    \item Device hardware (eg; camera) use negotiation interface
+\end{itemize}
+
+\subsection{Communication Interfaces}
+\begin{itemize}
+    \item WebRTC (Real-Time Communication) standards and protocols to enable real time, peer to peer audio and video communication
+    \item Request/Response protocol, HTTP/1.1 (as inherent to GraphQL)
+\end{itemize}
+
+\section{Technology Used}
+\textbf{Stack} :  Frontend - ReactJS (For Webapp), React Native (for Mobile App), 
+Middleware - NodeJS, GraphQL
+Backend - CouchDB, PouchDB databases 
+
+\section{Definitions, Acronyms and Abbreviations}
+\begin{itemize}
+    \item \textbf{Web Service} - either: a service offered by an electronic device to another electronic device, communicating with each other via the World Wide Web, or a server running on a computer device
+    \item \textbf{Native App} - An app to be installed and run on a device
+    \item \textbf{Neural Network Encoder} - A neural network encoder converts input into a feature vector which represents the input but taking less space then the original input
+    \item \textbf{Reverse Proxy} - ensures smooth flow of traffic between the client and the server and routes the client requests to appropriate backend server
+    \item \textbf{Load Balancing} - methodical and efficient distribution of network or application traffic across multiple servers
+    \item \textbf{Persistent Cache} - intended for intermediate term storage of documents or data objects
+    \item \textbf{Lossy Compression} - method of data compression in which the size of the file is reduced by eliminating data in the file
+    \item \textbf{SSH} - Secure Shell Protocol is a method for secure remote login from one computer to another
+    \item \textbf{WebRTC} - Web Real-Time Communication comprises of protocols, standards and JavaScript API which enable real time peer to peer communication
+    \item \textbf{Peer to Peer} - Browser to Browser or an application to application communication over the internet
+    \item \textbf{HTTP} - Hypertext Transfer Protocol gives users a way to interact with web resources such as HTML files by transmitting hypertext messages between clients and servers
+\end{itemize}
 % Just added a stub.
 % TODO: Complete and fill up the SRS!
