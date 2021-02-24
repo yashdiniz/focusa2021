@@ -32,11 +32,15 @@ Offline first is an application development paradigm where developers ensure tha
 For an app to be offline first we need to make sure that both code and the data required for it to function are not dependent on the presence of the network.
 Mobile applications do need to do something extra to make code available offline,
 Web Applications however can include service workers to achieve the same.
-With service workers we need to worry about when it is safe to update the code
+With service workers we need to worry about when it is safe to update the code. Refer to figure \ref{fig:offline-first}.
 
-Simple architecture of the offline first model:
-
-%add figure here (offline-first.png)
+\begin{figure}[h!]
+    \begin{center}
+        \includegraphics[width=15cm]{offline-first.png}
+    \end{center}
+    \caption{Simple architecture of the offline first model}
+    \label{fig:offline-first}
+\end{figure}
 
 A simple solution to making data available offline is to have a local database that you read and write to. The database can then be replicated to and from a server whenever a network is available.
 
@@ -82,19 +86,23 @@ Two generic auto merge strategies are:
     \item Merge by fields: If the two devices modified different fields of the object, it might be possible to auto merge by taking the new fields from both objects
 \end{enumerate}
 
-In the above approach merging is done by the server and clients simply fetch the merged value. However if you need user intervention to resolve a conflict you need to do the merge on the client. This will require all clients to store the version history of the document as well. A problem with this is that clients can
+In the above approach merging is done by the server and clients simply fetch the merged value. 
+However if you need user intervention to resolve a conflict you need to do the merge on the client.
+This will require all clients to store the version history of the document as well. A problem with this 
+is that clients can independently merge the document creating new multiple merge revisions.
+Clients need to handle this (For example by examining the history and ignoring one of the merge versions).
 
-independently merge the document creating new multiple merge revisions. Clients need to handle this (For example by examining the history and ignoring one of the merge versions).
+PouchDB and CouchDB handle this by using a hash of the document contents as the object version. So if two 
+different devices resolve the conflict the exact same way they will end up with the exact same version id.
 
-PouchDB & CouchDB handle this by using a hash of the document contents as the object version. So if two different devices resolve the conflict the exact same way they will end up with the exact same version id.
-
-\textbf{How do we delete an object?}
+\subsubsection{How do we delete an object ?}
 
 A simple way to delete objects is to have a "deleted" flag in the object. Merge function can then decide what to do if a deleted object has been modified. On the client, any object with the deleted flag set can be immediately purged as there will be no more updates to it. On the server ideally we would want to know that all clients have deleted the object before purging the object. The not so ideal but practical alternative is to periodically purge old objects.
 
-\textbf{Who uses this currently?}
+\subsubsection{Who uses this currently?}
 
-PouchDB & CouchDB follow the above model. In this setup, versions are stored both on the client and the server. When there is a conflict a deterministic algorithm auto picks a winning version
+PouchDB and CouchDB follow the above model. In this setup, versions are stored both on the client and 
+the server. When there is a conflict a deterministic algorithm auto picks a winning version
 
 %cite: https://hasura.io/blog/design-guide-to-offline-first-apps/#conflicts
 
@@ -116,7 +124,13 @@ All database clients are able to access some version of the data.
 
 The database can be split over multiple servers.
 
-% CAP theorem figure comes here (cap.png)
+\begin{figure}[h!]
+    \begin{center}
+        \includegraphics[width=15cm]{cap.png}
+    \end{center}
+    \caption{CAP Theorem. No database can offer the perfect solution for CAP.}
+    \label{fig:cap}
+\end{figure}
 
 If availability is a priority, we can let clients write data to one node of the database without waiting for other nodes to come into agreement. If the database knows how to take care of reconciling these operations between nodes, we achieve a sort of “eventual consistency” in exchange for high availability
 

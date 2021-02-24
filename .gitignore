@@ -27,3 +27,6 @@ db/
 *.lot
 *.synctex.gz
 *.toc
+ 
+# ignoring the DS store 
+.DS_Store
