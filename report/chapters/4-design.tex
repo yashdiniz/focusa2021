@@ -6,6 +6,23 @@
 % Add the SDLC model. Agile SDLC, pros and cons, sprints, CI/CD etc.
 % High Level Diagram showing microservices.
 % Acitivity Diagram.
-% Schema diagram.
+\section{Acitivity Diagram}
+
+The user logs in to the app by putting in the valid credentials.
+The credentials put in by the user are validated by the system through the authentication mechanism on the server.
+If the credentials are found to be incorrect, the system runs the error handler to address the error occurred.
+If the user still is not able to produce the correct credentials, the process ends and the user is not allowed to use the app.
+
+If the user has been validated and is found to be genuine, is directed to the home/main page of the app where he can choose to request for the News Feed, User Profile, Courses or launch video conferencing.
+All these requests can be made through the navigation panel provided in the app and are accessed as parallel activities.
+
+Once the user requests for a service, the request is sent to the system as a query which is then resolved by the graphQL to extract the specific requested data from the backend and the response returned is then displayed to the user in structured format.
+
+If the user requests to launch the video conferencing, the system estblishes a peer to peer connection with the requested user system, asks the user to grant access to the camera and audio and starts transfering bi-directional vectors as the secure connection is established.
+These bi-directional vectors are worked upon by the algorithm used to reduce the bandwidth usage and the output is displayed in the form of video.
+
+If the user decides to log out of the app, it can be accomplished via the corresponding UI component and as a result all the parallel activities combine to close and the user is logged out of the app safely .
+The user is also logged out of the app the session times out.
+% Schema diagram.erree
 % Sequence Diagram.
 % Neural Network architecture diagram.
