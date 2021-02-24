@@ -6,6 +6,44 @@
 % Add the SDLC model. Agile SDLC, pros and cons, sprints, CI/CD etc.
 % High Level Diagram showing microservices.
 % Acitivity Diagram.
-% Schema diagram.
+\section{Acitivity Diagram}
+
+The user logs in to the app by putting in the valid credentials.
+The credentials put in by the user are validated by the system through the authentication mechanism on the server.
+If the credentials are found to be incorrect, the system runs the error handler to address the error occurred.
+If the user still is not able to produce the correct credentials, the process ends and the user is not allowed to use the app.
+
+If the user has been validated and is found to be genuine, is directed to the home/main page of the app where he can choose to request for the News Feed, User Profile, Courses or launch video conferencing.
+All these requests can be made through the navigation panel provided in the app and are accessed as parallel activities.
+
+Once the user requests for a service, the request is sent to the system as a query which is then resolved by the graphQL to extract the specific requested data from the backend and the response returned is then displayed to the user in structured format.
+
+If the user requests to launch the video conferencing, the system estblishes a peer to peer connection with the requested user system, asks the user to grant access to the camera and audio and starts transfering bi-directional vectors as the secure connection is established.
+These bi-directional vectors are worked upon by the algorithm used to reduce the bandwidth usage and the output is displayed in the form of video.
+
+If the user decides to log out of the app, it can be accomplished via the corresponding UI component and as a result all the parallel activities combine to close and the user is logged out of the app safely .
+The user is also logged out of the app the session times out.
+% Schema diagram.erree
 % Sequence Diagram.
+
+\section{Sequence Diagram}
+
+The client sends a request to login to the auth along with the credentials ie; name, password.
+On receiving the credentials the auth verifies the authentication details, finding it correct, creates a session and generates a refresh cookie.
+Auth also generates a signed JWT(JSON Web Token) conatining the IP, username and session details of the client.
+This JWT is stored in the client memory and acts as an ID card which can be used by the client to directly work with the graphQL and microservices without the need of the authentication with the auth time and again.
+The JWT along with the refresh cookie is sent as a response to the user by the auth.
+
+The client can now communicate with graphql by showing the JWT and request for data.
+The graphql makes an HTTP GET request and forwards JWT to the requested microservice.
+The microservice verifies the signed JWT received from the graphql and if found valid executes the query and returns response data to the graphql.
+Grapql converts the recevied response into a required format and sends it to the client.
+This is incase of successful JWT verification
+
+Incase the microservice finds the JWT to be invalid it sends a failure response to the graphql wich inturn returns the failure response to the client.
+The client now needs to request the auth for a session refresh upon which the auth returns a new signed JWT along with the refresh cookie.
+
+On refresh the JWT gets popped out of memory and is no longer valid so client needs to request for a session renew and a new signed JWT.
+On logout the JWT is simply discarded by removing out of the memory. 
+
 % Neural Network architecture diagram.
