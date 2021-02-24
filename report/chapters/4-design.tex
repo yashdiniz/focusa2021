@@ -4,9 +4,6 @@
 % TODO: Complete and fill up the design chapter!
 
 % Add the SDLC model. Agile SDLC, pros and cons, sprints, CI/CD etc.
-% High Level Diagram showing microservices.
-% Acitivity Diagram.
-
 \section{Agile}
 
 \begin{figure}[h!]
@@ -17,9 +14,9 @@
     \label{fig:agile}
 \end{figure}
 
-In Agile we believe that every project needs to be handled differently and the existing methods
- need to be tailored to best suit the project requirements. To deliver specific features for a 
- release the tasks are divided into time boxes(small time frames).
+The philosophy of Agile is that every project needs to be handled differently and the existing methods
+need to be tailored to best suit the project requirements. To deliver specific features for a 
+release the tasks are divided into time boxes (small time frames).
 
 Agile uses an iterative approach and  working software build is delivered after each iteration. 
 Each build is incremental in terms of features; the final build holds all the features required 
@@ -29,21 +26,21 @@ Following are the Agile Manifesto principles:
 
 \begin{itemize}
     \item \textbf{Working software:} The best means of communication with the customers to understand
-     their requirements is by using demo working software, instead of just depending on documentation.
+    their requirements is by using demo working software, instead of just depending on documentation.
      
-     \item \textbf{Customer collaboration:} Continuous customer interaction is very important to get proper
-      requirements ,as the requirements cannot be gathered completely in the beginning of the project due 
-      to various factors.
+    \item \textbf{Customer collaboration:} Continuous customer interaction is very important to get proper
+    requirements ,as the requirements cannot be gathered completely in the beginning of the project due 
+    to various factors.
 
-      \item \textbf{Responding to change:} We are  focused on quick response to changes and 
-      continuous development in agile development.
+    \item \textbf{Responding to change:} The focus is on quick response to changes and 
+    continuous development in agile development.
 \end{itemize}
 
 \subsection{Agile v/s traditional SDLC Models}
 
 Traditional SDLC models are based on a predictive approach. Teams in traditional SDLC models 
 usually work with detailed planning and have a complete view of the exact tasks and features 
-to be delivered during the product life cycle. These Models entirely depend on the requirement 
+to be delivered during the product life cycle. These models entirely depend on the requirement 
 analysis and planning done in the beginning of the product life cycle. Any changes to be done go 
 through a strict change control management and prioritization.
 
@@ -58,7 +55,7 @@ with each other and are often based in the same geographical location.
 \subsection{Pros}
 \begin{itemize}
     \item Agile is a very realistic approach to software development.
-    \item Functionality can be developed rapidly and demonstrated and promotes teamwork and cross training 
+    \item Functionality can be developed, rapidly demonstrated and promotes teamwork and cross training. 
     \item Resource requirements are minimum.
     \item It delivers early partial working solutions and is suitable for fixed or changing requirements.
     \item Good model for environments that change steadily.
@@ -68,10 +65,11 @@ with each other and are often based in the same geographical location.
 
 \subsection{Cons}
 \begin{itemize}
-    \item ot suitable for handling complex dependencies and More risk of sustainability, maintainability and extensibility.
+    \item Not suitable for handling complex dependencies and more risk of sustainability, maintainability and extensibility.
     \item Strict delivery management dictates the scope, functionality to be delivered, and adjustments to meet the deadlines.
     \item Depends heavily on customer interaction, so if the customer is not clear, the team can be driven in the wrong direction.
-    \item here is a very high individual dependency, since there is minimum documentation generated and transfer of technology to new team members may be quite challenging due to lack of documentation.
+    \item Has a very high individual dependency, since there is minimum documentation generated and transfer of technology to new 
+    team members may be quite challenging due to lack of documentation.
 \end{itemize}
 
 \section{CI/CD pipeline}
@@ -79,11 +77,11 @@ A CI/CD pipeline automates you software delivery process. The pipeline builds co
 and safely deploys a new version of the application (CD).
 
 \subsection{CI and CD}
-CI stands for continuous integration. It is a development process in which the developers meger
+CI stands for Continuous Integration. It is a development process in which the developers merge
 their code changes multiple times a day in a central repository. With CI, each change in code 
 triggers an automated build and test sequence.
 
-CD stands for continuous Delivery which on top of continuous integration adds the practice of 
+CD stands for Continuous Delivery which on top of continuous integration adds the practice of 
 automating the entire software release process. CD includes infrastructure provisioning and deployment 
 which may be manual and consists of multiple stages.
 
@@ -99,7 +97,7 @@ which may be manual and consists of multiple stages.
 
 \subsubsection{Source Stage}
 Source repository triggers a pipeline run. A notification is triggered to the CI/CD tool 
-which runs the corresponding pipeline  if there is a change in code. 
+which runs the corresponding pipeline if there is a change in code. 
 
 \subsubsection{Build Stage}
 To build a runnable instance of our product that we can potentially ship to our end users we combine 
@@ -110,25 +108,24 @@ Regardless of the language, cloud-native software is typically deployed with Doc
 stage of the CI/CD pipeline builds the Docker containers.
 
 There are fundamental problems in the project's configuration if the project fails to pass the build 
-stage, and it’s best to address the problems  immediately.
+stage, and it’s best to address the problems immediately.
 
 \subsubsection{Test Stage}
 We run automated tests to validate our code and the behaviour of our product. This stage acts as a safety
 net that does not allow the bugs to reach the end-users.
 
-This stage can last from seconds  to  hours depending on the complexity of the project.
+This stage can last from seconds to  hours depending on the complexity of the project.
 
 Failure in this stage shows the errors in the code that developers didn't foresee when writing the code.
 
 \subsubsection{Deploy Stage}
 Once the runnable instance of the code has passed all the test stages, it is ready to deploy. There are 
-multiple deploy environments for example “beta” environment for the product team and “production” environment 
-for wend-users.
+multiple deploy environments for example “beta” environment for the product team and “production” 
+environment for end-users.
 
 Teams that have embraced the Agile model of development guided by tests and real-time monitoring usually 
 deploy work-in-progress manually to a beta environment for additional manual testing and review, and 
 automatically deploy approved changes from the master branch to production.
-
 
 \section{Activity Diagram}
 
@@ -148,13 +145,20 @@ If the user still is not able to produce the correct credentials, the process en
 If the user has been validated and is found to be genuine, is directed to the home/main page of the app where he can choose to request for the News Feed, User Profile, Courses or launch video conferencing.
 All these requests can be made through the navigation panel provided in the app and are accessed as parallel activities.
 
-Once the user requests for a service, the request is sent to the system as a query which is then resolved by the graphQL to extract the specific requested data from the backend and the response returned is then displayed to the user in structured format.
+Once the user requests for a service, the request is sent to the system as a query which is then resolved by the GraphQL to extract the specific requested data from the backend and the response returned is then displayed to the user in structured format.
 
 If the user requests to launch the video conferencing, the system estblishes a peer to peer connection with the requested user system, asks the user to grant access to the camera and audio and starts transfering bi-directional vectors as the secure connection is established.
 These bi-directional vectors are worked upon by the algorithm used to reduce the bandwidth usage and the output is displayed in the form of video.
 
 If the user decides to log out of the app, it can be accomplished via the corresponding UI component and as a result all the parallel activities combine to close and the user is logged out of the app safely .
 The user is also logged out of the app the session times out.
+
+% High Level Diagram showing microservices.
+
+
+% Acitivity Diagram.
+
+
 % Schema diagram.
 
 
@@ -165,26 +169,34 @@ The user is also logged out of the app the session times out.
     \begin{center}
         \includegraphics[width=15cm]{sequence.png}
     \end{center}
-    \caption{Sequence Diagram}
+    \caption{Authentication Sequence Diagram. This diagram illustrates four actors: client, auth, GraphQL, microservice.}
     \label{fig:sequence}
 \end{figure}
 
-Refer to figure \ref{fig:sequence}. The client sends a request to login to the auth along with the credentials ie; name, password.
+Refer to figure \ref{fig:sequence}.
+The client sends a request to login to the auth microservice along with the credentials ie; name, password.
 On receiving the credentials the auth verifies the authentication details, finding it correct, creates a session and generates a refresh cookie.
 Auth also generates a signed JWT(JSON Web Token) conatining the IP, username and session details of the client.
-This JWT is stored in the client memory and acts as an ID card which can be used by the client to directly work with the graphQL and microservices without the need of the authentication with the auth time and again.
+
+This JWT is stored in the client memory and acts as an ID card which can be used by 
+the client to directly work with the GraphQL and microservices without the need of 
+the authentication with the auth time and again.
 The JWT along with the refresh cookie is sent as a response to the user by the auth.
 
-The client can now communicate with graphql by showing the JWT and request for data.
-The graphql makes an HTTP GET request and forwards JWT to the requested microservice.
-The microservice verifies the signed JWT received from the graphql and if found valid executes the query and returns response data to the graphql.
+The client can now communicate with GraphQL by showing the JWT and request for data.
+The GraphQL makes an HTTP GET request and forwards JWT to the requested microservice.
+The microservice verifies the signed JWT received from the GraphQL and if found valid 
+executes the query and returns response data to the GraphQL.
 Grapql converts the recevied response into a required format and sends it to the client.
 This is incase of successful JWT verification
 
-Incase the microservice finds the JWT to be invalid it sends a failure response to the graphql wich inturn returns the failure response to the client.
-The client now needs to request the auth for a session refresh upon which the auth returns a new signed JWT along with the refresh cookie.
+Incase the microservice finds the JWT to be invalid it sends a failure response to the 
+GraphQL wich inturn returns the failure response to the client.
+The client now needs to request the auth for a session refresh upon which the auth 
+returns a new signed JWT along with the refresh cookie.
 
-On refresh the JWT gets popped out of memory and is no longer valid so client needs to request for a session renew and a new signed JWT.
-On logout the JWT is simply discarded by removing out of the memory. 
+On refresh the JWT gets deleted from memory and is no longer valid. The client needs 
+to request for a session renew and a new signed JWT.
+On logout the JWT is simply discarded by deleting the object from memory. 
 
 % Neural Network architecture diagram.
