@@ -52,9 +52,8 @@ Refer to figure \ref{fig:offline-first}.
 
 A simple solution to making data available offline is to have a local database 
 that you read and write to. The database can then be replicated to and from a 
-server whenever a network is available.
+server whenever a network is available.~\cite{HasuraOfflineFirst}
 
-%cite: https://hasura.io/blog/design-guide-to-offline-first-apps/#conflicts
 
 \subsection{Push- pull replication}
 
@@ -75,10 +74,9 @@ when the client is online again.
     \item You can not replicate multiple databases with each other.
     \item It is assumed that the graphql-server is the single source of truth.
     \item You have to set up things at the server side while with couchdb-sync 
-    you only have to start a server.
+    you only have to start a server.~\cite{RxDB}
 \end{enumerate}
 
-%cite: https://rxdb.info/replication-graphql.html
 
 \subsection{Conflict resolution}
 If the app can be used from multiple devices, it is possible for the user to make 
@@ -126,9 +124,8 @@ but practical alternative is to periodically purge old objects.
 \subsubsection{Who uses this currently?}
 
 PouchDB and CouchDB follow the above model. In this setup, versions are stored both on the client and 
-the server. When there is a conflict a deterministic algorithm auto picks a winning version.
+the server. When there is a conflict a deterministic algorithm auto picks a winning version.~\cite{HasuraOfflineFirst}
 
-%cite: https://hasura.io/blog/design-guide-to-offline-first-apps/#conflicts
 
 \subsection{Eventual consistency via CAP theorem}
 
@@ -181,6 +178,4 @@ Being able to isolate these operations means that view computation lends itself
 to parallel and incremental computation. More important, because these functions 
 produce key/value pairs, CouchDB is able to insert them into the B-tree storage engine, 
 sorted by key. Lookups by key, or key range, are extremely efficient operations with a 
-B-tree, described in big O notation as $O(log N)$ and $O(log N + K)$, respectively.
-
-%cite: https://guide.couchdb.org/draft/consistency.html
+B-tree, described in big O notation as $O(log N)$ and $O(log N + K)$, respectively.~\cite{CouchDB}
