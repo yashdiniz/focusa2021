@@ -1,0 +1,22 @@
+\section{PeerJS}
+
+The PeerJS library is aimed to simplify the peer-to-peer connection management. 
+PeerJS wraps the browser's WebRTC implementation to provide a complete, configurable, 
+and easy-to-use peer-to-peer connection API. 
+With PeerJS, peers are identified by simply using an ID, a string that the peer 
+can choose itself, or have a server generate one. 
+Equipped with an ID, a peer can create a P2P data or media stream connection to a remote peer.~\cite{PeerJSsimplifiesWebRTC}
+
+\subsection{PeerJS Server}
+
+Although WebRTC promises peer-to-peer communication, a server is still required to 
+act as a connection broker, and handle signalling.
+
+PeerJS provides an open source implementation of this connection broker 
+server named PeerJS Server, written in Node.js.Users can run their own Server, 
+or are at leisure to opt for the cloud-hosted version of PeerServer provided for free.
+To broker connections, PeerJS connects to a PeerServer. The PeerJS Server acts ONLY as 
+a connection broker, and it has to be noted that no peer-to-peer data goes through the server.~\cite{TamingWebRTCwithPeerJS}
+
+To make the P2P connection work seamlessly, we will build the neural network encoder and 
+integrate it into WebRTC possibly using the P2P library.
