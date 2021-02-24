@@ -124,7 +124,16 @@ Teams that have embraced the Agile model of development guided by tests and real
 deploy work-in-progress manually to a beta environment for additional manual testing and review, and 
 automatically deploy approved changes from the master branch to production.
 
+% High Level Diagram showing microservices.
 \section{High Level Systems}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=12cm]{High Level.png}
+    \caption{High Level Diagram illustrating all microservices of our application.}
+    \label{fig:highlevel}
+\end{figure}
+
 Microservices, also known as the microservice architecture, is an architectural style that structures an 
 application as a collection of services that are
 \begin{itemize}
@@ -134,23 +143,20 @@ application as a collection of services that are
 \end{itemize}
 
 The microservice architecture enables the rapid, frequent and reliable delivery of large, complex applications.
-
 The benefits of decomposing an application into different, smaller services are:
-
 \begin{itemize}
-    \item \textbf{Modularity:}This makes the application easier to understand, develop, test, and 
+    \item \textbf{Modularity:} This makes the application easier to understand, develop, test, and 
     become more resilient to architecture erosion.
-    \item \textbf{Scalability:}Since microservices are implemented and deployed independently of 
+    \item \textbf{Scalability:} Since microservices are implemented and deployed independently of 
     each other, i.e. they run within independent processes, they can be monitored and scaled independently.
-    \item \textbf{Integration:} of heterogeneous and legacy systems: microservices is considered as a 
+    \item \textbf{Integration of heterogeneous and legacy systems:} Microservices are considered as a 
     viable mean for modernizing existing monolithic software application.
     \item \textbf{Distributed development:} It parallelizes development by enabling small autonomous teams to
     develop, deploy and scale their respective services independently. It also allows the architecture of 
     an individual service to emerge through continuous refactoring.
 \end{itemize}
 
-Our project FOCUSA, will include the following microservices:
-
+Our project FOCUSA, will include the following microservices, refer to figure \ref{fig:highlevel}:
 \begin{itemize}
     \item \textbf{Auth:} performs the authentication process based on a username and password, and returns refresh cookies with a JWT.
     \item \textbf{Roles:}  returns the roles that a user belongs to. It depicts the different roles that different admins perform.
@@ -172,6 +178,7 @@ The microservices handle the business logic themselves, while the GraphQL platfo
 clients to process the queries by consulting the services using REST API, thus allowing for easier isolation 
 and horizontal scaling.
 
+% Activity Diagram
 \section{Activity Diagram}
 
 \begin{figure}[h!]
@@ -197,12 +204,6 @@ These bi-directional vectors are worked upon by the algorithm used to reduce the
 
 If the user decides to log out of the app, it can be accomplished via the corresponding UI component and as a result all the parallel activities combine to close and the user is logged out of the app safely .
 The user is also logged out of the app the session times out.
-
-% High Level Diagram showing microservices.
-
-
-% Acitivity Diagram.
-
 
 % Schema diagram.
 \section{Database Schema Diagram}
