@@ -25,4 +25,25 @@ If the user decides to log out of the app, it can be accomplished via the corres
 The user is also logged out of the app the session times out.
 % Schema diagram.erree
 % Sequence Diagram.
+
+\section{Sequence Diagram}
+
+The client sends a request to login to the auth along with the credentials ie; name, password.
+On receiving the credentials the auth verifies the authentication details, finding it correct, creates a session and generates a refresh cookie.
+Auth also generates a signed JWT(JSON Web Token) conatining the IP, username and session details of the client.
+This JWT is stored in the client memory and acts as an ID card which can be used by the client to directly work with the graphQL and microservices without the need of the authentication with the auth time and again.
+The JWT along with the refresh cookie is sent as a response to the user by the auth.
+
+The client can now communicate with graphql by showing the JWT and request for data.
+The graphql makes an HTTP GET request and forwards JWT to the requested microservice.
+The microservice verifies the signed JWT received from the graphql and if found valid executes the query and returns response data to the graphql.
+Grapql converts the recevied response into a required format and sends it to the client.
+This is incase of successful JWT verification
+
+Incase the microservice finds the JWT to be invalid it sends a failure response to the graphql wich inturn returns the failure response to the client.
+The client now needs to request the auth for a session refresh upon which the auth returns a new signed JWT along with the refresh cookie.
+
+On refresh the JWT gets popped out of memory and is no longer valid so client needs to request for a session renew and a new signed JWT.
+On logout the JWT is simply discarded by removing out of the memory. 
+
 % Neural Network architecture diagram.
