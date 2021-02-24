@@ -36,7 +36,7 @@ With service workers we need to worry about when it is safe to update the code
 
 Simple architecture of the offline first model:
 
-%add figure here
+%add figure here (offline-first.png)
 
 A simple solution to making data available offline is to have a local database that you read and write to. The database can then be replicated to and from a server whenever a network is available.
 
@@ -116,7 +116,7 @@ All database clients are able to access some version of the data.
 
 The database can be split over multiple servers.
 
-% CAP theorem figure comes here
+% CAP theorem figure comes here (cap.png)
 
 If availability is a priority, we can let clients write data to one node of the database without waiting for other nodes to come into agreement. If the database knows how to take care of reconciling these operations between nodes, we achieve a sort of “eventual consistency” in exchange for high availability
 
