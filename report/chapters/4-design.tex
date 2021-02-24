@@ -17,7 +17,7 @@ release the tasks are divided into time boxes (small time frames).
 
 Agile uses an iterative approach and  working software build is delivered after each iteration. 
 Each build is incremental in terms of features; the final build holds all the features required 
-by the customer. Refer to figure \ref{fig:agile}
+by the customer. Refer to figure \ref{fig:agile}.
 
 Following are the Agile Manifesto principles:
 
@@ -124,7 +124,53 @@ Teams that have embraced the Agile model of development guided by tests and real
 deploy work-in-progress manually to a beta environment for additional manual testing and review, and 
 automatically deploy approved changes from the master branch to production.
 
+\section{High Level Systems}
+Microservices, also known as the microservice architecture, is an architectural style that structures an 
+application as a collection of services that are
+\begin{itemize}
+    \item Highly maintainable and testable
+    \item Loosely coupled
+    \item Independently deployable
+\end{itemize}
 
+The microservice architecture enables the rapid, frequent and reliable delivery of large, complex applications.
+
+The benefits of decomposing an application into different, smaller services are:
+
+\begin{itemize}
+    \item \textbf{Modularity:}This makes the application easier to understand, develop, test, and 
+    become more resilient to architecture erosion.
+    \item \textbf{Scalability:}Since microservices are implemented and deployed independently of 
+    each other, i.e. they run within independent processes, they can be monitored and scaled independently.
+    \item \textbf{Integration:} of heterogeneous and legacy systems: microservices is considered as a 
+    viable mean for modernizing existing monolithic software application.
+    \item \textbf{Distributed development:} It parallelizes development by enabling small autonomous teams to
+    develop, deploy and scale their respective services independently. It also allows the architecture of 
+    an individual service to emerge through continuous refactoring.
+\end{itemize}
+
+Our project FOCUSA, will include the following microservices:
+
+\begin{itemize}
+    \item \textbf{Auth:} performs the authentication process based on a username and password, and returns refresh cookies with a JWT.
+    \item \textbf{Roles:}  returns the roles that a user belongs to. It depicts the different roles that different admins perform.
+    \item \textbf{Profiles:} Each user has a unique profile, containing details like the user display picture, username, and the various courses the user has subscribed to.
+    \item \textbf{Courses:}  returns the details of the courses which includes the course title and the different users subscribed to the course, as well as a provision for new users to subscribe to the course. Only users with certain roles can moderate their respective courses.
+    \item \textbf{Posts:} refers to posts posted by the course moderators. The moderators are able to perform CRUD operations on these posts
+    \item \textbf{Notifications:}  pushes notifications to the user devices and also monitors the database for changes.
+\end{itemize}
+
+\subsection{Using GraphQL with the Microservices}
+
+We make  use of a single GraphQL Schema as an API Gateway to all the microservices together, 
+integrating it under a single application. This enables integration of data from the different services.
+
+One of the main benefits of having everything behind a single endpoint, is that data can be routed more 
+effectively than if each request had its own service. 
+
+The microservices handle the business logic themselves, while the GraphQL platform interacts with the 
+clients to process the queries by consulting the services using REST API, thus allowing for easier isolation 
+and horizontal scaling.
 
 \section{Activity Diagram}
 
