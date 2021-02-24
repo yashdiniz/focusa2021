@@ -34,7 +34,7 @@ It is schema-free.~\cite{CouchConfluence}
 
 \begin{figure}[h!]
     \begin{center}
-        \includegraphics[width=15cm]{offline-first.png}
+        \includegraphics[width=10cm]{offline-first.png}
     \end{center}
     \caption{Simple architecture of the offline first model}
     \label{fig:offline-first}
@@ -55,7 +55,7 @@ that you read and write to. The database can then be replicated to and from a
 server whenever a network is available.~\cite{HasuraOfflineFirst}
 
 
-\subsection{Push- pull replication}
+\subsection{Push-pull replication}
 
 With RxDB you can do a two-way replication(push-pull replication) with a GraphQL endpoint. 
 This allows you to replicate data from the server into the client-side database and then 
@@ -74,7 +74,7 @@ when the client is online again.
     \item You can not replicate multiple databases with each other.
     \item It is assumed that the graphql-server is the single source of truth.
     \item You have to set up things at the server side while with couchdb-sync 
-    you only have to start a server.~\cite{RxDB}
+    you only have to start a server.~\cite{RxDBreplication}
 \end{enumerate}
 
 
@@ -97,9 +97,9 @@ version is also kept track. A conflict can be identified by the fact that two ve
 same parent. Two generic auto merge strategies are:
 
 \begin{enumerate}
-    \item Last write wins: Here we will simply take the last revision to 
+    \item \textbf{Last write wins}: Here we will simply take the last revision to 
     reach the server as the final value.
-    \item Merge by fields: If the two devices modified different fields 
+    \item \textbf{Merge by fields}: If the two devices modified different fields 
     of the object, it might be possible to auto merge by taking the new fields from both objects.
 \end{enumerate}
 
@@ -112,7 +112,7 @@ Clients need to handle this (For example by examining the history and ignoring o
 PouchDB and CouchDB handle this by using a hash of the document contents as the object version. So if two 
 different devices resolve the conflict the exact same way they will end up with the exact same version id.
 
-\subsubsection{How do we delete an object ?}
+\subsubsection{How do we delete an object?}
 
 A simple way to delete objects is to have a "deleted" flag in the object. 
 Merge function can then decide what to do if a deleted object has been modified. 
@@ -126,12 +126,11 @@ but practical alternative is to periodically purge old objects.
 PouchDB and CouchDB follow the above model. In this setup, versions are stored both on the client and 
 the server. When there is a conflict a deterministic algorithm auto picks a winning version.~\cite{HasuraOfflineFirst}
 
-
 \subsection{Eventual consistency via CAP theorem}
 
 \begin{figure}[h!]
     \begin{center}
-        \includegraphics[width=15cm]{cap.png}
+        \includegraphics[width=10cm]{cap.png}
     \end{center}
     \caption{CAP Theorem. No database can offer the perfect solution for CAP.}
     \label{fig:cap}
@@ -145,7 +144,7 @@ as opposed to putting absolute consistency ahead of raw availability like
 RDBMS or Paxos. What these systems have in common is an awareness that data 
 acts differently when many people are accessing it simultaneously. 
 Their approaches differ when it comes to which aspects of consistency, 
-availability, or partition tolerance they prioritize. Refer to figure. \ref{fig:cap}
+availability, or partition tolerance they prioritize. Refer to figure \ref{fig:cap}.
 
 The CAP theorem describes a few different strategies for distributing application 
 logic across networks. CouchDB’s solution uses replication to propagate application 
@@ -153,17 +152,11 @@ changes across participating nodes. This is a fundamentally different approach f
 consensus algorithms and relational databases, which operate at different intersections 
 of consistency, availability, and partition tolerance.
 
-\subsubsection{Consistency}
-
-All database clients see the same data, even with concurrent updates.
-
-\subsubsection{Availability}
-
-All database clients are able to access some version of the data.
-
-\subsubsection{Partition tolerance}
-
-The database can be split over multiple servers.
+\begin{itemize}
+    \item \textbf{Consistency}: All database clients see the same data, even with concurrent updates.
+    \item \textbf{Availability}: All database clients are able to access some version of the data.
+    \item \textbf{Partition tolerance}: The database can be split over multiple servers.
+\end{itemize}
 
 If availability is a priority, we can let clients write data to one node of the 
 database without waiting for other nodes to come into agreement. If the database 

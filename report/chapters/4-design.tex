@@ -1,13 +1,13 @@
 \chapter{Design}
 
 % SDLC model. Agile SDLC, pros and cons, sprints, CI/CD etc.
-\section{Agile}
+\section{Agile SDLC}
 
 \begin{figure}[h!]
     \begin{center}
         \includegraphics[width=9cm]{agile.jpg}
     \end{center}
-    \caption{Agile model}
+    \caption{Agile SDLC model}
     \label{fig:agile}
 \end{figure}
 
@@ -26,7 +26,7 @@ Following are the Agile Manifesto principles:
     their requirements is by using demo working software, instead of just depending on documentation.
      
     \item \textbf{Customer collaboration:} Continuous customer interaction is very important to get proper
-    requirements ,as the requirements cannot be gathered completely in the beginning of the project due 
+    requirements, as the requirements cannot be gathered completely in the beginning of the project due 
     to various factors.
 
     \item \textbf{Responding to change:} The focus is on quick response to changes and 
@@ -49,7 +49,7 @@ The backbone of agile methodology is customer interaction  and open communicatio
 documentation are the typical features of agile. The teams in agile methodology are in close collaboration 
 with each other and are often based in the same geographical location.
 
-\subsection{Pros}
+\subsubsection{Pros}
 \begin{itemize}
     \item Agile is a very realistic approach to software development.
     \item Functionality can be developed, rapidly demonstrated and promotes teamwork and cross training. 
@@ -60,7 +60,7 @@ with each other and are often based in the same geographical location.
     \item Gives flexibility to developers.
 \end{itemize}
 
-\subsection{Cons}
+\subsubsection{Cons}
 \begin{itemize}
     \item Not suitable for handling complex dependencies and more risk of sustainability, maintainability and extensibility.
     \item Strict delivery management dictates the scope, functionality to be delivered, and adjustments to meet the deadlines.
@@ -70,7 +70,7 @@ with each other and are often based in the same geographical location.
 \end{itemize}
 
 \section{CI/CD pipeline}
-A CI/CD pipeline automates you software delivery process. The pipeline builds codes, runs test (CI),
+A CI/CD pipeline automates your software delivery process. The pipeline builds codes, runs test (CI),
 and safely deploys a new version of the application (CD).
 
 \subsection{CI and CD}
@@ -98,7 +98,7 @@ which runs the corresponding pipeline if there is a change in code.
 
 \subsubsection{Build Stage}
 To build a runnable instance of our product that we can potentially ship to our end users we combine 
-the source code and its dependencies . Programs written in languages such as Java, C/C++, or Go need 
+the source code and its dependencies. Programs written in languages such as Java, C/C++, or Go need 
 to be compiled, whereas Ruby, Python and JavaScript programs work without this step.
 
 Regardless of the language, cloud-native software is typically deployed with Docker, in which case this 
@@ -111,7 +111,7 @@ stage, and it’s best to address the problems immediately.
 We run automated tests to validate our code and the behaviour of our product. This stage acts as a safety
 net that does not allow the bugs to reach the end-users.
 
-This stage can last from seconds to  hours depending on the complexity of the project.
+This stage can last from seconds to hours depending on the complexity of the project.
 
 Failure in this stage shows the errors in the code that developers didn't foresee when writing the code.
 
@@ -127,9 +127,9 @@ automatically deploy approved changes from the master branch to production.
 % High Level Diagram showing microservices.
 \section{High Level Systems}
 
-\begin{figure}
+\begin{figure}[h]
     \centering
-    \includegraphics[width=12cm]{High Level.png}
+    \includegraphics[width=12cm]{highlevel.png}
     \caption{High Level Diagram illustrating all microservices of our application.}
     \label{fig:highlevel}
 \end{figure}
@@ -156,7 +156,7 @@ The benefits of decomposing an application into different, smaller services are:
     an individual service to emerge through continuous refactoring.
 \end{itemize}
 
-Our project FOCUSA, will include the following microservices, refer to figure \ref{fig:highlevel}:
+Our project FOCUSA includes the following microservices. Refer to figure \ref{fig:highlevel}:
 \begin{itemize}
     \item \textbf{Auth:} performs the authentication process based on a username and password, and returns refresh cookies with a JWT.
     \item \textbf{Roles:}  returns the roles that a user belongs to. It depicts the different roles that different admins perform.
@@ -211,8 +211,36 @@ The user is also logged out of the app the session times out.
 \begin{figure}[h!]
     \centering
     \includegraphics[width=15cm]{db-schema.png}
-    \caption{The Database Schema Diagram illustrates the Collections and document schemas, along with references.}
+    \caption{The Database Schema Diagram illustrates the Collections and document schemas, 
+    along with relationships between them.}
+    \label{fig:schema}
 \end{figure}
+
+A database schema represents a \textbf{blueprint} or \textbf{architecture} of how our data will look. 
+It describes the shape of the data and how it might relate to other tables or models. An entry in our 
+database will be an example of the database schema. It will contain all of the resources described in 
+the schema. Refer to \label{fig:schema}.
+
+The \textbf{Collections} and their respective \textbf{Document Attributes} are:
+\begin{enumerate}
+    \item \textbf{Authentication(auth)}, which describes user details needed for authentication.
+    \item \textbf{Posts}, which desribes attributes like text, course, timestamp, URL attachment 
+    and flags for reported and approved.
+    \item \textbf{Courses}, which includes moderator roles, and describes information which will 
+    be displayed to the user, like the course name and description.
+    \item \textbf{Roles}, which is collection of roles which any user can have.
+    \item \textbf{Profile}, which describes all the extra user details like a full name, display picture, about paragraph, and a list of interests.
+\end{enumerate}
+
+The core \textbf{relationships} between the attributes are:
+\begin{enumerate}
+    \item Each auth publishes many posts. One-to-many relationship.
+    \item Many auths can have many roles. Many-to-many relationship.
+    \item Each auth has a profile. One-to-one relationship with total cardinality.
+\end{enumerate}
+
+The Posts collection functionally stores all posts and comment documents as simple trees. This data structure can easily support 
+and manage a hierarchy similar to tweets in Twitter. However, we allow the moderators to setup a limit to the depth of comments.
 
 % Sequence Diagram.
 \section{Sequence Diagram}
@@ -221,7 +249,8 @@ The user is also logged out of the app the session times out.
     \begin{center}
         \includegraphics[width=15cm]{sequence.png}
     \end{center}
-    \caption{Authentication Sequence Diagram. This diagram illustrates four actors: client, auth, GraphQL, microservice.}
+    \caption{Authentication Sequence Diagram. This diagram illustrates 
+    four actors: client, auth, GraphQL, microservice.}
     \label{fig:sequence}
 \end{figure}
 
