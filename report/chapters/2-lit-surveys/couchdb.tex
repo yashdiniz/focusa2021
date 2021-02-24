@@ -2,26 +2,25 @@
 
 \subsection{What is RxDB?}
 
-RxDB (short for Reactive Database) is a NoSQL-database for JavaScript Applications 
-like Websites, hybrid Apps, Electron-Apps, Progressive Web Apps and NodeJs. 
-Reactive means that you can not only query the current state, but subscribe to all state 
-changes like the result of a query or even a single field of a document. This is great 
-for UI-based real time applications in a way that makes it easy to develop and also has 
-great performance benefits. To replicate data between your clients and server, RxDB 
-provides modules for realtime replication with any CouchDB compliant endpoint and 
-also with custom GraphQL endpoints
+RxDB (Reactive Database) is a NoSQL database for JavaScript Applications 
+like Websites, hybrid Apps, Electron-Apps, Progressive Web Apps and NodeJs.
+
+RxDb allows you to not only query the current state but subscribe to all state changes.
+Therefore it is useful in UI-based real time applications and makes it easy to develop and adds great performance benefits.
+RxDB provides modules for realtime replication with any CouchDB compliant endpoint and 
+also with custom GraphQL endpoints to replicate data between your clients and server. 
 %cite: https://github.com/pubkey/rxdb
 
 \subsection{What is PouchDB?}
 
-PouchDB is an open-source JavaScript database inspired by Apache CouchDB that is designed to run well within the browser.
-PouchDB was created to help web developers build applications that work as well offline as they do online.
-It enables applications to store data locally while offline, then synchronize it with CouchDB and compatible servers when the application is back online, keeping the user's data in sync no matter where they next login.
+PouchDB is an open-source JavaScript database inspired by Apache CouchDB which runs well within the browser.
+PouchDB helps build applications that work as well offline as they do online.
+It allows applications to store data locally while offline, then synchronize it with CouchDB and compatible servers when the application is back online, keeping the user's data in sync no matter where they next login.
 %cite: https://pouchDB.com/learn.html
 
 \subsection{What is CouchDB?}
 
-CouchDB is (categorised as) a NoSQL database.A CouchDB database lacks a schema, or rigid pre-defined data structures such as tables. Data stored in CouchDB is a JSON document(s). The structure of the data, or document(s), can change dynamically to accommodate evolving needs.  
+CouchDB is (categorised as) a NoSQL database.A CouchDB database does not have a schema, or pre-defined data structures such as tables. Data is stored as JSON document. The structure of the data, or document, can change dynamically to accommodate evolving needs.  
 CouchDB is a peer based distributed database system. Any number of CouchDB hosts (servers and offline-clients) can have independent "replica copies'' of the same database, where applications have full database interactivity (query, add, edit, delete). When back online or on a schedule, database changes can be replicated bi-directionally.
 It is schema-free.
 %cite: https://cwiki.apache.org/confluence/display/COUCHDB/Introduction
