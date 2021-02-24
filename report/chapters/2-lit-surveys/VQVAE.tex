@@ -65,7 +65,7 @@ The input to the decoder is the corresponding embedding vector $e _k$ as given i
     \label{fig:vqvae}
 \end{figure}
 
-During forward computation the nearest embedding $z _q(x)$ \ref{eqn:decoder} is passed to the decoder,
+During forward computation the nearest embedding $z _q(x)$ is passed to the decoder,
 and during the backwards pass the gradient $\nabla _z L$ is passed unaltered to the encoder. 
 Since the output representation of the encoder and the input to the decoder share the same $D$
 dimensional space, the gradients contain useful information for how the encoder has to change its 
