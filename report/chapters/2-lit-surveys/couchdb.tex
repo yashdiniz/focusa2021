@@ -3,35 +3,34 @@
 \subsection{What is RxDB?}
 
 RxDB (Reactive Database) is a NoSQL database for JavaScript Applications 
-like Websites, hybrid Apps, Electron-Apps, Progressive Web Apps and NodeJs.
+like websites, hybrid Apps, Electron-Apps, Progressive Web Apps and NodeJs.
 
 RxDb allows you to not only query the current state but subscribe to all state changes.
-Therefore it is useful in UI-based real time applications and makes it easy to develop and adds great performance benefits.
+Therefore it is useful in UI-based real time applications and makes it easy to develop 
+and adds great performance benefits.
 RxDB provides modules for realtime replication with any CouchDB compliant endpoint and 
-also with custom GraphQL endpoints to replicate data between your clients and server. 
-%cite: https://github.com/pubkey/rxdb
+also with custom GraphQL endpoints to replicate data between your clients and server.~\cite{RxDB}
 
 \subsection{What is PouchDB?}
 
-PouchDB is an open-source JavaScript database inspired by Apache CouchDB which runs well within the browser.
-PouchDB helps build applications that work as well offline as they do online.
-It allows applications to store data locally while offline, then synchronize it with CouchDB and compatible servers when the application is back online, keeping the user's data in sync no matter where they next login.
-%cite: https://pouchDB.com/learn.html
+PouchDB is an open-source JavaScript database inspired by Apache CouchDB which 
+runs well within the browser. PouchDB helps build applications that work as well 
+offline as they do online. It allows applications to store data locally while offline, 
+then synchronize it with CouchDB and compatible servers when the application is back 
+online, keeping the user's data in sync no matter where they next login.~\cite{PouchGuide}
 
 \subsection{What is CouchDB?}
 
-CouchDB is (categorised as) a NoSQL database.A CouchDB database does not have a schema, or pre-defined data structures such as tables. Data is stored as JSON document. The structure of the data, or document, can change dynamically to accommodate evolving needs.  
-CouchDB is a peer based distributed database system. Any number of CouchDB hosts (servers and offline-clients) can have independent "replica copies'' of the same database, where applications have full database interactivity (query, add, edit, delete). When back online or on a schedule, database changes can be replicated bi-directionally.
-It is schema-free.
-%cite: https://cwiki.apache.org/confluence/display/COUCHDB/Introduction
+CouchDB is (categorised as) a NoSQL database.A CouchDB database does not have a schema, 
+or pre-defined data structures such as tables. Data is stored as JSON document. 
+The structure of the data, or document, can change dynamically to accommodate evolving needs.  
+CouchDB is a peer based distributed database system. Any number of CouchDB hosts 
+(servers and offline-clients) can have independent "replica copies" of the same database, 
+where applications have full database interactivity (query, add, edit, delete). 
+When back online or on a schedule, database changes can be replicated bi-directionally.
+It is schema-free.~\cite{CouchConfluence}
 
 \subsection{Offline First Design}
-
-Offline first is an application development paradigm where developers ensure that the functionality of an app is unaffected by intermittent lack of a network connection. In addition offline first usually implies the ability to sync data between multiple devices
-For an app to be offline first we need to make sure that both code and the data required for it to function are not dependent on the presence of the network.
-Mobile applications do need to do something extra to make code available offline,
-Web Applications however can include service workers to achieve the same.
-With service workers we need to worry about when it is safe to update the code. Refer to figure \ref{fig:offline-first}.
 
 \begin{figure}[h!]
     \begin{center}
@@ -41,48 +40,69 @@ With service workers we need to worry about when it is safe to update the code. 
     \label{fig:offline-first}
 \end{figure}
 
-A simple solution to making data available offline is to have a local database that you read and write to. The database can then be replicated to and from a server whenever a network is available.
+Offline first is an application development paradigm where developers ensure that the 
+functionality of an app is unaffected by intermittent lack of a network connection. 
+In addition offline first usually implies the ability to sync data between multiple devices
+For an app to be offline first we need to make sure that both code and the data required 
+for it to function are not dependent on the presence of the network.
+Mobile applications do need to do something extra to make code available offline,
+Web Applications however can include service workers to achieve the same.
+With service workers we need to worry about when it is safe to update the code. 
+Refer to figure \ref{fig:offline-first}.
+
+A simple solution to making data available offline is to have a local database 
+that you read and write to. The database can then be replicated to and from a 
+server whenever a network is available.
 
 %cite: https://hasura.io/blog/design-guide-to-offline-first-apps/#conflicts
 
 \subsection{Push- pull replication}
 
-With RxDB you can do a two-way replication(push-pull replication) with a GraphQL endpoint. This allows you to replicate data from the server into the client-side database and then query and modify it in realtime.
-When the user is offline, you still can use the data and later sync it with the server when the client is online again
+With RxDB you can do a two-way replication(push-pull replication) with a GraphQL endpoint. 
+This allows you to replicate data from the server into the client-side database and then 
+query and modify it in realtime.
+When the user is offline, you still can use the data and later sync it with the server 
+when the client is online again.
 
-Pros:
+\textbf{Pros}
 \begin{enumerate}
-    \item GraphQL-replication is faster and needs less resources
-    \item You do not need a couchdb-compliant endpoint, only a graphql-endpoint
+    \item GraphQL-replication is faster and needs less resources.
+    \item You do not need a couchdb-compliant endpoint, only a graphql-endpoint.
 \end{enumerate}
 
-Cons:
+\textbf{Cons}
 \begin{enumerate}
-    \item You can not replicate multiple databases with each other
-    \item It is assumed that the graphql-server is the single source of truth
-    \item You have to set up things at the server side while with couchdb-sync you only have to start a server
+    \item You can not replicate multiple databases with each other.
+    \item It is assumed that the graphql-server is the single source of truth.
+    \item You have to set up things at the server side while with couchdb-sync 
+    you only have to start a server.
 \end{enumerate}
 
 %cite: https://rxdb.info/replication-graphql.html
 
 \subsection{Conflict resolution}
-If the app can be used from multiple devices, it is possible for the user to make conflicting changes on different devices.
+If the app can be used from multiple devices, it is possible for the user to make 
+conflicting changes on different devices.
 
 \begin{itemize}
-    \item Simplest way to handle conflicts is to assume that they don’t matter and users will simply correct the data later. This approach is also known as last-write-wins.
+    \item Simplest way to handle conflicts is to assume that they don’t matter and 
+    users will simply correct the data later. This approach is also known as last-write-wins.
 \end{itemize}
 
-Assuming we do want to detect and resolve conflicts, there are many broad
-Approaches, one of them which pouchDB uses is:
+Assuming we do want to detect and resolve conflicts, there are many broad approaches, 
+one of them which pouchDB uses is:
 
 \subsubsection{Version the objects:}
 
-Every time a change is made a new version is created. In addition the parent version for a given version is also kept track. A conflict can be identified by the fact that two versions have the same parent
-Two generic auto merge strategies are:
+Every time a change is made a new version is created. In addition the parent version for a given 
+version is also kept track. A conflict can be identified by the fact that two versions have the 
+same parent. Two generic auto merge strategies are:
 
 \begin{enumerate}
-    \item Last write wins: Here we will simply take the last revision to reach the server as the final value
-    \item Merge by fields: If the two devices modified different fields of the object, it might be possible to auto merge by taking the new fields from both objects
+    \item Last write wins: Here we will simply take the last revision to 
+    reach the server as the final value.
+    \item Merge by fields: If the two devices modified different fields 
+    of the object, it might be possible to auto merge by taking the new fields from both objects.
 \end{enumerate}
 
 In the above approach merging is done by the server and clients simply fetch the merged value. 
@@ -96,20 +116,45 @@ different devices resolve the conflict the exact same way they will end up with 
 
 \subsubsection{How do we delete an object ?}
 
-A simple way to delete objects is to have a "deleted" flag in the object. Merge function can then decide what to do if a deleted object has been modified. On the client, any object with the deleted flag set can be immediately purged as there will be no more updates to it. On the server ideally we would want to know that all clients have deleted the object before purging the object. The not so ideal but practical alternative is to periodically purge old objects.
+A simple way to delete objects is to have a "deleted" flag in the object. 
+Merge function can then decide what to do if a deleted object has been modified. 
+On the client, any object with the deleted flag set can be immediately purged as 
+there will be no more updates to it. On the server ideally we would want to know 
+that all clients have deleted the object before purging the object. The not so ideal 
+but practical alternative is to periodically purge old objects.
 
 \subsubsection{Who uses this currently?}
 
 PouchDB and CouchDB follow the above model. In this setup, versions are stored both on the client and 
-the server. When there is a conflict a deterministic algorithm auto picks a winning version
+the server. When there is a conflict a deterministic algorithm auto picks a winning version.
 
 %cite: https://hasura.io/blog/design-guide-to-offline-first-apps/#conflicts
 
 \subsection{Eventual consistency via CAP theorem}
 
-A distributed system is a system that operates robustly over a wide network. A particular feature of network computing is that network links can potentially disappear, and there are plenty of strategies for managing this type of network segmentation. CouchDB differs from others by accepting eventual consistency, as opposed to putting absolute consistency ahead of raw availability like RDBMS or Paxos. What these systems have in common is an awareness that data acts differently when many people are accessing it simultaneously. Their approaches differ when it comes to which aspects of consistency, availability, or partition tolerance they prioritize.
+\begin{figure}[h!]
+    \begin{center}
+        \includegraphics[width=15cm]{cap.png}
+    \end{center}
+    \caption{CAP Theorem. No database can offer the perfect solution for CAP.}
+    \label{fig:cap}
+\end{figure}
 
-The CAP theorem describes a few different strategies for distributing application logic across networks. CouchDB’s solution uses replication to propagate application changes across participating nodes. This is a fundamentally different approach from consensus algorithms and relational databases, which operate at different intersections of consistency, availability, and partition tolerance.
+A distributed system is a system that operates robustly over a wide network. 
+A particular feature of network computing is that network links can potentially 
+disappear, and there are plenty of strategies for managing this type of network 
+segmentation. CouchDB differs from others by accepting eventual consistency, 
+as opposed to putting absolute consistency ahead of raw availability like 
+RDBMS or Paxos. What these systems have in common is an awareness that data 
+acts differently when many people are accessing it simultaneously. 
+Their approaches differ when it comes to which aspects of consistency, 
+availability, or partition tolerance they prioritize. Refer to figure. \ref{fig:cap}
+
+The CAP theorem describes a few different strategies for distributing application 
+logic across networks. CouchDB’s solution uses replication to propagate application 
+changes across participating nodes. This is a fundamentally different approach from 
+consensus algorithms and relational databases, which operate at different intersections 
+of consistency, availability, and partition tolerance.
 
 \subsubsection{Consistency}
 
@@ -123,21 +168,19 @@ All database clients are able to access some version of the data.
 
 The database can be split over multiple servers.
 
-\begin{figure}[h!]
-    \begin{center}
-        \includegraphics[width=15cm]{cap.png}
-    \end{center}
-    \caption{CAP Theorem. No database can offer the perfect solution for CAP.}
-    \label{fig:cap}
-\end{figure}
-
-If availability is a priority, we can let clients write data to one node of the database without waiting for other nodes to come into agreement. If the database knows how to take care of reconciling these operations between nodes, we achieve a sort of “eventual consistency” in exchange for high availability
+If availability is a priority, we can let clients write data to one node of the 
+database without waiting for other nodes to come into agreement. If the database 
+knows how to take care of reconciling these operations between nodes, we achieve 
+a sort of “eventual consistency” in exchange for high availability.
 
 \subsection{MapReduce algorithm}
 
-CouchDB uses MapReduce to compute the results of a view. MapReduce makes use of two functions, “map” and “reduce,” which are applied to each document in isolation. Being able to isolate these operations means that view computation lends itself to parallel and incremental computation. More important, because these functions produce key/value pairs, CouchDB is able to insert them into the B-tree storage engine, sorted by key. Lookups by key, or key range, are extremely efficient operations with a B-tree, described in big O notation as O(log N) and O(log N + K), respectively.
+CouchDB uses MapReduce to compute the results of a view. MapReduce makes use of two 
+functions, “map” and “reduce,” which are applied to each document in isolation. 
+Being able to isolate these operations means that view computation lends itself 
+to parallel and incremental computation. More important, because these functions 
+produce key/value pairs, CouchDB is able to insert them into the B-tree storage engine, 
+sorted by key. Lookups by key, or key range, are extremely efficient operations with a 
+B-tree, described in big O notation as $O(log N)$ and $O(log N + K)$, respectively.
 
 %cite: https://guide.couchdb.org/draft/consistency.html
-
-
-% stub.
