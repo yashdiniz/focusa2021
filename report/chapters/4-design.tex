@@ -235,8 +235,12 @@ The \textbf{Collections} and their respective \textbf{Document Attributes} are:
 The core \textbf{relationships} between the attributes are:
 \begin{enumerate}
     \item Each auth publishes many posts. One-to-many relationship.
-    \item Many auths can have many roles. Many-to-many relationship.
+    \item Many auths have many roles. Many-to-many relationship.
     \item Each auth has a profile. One-to-one relationship with total cardinality.
+    \item Many comment posts have one parent post. Many-to-one relationship.
+    \item Each post belongs to one course. Many-to-one relationship.
+    \item Each course is moderated by many roles. One-to-many relationship.
+    \item Each profile subscribes to many courses. One-to-many relationship.
 \end{enumerate}
 
 The Posts collection functionally stores all posts and comment documents as simple trees. This data structure can easily support 
