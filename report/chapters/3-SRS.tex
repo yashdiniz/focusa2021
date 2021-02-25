@@ -96,6 +96,8 @@ NodeJS, GraphQL, CouchDB, ReactJS
 \begin{itemize}
     \item We will be using SSL for encrypting the traffic.
     \item Servers will have firewalls, and SSH connections will be protected by password and certificates.
+    \item Each service will also be containerized, running in complete isolation, interacting strictly via 
+    loosely coupled message passing.
 \end{itemize}
 
 \subsection{Maintainability}
@@ -158,6 +160,10 @@ NodeJS, GraphQL, CouchDB, ReactJS
     and routes the client requests to appropriate backend server. Popularly used for load balancing and security.
     \item \textbf{Load Balancing} - methodical and efficient distribution of network or application traffic 
     across multiple servers.
+    \item \textbf{Microservices} - The application is broken down into multiple, isolated services, each performing 
+    a small part of the entire application. Microservices are easy to manage and operate in parallel.
+    \item \textbf{Message Passing} - Applications can share data with each other by passing messages over the network. 
+    These messages will be passed using a standard protocol like HTTP.
     \item \textbf{Persistent Cache} - intended for intermediate term storage of documents or data objects.
     \item \textbf{Lossy Compression} - method of data compression in which the size of the file 
     is reduced by eliminating data in the file.
