@@ -50,6 +50,7 @@ documentation are the typical features of agile. The teams in agile methodology 
 with each other and are often based in the same geographical location.
 
 \subsubsection{Pros}
+
 \begin{itemize}
     \item Agile is a very realistic approach to software development.
     \item Functionality can be developed, rapidly demonstrated and promotes teamwork and cross training. 
@@ -61,6 +62,7 @@ with each other and are often based in the same geographical location.
 \end{itemize}
 
 \subsubsection{Cons}
+
 \begin{itemize}
     \item Not suitable for handling complex dependencies and more risk of sustainability, maintainability and extensibility.
     \item Strict delivery management dictates the scope, functionality to be delivered, and adjustments to meet the deadlines.
@@ -71,17 +73,25 @@ with each other and are often based in the same geographical location.
 
 \subsection{Why Agile?}
 
-Our project is built using the JAMstack, which is a very popular technology stack. 
-Being college students, flexibility and time management is of grave concern. Juggling between coursework and 
-project work is made easier by ensuring that each incremental change made to the code repository will still 
-result in operational code with minimal errors. Working iteratively helps us deliver a working project solution 
-in multiple sprints, building incrementally.
+Flexibility and time management are important factors to consider when working on projects.
+Working iteratively, as Agile necessitates, allows a project team to deliver operational solutions in incremental builds.
+Each incremental change made to the code repository is thus maintained, and product releases are thus ensured to have minimal errors.
+Furthermore, tests are also performed prior to every product release, which help find bugs and mitigate errors which 
+could have crept into the product during development.
+
+It is also important to note that the JAMstack, which is the technology stack used to implement the project, 
+has features which include loose-coupling between modules, and a very wide community of developers. Each module, 
+called a microservice, can be easily maintained by individual developers. Since each microservice delivers a limited 
+set of functions, documentation for each module can be minimised. JAMstack approaches project development in a 
+similar way to Agile, and thus can be a perfect fit.
 
 \section{CI/CD pipeline}
+
 A CI/CD pipeline automates your software delivery process. The pipeline builds codes, runs test (CI),
 and safely deploys a new version of the application (CD).
 
 \subsection{CI and CD}
+
 CI stands for Continuous Integration. It is a development process in which the developers merge
 their code changes multiple times a day in a central repository. With CI, each change in code 
 triggers an automated build and test sequence.
@@ -101,10 +111,12 @@ which may be manual and consists of multiple stages.~\cite{CICD}
 \end{figure}
 
 \subsubsection{Source Stage}
+
 Source repository triggers a pipeline run. A notification is triggered to the CI/CD tool 
 which runs the corresponding pipeline if there is a change in code. 
 
 \subsubsection{Build Stage}
+
 To build a runnable instance of our product that we can potentially ship to our end users we combine 
 the source code and its dependencies. Programs written in languages such as Java, C/C++, or Go need 
 to be compiled, whereas Ruby, Python and JavaScript programs work without this step.
@@ -116,6 +128,7 @@ There are fundamental problems in the project's configuration if the project fai
 stage, and it’s best to address the problems immediately.
 
 \subsubsection{Test Stage}
+
 We run automated tests to validate our code and the behaviour of our product. This stage acts as a safety
 net that does not allow the bugs to reach the end-users.
 
@@ -124,6 +137,7 @@ This stage can last from seconds to hours depending on the complexity of the pro
 Failure in this stage shows the errors in the code that developers didn't foresee when writing the code.
 
 \subsubsection{Deploy Stage}
+
 Once the runnable instance of the code has passed all the test stages, it is ready to deploy. There are 
 multiple deploy environments for example “beta” environment for the product team and “production” 
 environment for end-users.
@@ -135,34 +149,46 @@ automatically deploy approved changes from the master branch to production.
 \section{JAMstack}
 
 \subsection{What is JAMstack?}
-Jamstack is an architecture designed to make the web faster, more secure, and easier to scale. It builds on many of the tools and workflows which bring maximum productivity.
+
+Jamstack is an architecture designed to make the web faster, more secure, and easier to scale. 
+It builds on many of the tools and workflows which bring maximum productivity.
 
 It adheres to the following components : Javascript, APIs and Markup.
 
-The core principles of pre-rendering and decoupling, enable sites and applications to be delivered with greater confidence and resilience than ever before.
+The core principles of pre-rendering and decoupling, enable sites and applications to be delivered 
+with greater confidence and resilience than ever before.
 
 \subsection{Why use JAMstack?}
 
 These are the core concepts that makes JAMstack deliver fast, secure, high-performing, resilient, and efficient infrastructure:
 
 \subsubsection{Speed}
-The fact that you’re serving JAMstack apps as static files directly from a Content Delivery Network makes it likely your app is going to load super fast. 
-Therefore the server need not spend time building the page before responding; all as a result of pre-rendering. 
+
+Serving JAMstack apps as static files directly from a Content Delivery Network makes it 
+likely apps will load faster. Therefore the server need not spend time building the page 
+before responding; all as a result of pre-rendering. 
 
 \subsubsection{Cost}
-More often than not, JAMstack sites are going to run cheaper than their server side counterparts. Hosting static assets is 
-cheap and now your page is being served at the same rate.
+
+More often than not, JAMstack sites are going to run cheaper than their server side counterparts. 
+Hosting static assets is cheap and now your page is being served at the same rate.
 
 \subsubsection{Scalability}
+
 Since you’re serving your files off of static hosting, likely a CDN, that pretty much automatically gives you infinite scalability.
 
 \subsubsection{Maintenance}
-The foundation of your static site isn’t a server, meaning you don't need to maintain it. Your static HTML, CSS, and JS are maintained for you headache-free.
+
+The foundation of your static site isn’t a server, meaning you don't need to maintain it. 
+Your static HTML, CSS, and JS are maintained for you headache-free.
 
 \subsubsection{Security}
-With JAMstack, there is no need to lockdown all the services as a central organisation, instead, we can lock separate containerised services.
+
+With JAMstack, there is no need to lockdown all the services as a central organisation, instead, 
+we can lock separate containerised services.
 
 \subsection{A Comparison with  the Traditional Web Architecture}
+
 Jamstack is the new standard architecture for the web. Using Git workflows and modern build tools, pre-rendered content 
 is served to a CDN and made dynamic through APIs and serverless functions. Technologies in the stack include JavaScript frameworks, 
 Static Site Generators, Headless CMSs, and CDNs. Refer to figure \ref{fig:jamstack}
