@@ -224,14 +224,12 @@ The user is also logged out of the app the session times out.
     \label{fig:schema}
 \end{figure}
 
-A database schema represents a \textbf{blueprint} or \textbf{architecture} of how our data will look. 
-It describes the shape of the data and how it might relate to other tables or models. An entry in our 
-database will be an example of the database schema. It will contain all of the resources described in 
-the schema. Refer to \label{fig:schema}.
+A database schema represents a \textbf{blueprint} or \textbf{architecture} of how the data will look. 
+It describes the shape of the data and how it might relate to other tables or models. Refer to \label{fig:schema}.
 
 The \textbf{Collections} and their respective \textbf{Document Attributes} are:
 \begin{enumerate}
-    \item \textbf{Authentication(auth)}, which describes user details needed for authentication.
+    \item \textbf{User}, which describes user details needed for authentication.
     \item \textbf{Posts}, which desribes attributes like text, course, timestamp, URL attachment 
     and flags for reported and approved.
     \item \textbf{Courses}, which includes moderator roles, and describes information which will 
@@ -242,9 +240,9 @@ The \textbf{Collections} and their respective \textbf{Document Attributes} are:
 
 The core \textbf{relationships} between the attributes are:
 \begin{enumerate}
-    \item Each auth publishes many posts. One-to-many relationship.
-    \item Many auths have many roles. Many-to-many relationship.
-    \item Each auth has a profile. One-to-one relationship with total cardinality.
+    \item Each user publishes many posts. One-to-many relationship.
+    \item Many users have many roles. Many-to-many relationship.
+    \item Each user has a profile. One-to-one relationship with total cardinality.
     \item Many comment posts have one parent post. Many-to-one relationship.
     \item Each post belongs to one course. Many-to-one relationship.
     \item Each course is moderated by many roles. One-to-many relationship.
@@ -254,7 +252,6 @@ The core \textbf{relationships} between the attributes are:
 The Posts collection functionally stores all posts and comment documents as simple trees. This data structure can easily support 
 and manage a hierarchy similar to tweets in Twitter. However, we allow the moderators to setup a limit to the depth of comments.
 
-% Sequence Diagram.
 \section{Sequence Diagram}
 
 \begin{figure}[h!]
@@ -267,29 +264,27 @@ and manage a hierarchy similar to tweets in Twitter. However, we allow the moder
 \end{figure}
 
 Refer to figure \ref{fig:sequence}.
-The client sends a request to login to the auth microservice along with the credentials ie; name, password.
-On receiving the credentials the auth verifies the authentication details, finding it correct, creates a session and generates a refresh cookie.
-Auth also generates a signed JWT(JSON Web Token) conatining the IP, username and session details of the client.
+The User initiates with a request to login to the Authenticator along with their credentials ie; name and password.
+On receiving the credentials, the Authenticator verifies them, creates a session and generates a refresh cookie.
+Auth also generates a signed JWT(JSON Web Token) conatining the IP, username and session details of the User.
 
-This JWT is stored in the client memory and acts as an ID card which can be used by 
-the client to directly work with the GraphQL and microservices without the need of 
-the authentication with the auth time and again.
-The JWT along with the refresh cookie is sent as a response to the user by the auth.
+This JWT is stored in the User's device memory. This JWT is synonymous to an ID card which can be used by 
+the User to directly work with the GraphQL and Services without needing to disturb the Authenticator repeatedly.
 
-The client can now communicate with GraphQL by showing the JWT and request for data.
-The GraphQL makes an HTTP GET request and forwards JWT to the requested microservice.
-The microservice verifies the signed JWT received from the GraphQL and if found valid 
-executes the query and returns response data to the GraphQL.
-Grapql converts the recevied response into a required format and sends it to the client.
-This is incase of successful JWT verification
+The User can now communicate with GraphQL by sharing the JWT.
+GraphQL makes a request and forwards JWT to the Services. Services here refer to all the microservices that form the system.
+The Services validate the signed JWT received from the GraphQL (by checking its digital signature) 
+and if found valid execute the query and return response data to GraphQL.
+GraphQL then converts the recevied response into the format requested by the User, and sends it to the User.
 
-Incase the microservice finds the JWT to be invalid it sends a failure response to the 
-GraphQL wich inturn returns the failure response to the client.
-The client now needs to request the auth for a session refresh upon which the auth 
+However, if the Services find the JWT to be invalid, a failure response is sent to
+GraphQL which then returns a failure response to the User.
+The User now needs to request the Authenticator for a session refresh upon which the Authenticator
 returns a new signed JWT along with the refresh cookie.
 
-On refresh the JWT gets deleted from memory and is no longer valid. The client needs 
-to request for a session renew and a new signed JWT.
-On logout the JWT is simply discarded by deleting the object from memory. 
+If the User accidentally refreshes their browser, the JWT will get deleted from memory. 
+The User will then request for a session refresh, and a new signed JWT will be generated.
+
+On logout the JWT is simply discarded by deleting the object from memory.
 
 % Neural Network architecture diagram.
