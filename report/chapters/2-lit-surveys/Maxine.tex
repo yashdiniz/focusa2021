@@ -77,3 +77,22 @@ This reduces the customer base because of its cost and huge unavailability of GP
 
 It is therefore important to understand that dependence on compute-intensive hardware could
 currently be our only barrier to building effective applications using Neural Networks.
+
+\section{Comfort Noise}
+
+Comfort noise is an audibly soft, synthetic background noise that was introduced in wireless communications 
+mainly to overcome the issues of artificial silence which occurs in voice activity detection systems.
+The issues of receiving prolonged periods of artificial silence would include:
+
+\begin{itemize}
+    \item The listener disconnecting prematurely believing transmission has been lost.
+    \item The speech does not sound smooth, since the voice activity detector would 
+    abruptly cut the signal as an attempt to save bandwidth, but this would give the 
+    listener a perception that the voice quality has worsened.
+    \item The sudden changes in voice amplitude, punctuated by repeated gaps of silence 
+    would be jarring to the listener.
+\end{itemize}
+
+As can be observed, the above issues are not technical. Engineers arrived at a simple solution which involved adding 
+comfort noise to the communication. This noise is added at the receiving end of the communication, and not transmitted.~\cite{ComfortNoise}
+Such a setup helps save bandwidth while also circumventing the issues described above.
