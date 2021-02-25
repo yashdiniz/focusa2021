@@ -132,7 +132,49 @@ Teams that have embraced the Agile model of development guided by tests and real
 deploy work-in-progress manually to a beta environment for additional manual testing and review, and 
 automatically deploy approved changes from the master branch to production.
 
-% High Level Diagram showing microservices.
+\section{JAMstack}
+
+\subsection{What is JAMstack?}
+Jamstack is an architecture designed to make the web faster, more secure, and easier to scale. It builds on many of the tools and workflows which bring maximum productivity.
+
+It adheres to the following components : Javascript, APIs and Markup.
+
+The core principles of pre-rendering and decoupling, enable sites and applications to be delivered with greater confidence and resilience than ever before.
+
+\subsection{Why use JAMstack?}
+
+These are the core concepts that makes JAMstack deliver fast, secure, high-performing, resilient, and efficient infrastructure:
+
+\subsubsection{Speed}
+The fact that you’re serving JAMstack apps as static files directly from a Content Delivery Network makes it likely your app is going to load super fast. 
+Therefore the server need not spend time building the page before responding; all as a result of pre-rendering. 
+
+\subsubsection{Cost}
+More often than not, JAMstack sites are going to run cheaper than their server side counterparts. Hosting static assets is 
+cheap and now your page is being served at the same rate.
+
+\subsubsection{Scalability}
+Since you’re serving your files off of static hosting, likely a CDN, that pretty much automatically gives you infinite scalability.
+
+\subsubsection{Maintenance}
+The foundation of your static site isn’t a server, meaning you don't need to maintain it. Your static HTML, CSS, and JS are maintained for you headache-free.
+
+\subsubsection{Security}
+With JAMstack, there is no need to lockdown all the services as a central organisation, instead, we can lock separate containerised services.
+
+\subsection{A Comparison with  the Traditional Web Architecture}
+Jamstack is the new standard architecture for the web. Using Git workflows and modern build tools, pre-rendered content 
+is served to a CDN and made dynamic through APIs and serverless functions. Technologies in the stack include JavaScript frameworks, 
+Static Site Generators, Headless CMSs, and CDNs. Refer to figure \ref{fig:jamstack}
+
+\begin{figure}[h!]
+    \begin{center}
+        \includegraphics[width=15cm]{Jamstack.jpg}
+    \end{center}
+    \caption{Traditional web v/s JAMstack}
+    \label{fig:jamstack}
+\end{figure}
+
 \section{High Level Systems}
 
 \begin{figure}[h]
