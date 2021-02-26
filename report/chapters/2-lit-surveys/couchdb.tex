@@ -63,13 +63,13 @@ realtime query and modification.
 When the user is offline, they still can use the data and later sync it with the server 
 when the client is online again.
 
-\textbf{Pros}
+\subsubsection*{Pros}
 \begin{enumerate}
     \item GraphQL-replication is faster and needs less resources.
     \item Does not need a couchdb-compliant endpoint, only a graphql-endpoint.
 \end{enumerate}
 
-\textbf{Cons}
+\subsubsection*{Cons}
 \begin{enumerate}
     \item Cannot replicate multiple databases with each other.
     \item It is assumed that the graphql-server is the single source of truth.
@@ -90,7 +90,7 @@ conflicting changes on different devices.
 Since conflict detection and resolution is a must, there are many broad approaches, 
 one of them which pouchDB uses is:
 
-\textbf{Version the objects:}
+\subsubsection*{Version the objects:}
 
 Every time a change is made a new version is created. In addition the parent version for a given 
 version is also kept track. A conflict can be identified by the fact that two versions have the 
@@ -112,7 +112,7 @@ Clients need to handle this (For example by examining the history and ignoring o
 PouchDB and CouchDB handle this by using a hash of the document contents as the object version. So if two 
 different devices resolve the conflict the exact same way they will end up with the exact same version id.
 
-\textbf{How are documents deleted?}
+\subsubsection*{How are documents deleted?}
 
 A simple way to delete objects is to have a "deleted" flag in the object. 
 Merge function can then decide what to do if a deleted object has been modified. 
@@ -120,7 +120,7 @@ On the client, any object with the deleted flag set can be immediately purged as
 there will be no more updates to it. The server would need to make sure that every client has purged the object locally. 
 The not so ideal but practical alternative is to periodically purge old objects.
 
-\textbf{Who uses this currently?}
+\subsubsection*{Who uses this currently?}
 
 PouchDB and CouchDB follow the above model. In this setup, versions are stored both on the client and 
 the server. When there is a conflict a deterministic algorithm auto picks a winning version.~\cite{HasuraOfflineFirst}
