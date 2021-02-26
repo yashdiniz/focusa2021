@@ -1,8 +1,4 @@
-\section{NVIDIA Maxine}
-
-Note that we have added NVIDIA Maxine to the literature survey to share that we are aware of 
-their offering video conferencing services using AI. We take 
-inspiration from NVIDIA's technology and attempt to overcome their disadvantages.
+\subsection{NVIDIA Maxine}
 
 NVIDIA Maxine is a fully accelerated platform SDK for developers of video 
 conferencing services to build and deploy AI-powered features that use state-of-the-art 
@@ -18,7 +14,7 @@ Maxine-based applications let service providers offer the same features to every
 including computers, tablets, and phones. Applications built with Maxine can easily be deployed as 
 microservices that scale to hundreds of thousands of streams in a Kubernetes environment.~\cite{Maxine}
 
-\subsection{Features}
+\subsubsection{Features}
 
 \begin{itemize}
     \item \textbf{Easy to use SDK}: Includes libraries, tools and example pipelines 
@@ -31,46 +27,48 @@ microservices that scale to hundreds of thousands of streams in a Kubernetes env
     on NVIDIA Tensor Cores GPUs.
 \end{itemize}
 
-\subsection{Key Technologies}
+\subsubsection{Key Technologies}
 
-\subsubsection{Reduce Video Bandwidth compared to H.264}
-With AI-based video compression technology running on \textbf{NVIDIA GPUs}, 
-developers can reduce bandwidth use down to one-tenth of the bandwidth needed 
-for the H.264 video compression standard. This cuts costs for providers and 
-delivers a smoother video conferencing experience for end users, who can enjoy 
-more AI-powered services while streaming less data on their computers, tablets, and phones.
+\begin{itemize}
+    \item \textbf{Reduce Video Bandwidth compared to H.264}: 
+    With AI-based video compression technology running on \textbf{NVIDIA GPUs}, 
+    developers can reduce bandwidth use down to one-tenth of the bandwidth needed 
+    for the H.264 video compression standard. This cuts costs for providers and 
+    delivers a smoother video conferencing experience for end users, who can enjoy 
+    more AI-powered services while streaming less data on their computers, tablets, and phones.
+    
+    \item \textbf{Face Re-Animation}:
+    Using new AI research, you can identify key facial points of each person on a video call 
+    and then use these points with a still image to reanimate a person’s face on the other side 
+    of the call using Generative Adversarial Networks (GANs).
+    
+    These key points can be used for face alignment, where faces are rotated so that
+    people appear to be facing each other during a call, as well as gaze correction 
+    to help simulate eye contact, even if a person’s camera isn’t aligned with their screen.
+    
+    Developers can also add features that allow call participants to choose their
+    own avatars that are realistically animated in real time by their voice and emotional tone.
 
-\subsubsection{Face Re-Animation}
-Using new AI research, you can identify key facial points of each person on a video call 
-and then use these points with a still image to reanimate a person’s face on the other side 
-of the call using Generative Adversarial Networks (GANs).
+    \item \textbf{Video and Audio Effects}:
+    AI-based super-resolution and artifact reduction can convert lower resolutions to higher
+    resolution videos in real time which helps to lower the bandwidth requirements for video 
+    conference providers, as well as improves the call experience for users with lower bandwidth. 
+    Developers can add features to filter out common background noise and frame the camera on a user’s 
+    face for a more personal and engaging conversation.
+    
+    Additional AI models can help remove noise from low-light conditions creating a more appealing picture.
 
-These key points can be used for face alignment, where faces are rotated so that
-people appear to be facing each other during a call, as well as gaze correction 
-to help simulate eye contact, even if a person’s camera isn’t aligned with their screen.
+    \item \textbf{Conversational AI}:
+    Maxine-based applications can use NVIDIA Jarvis, a fully accelerated conversational
+    AI framework with state-of-the-art models optimized for real time performance. Using Jarvis, 
+    developers can integrate virtual assistants to take notes, set action items, and answer questions 
+    in human-like voices.
+    
+    Additional conversational AI services such as translations, closed captioning and transcriptions help 
+    ensure everyone can understand what’s being discussed on the call.
+\end{itemize}
 
-Developers can also add features that allow call participants to choose their
-own avatars that are realistically animated in real time by their voice and emotional tone.
-
-\subsubsection{Video and Audio Effects}
-AI-based super-resolution and artifact reduction can convert lower resolutions to higher
-resolution videos in real time which helps to lower the bandwidth requirements for video 
-conference providers, as well as improves the call experience for users with lower bandwidth. 
-Developers can add features to filter out common background noise and frame the camera on a user’s 
-face for a more personal and engaging conversation.
-
-Additional AI models can help remove noise from low-light conditions creating a more appealing picture.
-
-\subsubsection{Conversational AI}
-Maxine-based applications can use NVIDIA Jarvis, a fully accelerated conversational
-AI framework with state-of-the-art models optimized for real time performance. Using Jarvis, 
-developers can integrate virtual assistants to take notes, set action items, and answer questions 
-in human-like voices.
-
-Additional conversational AI services such as translations, closed captioning and transcriptions help 
-ensure everyone can understand what’s being discussed on the call.
-
-\subsection{Disadvantages}
+\subsubsection{Observation}
 
 NVIDIA Maxine needs all of its devices to have NVIDIA hardware or access to the NVIDIA cloud. 
 This reduces the customer base because of its cost and huge unavailability of GPUs.
@@ -78,7 +76,7 @@ This reduces the customer base because of its cost and huge unavailability of GP
 It is therefore important to understand that dependence on compute-intensive hardware could
 currently be the only barrier to building effective applications using Neural Networks.
 
-\section{Comfort Noise}
+\subsection{Comfort Noise}
 
 Comfort noise is an audibly soft, synthetic background noise that was introduced in wireless communications 
 mainly to overcome the issues of artificial silence which occurs in voice activity detection systems.
