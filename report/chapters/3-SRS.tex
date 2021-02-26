@@ -14,13 +14,13 @@ insights.
 
 \subsection{Project Overview}
 
-Our project aims to deliver a scalable web services framework which is easy to work 
+This project aims to deliver a scalable web services framework which is easy to work 
 with for both the developer and the customers. It will allow connecting students and 
 teachers through subscription portals, by letting faculty moderators post content 
 which can be accessed by the students and synced whenever an internet connection 
-is available. Furthermore, we aim to build a real-time video conferencing platform 
-using a lossy compression algorithm involving neural networks. Finally, we plan on 
-integrating various existing services like Google Calendar and Drive, to ease 
+is available. Furthermore, the project will have a real-time video conferencing platform 
+using an experimental lossy compression algorithm involving neural networks. 
+Finally, various existing services like Google Calendar and Drive will be integrated, to ease 
 automation efforts, reducing the need to manually manage multiple tools.
 
 \subsection{Hardware Requirements}
@@ -80,7 +80,7 @@ NodeJS, GraphQL, CouchDB, ReactJS
     \item Using CouchDB as a distributed database allows for simplifying 
     horizontal scalability using eventual consistency.
     \item Using containerized microservices further improve the scope for horizontal scalability.
-    \item Simple since we are using GraphQL as our Web Services Framework 
+    \item Simple since GraphQL is used as the Web Services Framework 
     and also using the ReactJS and CouchDB technology stack.
 \end{itemize}
 
@@ -94,7 +94,7 @@ NodeJS, GraphQL, CouchDB, ReactJS
 
 \subsection{Security}
 \begin{itemize}
-    \item We will be using SSL for encrypting the traffic.
+    \item SSL will be used for encrypting the traffic.
     \item Servers will have firewalls, and SSH connections will be protected by password and certificates.
     \item Each service will also be containerized, running in complete isolation, interacting strictly via 
     loosely coupled message passing.
@@ -102,17 +102,17 @@ NodeJS, GraphQL, CouchDB, ReactJS
 
 \subsection{Maintainability}
 \begin{itemize}
-    \item We are using a microservice architecture on the server-side. 
+    \item Microservice architecture will be used on the server-side. 
     The loosely-coupled modularity offered by this architecture simplifies maintenance tasks.
     \item The frontend will be built with reusable ReactJS components. 
-    Our goal is to maximize code reuse, and simplify maintenance.
-    \item We will also be using third-party npm packages wherever necessary.
+    The goal is to maximize code reuse, and simplify maintenance.
+    \item Third-party npm packages will also be incorporated wherever necessary.
 \end{itemize}
 
 \subsection{Performance}
 \begin{itemize}
-    \item We will be using distillation techniques for the neural networks 
-    and we will try to reduce the CPU and memory footprints of the same as much as possible.
+    \item Distillation techniques for the neural networks will also be incorporated,
+    and an attampt will be made to reduce the CPU and memory footprints of the same as much as possible.
 \end{itemize}
 
 \section{Interface Requirements}
@@ -131,7 +131,7 @@ NodeJS, GraphQL, CouchDB, ReactJS
 \begin{itemize}
     \item SSH protocol for the server-side interface.
     \item Device hardware, like the camera, microphone, and others. 
-    We will use the WebRTC negotiation interface to obtain secure access to the hardware.
+    The WebRTC negotiation interface will be used to obtain secure access to the hardware.
 \end{itemize}
 
 \subsection{Communication Interfaces}

@@ -45,11 +45,11 @@ update, and delete (or CRUD) operations respectively.~\cite{GeeksRestAPI}
 GraphQL is a query language and server-side runtime for Application Programming Interfaces (APIs) 
 that prioritizes giving clients exactly the data they request and nothing more. 
 GraphQL is designed to make APIs fast, flexible, and developer-friendly. It is not tied 
-to any specific database or storage engine and is instead backed by your existing code and data.
+to any specific database or storage engine and is instead backed by existing code and data.
 
 API developers use GraphQL to create a schema to describe all the possible data that clients can query 
-through that service. This schema is made up of object types, which define which kind of object you can 
-request and what fields it has. As queries come in, GraphQL validates the queries against the schema. 
+through that service. This schema is made up of object types, which define which kind of object can be
+requested and what fields it has. As queries come in, GraphQL validates the queries against the schema. 
 GraphQL then executes the validated queries.
 
 The API developer attaches each field in a schema to a function called a resolver. 
@@ -80,10 +80,10 @@ the end user.~\cite{RubrikGraphQL}
 
 \subsubsection{Data Fetching}
 
-With a REST API, you would typically gather the data by accessing multiple endpoints. You basically 
-end up having to make multiple requests to different endpoints to fetch the required data.
-In GraphQL on the other hand, you’d simply send a single query to the GraphQL server that 
-includes the concrete data requirements. The server then responds with a JSON object where these 
+With a REST API, data would be gathered by accessing multiple endpoints. The application would  
+end up having to make multiple requests to different endpoints to fetch the required data, and could lead to overfetching of data.
+In GraphQL on the other hand, a single query to the GraphQL server that 
+includes the concrete data requirements would be sufficient. The server would then respond with a JSON object where these 
 requirements are fulfilled. Therefore using GraphQL, the client can specify exactly the data it needs in a query.
 
 \subsubsection{Over-fetching and Under-fetching of Data}
@@ -104,7 +104,7 @@ the switch can be flipped for the client apps to load the data from the actual A
 
 \subsubsection{Rapid Product Iterations on the Front-end}
 
-A common pattern with REST APIs is to structure the endpoints according to the views that you have inside your app 
+A common pattern with REST APIs is to structure the endpoints according to the views inside the app 
 in order for the client to get all required information for a particular view by simply accessing the corresponding 
 endpoint. However, the major drawback of this approach is that it doesn’t allow for rapid iterations on the frontend. 
 With every change that is made to the UI, there is a high risk that now there is more or less data required than before.
@@ -115,9 +115,9 @@ no backend adjustments are required when the design and data needs on the fronte
 
 \subsubsection{Insightful Analytics on the Back-end}
 
-GraphQL allows you to have fine-grained insights about the data that’s requested on the backend. As each client specifies 
+GraphQL allows having fine-grained insights about the data that’s requested on the backend. As each client specifies 
 exactly what information it’s interested in, it is possible to gain a deep understanding of how the available data is being 
 used. This can for example help in evolving an API and deprecating specific fields that are not requested by any clients any more.
-With GraphQL, you can also do low-level performance monitoring of the requests that are processed by your server. 
+With GraphQL, the developer can also do low-level performance monitoring of the requests that are processed by the server. 
 GraphQL uses the concept of resolver functions to collect the data that’s requested by a client. Instrumenting and measuring 
-performance of these resolvers provides crucial insights about bottlenecks in your system.~\cite{GraphQLvsREST}
+performance of these resolvers provides crucial insights about bottlenecks in the system.~\cite{GraphQLvsREST}

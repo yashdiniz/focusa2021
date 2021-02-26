@@ -87,7 +87,7 @@ similar way to Agile, and thus can be a perfect fit.
 
 \section{CI/CD pipeline}
 
-A CI/CD pipeline automates your software delivery process. The pipeline builds codes, runs test (CI),
+A CI/CD pipeline automates the software delivery process. The pipeline builds codes, runs test (CI),
 and safely deploys a new version of the application (CD).
 
 \subsection{CI and CD}
@@ -117,8 +117,9 @@ which runs the corresponding pipeline if there is a change in code.
 
 \subsubsection{Build Stage}
 
-To build a runnable instance of our product that we can potentially ship to our end users we combine 
-the source code and its dependencies. Programs written in languages such as Java, C/C++, or Go need 
+To build a runnable instance of the product that which can potentially be shipped to end users  
+the source code and its dependencies will need to undergo a build stage. 
+Programs written in languages such as Java, C/C++, or Go need 
 to be compiled, whereas Ruby, Python and JavaScript programs work without this step.
 
 Regardless of the language, cloud-native software is typically deployed with Docker, in which case this 
@@ -129,7 +130,7 @@ stage, and it’s best to address the problems immediately.
 
 \subsubsection{Test Stage}
 
-We run automated tests to validate our code and the behaviour of our product. This stage acts as a safety
+Automated tests can be run to validate the code and the behaviour of the product. This stage acts as a safety
 net that does not allow the bugs to reach the end-users.
 
 This stage can last from seconds to hours depending on the complexity of the project.
@@ -171,21 +172,22 @@ before responding; all as a result of pre-rendering.
 \subsubsection{Cost}
 
 More often than not, JAMstack sites are going to run cheaper than their server side counterparts. 
-Hosting static assets is cheap and now your page is being served at the same rate.
+Hosting static assets is cheap and now the pages are being served at the same rate.
 
 \subsubsection{Scalability}
 
-Since you’re serving your files off of static hosting, likely a CDN, that pretty much automatically gives you infinite scalability.
+Since the files are being served off of static hosting, likely a CDN, 
+that pretty much automatically gives infinite and inexpensive scalability.
 
 \subsubsection{Maintenance}
 
-The foundation of your static site isn’t a server, meaning you don't need to maintain it. 
-Your static HTML, CSS, and JS are maintained for you headache-free.
+The static site isn’t hosted on a server, meaning hardware maintenance is offloaded. 
+Static HTML, CSS, and JS are maintained headache-free on an automated, distributed CDN system.
 
 \subsubsection{Security}
 
 With JAMstack, there is no need to lockdown all the services as a central organisation, instead, 
-we can lock separate containerised services.
+each service can be locked in separate containerised services, leading to easier management and isolation.
 
 \subsection{A Comparison with  the Traditional Web Architecture}
 
@@ -206,7 +208,7 @@ Static Site Generators, Headless CMSs, and CDNs. Refer to figure \ref{fig:jamsta
 \begin{figure}[h]
     \centering
     \includegraphics[width=12cm]{highlevel.png}
-    \caption{High Level Diagram illustrating all microservices of our application.}
+    \caption{High Level Diagram illustrating all microservices of the project.}
     \label{fig:highlevel}
 \end{figure}
 
@@ -232,7 +234,7 @@ The benefits of decomposing an application into different, smaller services are:
     an individual service to emerge through continuous refactoring.
 \end{itemize}
 
-Our project FOCUSA includes the following microservices. Refer to figure \ref{fig:highlevel}:
+The project, FOCUSA includes the following microservices. Refer to figure \ref{fig:highlevel}:
 \begin{itemize}
     \item \textbf{Auth:} performs the authentication process based on a username and password, and returns refresh cookies with a JWT.
     \item \textbf{Roles:}  returns the roles that a user belongs to. It depicts the different roles that different admins perform.
@@ -244,8 +246,8 @@ Our project FOCUSA includes the following microservices. Refer to figure \ref{fi
 
 \subsection{Using GraphQL with the Microservices}
 
-We make  use of a single GraphQL Schema as an API Gateway to all the microservices together, 
-integrating it under a single application. This enables integration of data from the different services.
+The projext will make use of a single GraphQL Schema as an API Gateway to all the microservices, 
+integrating it under a single application. This enables easy integration of data from the different services.
 
 One of the main benefits of having everything behind a single endpoint, is that data can be routed more 
 effectively than if each request had its own service. 
@@ -318,7 +320,7 @@ The core \textbf{relationships} between the attributes are:
 \end{enumerate}
 
 The Posts collection functionally stores all posts and comment documents as simple trees. This data structure can easily support 
-and manage a hierarchy similar to tweets in Twitter. However, we allow the moderators to setup a limit to the depth of comments.
+and manage a hierarchy similar to tweets in Twitter. However, the moderators will be able to setup a limit to the depth of comments.
 
 \section{Sequence Diagram}
 

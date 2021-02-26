@@ -36,7 +36,7 @@ Inverse Document Frequency is a measure of how important a term is.~\cite{tfidft
 \end{equation}
 where, $N =$ Total number of documents, $n _t =$ Number of documents having the term $t$ in it.
 
-We now combine both to produce a composite weight for each term in each document.
+Now combine both to produce a composite weight for each term in each document.
 \begin{equation}
     tfidf(t,D) = tf(t,D) \times idf(t,D)
     \label{eqn:tfidf}
@@ -49,7 +49,7 @@ Also, The TF-IDF score/relevancy for a multi-term query $q = (t 1 , . . . , t_m)
 
 \subsubsection{Use of TF-IDF text search in an example}
 
-Suppose our search engine contained the following three documents,
+Suppose a search engine contained the following three documents,
 
 \textbf{Document A:} "the mouse played with the cat"
 
@@ -57,7 +57,7 @@ Suppose our search engine contained the following three documents,
 
 \textbf{Document C:} "dog 1 and dog 2 ate the hot dog"
 
-We compute the TF-IDF vector for each document like so~\cite{tfidfExample}:
+The TF-IDF vector is now computed for each document like so~\cite{tfidfExample}:
 
 \textbf{Document A:} "the mouse played with the cat"
 \begin{figure}[h!]
@@ -66,15 +66,17 @@ We compute the TF-IDF vector for each document like so~\cite{tfidfExample}:
 
 \subsection{Compare query against a document}
 \begin{enumerate}
-    \item Find the TF-IDF vector for the document. This should be an easy, $O(1)$ lookup since we already computed the TF-IDF vector.
-    \item Compute the TF-IDF vector for the query. (Note: technically, we are treating the query as if it were a new document. However, you should not recompute the IDF values: just use the ones you computed earlier.)
+    \item Find the TF-IDF vector for the document. This should be an easy, $O(1)$ lookup since the TF-IDF vector was already computed.
+    \item Compute the TF-IDF vector for the query. (Note: technically, the query is treated as if it were a new document. 
+    However, the IDF values need not be recomputed: just use the ones computed earlier.)
     \item Compute the cosine similarity between the document vector and the query vector.
-    \item We can do this by comparing the TF-IDF vector for your query against all the document TF-IDF vectors and compute how similar your query vector is to each document by exploiting properties of the cosine function and the dot product.
+    \item This can be done by comparing the TF-IDF vector for the query against all the document TF-IDF vectors and compute how similar 
+    the query vector is to each document by exploiting properties of the cosine function and the dot product.
 \end{enumerate}
 
-We determine the $K$ documents of the collection with the highest vector space 
-scores on the query $q$. Typically, we seek these $K$ top documents ordered by 
-score in decreasing order; for instance many search engines use $K = 10$ to retrieve 
+The $K$ documents of the collection with the highest vector space 
+scores on the query $q$ need to be determined. Typically, these $K$ top documents ordered by 
+score in decreasing order is what is needed; for instance many search engines use $K = 10$ to retrieve 
 and rank-order the first page of the ten best results.~\cite{tfidfExample}
 
 \subsubsection{Time Complexity}
@@ -84,9 +86,9 @@ The time complexity of this algorithm is:
     O(|Q| |D| |T|) = O(|D| |T|)
 \end{equation}
 
-we consider $|Q|$ fixed, where $Q$ is the set of words in the query and $D$ is the set of all documents.
+where $|Q|$ is considered fixed, $Q$ is the set of words in the query and $D$ is the set of all documents.
 
 Also, if the $D$ is the set of only the matching documents, then
 since scores is a priority queue (at least in doc-at-time-scheme) built on heap, 
-putting every $d$ into takes $\log K$. Therefore we can estimate it as $O(|D| \log K )$.~\cite{tfidfComplexity}
+putting every $d$ into takes $\log K$. Therefore, an estimate can be $O(|D| \log K )$.~\cite{tfidfComplexity}
 

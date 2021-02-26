@@ -5,11 +5,11 @@
 RxDB (Reactive Database) is a NoSQL database for JavaScript Applications 
 like websites, hybrid Apps, Electron-Apps, Progressive Web Apps and NodeJs.
 
-RxDb allows you to not only query the current state but subscribe to all state changes.
+RxDB allows querying the current state but subscribe to all state changes.
 Therefore it is useful in UI-based real time applications and makes it easy to develop 
 and adds great performance benefits.
 RxDB provides modules for realtime replication with any CouchDB compliant endpoint and 
-also with custom GraphQL endpoints to replicate data between your clients and server.~\cite{RxDB}
+also with custom GraphQL endpoints to replicate data between clients and server.~\cite{RxDB}
 
 \subsubsection{What is PouchDB?}
 
@@ -43,38 +43,38 @@ It is schema-free.~\cite{CouchConfluence}
 Offline first is an application development paradigm where developers ensure that the 
 functionality of an app is unaffected by intermittent lack of a network connection. 
 In addition offline first usually implies the ability to sync data between multiple devices
-For an app to be offline first we need to make sure that both code and the data required 
-for it to function are not dependent on the presence of the network.
+For an app to be offline first, both the code and the data required 
+for it to function should not be dependent on the presence of the network.
 Mobile applications do need to do something extra to make code available offline,
 Web Applications however can include service workers to achieve the same.
-With service workers we need to worry about when it is safe to update the code. 
+With service workers the concern shifts to finding the safest time to update the code. 
 Refer to figure \ref{fig:offline-first}.
 
 A simple solution to making data available offline is to have a local database 
-that you read and write to. The database can then be replicated to and from a 
+to read and write to. The database can then be replicated to and from a 
 server whenever a network is available.~\cite{HasuraOfflineFirst}
 
 
 \subsubsection{Push-pull replication}
 
-With RxDB you can do a two-way replication(push-pull replication) with a GraphQL endpoint. 
-This allows you to replicate data from the server into the client-side database and then 
-query and modify it in realtime.
-When the user is offline, you still can use the data and later sync it with the server 
+RxDB can do a two-way replication(push-pull replication) with a GraphQL endpoint. 
+This allows data replication from the server into the client-side database and then 
+realtime query and modification.
+When the user is offline, they still can use the data and later sync it with the server 
 when the client is online again.
 
 \textbf{Pros}
 \begin{enumerate}
     \item GraphQL-replication is faster and needs less resources.
-    \item You do not need a couchdb-compliant endpoint, only a graphql-endpoint.
+    \item Does not need a couchdb-compliant endpoint, only a graphql-endpoint.
 \end{enumerate}
 
 \textbf{Cons}
 \begin{enumerate}
-    \item You can not replicate multiple databases with each other.
+    \item Cannot replicate multiple databases with each other.
     \item It is assumed that the graphql-server is the single source of truth.
-    \item You have to set up things at the server side while with couchdb-sync 
-    you only have to start a server.~\cite{RxDBreplication}
+    \item GraphQL server has to be setup, while with couchdb-sync, the replication 
+    only requires to start a server.~\cite{RxDBreplication}
 \end{enumerate}
 
 
@@ -87,7 +87,7 @@ conflicting changes on different devices.
     users will simply correct the data later. This approach is also known as last-write-wins.
 \end{itemize}
 
-Assuming we do want to detect and resolve conflicts, there are many broad approaches, 
+Since conflict detection and resolution is a must, there are many broad approaches, 
 one of them which pouchDB uses is:
 
 \textbf{Version the objects:}
@@ -97,14 +97,14 @@ version is also kept track. A conflict can be identified by the fact that two ve
 same parent. Two generic auto merge strategies are:
 
 \begin{enumerate}
-    \item \textbf{Last write wins}: Here we will simply take the last revision to 
+    \item \textbf{Last write wins}: Here the last revision is considered to 
     reach the server as the final value.
     \item \textbf{Merge by fields}: If the two devices modified different fields 
     of the object, it might be possible to auto merge by taking the new fields from both objects.
 \end{enumerate}
 
 In the above approach merging is done by the server and clients simply fetch the merged value. 
-However if you need user intervention to resolve a conflict you need to do the merge on the client.
+However if user intervention is needed to resolve a conflict, then there is a feature to merge on the client.
 This will require all clients to store the version history of the document as well. A problem with this 
 is that clients can independently merge the document creating new multiple merge revisions.
 Clients need to handle this (For example by examining the history and ignoring one of the merge versions).
@@ -112,14 +112,13 @@ Clients need to handle this (For example by examining the history and ignoring o
 PouchDB and CouchDB handle this by using a hash of the document contents as the object version. So if two 
 different devices resolve the conflict the exact same way they will end up with the exact same version id.
 
-\textbf{How do we delete an object?}
+\textbf{How are documents deleted?}
 
 A simple way to delete objects is to have a "deleted" flag in the object. 
 Merge function can then decide what to do if a deleted object has been modified. 
 On the client, any object with the deleted flag set can be immediately purged as 
-there will be no more updates to it. On the server ideally we would want to know 
-that all clients have deleted the object before purging the object. The not so ideal 
-but practical alternative is to periodically purge old objects.
+there will be no more updates to it. The server would need to make sure that every client has purged the object locally. 
+The not so ideal but practical alternative is to periodically purge old objects.
 
 \textbf{Who uses this currently?}
 
@@ -158,10 +157,10 @@ of consistency, availability, and partition tolerance.
     \item \textbf{Partition tolerance}: The database can be split over multiple servers.
 \end{itemize}
 
-If availability is a priority, we can let clients write data to one node of the 
+If availability is a priority, the clients can write data to one node of the 
 database without waiting for other nodes to come into agreement. If the database 
-knows how to take care of reconciling these operations between nodes, we achieve 
-a sort of “eventual consistency” in exchange for high availability.
+knows how to take care of reconciling these operations between nodes, 
+a sort of “eventual consistency” is achieved in exchange for high availability.
 
 \subsubsection{MapReduce algorithm}
 
