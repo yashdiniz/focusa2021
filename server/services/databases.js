@@ -35,11 +35,11 @@ const generateUUID = (size) => crypto.rng(size || UUIDSize)
 // initiate the replication
 // sync();
 
-const authSchema = {
-    name: 'auth',
-    title: 'FOCUSA auth schema',
+const userSchema = {
+    name: 'user',
+    title: 'FOCUSA user schema',
     version: 0,
-    description: "Contains the auth schema.",
+    description: "Contains the user details needed for authentication.",
     type: 'object',
     properties: {
         UUID: {
@@ -67,7 +67,7 @@ const coursesSchema = {
     name: 'courses',
     title: 'FOCUSA course schema',
     version: 0,
-    description: "Contains the courses schema.",
+    description: "Contains the course descriptions and moderator roles.",
     type:'object',
     properties: {
         UUID: {
@@ -95,7 +95,7 @@ const rolesSchema = {
     name: 'roles',
     title: 'FOCUSA roles schema',
     version: 0,
-    description: "Contains the roles schema.",
+    description: "Contains a collection of roles which any user can have.",
     type: 'object',
     properties: {
         UUID: {
@@ -114,7 +114,7 @@ const postsSchema = {
     name: 'posts',
     title: 'FOCUSA posts schema',
     version: 0,
-    description: "Contains the posts schema.",
+    description: "Contains the posts published by authors, belonging to a course, and flagged using other attributes.",
     type: 'object',
     properties: {
         UUID: {
@@ -135,16 +135,16 @@ const postsSchema = {
             default: null
         },
         author: {
-            ref: 'auth',
+            ref: 'user',
             final: true,
         },
         reported: {
             type: 'number',
-            default: false, // false
+            default: false,
         },
         approved: {
             type: 'number',
-            default: true, // true
+            default: true,
         },
         time: {
             type: 'string', // save datetime
@@ -162,11 +162,11 @@ const profileSchema = {
     name: 'profile',
     title: 'FOCUSA profile schema',
     version: 0,
-    description: "Contains the profile schema.",
+    description: "Contains all the user details needed for UI and other purposes.",
     type: 'object',
     properties: {
-        authID: {
-            ref: 'auth',
+        userID: {
+            ref: 'user',    // one-to-one
             primary: true,
         },
         fullName: {
@@ -187,20 +187,20 @@ const profileSchema = {
     },
     required: ['fullName', 'about', 'display_pic']
 };
-const auth_rolesSchema = {
-    name: 'auth_roles',
-    title: 'FOCUSA auth_roles schema',
+const user_rolesSchema = {
+    name: 'user_roles',
+    title: 'FOCUSA user_roles schema',
     version: 0,
-    description: "Contains the auth_roles schema.",
+    description: "Contains the user_roles schema.",
     type: 'object',
     properties: {
-        auth_roleID: {   // feed an auth_role as ID, enforced by programmer in code.
+        user_roleID: {   // feed an user_role as ID, enforced by programmer in code.
             type: 'string',
             primary: true,
         },
     },
-    indexes: ['auth_roleID'],
-    required: ['auth_roleID'],
+    indexes: ['user_roleID'],
+    required: ['user_roleID'],
 };
 
 const db = RxDB.createRxDatabase({
@@ -211,12 +211,12 @@ const db = RxDB.createRxDatabase({
 });
 
 const collections = db.then(db=> db.addCollections({
-    auth: { schema: authSchema },
+    user: { schema: userSchema },
     courses: { schema: coursesSchema },
     roles: { schema: rolesSchema },
     posts: { schema: postsSchema },
     profile: { schema: profileSchema },
-    auth_roles: { schema: auth_rolesSchema }
+    user_roles: { schema: user_rolesSchema }
 }));
 
 RxDB.addRxPlugin(require('pouchdb-adapter-http'));
