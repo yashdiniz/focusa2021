@@ -4,13 +4,11 @@
  * author: @yashdiniz
  */
 const path = require('path'), crypto = require('crypto');
-const { UUIDSize, maxModRolesforCourse, defaultProfilePic } = require('../config');
+const { UUIDSize, maxModRolesforCourse, defaultProfilePic, remote } = require('../config');
 
 const RxDB = require('rxdb');
 const leveldown = require('leveldown');
 RxDB.addRxPlugin(require('pouchdb-adapter-leveldb'));
-
-const remote = 'http://admin:admin@localhost:5984/focusa';	// the remote database to sync with!
 
 // const sync = () => {
 //     syncHandlers.forEach(o => {
@@ -58,6 +56,7 @@ const userSchema = {
         },
         scheme: {
             type: 'string',
+            enum: ['pbkdf2'],
         },
     },
     required: ['name', 'hash', 'salt', 'scheme'],
@@ -83,9 +82,12 @@ const coursesSchema = {
         },
         mods: {
             type: 'array',
-            ref: 'roles',
             uniqueItems: true,
             maxItems: 2 || maxModRolesforCourse,
+            items: {
+                type: 'string',
+                ref: 'roles',
+            }
         },
     },
     required: ['name', 'description'],
@@ -122,20 +124,23 @@ const postsSchema = {
             primary: true,
         },
         parent: {
+            type: 'string',
             ref: 'posts',
             final: true,
-            default: null,
+            default: '',
         },
         text: {
             type: 'string',
         },
         course: {
+            type: 'string',            
             ref: 'courses',
             final: true,
-            default: null
+            default: '',
         },
         author: {
             ref: 'user',
+            type: 'string',
             final: true,
         },
         reported: {
@@ -152,7 +157,7 @@ const postsSchema = {
         attachmentURL: {
             type: 'string',
             final: true,
-            default: null,
+            default: '',
         },
     },
     required: ['text', 'time'],
@@ -167,6 +172,7 @@ const profileSchema = {
     properties: {
         userID: {
             ref: 'user',    // one-to-one
+            type: 'string',
             primary: true,
         },
         fullName: {
@@ -182,7 +188,10 @@ const profileSchema = {
         interests: {
             uniqueItems: true,
             type: 'array',
-            ref: 'courses',
+            items: {
+                type: 'string',
+                ref: 'courses',
+            }
         },
     },
     required: ['fullName', 'about', 'display_pic']
@@ -204,31 +213,32 @@ const user_rolesSchema = {
 };
 
 const db = RxDB.createRxDatabase({
-    name: 'focusa',
+    name: 'db/focusa',
     adapter: leveldown,
     multiInstance:false,
     eventReduce: false,
-});
+}).catch(e => console.error(e));
 
-const collections = db.then(db=> db.addCollections({
+const focusa = db.then(db=> db.addCollections({
     user: { schema: userSchema },
     courses: { schema: coursesSchema },
     roles: { schema: rolesSchema },
     posts: { schema: postsSchema },
     profile: { schema: profileSchema },
-    user_roles: { schema: user_rolesSchema }
-}));
+    user_roles: { schema: user_rolesSchema },
+})).catch(e => console.error(e));
 
 RxDB.addRxPlugin(require('pouchdb-adapter-http'));
 
-const replicationState = collections.sync({
+const replicationState = async () =>
+await collections.sync({
     remote,
     options: {
         live: true
     },
-});
+}).catch(e => console.error(e));
 
 module.exports = {
-    db, collections, replicationState,
+    db, focusa, replicationState,
     assert, generateUUID
 }
