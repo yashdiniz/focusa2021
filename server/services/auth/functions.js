@@ -8,7 +8,7 @@
  * 
  * author: @yashdiniz
  */
-process.title = 'FOCUSA auth service';
+process.title = 'FOCUSA authenticator service';
 const { focusa, assert, generateUUID } = require('../databases');
 const { pbkdfDigest, pbkdfIters, pbkdfLen, usernamePattern, currentPasswordScheme } = require('../../config');
 const crypto = require('crypto');
@@ -33,14 +33,14 @@ const pbkdf = (word, salt) => new Promise((resolve, reject) => 	// will return a
 // Reference: https://stackoverflow.com/a/22440576/13227113
 
 // TODO: Switch to map/reduce!!
-focusa.auth
-auth.createIndex({  // creating an index for enforcing uniqueness in usernames
+focusa.user ??
+user.createIndex({  // creating an index for enforcing uniqueness in usernames
 	index: { 
 		fields: ['name'],
 		ddoc: 'indexes',
-		name: 'auth_unique'
+		name: 'user_unique'
 	}
-}).then(() => auth.find({
+}).then(() => user.find({
 	selector: { 
 		name: null 
 	}, 
@@ -56,7 +56,7 @@ const createUser = (name, password) => {
     let salt = generateUUID();
     return pbkdf(password, salt)    // hash the password
     .then(hash => {
-        auth.post({ // db.post() ensures random UUIDs, useful in this scenario
+        user.post({ // db.post() ensures random UUIDs, useful in this scenario
             name, hash, salt, scheme: currentPasswordScheme
         }).then(
             // 1. temp hold the ID of document just posted.
