@@ -8,7 +8,6 @@
  * 
  * author: @yashdiniz
  */
-process.title = 'FOCUSA authenticator service';
 const { focusa, assert, generateUUID } = require('../databases');
 const { pbkdfDigest, pbkdfIters, pbkdfLen, usernamePattern, currentPasswordScheme } = require('../../config');
 const crypto = require('crypto');
@@ -29,39 +28,30 @@ const pbkdf = (word, salt) => new Promise((resolve, reject) => 	// will return a
 // 	}));
 // }).catch(e=> console.error("Database initialization failed.", e));
 
+const userExistsError = new Error("Username already exists. Please try another username.");
+
 // Use this to enforce one form of low-risk-low-conflict uniqueness.
-// Reference: https://stackoverflow.com/a/22440576/13227113
-
-// TODO: Switch to map/reduce!!
-focusa.user ??
-user.createIndex({  // creating an index for enforcing uniqueness in usernames
-	index: { 
-		fields: ['name'],
-		ddoc: 'indexes',
-		name: 'user_unique'
-	}
-}).then(() => user.find({
-	selector: { 
-		name: null 
-	}, 
-	use_index:'indexes', 
-	limit: 0 
-})).catch(e => console.error(e));
-
-const createUser = (name, password) => {
+// Reference: https://stackoverflow.com/a/1933616
+const createUser = async (name, password) => {
     assert(typeof name === 'string' && typeof password === 'string',
         "Invalid arguments for createUser.");
     assert(name == name.match(usernamePattern), 
         "User not created. name should match: " + usernamePattern);
-    let salt = generateUUID();
-    return pbkdf(password, salt)    // hash the password
-    .then(hash => {
-        user.post({ // db.post() ensures random UUIDs, useful in this scenario
-            name, hash, salt, scheme: currentPasswordScheme
-        }).then(
-            // 1. temp hold the ID of document just posted.
-            // 2. try to find(using auth_unique index) for another document with matching name.
-            // 3. if a match is found, then delete the document just posted, and throw failure.
-        )
-    })
-}
+    
+    let salt = generateUUID(), uuid = generateUUID();
+    let hash = await pbkdf(password, salt);    // hash the password
+    let c = await focusa;    // wait until focusa resolves collections    
+    
+    // start by adding the user to the database,
+    let newUser = await c.user.insert({
+        uuid, name, hash, salt, 
+        scheme: currentPasswordScheme
+    });
+
+    // also add a primary key index reference for user names
+    return await c.auth.insert({ name, uuid })
+    .catch(e => {   // if user already exists
+        newUser.remove();   // remove the new User added to the database
+        throw userExistsError;  // and throw
+    });
+};
