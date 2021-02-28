@@ -10,13 +10,14 @@ const secret = process.env['SECRET'];
 // the realm stores the DNS/server name.
 const realm = process.env['REALM'];
 
-const remote = 'http://admin:admin@localhost:5984/focusa';  // remote couchDB URL
+const remote = 'http://admin:admin@localhost:5984/';  // remote couchDB URL
 
 // auth-related, PBKDF arguments
 const pbkdfIters = 1<<14, 
     pbkdfLen = 24, 
     pbkdfDigest = 'sha256',
     currentPasswordScheme = 'pbkdf2',
+    minPasswordLength = 8,
     UUIDSize = 24;
 const usernamePattern = /\w+/;  // almost alphanumeric pattern(URL safe)
 
@@ -29,6 +30,6 @@ const defaultProfilePic = 'dp.jpeg';
 module.exports = { 
     port, graphiql, secret, realm, remote,
     pbkdfIters, pbkdfDigest, pbkdfLen, UUIDSize, currentPasswordScheme,
-    usernamePattern, maxModRolesforCourse,
+    minPasswordLength, usernamePattern, maxModRolesforCourse,
     defaultProfilePic
 };
