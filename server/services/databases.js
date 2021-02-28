@@ -33,6 +33,27 @@ const generateUUID = (size) => crypto.rng(size || UUIDSize)
 // initiate the replication
 // sync();
 
+const authSchema = {
+    name: 'auth',
+    title: 'FOCUSA auth schema',
+    version: 0,
+    description: "Collection intentionally created to ensure unique usernames.",
+    type: 'object',
+    properties: {
+        name: {
+            type: 'string',
+            primary: true,
+        },
+        uuid: {
+            type: 'string',
+            ref: 'user',
+            unique: true,
+            final: true,
+        }
+    },
+    required: ['userID'],
+}
+
 const userSchema = {
     name: 'user',
     title: 'FOCUSA user schema',
@@ -40,12 +61,13 @@ const userSchema = {
     description: "Contains the user details needed for authentication.",
     type: 'object',
     properties: {
-        UUID: {
+        uuid: {
             type: 'string',
             primary: true,
         },
         name: {
             type: 'string',
+            ref: 'auth',
             unique: true,
         },
         hash: {
@@ -69,7 +91,7 @@ const coursesSchema = {
     description: "Contains the course descriptions and moderator roles.",
     type:'object',
     properties: {
-        UUID: {
+        uuid: {
             type: 'string',
             primary: true,
         },
@@ -100,7 +122,7 @@ const rolesSchema = {
     description: "Contains a collection of roles which any user can have.",
     type: 'object',
     properties: {
-        UUID: {
+        uuid: {
             type: 'string',
             primary: true,
         },
@@ -119,7 +141,7 @@ const postsSchema = {
     description: "Contains the posts published by authors, belonging to a course, and flagged using other attributes.",
     type: 'object',
     properties: {
-        UUID: {
+        uuid: {
             type: 'string',
             primary: true,
         },
@@ -220,6 +242,7 @@ const db = RxDB.createRxDatabase({
 }).catch(e => console.error(e));
 
 const focusa = db.then(db=> db.addCollections({
+    auth: { schema: authSchema },
     user: { schema: userSchema },
     courses: { schema: coursesSchema },
     roles: { schema: rolesSchema },
@@ -231,11 +254,17 @@ const focusa = db.then(db=> db.addCollections({
 RxDB.addRxPlugin(require('pouchdb-adapter-http'));
 
 const replicationState = async () =>
-await collections.sync({
-    remote,
-    options: {
-        live: true
-    },
+await focusa.then(focusa => {
+    let collections = Object.keys(focusa);
+    let syncs = [];
+    for (var c in collections)
+        syncs.push(focusa[collections[c]].sync({
+            remote,
+            options: {
+                live: true
+            },
+        }));
+    return syncs;
 }).catch(e => console.error(e));
 
 module.exports = {
