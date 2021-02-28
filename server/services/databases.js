@@ -51,7 +51,7 @@ const authSchema = {
             final: true,
         }
     },
-    required: ['userID'],
+    required: ['uuid'],
 }
 
 const userSchema = {
@@ -229,9 +229,19 @@ const user_rolesSchema = {
             type: 'string',
             primary: true,
         },
+        user: {
+            type: 'string',
+            ref: 'user',
+            final: true,
+        },
+        role: {
+            type: 'string',
+            ref: 'roles',
+            final: true,
+        }
     },
     indexes: ['user_roleID'],
-    required: ['user_roleID'],
+    required: ['user_roleID', 'user', 'role'],
 };
 
 const db = RxDB.createRxDatabase({
@@ -239,7 +249,7 @@ const db = RxDB.createRxDatabase({
     adapter: leveldown,
     multiInstance:false,
     eventReduce: false,
-}).catch(e => console.error(e));
+}).catch(console.error);
 
 const focusa = db.then(db=> db.addCollections({
     auth: { schema: authSchema },
@@ -249,7 +259,7 @@ const focusa = db.then(db=> db.addCollections({
     posts: { schema: postsSchema },
     profile: { schema: profileSchema },
     user_roles: { schema: user_rolesSchema },
-})).catch(e => console.error(e));
+})).catch(console.error);
 
 RxDB.addRxPlugin(require('pouchdb-adapter-http'));
 
@@ -259,13 +269,13 @@ await focusa.then(focusa => {
     let syncs = [];
     for (var c in collections)
         syncs.push(focusa[collections[c]].sync({
-            remote,
+            remote: remote + collections[c],
             options: {
                 live: true
             },
         }));
     return syncs;
-}).catch(e => console.error(e));
+}).catch(console.error);
 
 module.exports = {
     db, focusa, replicationState,
