@@ -75,7 +75,7 @@ const deleteUser = async (name) => {
     let c = await focusa;
     // execute a search on auth index to find username
     return await c.auth.findOne(name).exec()
-    .then(doc => {  // then remove the doc after finding it
+    .then(async doc => {  // then remove the doc after finding it
         if (doc) {
             let user = await doc.populate('uuid');
             doc.remove();   // remove the auth entry
