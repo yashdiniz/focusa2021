@@ -5,6 +5,8 @@ const app = express();
 const ensureAuthenticated = require('./ensureAuthenticated.js');
 const GoogleStrategy = require('./strategy.js');
 
+process.title = 'FOCUSA authenticator service';
+
 app.configure(()=> {
     app.use(passport.initialize());
     app.use(passport.session());
