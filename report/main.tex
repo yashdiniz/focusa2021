@@ -7,8 +7,16 @@
 \usepackage{graphicx}
 \usepackage{amsmath}
 
-\usepackage[bookmarks=true]{hyperref}
+\usepackage[bookmarks=true,pdftex]{hyperref}
 \usepackage{bookmark}
+\makeatletter
+\AtBeginDocument{
+  \hypersetup{
+    pdftitle = {\@title},
+    pdfauthor = {\@author}
+  }
+}
+\makeatother
 
 \graphicspath{ {images/} }
 \setlength{\parskip}{\baselineskip}%
