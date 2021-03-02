@@ -2,51 +2,47 @@ const passport = require('passport');
 const express = require('express');
 const app = express();
 
-const ensureAuthenticated = require('./ensureAuthenticated.js');
-const GoogleStrategy = require('./strategy.js');
+const { authPort } = require('../../config');
+const { localStrategy } = require('./strategy.js');
 
 process.title = 'FOCUSA authenticator service';
 
-app.configure(()=> {
-    app.use(passport.initialize());
-    app.use(passport.session());
-});
+app.use(passport.initialize());
+app.use(passport.session());
 
 /**
  * Passport session setup.
  * To support persistent login sessions, Passport needs to be able to
  * serialize users into and deserialize users out of the session.
 */
-passport.serializeUser(function(user, done) {
-    done(null, user);
-});  
-passport.deserializeUser(function(obj, done) {
-done(null, obj);
-});
+passport.serializeUser((user, done) => done(null, user));  
+passport.deserializeUser((obj, done) => done(null, obj));
 
 /**
- * Google Strategy from Passport. 
+ * Local Strategy from Passport. 
  * Also coding such that strategy can be upgraded in future.
 */ 
-passport.use(GoogleStrategy);
+passport.use(localStrategy);
 
-// STUB!! TODO: create the simple frontend to serve here.
 app.get('/login', 
-    passport.authenticate('google', 
+    passport.authenticate('local', 
     {
-        failureRedirect: '/login'
+        failureRedirect: '/error',
     }),
     (req, res) => {
-        res.redirect('/');
+        // TODO: add in the JWT transfer too.
+        res.json({ 
+            name: req.user.name,
+            time: req.user.time,
+            login: true });
     }
 );
 
-app.get('/callback',
-    passport.authenticate('google',
-    {
-        failureRedirect: '/login' 
-    }),
-    (req, res) => {
-        res.redirect('/');
-    }
-)
+app.get('/error', (req, res) => {
+    // umm yes, this always returns login false, it's just an error hook
+    res.json({ login: false, message: 'Incorrect username or password.' });
+});
+
+app.listen(authPort, () => {
+    console.warn(`Auth listening on port ${ authPort }`);
+});
