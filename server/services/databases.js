@@ -4,7 +4,7 @@
  * author: @yashdiniz
  */
 const path = require('path'), crypto = require('crypto');
-const { UUIDSize, maxModRolesforCourse, defaultProfilePic, remote } = require('../config');
+const { UUIDSize, maxModRolesforCourse, defaultProfilePic, remote, projectRoot } = require('../config');
 
 const RxDB = require('rxdb');
 const leveldown = require('leveldown');
@@ -245,7 +245,7 @@ const user_rolesSchema = {
 };
 
 const db = RxDB.createRxDatabase({
-    name: 'db/focusa',
+    name: path.join(projectRoot, 'db/focusa'),
     adapter: leveldown,
     multiInstance:false,
     eventReduce: false,
