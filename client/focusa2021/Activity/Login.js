@@ -25,7 +25,7 @@ const Login=({navigation}) =>{
 
     return(
         <View style={styles.container}>
-                <StatusBar backgroundColor = "#000000" barStyle="light-content"/> 
+                <StatusBar backgroundColor = "#ffffff" barStyle="dark-content"/> 
                 <Image style={styles.image} source={require('../assets/images/focusa2.png')}/>
                 <Image  style={styles.focusaText} source={require('../assets/images/focusalogosmall.png')} />
                 <TextInput style={styles.inputBox} placeholder="Username" onChangeText={(username) => setUsername(username)}/>
