@@ -84,6 +84,8 @@ const userSchema = {
     required: ['name', 'hash', 'salt', 'scheme'],
     indexes: ['name'],
 };
+
+// TODO : add an index for courses to maintain uniqueness
 const coursesSchema = {
     name: 'courses',
     title: 'FOCUSA course schema',
@@ -115,6 +117,8 @@ const coursesSchema = {
     required: ['name', 'description'],
     indexes: ['name'],
 };
+
+// TODO: add an index for roles to maintain uniqueness
 const rolesSchema = {
     name: 'roles',
     title: 'FOCUSA roles schema',
