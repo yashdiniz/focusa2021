@@ -1,8 +1,11 @@
 /**
+ * List of functions required for interacting with 
+ * profile collection in CRUD fashion.
  * author: @reydias06
  */
 
 const { focusa, assert } = require('../databases');
+const { defaultfullName, defaultAbout } = require('../../config');
 
 const userNonExistant = new Error('User does not exist.');
 
@@ -16,8 +19,8 @@ const createProfile = async (userID)=> {
         if (doc) {
             return c.profile.insert({
                 userID,
-                fullName: 'User Profile Name', 
-                about: 'Hey, I am a new User !',
+                fullName: defaultfullName, 
+                about: defaultAbout,
                 interests: [],
             });
         } else throw userNonExistant;
