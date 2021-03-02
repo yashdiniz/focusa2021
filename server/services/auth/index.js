@@ -1,13 +1,15 @@
 const passport = require('passport');
 const express = require('express');
+const express_session = require('express-session');
 const app = express();
 
-const { authPort } = require('../../config');
+const { authPort, secret } = require('../../config');
 const { localStrategy } = require('./strategy.js');
 
 process.title = 'FOCUSA authenticator service';
 
 app.use(passport.initialize());
+app.use(express_session({ secret }));
 app.use(passport.session());
 
 /**
@@ -16,7 +18,7 @@ app.use(passport.session());
  * serialize users into and deserialize users out of the session.
 */
 passport.serializeUser((user, done) => done(null, user));  
-passport.deserializeUser((obj, done) => done(null, obj));
+passport.deserializeUser((sess, done) => done(null, sess));
 
 /**
  * Local Strategy from Passport. 

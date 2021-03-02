@@ -1,11 +1,12 @@
 const dotenv = require('dotenv');
-dotenv.config();
 
 const projectRoot = '/home/yash/Desktop/focusa-new/server';
+dotenv.config({ path: projectRoot + '/.env' });
+
 const production = false;
 const port = 1896;   // using FOCUSA legacy port for testing.
 const authPort = port + 1;
-const graphiql = production;  // essentially, run graphiql at graphql endpoint
+const graphiql = !production;  // essentially, run graphiql at graphql endpoint
 
 // the dev secret which will be used for most crypto operations.
 const secret = process.env['SECRET'];
