@@ -1,8 +1,11 @@
 const dotenv = require('dotenv');
 dotenv.config();
 
-const port = process.env['PORT'];   // using FOCUSA legacy port for testing.
-const graphiql = process.env['PRODUCTION'] == 'false';  // essentially, run graphiql at graphql endpoint
+const projectRoot = '/home/yash/Desktop/focusa-new/server';
+const production = false;
+const port = 1896;   // using FOCUSA legacy port for testing.
+const authPort = port + 1;
+const graphiql = production;  // essentially, run graphiql at graphql endpoint
 
 // the dev secret which will be used for most crypto operations.
 const secret = process.env['SECRET'];
@@ -28,7 +31,8 @@ const maxModRolesforCourse = 2;
 const defaultProfilePic = 'dp.jpeg';
 
 module.exports = { 
-    port, graphiql, secret, realm, remote,
+    port, authPort,
+    projectRoot, graphiql, secret, realm, remote,
     pbkdfIters, pbkdfDigest, pbkdfLen, UUIDSize, currentPasswordScheme,
     minPasswordLength, usernamePattern, maxModRolesforCourse,
     defaultProfilePic
