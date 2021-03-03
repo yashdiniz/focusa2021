@@ -24,6 +24,7 @@ const pbkdfIters = 1<<14,
     minPasswordLength = 8,
     UUIDSize = 24;
 const usernamePattern = /\w+/;  // almost alphanumeric pattern(URL safe)
+const sessionMaxAge = 5 * 60 * 1000;
 
 // course-related
 const maxModRolesforCourse = 2;
@@ -32,7 +33,7 @@ const maxModRolesforCourse = 2;
 const defaultProfilePic = 'dp.jpeg';
 
 module.exports = { 
-    port, authPort,
+    port, authPort, sessionMaxAge,
     projectRoot, graphiql, secret, realm, remote,
     pbkdfIters, pbkdfDigest, pbkdfLen, UUIDSize, currentPasswordScheme,
     minPasswordLength, usernamePattern, maxModRolesforCourse,

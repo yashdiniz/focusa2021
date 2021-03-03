@@ -3,13 +3,18 @@ const express = require('express');
 const express_session = require('express-session');
 const app = express();
 
-const { authPort, secret } = require('../../config');
+const { authPort, secret, sessionMaxAge } = require('../../config');
 const { localStrategy } = require('./strategy.js');
+const { ensureAuthenticated } = require('./ensureAuthenticated');
 
 process.title = 'FOCUSA authenticator service';
 
 app.use(passport.initialize());
-app.use(express_session({ secret }));
+app.use(express_session({ 
+    secret,
+    saveUninitialized: false,
+    resave: false,
+}));
 app.use(passport.session());
 
 /**
@@ -32,6 +37,8 @@ app.get('/login',
         failureRedirect: '/error',
     }),
     (req, res) => {
+        // set the refresh cookie maximum age as needed.
+        req.session.cookie.maxAge = sessionMaxAge;
         // TODO: add in the JWT transfer too.
         res.json({ 
             name: req.user.name,
@@ -40,9 +47,16 @@ app.get('/login',
     }
 );
 
+app.get('/check', ensureAuthenticated, (req, res) => {
+    res.json({ 
+        name: req.user.name,
+        time: req.user.time,
+    });
+});
+
 app.get('/error', (req, res) => {
     // umm yes, this always returns login false, it's just an error hook
-    res.json({ login: false, message: 'Incorrect username or password.' });
+    res.status(401).json({ login: false, message: 'User not authenticated.' });
 });
 
 app.listen(authPort, () => {
