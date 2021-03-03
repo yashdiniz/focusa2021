@@ -36,7 +36,7 @@ const Posts = () =>{
                 </TouchableOpacity>
 
 
-                <TouchableOpacity style={{marginLeft:'auto'}}>
+                <TouchableOpacity style={{marginLeft:'auto', paddingRight: 15}}>
                 <MaterialCommunityIcons name="dots-horizontal" size={35} style={{marginTop: 10, paddingLeft: 27}} />
                 </TouchableOpacity>
             </View>
