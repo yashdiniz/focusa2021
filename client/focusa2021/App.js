@@ -10,14 +10,17 @@ import { apolloClient } from './apollo';
 
 import Login from './Activity/Login';
 import Home from './Activity/Home';
+import BottomNavigator from './Components/BottomNavigator';
 
 const Stack = createStackNavigator();
+
+let isLoggedIn = false; // false by default... Will turn true after login
 
 class App extends Component{
     render(){
         return(
             <NavigationContainer>
-                <Stack.Navigator screenOptions={{
+                {/* <Stack.Navigator screenOptions={{
                     headerShown: false
                 }}>
                     <Stack.Screen
@@ -25,7 +28,8 @@ class App extends Component{
                         component={Login}
                     />
                     <Stack.Screen name="Home" component={Home} />
-                </Stack.Navigator>
+                </Stack.Navigator> */}
+                <BottomNavigator/>
             </NavigationContainer>
             
         );

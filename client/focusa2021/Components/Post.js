@@ -1,7 +1,7 @@
 import React, {Components} from 'react';
-import { View, Text, TouchableOpacity, Button } from 'react-native';
+import { View, Text, TouchableOpacity, Button, Dimensions, } from 'react-native';
 import styles from '../Styles/HomeStyle';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const Posts = () =>{
     return(
@@ -18,19 +18,28 @@ const Posts = () =>{
             <Text style={styles.topictitle}>Regression Analysis</Text>
 
             <View style={{alignItems:'center', justifyContent:'center'}}>
-            <TouchableOpacity 
-                style ={{
-                    height: 40,
-                    width:190,
-                    marginTop :20,
-                    borderStyle:"solid",
-                    borderWidth: 2,
-                }}>
-             <Button title="View Attachment" color="grey"/> 
-          </TouchableOpacity>
+                    <TouchableOpacity style={{flexDirection:'row'}}>
+                        <MaterialCommunityIcons name="file-document" size={30} style={{marginTop: 20, paddingLeft: 27}} />
+                        <Text style={{marginTop:28}}>View Attachments</Text>
+                    </TouchableOpacity>
             </View>
 
-            <View style={{ borderBottomColor: 'grey',borderBottomWidth: 1, marginTop: 10}}/>
+            <View style={{ borderBottomColor: 'grey',borderBottomWidth: 1, marginTop: 15}}/>
+
+            <View style={{flexDirection: 'row'}}>
+                <TouchableOpacity >
+                        <MaterialCommunityIcons name="comment-processing-outline" size={35} style={{marginTop: 10, paddingLeft: 27}} />
+                </TouchableOpacity>
+
+                <TouchableOpacity>
+                <MaterialCommunityIcons name="share-outline" size={35} style={{marginTop: 10, paddingLeft: 27}} />
+                </TouchableOpacity>
+
+
+                <TouchableOpacity style={{marginLeft:'auto'}}>
+                <MaterialCommunityIcons name="dots-horizontal" size={35} style={{marginTop: 10, paddingLeft: 27}} />
+                </TouchableOpacity>
+            </View>
            
         </View>
     );
