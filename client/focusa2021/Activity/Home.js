@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
-import { View, StatusBar, Text,ScrollView,SafeAreaView } from 'react-native';
+import { View, StatusBar, Text,ScrollView,SafeAreaView, TextInput } from 'react-native';
 import styles from '../Styles/HomeStyle'
 import Posts from '../Components/Post';
 import { isLoggedIn } from './singletonStates';
-import Login from '../Activity/Login';
+import SearchBar from '../Components/SearchBar';
+
 
 const Home = ({ navigation, route }) =>{
     if(!isLoggedIn()) navigation.navigate('Login');
@@ -11,6 +12,7 @@ const Home = ({ navigation, route }) =>{
         <SafeAreaView>
             <ScrollView contentContainerStyle={styles.Homeview}>
             <StatusBar backgroundColor = "#ffffff" barStyle="dark-content"/>
+            <SearchBar/>
             <Posts/>
             <Posts/>
             <Posts/>

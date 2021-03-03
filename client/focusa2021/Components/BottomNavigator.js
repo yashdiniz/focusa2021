@@ -7,6 +7,8 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Home from '../Activity/Home';
 import Courses from '../Activity/courses';
 import Login from '../Activity/Login';
+import Profile from '../Activity/Profile';
+import Video from '../Activity/Video';
 
 const Tab = createBottomTabNavigator();
 
@@ -43,10 +45,33 @@ function BottomNavigator({ loggedIn }) {
         options={{
           tabBarLabel: 'Courses',
           tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="file" color={color} size={size} />
+            <MaterialCommunityIcons name="book-open" color={color} size={size} />
           ),
         }}
       />
+
+      <Tab.Screen
+        name="Video"
+        component={Video}
+        options={{
+          tabBarLabel: 'Video',
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="video" color={color} size={size} />
+          ),
+        }}
+      />
+
+      <Tab.Screen
+        name="Profile"
+        component={Profile}
+        options={{
+          tabBarLabel: 'Profile',
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="account" color={color} size={size} />
+          ),
+        }}
+      />
+
     </Tab.Navigator>
   );
 }
