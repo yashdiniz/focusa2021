@@ -247,7 +247,7 @@ const user_rolesSchema = {
 const db = RxDB.createRxDatabase({
     name: 'db/focusa',
     adapter: leveldown,
-    multiInstance:false,
+    multiInstance: true,
     eventReduce: false,
 }).catch(console.error);
 
