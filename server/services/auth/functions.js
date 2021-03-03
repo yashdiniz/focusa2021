@@ -156,5 +156,6 @@ const updateUser = async (name, newpassword) => {
 }
 
 module.exports = {
-    createUser, deleteUser, validateUser, updateUser, userExists
+    createUser, deleteUser, validateUser, updateUser, userExists,
+    userExistsError, loginError, userNonExistant
 }

@@ -4,7 +4,7 @@
  * author: @yashdiniz
  */
 const path = require('path'), crypto = require('crypto');
-const { UUIDSize, maxModRolesforCourse, defaultProfilePic, remote } = require('../config');
+const { UUIDSize, maxModRolesforCourse, defaultProfilePic, remote, projectRoot } = require('../config');
 
 const RxDB = require('rxdb');
 const leveldown = require('leveldown');
@@ -84,6 +84,8 @@ const userSchema = {
     required: ['name', 'hash', 'salt', 'scheme'],
     indexes: ['name'],
 };
+
+// TODO : add an index for courses to maintain uniqueness
 const coursesSchema = {
     name: 'courses',
     title: 'FOCUSA course schema',
@@ -115,6 +117,8 @@ const coursesSchema = {
     required: ['name', 'description'],
     indexes: ['name'],
 };
+
+// TODO: add an index for roles to maintain uniqueness
 const rolesSchema = {
     name: 'roles',
     title: 'FOCUSA roles schema',
@@ -245,7 +249,7 @@ const user_rolesSchema = {
 };
 
 const db = RxDB.createRxDatabase({
-    name: 'db/focusa',
+    name: path.join(projectRoot, 'db/focusa'),
     adapter: leveldown,
     multiInstance:false,
     eventReduce: false,
