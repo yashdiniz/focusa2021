@@ -1,14 +1,23 @@
 import React from 'react';
-import { View, Text, StatusBar } from 'react-native';
+import { View, Text, StatusBar,ScrollView } from 'react-native';
 import { isLoggedIn } from './singletonStates'; 
+import SearchBar from '../Components/SearchBar';
+import styles from '../Styles/CourseStyles';
+import Course from '../Components/Course';
 
-const Courses = ({ navigation, route, loggedIn }) =>{
-    if(!isLoggedIn()) navigation.navigate('Login');
+const Courses = ({ navigation, route, login }) =>{
+    if(!login) navigation.navigate('Login');
     return(
-        <View style={{alignItems:'center', justifyContent:'center'}}>
+        <ScrollView contentContainerStyle={styles.CoursesView}>
             <StatusBar backgroundColor = "#ffffff" barStyle="dark-content"/>
-            <Text style={{fontSize: 20}}>This is the Courses page</Text>
-        </View>
+            <SearchBar/>
+            <Course/>
+            <Course/>
+            <Course/>
+            <Course/>
+            <Course/>
+            <Course/>
+        </ScrollView>
     )
 }
 

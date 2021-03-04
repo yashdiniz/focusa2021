@@ -1,9 +1,8 @@
 import React from 'react';
 import {View,Text,StatusBar} from 'react-native';
-import { isLoggedIn } from './singletonStates';
 
-const Video = ({ navigation, route, loggedIn }) =>{
-    if(!isLoggedIn()) navigation.navigate('Login');
+const Video = ({ navigation, route, login }) =>{
+    if(!login) navigation.navigate('Login');
     return(
         <View style={{alignItems:'center', justifyContent:'center'}}>
             <StatusBar backgroundColor = "#ffffff" barStyle="dark-content"/>

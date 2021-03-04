@@ -3,9 +3,8 @@ import { View,Text,StatusBar,Image, TextInput, Button, Alert, TouchableOpacity} 
 import styles from '../Styles/LoginStyles';
 import * as Font from 'expo-font';
 import { ScalarLeafsRule } from 'graphql';
-import { loggedInSuccessfully } from './singletonStates';
 
-const Login=({navigation}) =>{
+const Login=({navigation, setLoggedIn}) =>{
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
@@ -15,7 +14,7 @@ const Login=({navigation}) =>{
         }
         else{
             Alert.alert('Loging in', username + password);
-            loggedInSuccessfully();
+            setLoggedIn(true);
             navigation.goBack();
         }
 
