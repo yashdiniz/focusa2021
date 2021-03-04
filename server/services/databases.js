@@ -4,21 +4,20 @@
  * author: @yashdiniz
  */
 const path = require('path'), crypto = require('crypto');
-const { UUIDSize, maxModRolesforCourse, defaultProfilePic, remote, projectRoot } = require('../config');
+const { UUIDSize, maxModRolesforCourse, 
+    defaultProfilePic, remote, projectRoot } = require('../config');
 
 const RxDB = require('rxdb');
 const leveldown = require('leveldown');
 RxDB.addRxPlugin(require('pouchdb-adapter-leveldb'));
 
-// const sync = () => {
-//     syncHandlers.forEach(o => {
-//         o.handler.on('complete', 
-//             async ()=> console.log('Database', o.db, 'synced.')
-//         ).on('error', e=>console.log(e));
-//     });
-// };
-
-// assert(condition, message) simplifies the code structure, by immediately throwing if condition is not met.
+// assert(condition, message) simplifies the code structure, 
+// by immediately throwing if condition is not met.
+/**
+ * Asserts a condition, and throws a message on violation.
+ * @param {boolean} condition Condition to be asserted.
+ * @param {string} message Message to throw on condition violation.
+ */
 const assert = (condition, message) => {
     if(!condition) throw message || 'Assertion failed!';
     else return true;
@@ -26,6 +25,10 @@ const assert = (condition, message) => {
 
 // generate a random number as UUID
 // the UUID is made URL safe, while still maintaining base64, by basic substitution
+/**
+ * Generates a random string of characters.
+ * @param {number} size Number of random characters to return.
+ */
 const generateUUID = (size) => crypto.rng(size || UUIDSize)
                     .toString('base64')
                     .replace(/\//gi,'.').replace(/\+/gi,'-').replace(/\=/gi,'_')
@@ -267,6 +270,9 @@ const focusa = db.then(db=> db.addCollections({
 
 RxDB.addRxPlugin(require('pouchdb-adapter-http'));
 
+/**
+ * Returns a Promise holding the state of replication process.
+ */
 const replicationState = async () =>
 await focusa.then(focusa => {
     let collections = Object.keys(focusa);
