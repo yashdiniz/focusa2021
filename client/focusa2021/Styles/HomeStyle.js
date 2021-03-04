@@ -1,17 +1,18 @@
-import React from 'react';
-import {StyleSheet, Dimensions, OpaqueColorValue} from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
 
 export default StyleSheet.create({
     Homeview:{
         alignItems: "center",
         justifyContent: "center",
+        backgroundColor: '#eeeeee',
     },
     PostView:{
-        width: Dimensions.get('screen').width,
+        width: Dimensions.get('screen').width - 15,
         height: 250,
         borderColor: 'grey',
         borderWidth: 2,
-        margin: 12,
+        margin: 10,
+        backgroundColor:'#ffffff'  
     },
     subjectName:{
         padding: 10,
