@@ -17,7 +17,7 @@ const SearchBar =() =>{
             marginTop: 10,
             backgroundColor:'#ffffff'}}>
             <MaterialCommunityIcons name="magnify" size={15} style={{paddingTop: 13, paddingLeft:10, color:'grey'}}/>
-            <TextInput placeholder="Search" style={{ height: 40,width: Dimensions.get('screen').width}}/>
+            <TextInput placeholder="Search" style={{ height: 40,width: Dimensions.get('screen').width}} returnKeyType='search'/>
         </View>
 
     )

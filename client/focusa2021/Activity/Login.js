@@ -1,8 +1,9 @@
 import React, { useState, Component } from 'react';
-import { View,Text,StatusBar,Image, TextInput, Button, Alert, TouchableOpacity} from 'react-native';
+import { ScrollView,Text,StatusBar,Image, TextInput, Button, Alert, TouchableOpacity} from 'react-native';
 import styles from '../Styles/LoginStyles';
 import * as Font from 'expo-font';
 import { ScalarLeafsRule } from 'graphql';
+import { set } from 'react-native-reanimated';
 
 const Login=({navigation, setLoggedIn}) =>{
     const [username, setUsername] = useState('');
@@ -25,20 +26,20 @@ const Login=({navigation, setLoggedIn}) =>{
     }
 
     return(
-        <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.container}>
                 <StatusBar backgroundColor = "#ffffff" barStyle="dark-content"/> 
                 <Image style={styles.image} source={require('../assets/images/focusa2.png')}/>
                 <Image  style={styles.focusaText} source={require('../assets/images/focusalogosmall.png')} />
-                <TextInput style={styles.inputBox} placeholder="Username" onChangeText={(username) => setUsername(username)}/>
-                <TextInput style={styles.inputBox} placeholder="Password" secureTextEntry={true} onChangeText={(password) => setPassword(password)} />
+                <TextInput style={styles.inputBox} placeholder="Username" onChangeText={(username) => setUsername(username)} returnKeyType='next' autoFocus={true} onSubmitEditing={() => { this.passwordTextInput.focus(); }}/>
+                <TextInput style={styles.inputBox} placeholder="Password" secureTextEntry={true} onChangeText={(password) => setPassword(password)} returnKeyType='done' onSubmitEditing={presslogin} ref={(input)=> {this.passwordTextInput = input;}}/>
 
                 <TouchableOpacity 
                 style ={{
                     height: 40,
                     width:160,
                     borderRadius: 17,
-                    marginTop :20
-                }}>
+                    marginTop :20,
+                }} returnKeyType='next'>
             <Button title="LOGIN" color="black" onPress={presslogin}/> 
           </TouchableOpacity>
 
@@ -47,7 +48,7 @@ const Login=({navigation, setLoggedIn}) =>{
                     Forgot Password?
                 </Text>
         </TouchableOpacity>
-            </View>
+            </ScrollView>
     );
 
 }

@@ -9,6 +9,7 @@ import Courses from '../Activity/courses';
 import Login from '../Activity/Login';
 import Profile from '../Activity/Profile';
 import Video from '../Activity/Video';
+import SubjectPage from '../Activity/SubjectPage'
 
 const Tab = createBottomTabNavigator();
 
@@ -21,6 +22,17 @@ function BottomNavigator() {
         activeTintColor: '#e91e63',
       }}
     >
+
+      <Tab.Screen
+        name="SubjectPage"
+        options={{
+          tabBarLabel: 'SubjectPage',
+          tabBarButton: () => null,
+        }}
+      >
+        {props => <SubjectPage {...props} login={login}/>}
+      </Tab.Screen>
+
       <Tab.Screen
         name="Login"
         options={{
