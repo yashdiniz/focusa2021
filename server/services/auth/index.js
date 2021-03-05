@@ -3,7 +3,7 @@ const express = require('express');
 const express_session = require('express-session');
 const app = express();
 
-const { authPort, secret, sessionMaxAge } = require('../../config');
+const { authPort, secret } = require('../../config');
 const { localStrategy } = require('./strategy.js');
 const { ensureAuthenticated } = require('./ensureAuthenticated');
 
@@ -37,12 +37,10 @@ app.get('/login',
         failureRedirect: '/error',
     }),
     (req, res) => {
-        // set the refresh cookie maximum age as needed.
-        req.session.cookie.maxAge = sessionMaxAge;
         // TODO: add in the JWT transfer too.
         res.json({ 
             name: req.user.name,
-            time: req.user.time,
+            token: req.user.token,
             login: true });
     }
 );
@@ -50,7 +48,7 @@ app.get('/login',
 app.get('/check', ensureAuthenticated, (req, res) => {
     res.json({ 
         name: req.user.name,
-        time: req.user.time,
+        token: req.user.token,
     });
 });
 

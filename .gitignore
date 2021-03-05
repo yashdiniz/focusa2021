@@ -30,3 +30,6 @@ db/
  
 # ignoring the DS store 
 .DS_Store
+
+# ignoring the certificates!!
+certs/

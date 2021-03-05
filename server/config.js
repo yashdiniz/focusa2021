@@ -1,7 +1,9 @@
 const dotenv = require('dotenv');
+const path = require('path');
+const fs = require('fs');
 
 const projectRoot = '/home/yash/Desktop/focusa-new/server';
-dotenv.config({ path: projectRoot + '/.env' });
+dotenv.config({ path: path.join(projectRoot, '.env') });
 
 const production = false;
 const port = 1896;   // using FOCUSA legacy port for testing.
@@ -25,22 +27,24 @@ const pbkdfIters = 1<<14,
     UUIDSize = 24;
 
 const JWTsignOptions = {
-    algorithm: 'ES256',
+    algorithm: 'RS256',
     expiresIn: 300, // 5 minutes
+    notBefore: 0,   // available from current timestamp
     audience: 'react-native-app',
     issuer: 'FOCUSA',
+    subject: 'graphql',
 },
 JWTverifyOptions = {
-    algorithms: ['ES256'],
+    algorithms: ['RS256'],
     audience: 'react-native-app',
     issuer: 'FOCUSA',
-    maxAge: '300s',
+    subject: 'graphql',
 },
-JWTSecret = {
-    
+JWTsecret = {
+    public:  fs.readFileSync(path.join(projectRoot, 'certs/certificate.pem')),
+    private: fs.readFileSync(path.join(projectRoot, 'certs/key.pem')),
 };
 const usernamePattern = /\w+/;  // almost alphanumeric pattern(URL safe)
-const sessionMaxAge = 5 * 60 * 1000;
 
 // course-related
 const maxModRolesforCourse = 2;
@@ -49,8 +53,9 @@ const maxModRolesforCourse = 2;
 const defaultProfilePic = 'dp.jpeg';
 
 module.exports = { 
-    port, authPort, sessionMaxAge,
-    projectRoot, graphiql, secret, realm, remote, JWTsignOptions, JWTverifyOptions,
+    port, authPort,
+    projectRoot, graphiql, secret, realm, remote, 
+    JWTsignOptions, JWTverifyOptions, JWTsecret,
     pbkdfIters, pbkdfDigest, pbkdfLen, UUIDSize, currentPasswordScheme,
     minPasswordLength, usernamePattern, maxModRolesforCourse,
     defaultProfilePic
