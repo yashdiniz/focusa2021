@@ -1,8 +1,8 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View,Text,StatusBar} from 'react-native';
 
 const Profile = ({ navigation, route, login }) =>{
-    if(!login) navigation.navigate('Login');
+    useEffect(() => { if(!login) navigation.navigate('Login');});
     return(
         <View style={{alignItems:'center', justifyContent:'center'}}>
             <StatusBar backgroundColor = "#ffffff" barStyle="dark-content"/>
