@@ -13,20 +13,14 @@ const { pbkdfDigest, pbkdfIters, pbkdfLen, usernamePattern, currentPasswordSchem
 const crypto = require('crypto');
 
 // Reference: https://pouchdb.com/2015/05/18/we-have-a-problem-with-promises.html
+/**
+ * The hashing technique used for passwords.
+ * @param {string} word The word to hash.
+ * @param {string} salt A random salt to use for hash obfuscation.
+ */
 const pbkdf = (word, salt) => new Promise((resolve, reject) => 	// will return a Promise!
 		crypto.pbkdf2(word, salt, pbkdfIters, pbkdfLen, pbkdfDigest,
 		(err, key) => err !== null ? reject(err) : resolve(key.toString('base64'))));
-
-// logs.get('_local/firstTime')	// check the presence of the flag
-// .catch(e=>{						// if it does not exist
-// 	console.log("Welcome to FOCUSA! Initialising database.");
-// 	return security.putRole('_admin', "The administrator role.")	// create an admin role
-// 	.then(o=> security.putRole('_super', "The superuser role."))
-// 	.then(o=> security.createUser('admin','admin',['_admin']))	// then create a user admin
-// 	.then(o=> logs.put({	// then create the flag
-// 		_id:'_local/firstTime', value: true,
-// 	}));
-// }).catch(e=> console.error("Database initialization failed.", e));
 
 const userExistsError = new Error('Username already exists. Please try another username.'),
       loginError = new Error('Login failed. Incorrect username or password.'),
