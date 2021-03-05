@@ -5,8 +5,10 @@ import SearchBar from '../Components/SearchBar';
 import styles from '../Styles/CourseStyles';
 import Course from '../Components/Course';
 
+import { ensureAuthenticated } from './ensureAuthenticated';
+
 const Courses = ({ navigation, route, login }) =>{
-    useEffect(() => { if(!login) navigation.navigate('Login');});
+    ensureAuthenticated(navigation, login);
     return(
         <ScrollView contentContainerStyle={styles.CoursesView}>
             <StatusBar backgroundColor = "#ffffff" barStyle="dark-content"/>

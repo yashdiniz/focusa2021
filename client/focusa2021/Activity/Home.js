@@ -4,9 +4,10 @@ import styles from '../Styles/HomeStyle'
 import Posts from '../Components/Post';
 import SearchBar from '../Components/SearchBar';
 
+import {ensureAuthenticated} from './ensureAuthenticated';
 
 const Home = ({ navigation, route, login }) =>{
-    useEffect(() => { if(!login) navigation.navigate('Login');});
+    ensureAuthenticated(navigation, login);
     return(
         <ScrollView contentContainerStyle={styles.Homeview}>
             <StatusBar backgroundColor = "#ffffff" barStyle="dark-content"/>
