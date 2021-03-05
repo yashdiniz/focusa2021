@@ -5,6 +5,20 @@
 const LocalStrategy = require('passport-local').Strategy;
 const jwt = require('jsonwebtoken');
 const { validateUser } = require('./functions');
+const { JWTsignOptions, JWTverifyOptions, JWTSecret } = require('../../config');
+
+const signToken = (username, payload) => {
+    return jwt.sign(payload, JWTSecret, {
+        ...JWTsignOptions,
+        notBefore: Date.now()/1000,
+        subject: username,
+    });
+};
+const verifyToken = (token) => {
+    return jwt.verify(token, JWTSecret, {
+        ...JWTverifyOptions,
+    });
+};
 
 // form values sent need to have name and pass as input values...
 const localStrategy = new LocalStrategy(async (username, password, done) => {

@@ -23,6 +23,22 @@ const pbkdfIters = 1<<14,
     currentPasswordScheme = 'pbkdf2',
     minPasswordLength = 8,
     UUIDSize = 24;
+
+const JWTsignOptions = {
+    algorithm: 'ES256',
+    expiresIn: 300, // 5 minutes
+    audience: 'react-native-app',
+    issuer: 'FOCUSA',
+},
+JWTverifyOptions = {
+    algorithms: ['ES256'],
+    audience: 'react-native-app',
+    issuer: 'FOCUSA',
+    maxAge: '300s',
+},
+JWTSecret = {
+    
+};
 const usernamePattern = /\w+/;  // almost alphanumeric pattern(URL safe)
 const sessionMaxAge = 5 * 60 * 1000;
 
@@ -34,7 +50,7 @@ const defaultProfilePic = 'dp.jpeg';
 
 module.exports = { 
     port, authPort, sessionMaxAge,
-    projectRoot, graphiql, secret, realm, remote,
+    projectRoot, graphiql, secret, realm, remote, JWTsignOptions, JWTverifyOptions,
     pbkdfIters, pbkdfDigest, pbkdfLen, UUIDSize, currentPasswordScheme,
     minPasswordLength, usernamePattern, maxModRolesforCourse,
     defaultProfilePic
