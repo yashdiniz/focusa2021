@@ -1,5 +1,5 @@
-# Auth service
+# Authenticator service
 
-This microservice will manage `auth` and `roles`.
+This microservice will manage `user` and `roles`.
 
 This includes login, session management, JWT refresh, roles querying, and other security operations.

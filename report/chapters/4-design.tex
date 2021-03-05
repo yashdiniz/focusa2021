@@ -157,11 +157,12 @@ It builds on many of the tools and workflows which bring maximum productivity.
 It adheres to the following components : Javascript, APIs and Markup.
 
 The core principles of pre-rendering and decoupling, enable sites and applications to be delivered 
-with greater confidence and resilience than ever before.
+with greater confidence and resilience than ever before.~\cite{JAMstack}
 
 \subsection{Why use JAMstack?}
 
-These are the core concepts that makes JAMstack deliver fast, secure, high-performing, resilient, and efficient infrastructure:
+These are the core concepts that makes JAMstack deliver fast, secure, high-performing, 
+resilient, and efficient infrastructure:
 
 \subsubsection{Speed}
 
@@ -197,7 +198,7 @@ Static Site Generators, Headless CMSs, and CDNs. Refer to figure \ref{fig:jamsta
 
 \begin{figure}[h!]
     \begin{center}
-        \includegraphics[width=15cm]{Jamstack.jpg}
+        \includegraphics[width=12cm]{Jamstack.jpg}
     \end{center}
     \caption{Traditional web v/s JAMstack}
     \label{fig:jamstack}
@@ -272,15 +273,19 @@ The credentials put in by the user are validated by the system through the authe
 If the credentials are found to be incorrect, the system runs the error handler to address the error occurred.
 If the user still is not able to produce the correct credentials, the process ends and the user is not allowed to use the app.
 
-If the user has been validated and is found to be genuine, is directed to the home/main page of the app where he can choose to request for the News Feed, User Profile, Courses or launch video conferencing.
+If the user has been validated and is found to be genuine, is directed to the home/main page of the app where he can 
+choose to request for the News Feed, User Profile, Courses or launch video conferencing.
 All these requests can be made through the navigation panel provided in the app and are accessed as parallel activities.
 
-Once the user requests for a service, the request is sent to the system as a query which is then resolved by the GraphQL to extract the specific requested data from the backend and the response returned is then displayed to the user in structured format.
+Once the user requests for a service, the request is sent to the system as a query which is then resolved by the GraphQL 
+to extract the specific requested data from the backend and the response returned is then displayed to the user in structured format.
 
-If the user requests to launch the video conferencing, the system estblishes a peer to peer connection with the requested user system, asks the user to grant access to the camera and audio and starts transfering bi-directional vectors as the secure connection is established.
+If the user requests to launch the video conferencing, the system estblishes a peer to peer connection with the requested user 
+system, asks the user to grant access to the camera and audio and starts transfering bi-directional vectors as the secure connection is established.
 These bi-directional vectors are worked upon by the algorithm used to reduce the bandwidth usage and the output is displayed in the form of video.
 
-If the user decides to log out of the app, it can be accomplished via the corresponding UI component and as a result all the parallel activities combine to close and the user is logged out of the app safely .
+If the user decides to log out of the app, it can be accomplished via the corresponding UI component and as a result all the 
+parallel activities combine to close and the user is logged out of the app safely .
 The user is also logged out of the app the session times out.
 
 % Schema diagram.
@@ -295,7 +300,7 @@ The user is also logged out of the app the session times out.
 \end{figure}
 
 A database schema represents a \textbf{blueprint} or \textbf{architecture} of how the data will look. 
-It describes the shape of the data and how it might relate to other tables or models. Refer to \label{fig:schema}.
+It describes the shape of the data and how it might relate to other tables or models. Refer to figure \ref{fig:schema}.
 
 The \textbf{Collections} and their respective \textbf{Document Attributes} are:
 \begin{enumerate}
@@ -329,7 +334,7 @@ and manage a hierarchy similar to tweets in Twitter. However, the moderators wil
         \includegraphics[width=15cm]{sequence.png}
     \end{center}
     \caption{Authentication Sequence Diagram. This diagram illustrates 
-    four actors: client, auth, GraphQL, microservice.}
+    four actors: User, Authenticator, GraphQL, Services.}
     \label{fig:sequence}
 \end{figure}
 
