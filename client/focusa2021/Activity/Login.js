@@ -4,11 +4,13 @@ import styles from '../Styles/LoginStyles';
 import * as Font from 'expo-font';
 import { ScalarLeafsRule } from 'graphql';
 import { set } from 'react-native-reanimated';
-import { get } from 'axios';
+
+import { authenticate } from "./ensureAuthenticated";
 
 const Login=({navigation, setLoggedIn}) =>{
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    let passwordTextInput;
 
     function presslogin(){
         if(username == '' || password == ''){
@@ -16,9 +18,9 @@ const Login=({navigation, setLoggedIn}) =>{
         }
         else{
             Alert.alert('Logging in', username + password);
-            get('/login')
-            setLoggedIn(true);
-            navigation.goBack();
+            authenticate(username, password, setLoggedIn)   // perform authentication
+            .then(() => navigation.goBack())  // go back to activity on success
+            .catch(console.error);  // TODO: toast on failure
         }
     }
 
@@ -31,8 +33,15 @@ const Login=({navigation, setLoggedIn}) =>{
                 <StatusBar backgroundColor = "#ffffff" barStyle="dark-content"/> 
                 <Image style={styles.image} source={require('../assets/images/focusa2.png')}/>
                 <Image  style={styles.focusaText} source={require('../assets/images/focusalogosmall.png')} />
-                <TextInput style={styles.inputBox} placeholder="Username" onChangeText={(username) => setUsername(username)} returnKeyType='next' autoFocus={true} onSubmitEditing={() => { this.passwordTextInput.focus(); }}/>
-                <TextInput style={styles.inputBox} placeholder="Password" secureTextEntry={true} onChangeText={(password) => setPassword(password)} returnKeyType='done' onSubmitEditing={presslogin} ref={(input)=> {this.passwordTextInput = input;}}/>
+                <TextInput style={styles.inputBox} placeholder="Username" require={true}
+                    returnKeyType='next' autoFocus={true} autoCapitalize='none' autoCorrect={false} 
+                    onChangeText={(username) => setUsername(username)} 
+                    onSubmitEditing={() => { passwordTextInput.focus(); }}/>
+                <TextInput style={styles.inputBox} placeholder="Password" 
+                    secureTextEntry={true} returnKeyType='done' 
+                    onChangeText={(password) => setPassword(password)} 
+                    onSubmitEditing={presslogin} 
+                    ref={(input)=> { passwordTextInput = input; }}/>
 
                 <TouchableOpacity 
                 style ={{
