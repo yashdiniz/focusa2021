@@ -1,6 +1,5 @@
 import React, {useEffect} from 'react';
 import { View, Text, StatusBar,ScrollView } from 'react-native';
-import { isLoggedIn } from './singletonStates'; 
 import SearchBar from '../Components/SearchBar';
 import styles from '../Styles/CourseStyles';
 import Course from '../Components/Course';
