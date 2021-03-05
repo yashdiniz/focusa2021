@@ -4,6 +4,7 @@ import styles from '../Styles/LoginStyles';
 import * as Font from 'expo-font';
 import { ScalarLeafsRule } from 'graphql';
 import { set } from 'react-native-reanimated';
+import { get } from 'axios';
 
 const Login=({navigation, setLoggedIn}) =>{
     const [username, setUsername] = useState('');
@@ -14,11 +15,11 @@ const Login=({navigation, setLoggedIn}) =>{
             Alert.alert('Message:','username and pasword can\'t be empty')
         }
         else{
-            Alert.alert('Loging in', username + password);
+            Alert.alert('Logging in', username + password);
+            get('/login')
             setLoggedIn(true);
             navigation.goBack();
         }
-
     }
 
     function forgotpassword(){
