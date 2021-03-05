@@ -1,10 +1,12 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
 
 export default StyleSheet.create({
     container:{
-        marginTop: 100,
+        backgroundColor: 'white',
         alignItems: "center",
         justifyContent: "center",
+        height: Dimensions.get('screen').height,
+        width: Dimensions.get('screen').width,
     },
 
     image:{
