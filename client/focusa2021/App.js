@@ -10,7 +10,6 @@ import { apolloClient } from './apollo';
 import BottomNavigator from './Components/BottomNavigator';
 
 const App = (props) => {
-    const [ login, setLoggedIn ] = useState('');
     return(
         <NavigationContainer>
             {/* <Stack.Navigator screenOptions={{
@@ -22,7 +21,7 @@ const App = (props) => {
                 />
                 <Stack.Screen name="Home" component={Home} />
             </Stack.Navigator> */}
-            <BottomNavigator login={login} setLoggedIn={setLoggedIn} />
+            <BottomNavigator/>
         </NavigationContainer>
     );
 }

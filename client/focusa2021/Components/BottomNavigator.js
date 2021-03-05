@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useState} from 'react';
 import { Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -12,7 +12,8 @@ import Video from '../Activity/Video';
 
 const Tab = createBottomTabNavigator();
 
-function BottomNavigator({login, setLoggedIn}) {
+function BottomNavigator() {
+  const [login, setLoggedIn] = useState('');
   return (
     <Tab.Navigator
       initialRouteName="Home"
