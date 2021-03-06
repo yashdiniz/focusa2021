@@ -1,5 +1,4 @@
-import React, { Component, useState } from 'react';
-import { Button, Text, View, SafeAreaView, ActivityIndicator, StyleSheet } from 'react-native';
+import React from 'react';
 import { ApolloProvider, useQuery, gql } from '@apollo/client';
 import { Picker } from '@react-native-picker/picker';
 import 'react-native-gesture-handler';
@@ -12,15 +11,6 @@ import BottomNavigator from './Components/BottomNavigator';
 const App = (props) => {
     return(
         <NavigationContainer>
-            {/* <Stack.Navigator screenOptions={{
-                headerShown: false
-            }}>
-                <Stack.Screen
-                    name="Login"
-                    component={Login}
-                />
-                <Stack.Screen name="Home" component={Home} />
-            </Stack.Navigator> */}
             <BottomNavigator/>
         </NavigationContainer>
     );

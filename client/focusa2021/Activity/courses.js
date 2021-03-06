@@ -6,8 +6,8 @@ import Course from '../Components/Course';
 
 import { ensureAuthenticated } from './ensureAuthenticated';
 
-const Courses = ({ navigation, route, login }) =>{
-    ensureAuthenticated(navigation, login);
+const Courses = ({ navigation, route, token }) =>{
+    ensureAuthenticated(navigation, token);
     return(
         <ScrollView contentContainerStyle={styles.CoursesView}>
             <StatusBar backgroundColor = "#ffffff" barStyle="dark-content"/>

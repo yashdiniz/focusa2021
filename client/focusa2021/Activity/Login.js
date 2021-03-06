@@ -18,6 +18,8 @@ const Login=({navigation, setLoggedIn}) =>{
         }
         else{
             Alert.alert('Logging in', username + password);
+            // TODO: disable manual back button
+            // refer https://stackoverflow.com/a/43980393
             authenticate(username, password, setLoggedIn)   // perform authentication
             .then(() => navigation.goBack())  // go back to activity on success
             .catch(console.error);  // TODO: toast on failure

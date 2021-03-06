@@ -6,8 +6,8 @@ import SearchBar from '../Components/SearchBar';
 
 import {ensureAuthenticated} from './ensureAuthenticated';
 
-const Home = ({ navigation, route, login }) =>{
-    ensureAuthenticated(navigation, login);
+const Home = ({ navigation, route, token }) =>{
+    ensureAuthenticated(navigation, token);
     return(
         <ScrollView contentContainerStyle={styles.Homeview}>
             <StatusBar backgroundColor = "#ffffff" barStyle="dark-content"/>

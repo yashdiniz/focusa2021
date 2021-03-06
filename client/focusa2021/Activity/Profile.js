@@ -3,8 +3,8 @@ import {View,Text,StatusBar} from 'react-native';
 
 import {ensureAuthenticated} from './ensureAuthenticated';
 
-const Profile = ({ navigation, route, login }) =>{
-    ensureAuthenticated(navigation, login);
+const Profile = ({ navigation, route, token }) =>{
+    ensureAuthenticated(navigation, token);
     return(
         <View style={{alignItems:'center', justifyContent:'center'}}>
             <StatusBar backgroundColor = "#ffffff" barStyle="dark-content"/>

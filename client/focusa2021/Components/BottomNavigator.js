@@ -14,7 +14,7 @@ import SubjectPage from '../Activity/SubjectPage'
 const Tab = createBottomTabNavigator();
 
 function BottomNavigator() {
-  const [login, setLoggedIn] = useState('');
+  const [token, setLoggedIn] = useState('');
   return (
     <Tab.Navigator
       initialRouteName="Home"
@@ -40,7 +40,7 @@ function BottomNavigator() {
           tabBarButton: () => null,
         }}
       >
-        {props => <SubjectPage {...props} login={login}/>}
+        {props => <SubjectPage {...props} token={token}/>}
       </Tab.Screen>
 
       <Tab.Screen
@@ -52,7 +52,7 @@ function BottomNavigator() {
           ),
         }}
       >
-        {props => <Home {...props} login={login}/>}
+        {props => <Home {...props} token={token}/>}
       </Tab.Screen>
 
       <Tab.Screen
@@ -64,7 +64,7 @@ function BottomNavigator() {
           ),
         }}
       >
-        {props => <Courses {...props} login ={login}/>}
+        {props => <Courses {...props} token={token}/>}
       </Tab.Screen>
       <Tab.Screen
         name="Video"
@@ -75,7 +75,7 @@ function BottomNavigator() {
           ),
         }}
       >
-        {props => <Video {...props} login ={login}/>}
+        {props => <Video {...props} token={token}/>}
       </Tab.Screen>
       <Tab.Screen
         name="Profile"
@@ -86,7 +86,7 @@ function BottomNavigator() {
           ),
         }}
       >
-        {props => <Profile {...props} login ={login}/>}
+        {props => <Profile {...props} token={token}/>}
       </Tab.Screen>
     </Tab.Navigator>
   );
