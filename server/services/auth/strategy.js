@@ -28,6 +28,19 @@ async (req, username, password, done) => {
     }
 });
 
+/**
+ * Refreshes the session by issuing a new JWT token.
+ * @param {object} session The session data.
+ */
+const refreshToken = (req) => {
+    let session = {
+        name: req.user.name,
+        time: req.user.time,    // do not refresh time! Will determine time since login
+        ip:   req.ip            // update the IP
+    }
+    return (req.user.token = jwt.sign(session));
+}
+
 // const gStrategy = new GoogleStrategy({
 //     returnURL: path.join(realm, '/callback'),   // options
 //     realm
@@ -41,5 +54,5 @@ async (req, username, password, done) => {
 // });
 
 module.exports = {
-    localStrategy
+    localStrategy, refreshToken
 }

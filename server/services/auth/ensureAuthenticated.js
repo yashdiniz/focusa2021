@@ -6,6 +6,7 @@
 let ensureAuthenticated = (req, res, next) => {
     if (req.session.passport.user) {
         req.user = req.session.passport.user;
+        if (req.ip !== req.user.ip) return res.redirect('/error');
         return next();
     }
     res.redirect('/error');

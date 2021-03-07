@@ -181,7 +181,7 @@ const postsSchema = {
             default: true,
         },
         time: {
-            type: 'string', // save datetime
+            type: 'number', // save timestamp
         },
         attachmentURL: {
             type: 'string',
@@ -218,12 +218,18 @@ const profileSchema = {
             uniqueItems: true,
             type: 'array',
             items: {
-                type: 'string',
-                ref: 'courses',
+                type: 'object',
+                properties: {
+                    course: {
+                        type: 'string',
+                        ref: 'courses',
+                    }
+                }
             }
         },
     },
-    required: ['fullName', 'about', 'display_pic']
+    required: ['fullName', 'about', 'display_pic'],
+    indexes: ['interests.[].course'],   // find out who is subscribed
 };
 const user_rolesSchema = {
     name: 'user_roles',

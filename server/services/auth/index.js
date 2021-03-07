@@ -1,10 +1,11 @@
 const passport = require('passport');
 const express = require('express');
 const express_session = require('express-session');
+const bodyParser = require('body-parser');
 const app = express();
 
 const { authPort, secret } = require('../../config');
-const { localStrategy } = require('./strategy.js');
+const { localStrategy, refreshToken } = require('./strategy.js');
 const { ensureAuthenticated } = require('./ensureAuthenticated');
 
 process.title = 'FOCUSA authenticator service';
@@ -12,10 +13,16 @@ process.title = 'FOCUSA authenticator service';
 app.use(passport.initialize());
 app.use(express_session({ 
     secret,
+    cookie: {
+        httpOnly: true,
+        sameSite: true,
+    },
     saveUninitialized: false,
     resave: false,
 }));
 app.use(passport.session());
+
+app.use(bodyParser.urlencoded({ extended: true }));
 
 /**
  * Passport session setup.
@@ -38,8 +45,7 @@ app.get('/login',
     }),
     (req, res) => {
         // TODO: add in the JWT transfer too.
-        res.json({ 
-            name: req.user.name,
+        res.json({
             token: req.user.token,
             login: true });
     }
@@ -49,12 +55,21 @@ app.get('/check', ensureAuthenticated, (req, res) => {
     res.json({ 
         name: req.user.name,
         token: req.user.token,
+        match: req.user.token === req.body.token,    // check a match
     });
 });
 
 app.get('/error', (req, res) => {
-    // umm yes, this always returns login false, it's just an error hook
+    // umm yes, this always returns login false, it's just an error broadcast
     res.status(401).json({ login: false, message: 'User not authenticated.' });
+});
+
+app.get('/refresh', ensureAuthenticated, (req, res) =>{
+    refreshToken(req);  // refresh token of the session
+    res.json({
+        token: req.user.token,
+        login: true,
+    });
 });
 
 app.listen(authPort, () => {
