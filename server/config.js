@@ -50,7 +50,9 @@ const usernamePattern = /\w+/;  // almost alphanumeric pattern(URL safe)
 const maxModRolesforCourse = 2;
 
 // profile-related
-const defaultProfilePic = 'dp.jpeg';
+const defaultProfilePic = 'dp.jpeg',
+    defaultfullName = 'User Profile Name',
+    defaultAbout = 'Hey, I am a new User!';
 
 module.exports = { 
     port, authPort,
@@ -58,5 +60,5 @@ module.exports = {
     JWTsignOptions, JWTverifyOptions, JWTsecret,
     pbkdfIters, pbkdfDigest, pbkdfLen, UUIDSize, currentPasswordScheme,
     minPasswordLength, usernamePattern, maxModRolesforCourse,
-    defaultProfilePic
+    defaultProfilePic, defaultfullName, defaultAbout
 };
