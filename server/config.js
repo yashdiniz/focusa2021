@@ -2,7 +2,7 @@ const dotenv = require('dotenv');
 const path = require('path');
 const fs = require('fs');
 
-const projectRoot = '/home/yash/Desktop/focusa-new/server';
+const projectRoot = './';
 dotenv.config({ path: path.join(projectRoot, '.env') });
 
 const production = false;
