@@ -147,7 +147,11 @@ const updateUser = async (name, newpassword) => {
             });
         } else throw userNonExistant;
     })
-}
+};
+
+// create admin if does not already exist
+// TODO: make this process more secure!!
+userExists('admin').catch(e => createUser('admin', 'gyroscope'));
 
 module.exports = {
     createUser, deleteUser, validateUser, updateUser, userExists,

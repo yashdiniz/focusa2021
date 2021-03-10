@@ -44,7 +44,6 @@ app.get('/login',
         failureRedirect: '/error',
     }),
     (req, res) => {
-        // TODO: add in the JWT transfer too.
         res.json({
             token: req.user.token,
             login: true });

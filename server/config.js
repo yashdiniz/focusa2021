@@ -11,10 +11,10 @@ const authPort = port + 1;
 const graphiql = !production;  // essentially, run graphiql at graphql endpoint
 
 // the dev secret which will be used for most crypto operations.
-const secret = process.env['SECRET'] || "b-3l][=08BOIHW[oH)#T)(HG{3-09g2p[i-u";
+const secret = process.env['SECRET'];
 
 // the realm stores the DNS/server name.
-const realm = process.env['REALM'] || "https://focusa-auth.herokuapp.com/";
+const realm = process.env['REALM'];
 
 const remote = 'http://admin:admin@localhost:5984/';  // remote couchDB URL
 
