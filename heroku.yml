@@ -1,2 +1,0 @@
-run:
-  web: node services/auth/index.js
