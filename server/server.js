@@ -7,6 +7,8 @@ process.title = "FOCUSA graphQL";
 
 const app = express();  // create a router
 
+require('./services/auth/index');   // importing the auth service (strictly for auth purposes)  
+
 // let the /graphql endpoint use the graphql adapter middleware
 app.use('/graphql', graphqlHTTP({
     schema, // ES6, key:value pair coupling
