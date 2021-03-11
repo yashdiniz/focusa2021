@@ -38,6 +38,8 @@ passport.deserializeUser((sess, done) => done(null, sess));
 */ 
 passport.use(localStrategy);
 
+app.use(require('helmet')());
+
 app.get('/login', 
     passport.authenticate('local', 
     {
