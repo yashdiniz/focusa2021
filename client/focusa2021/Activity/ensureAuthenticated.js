@@ -3,7 +3,7 @@ import { create } from 'axios';
 import { Alert } from "react-native";
 
 const axios = create({
-    baseURL: 'http://192.168.43.71:1897',
+    baseURL: 'http://focusa-auth.herokuapp.com',
     timeout: 5000,
 });
 
