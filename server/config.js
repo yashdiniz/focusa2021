@@ -6,7 +6,7 @@ const projectRoot = './';
 dotenv.config({ path: path.join(projectRoot, '.env') });
 
 const production = false;
-const port = 1896;   // using FOCUSA legacy port for testing.
+const port = process.env['port'] || 1896;   // using FOCUSA legacy port for testing.
 const authPort = port + 1;
 const graphiql = !production;  // essentially, run graphiql at graphql endpoint
 
