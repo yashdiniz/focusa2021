@@ -26,6 +26,11 @@ const pbkdfIters = 1<<14,
     minPasswordLength = 8,
     UUIDSize = 24;
 
+if (!fs.existsSync(path.join(projectRoot, 'certs/certificate.pem'))) {
+    // generates the certificates by invoking script, if not already made
+    const { execSync } = require('child_process');
+    execSync('bash ./generateCerts.sh < ./certinputs');
+}
 const JWTsignOptions = {
     algorithm: 'RS256',
     expiresIn: 300, // 5 minutes

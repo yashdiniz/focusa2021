@@ -5,9 +5,6 @@ const schema = require('./schema/schema');
 
 process.title = "FOCUSA graphQL";
 
-const { execSync } = require('child_process');
-execSync('bash ./generateCerts.sh < ./certinputs');
-
 const app = express();  // create a router
 
 require('./services/auth/index');   // importing the auth service (strictly for auth purposes)  
