@@ -97,8 +97,7 @@ const validateUser = async (name, password) => {
             // TODO: ensure to check password scheme before checking password.
             let hash = await pbkdf(password, user.salt);
             // if the password hashes match
-            if (hash == user.hash)
-                return user;
+            if (hash == user.hash) return user;
             else throw loginError;
         } else throw userNonExistant;
     });
@@ -114,11 +113,25 @@ const userExists = async (name) => {
     let c = await focusa;
     return await c.auth.findOne(name).exec()
     .then(async doc => {
-        if (doc) {
-            return await doc.populate('uuid');
-        } else throw userNonExistant;
+        if (doc) return await doc.populate('uuid');
+        else throw userNonExistant;
     })
 };
+
+/**
+ * Gets a user by their ID.
+ * @param {string} id Database UUID key used to identify user.
+ */
+const getUserById = async (id) => {
+    assert(typeof id === 'string', 
+    "Invalid arguments for getUserById.");
+    let c = await focusa;
+    return await c.user.findOne(id).exec()
+    .then(async doc => {
+        if (doc) return doc;
+        else throw userNonExistant;
+    });
+}
 
 // TODO(long term): maybe add functionality to update the user name?
 /**
@@ -154,6 +167,6 @@ const updateUser = async (name, newpassword) => {
 userExists('admin').catch(e => createUser('admin', 'gyroscope'));
 
 module.exports = {
-    createUser, deleteUser, validateUser, updateUser, userExists,
+    createUser, deleteUser, validateUser, updateUser, userExists, getUserById,
     userExistsError, loginError, userNonExistant
 }
