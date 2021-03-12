@@ -1,11 +1,10 @@
 import React from 'react';
-import { View,StatusBar, ScrollView } from 'react-native';
+import { StatusBar, ScrollView } from 'react-native';
 import styles from '../Styles/SubjectPageStyle';
 import SubjectPageHeader from '../Components/SujectPageHeader'; 
 import Post from '../Components/Post';
 
 import {ensureAuthenticated} from './ensureAuthenticated';
-import Posts from '../Components/Post';
 
 const SubjectPage  = ({navigation, route, token})=>{
     ensureAuthenticated(navigation, token);

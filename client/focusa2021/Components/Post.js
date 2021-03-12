@@ -1,5 +1,5 @@
-import React, {Components} from 'react';
-import { View, Text, TouchableOpacity, Button, Dimensions, } from 'react-native';
+import React from 'react';
+import { View, Text, TouchableOpacity, } from 'react-native';
 import styles from '../Styles/HomeStyle';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 

@@ -1,6 +1,5 @@
-import {useEffect, useState } from 'react';
+import {useEffect } from 'react';
 import { create } from 'axios';
-import { Alert } from "react-native";
 
 const axios = create({
     baseURL: 'http://focusa-auth.herokuapp.com',
@@ -18,7 +17,7 @@ const authenticate = (username, password, setLoggedIn) => {
         params: { username, password }
     })
     .then(res => {
-        console.log(res)
+        console.log('Login Token: ', res.data.token);
         setLoggedIn(res.data.token);    // set the token to the state
     });
 }
@@ -28,6 +27,6 @@ function ensureAuthenticated(navigation, token) {
         console.log('Current login state: ',token.length>0);
         if(!token) navigation.navigate('Login');
     });
-};
+}
 
 export { authenticate, ensureAuthenticated };

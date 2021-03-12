@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {View,Text,StatusBar} from 'react-native';
 
 import {ensureAuthenticated} from './ensureAuthenticated';

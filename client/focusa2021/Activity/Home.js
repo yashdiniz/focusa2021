@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react';
-import { View, StatusBar, Text,ScrollView,SafeAreaView, TextInput } from 'react-native';
+import React from 'react';
+import { StatusBar, ScrollView } from 'react-native';
 import styles from '../Styles/HomeStyle'
 import Posts from '../Components/Post';
 import SearchBar from '../Components/SearchBar';
