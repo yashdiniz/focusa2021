@@ -25,7 +25,7 @@ const authenticate = (username, password, setLoggedIn) => {
 function ensureAuthenticated(navigation, token) {
     useEffect(() => {
         console.log('Current login state: ',token.length>0);
-        if(!token) navigation.navigate('Login');
+        if(!token) return navigation.navigate('Login');
     });
 }
 
