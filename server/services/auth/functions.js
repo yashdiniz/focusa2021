@@ -9,7 +9,7 @@
  * author: @yashdiniz
  */
 const { focusa, assert, generateUUID } = require('../databases');
-const { pbkdfDigest, pbkdfIters, pbkdfLen, usernamePattern, currentPasswordScheme, minPasswordLength } = require('../../config');
+const { pbkdfDigest, pbkdfIters, pbkdfLen, usernamePattern, currentPasswordScheme, minPasswordLength, rolePattern } = require('../../config');
 const crypto = require('crypto');
 
 // Reference: https://pouchdb.com/2015/05/18/we-have-a-problem-with-promises.html
@@ -24,7 +24,9 @@ const pbkdf = (word, salt) => new Promise((resolve, reject) => 	// will return a
 
 const userExistsError = new Error('Username already exists. Please try another username.'),
       loginError = new Error('Login failed. Incorrect username or password.'),
-      userNonExistant = new Error('User does not exist.');
+      userNonExistant = new Error('User does not exist.'),
+      roleExistsError = new Error('Role already exists. Please try another role name.'),
+      roleNonExistant = new Error('Role does not exist.');
 
 // Built auth index to enforce one form of low-risk-low-conflict uniqueness.
 // Reference: https://stackoverflow.com/a/1933616
@@ -115,7 +117,7 @@ const userExists = async (name) => {
     .then(async doc => {
         if (doc) return await doc.populate('uuid');
         else throw userNonExistant;
-    })
+    });
 };
 
 /**
@@ -162,11 +164,102 @@ const updateUser = async (name, newpassword) => {
     })
 };
 
+// TODO: add jdoc
+const createRole = async (name) => {
+    assert(typeof name === 'string', "Invalid arguments for createRole.");
+    assert(name == name.match(rolePattern), "Role not added. name should match: " + rolePattern);
+
+    let c = await focusa;
+    let uuid = generateUUID();  // generate the UUID
+
+    // insert the role document into roles
+    let newRole = await c.roles.insert({
+        name, uuid
+    });
+
+    // also insert the role into the index
+    return await c.role.insert({ name, uuid })
+    .catch(e => {
+        newRole.remove();   // remove if user exists
+        throw roleExistsError;
+    });
+};
+
+const deleteRole = async (name) => {
+    assert(typeof name === 'string', 
+        "Invalid arguments for deleteRole.");
+    let c = await focusa;
+    // execute a search on role index to find username
+    return await c.role.findOne(name).exec()
+    .then(async doc => {  // then remove the doc after finding it
+        if (doc) {
+            let role = await doc.populate('uuid');
+            doc.remove();   // remove the role entry
+            role.remove();  // also remove the ref roles entry
+            return doc;
+        } else throw roleNonExistant;
+    });
+};
+
+const roleExists = async (name) => {
+    assert(typeof name == 'string',
+        "Invalid arguments for roleExists.");
+    let c = await focusa;
+    return await c.role.findOne(name).exec()
+    .then(async doc => {
+        if(doc) return await doc.populate('uuid');
+        else throw roleNonExistant;
+    });
+};
+
+const giveRole = async (role, user) => {
+    assert(typeof role === 'string' && typeof user === 'string', 
+        "Invalid arguments for giveRole.");
+    let c = await focusa;
+    // first find the user and the role.
+    let u = await userExists(user);
+    let r = await roleExists(role);
+
+    return c.user_roles.insert({ 
+        uuid: `${u.uuid}_${r.uuid}`, 
+        user: u.uuid, 
+        role: r.uuid, 
+    });
+};
+
+const getRoleById = (id) => {
+    assert(typeof id === 'string', 
+    "Invalid arguments for getRoleById.");
+    let c = await focusa;
+    return await c.roles.findOne(id).exec()
+    .then(async doc => {
+        if (doc) return doc;
+        else throw roleNonExistant;
+    });
+};
+
+// TODO: undefined stub
+const getRolesOfUser = () => {
+
+};
+
+const getUsersOfRole = () => {
+
+};
+
+const userHasRole = () => {
+
+};
+
 // create admin if does not already exist
 // TODO: make this process more secure!!
 userExists('admin').catch(e => createUser('admin', 'gyroscope'));
+// also give admin user admin role
+roleExists('admin').catch(e => createRole('admin')).finally(o => giveRole('admin', 'admin'));
 
 module.exports = {
     createUser, deleteUser, validateUser, updateUser, userExists, getUserById,
-    userExistsError, loginError, userNonExistant
+    createRole, deleteRole, roleExists, giveRole, getRoleById,
+    userExistsError, loginError, userNonExistant,
+    roleExistsError, roleNonExistant,
 }

@@ -121,7 +121,26 @@ const coursesSchema = {
     indexes: ['name'],
 };
 
-// TODO: add an index for roles to maintain uniqueness
+const roleSchema = {
+    name: 'role',
+    title: 'FOCUSA role schema',
+    version: 0,
+    description: "Collection intentionally created to ensure unique roles.",
+    type: 'object',
+    properties: {
+        name: {
+            type: 'string',
+            primary: true,
+        },
+        uuid: {
+            type: 'string',
+            ref: 'roles',
+            unique: true,
+        },
+    },
+    required: ['name', 'uuid'],
+    indexes: ['name', 'uuid']
+};
 const rolesSchema = {
     name: 'roles',
     title: 'FOCUSA roles schema',
@@ -264,10 +283,11 @@ const db = RxDB.createRxDatabase({
     eventReduce: false,
 }).catch(console.error);
 
-const focusa = db.then(db=> db.addCollections({
+const focusa = db.then(database=> database.addCollections({
     auth: { schema: authSchema },
     user: { schema: userSchema },
     courses: { schema: coursesSchema },
+    role: { schema: roleSchema },
     roles: { schema: rolesSchema },
     posts: { schema: postsSchema },
     profile: { schema: profileSchema },
@@ -280,11 +300,11 @@ RxDB.addRxPlugin(require('pouchdb-adapter-http'));
  * Returns a Promise holding the state of replication process.
  */
 const replicationState = async () =>
-await focusa.then(focusa => {
-    let collections = Object.keys(focusa);
+await focusa.then(coll => {
+    let collections = Object.keys(coll);
     let syncs = [];
     for (var c in collections)
-        syncs.push(focusa[collections[c]].sync({
+        syncs.push(coll[collections[c]].sync({
             remote: remote + collections[c],
             options: {
                 live: true

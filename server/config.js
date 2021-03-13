@@ -25,6 +25,7 @@ const pbkdfIters = 1<<14,
     currentPasswordScheme = 'pbkdf2',
     minPasswordLength = 8,
     UUIDSize = 24;
+const rolePattern = /\w+/;
 
 if (!fs.existsSync(path.join(projectRoot, 'certs/certificate.pem'))) {
     // generates the certificates by invoking script, if not already made
@@ -62,7 +63,7 @@ const defaultProfilePic = 'dp.jpeg',
 module.exports = { 
     port, authPort,
     projectRoot, graphiql, secret, realm, remote, 
-    JWTsignOptions, JWTverifyOptions, JWTsecret,
+    JWTsignOptions, JWTverifyOptions, JWTsecret, rolePattern,
     pbkdfIters, pbkdfDigest, pbkdfLen, UUIDSize, currentPasswordScheme,
     minPasswordLength, usernamePattern, maxModRolesforCourse,
     defaultProfilePic, defaultfullName, defaultAbout
