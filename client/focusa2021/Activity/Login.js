@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Toast from 'react-native-toast-message';
 import { ScrollView,Text,StatusBar,Image, TextInput, Button, Alert, TouchableOpacity} from 'react-native';
 import styles from '../Styles/LoginStyles';
 
