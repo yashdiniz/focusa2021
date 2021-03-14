@@ -22,10 +22,10 @@ const pbkdf = (word, salt) => new Promise((resolve, reject) => 	// will return a
 		crypto.pbkdf2(word, salt, pbkdfIters, pbkdfLen, pbkdfDigest,
 		(err, key) => err !== null ? reject(err) : resolve(key.toString('base64'))));
 
-const userExistsError = new Error('Username already exists. Please try another username.'),
+const userExistsError = new Error('Username already exists.'),
       loginError = new Error('Login failed. Incorrect username or password.'),
       userNonExistant = new Error('User does not exist.'),
-      roleExistsError = new Error('Role already exists. Please try another role name.'),
+      roleExistsError = new Error('Role already exists.'),
       roleNonExistant = new Error('Role does not exist.');
 
 // Built auth index to enforce one form of low-risk-low-conflict uniqueness.
@@ -33,7 +33,7 @@ const userExistsError = new Error('Username already exists. Please try another u
 
 /**
  * Create a User in the database, and add the username to the auth index.
- * @param {string} name User name, unique alphanumeric identifier.
+ * @param {string} name User name.
  * @param {string} password used for validation.
  */
 const createUser = async (name, password) => {
@@ -63,7 +63,7 @@ const createUser = async (name, password) => {
 
 /**
  * Delete an existing User from a database, along with the respective auth index entry.
- * @param {string} name User name, unique alphanumeric identifier.
+ * @param {string} name User name.
  */
 const deleteUser = async (name) => {
     assert(typeof name === 'string', 
@@ -83,7 +83,7 @@ const deleteUser = async (name) => {
 
 /**
  * Validate a User, returns user details if password matches.
- * @param {string} name User name, unique alphanumeric identifier.
+ * @param {string} name User name.
  * @param {string} password used for validation.
  */
 const validateUser = async (name, password) => {
@@ -107,7 +107,7 @@ const validateUser = async (name, password) => {
 
 /**
  * Check if User exists in database, return user details.
- * @param {string} name User name, unique alphanumeric identifier.
+ * @param {string} name User name.
  */
 const userExists = async (name) => {
     assert(typeof name === 'string', 
@@ -138,7 +138,7 @@ const getUserById = async (id) => {
 // TODO(long term): maybe add functionality to update the user name?
 /**
  * Update the User password.
- * @param {string} name User name, unique alphanumeric identifier.
+ * @param {string} name User name.
  * @param {string} newpassword The new password, will update the previous password.
  */
 const updateUser = async (name, newpassword) => {
@@ -164,7 +164,10 @@ const updateUser = async (name, newpassword) => {
     })
 };
 
-// TODO: add jdoc
+/**
+ * Creates a role in the database.
+ * @param {string} name Name of the role to create.
+ */
 const createRole = async (name) => {
     assert(typeof name === 'string', "Invalid arguments for createRole.");
     assert(name == name.match(rolePattern), "Role not added. name should match: " + rolePattern);
@@ -173,9 +176,7 @@ const createRole = async (name) => {
     let uuid = generateUUID();  // generate the UUID
 
     // insert the role document into roles
-    let newRole = await c.roles.insert({
-        name, uuid
-    });
+    let newRole = await c.roles.insert({ name, uuid });
 
     // also insert the role into the index
     return await c.role.insert({ name, uuid })
@@ -185,6 +186,10 @@ const createRole = async (name) => {
     });
 };
 
+/**
+ * Deletes a role from the database.
+ * @param {string} name Name of the role to delete.
+ */
 const deleteRole = async (name) => {
     assert(typeof name === 'string', 
         "Invalid arguments for deleteRole.");
@@ -201,6 +206,10 @@ const deleteRole = async (name) => {
     });
 };
 
+/**
+ * Checks if a role is already created in the database.
+ * @param {string} name Name of the role to check.
+ */
 const roleExists = async (name) => {
     assert(typeof name == 'string',
         "Invalid arguments for roleExists.");
@@ -212,6 +221,11 @@ const roleExists = async (name) => {
     });
 };
 
+/**
+ * Gives a role to a user.
+ * @param {string} role The role to give.
+ * @param {string} user The user to give the role to.
+ */
 const giveRole = async (role, user) => {
     assert(typeof role === 'string' && typeof user === 'string', 
         "Invalid arguments for giveRole.");
@@ -220,46 +234,81 @@ const giveRole = async (role, user) => {
     let u = await userExists(user);
     let r = await roleExists(role);
 
-    return c.user_roles.insert({ 
-        uuid: `${u.uuid}_${r.uuid}`, 
+    return await c.user_roles.insert({ 
+        user_roleID: `${u.uuid}_${r.uuid}`, 
         user: u.uuid, 
         role: r.uuid, 
     });
 };
 
-const getRoleById = (id) => {
+/**
+ * Get a role by their ID.
+ * @param {string} id Database UUID used to identify role.
+ */
+const getRoleById = async (id) => {
     assert(typeof id === 'string', 
     "Invalid arguments for getRoleById.");
     let c = await focusa;
     return await c.roles.findOne(id).exec()
-    .then(async doc => {
+    .then(doc => {
         if (doc) return doc;
         else throw roleNonExistant;
     });
 };
 
-// TODO: undefined stub
-const getRolesOfUser = () => {
-
+/**
+ * Gets a list of Roles assigned to the User.
+ * @param {string} user The User name to find the roles of.
+ */
+const getRolesOfUser = async (user) => {
+    assert(typeof user === 'string', 
+    "Invalid arguments for getRolesOfUser.");
+    let c = await focusa;
+    // first find the username
+    return await userExists(user)
+    .then(doc => c.user_roles.find({ selector: 
+        { user: doc.uuid }
+    }).exec());
 };
 
-const getUsersOfRole = () => {
-
+/**
+ * Gets a list of Roles assigned to a User.
+ * @param {string} role The Role name to find the users for.
+ */
+const getUsersOfRole = async (role) => {
+    assert(typeof role === 'string', 
+    "Invalid arguments for getUsersOfRole.");
+    let c = await focusa;
+    return await roleExists(role)
+    .then(doc => c.user_roles.find({ selector: 
+        { role: doc.uuid }
+    }).exec());
 };
 
-const userHasRole = () => {
-
+/**
+ * Finds if a user_role pair exists in the database.
+ * @param {string} user The User name to check.
+ * @param {string} role The Role name to check.
+ */
+const userHasRole = async (user, role) => {
+    assert(typeof user === 'string' && typeof role === 'string', 
+    "Invalid arguments for userHasRole.");
+    let c = await focusa;
+    let u = await userExists(user);
+    let r = await roleExists(role);
+    return await c.user_roles.findOne(`${u.uuid}_${r.uuid}`).exec();
 };
 
 // create admin if does not already exist
 // TODO: make this process more secure!!
-userExists('admin').catch(e => createUser('admin', 'gyroscope'));
+createUser('admin', 'gyroscope').catch(e => console.error('Attempted creating admin. ' + e.message));
 // also give admin user admin role
-roleExists('admin').catch(e => createRole('admin')).finally(o => giveRole('admin', 'admin'));
+createRole('admin').catch(e => console.error('Attempted creating admin.' + e.message))
+.finally(o => giveRole('admin', 'admin')).catch(e => console.error('Attempted giving role to admin.' + e.message));
 
 module.exports = {
     createUser, deleteUser, validateUser, updateUser, userExists, getUserById,
-    createRole, deleteRole, roleExists, giveRole, getRoleById,
+    createRole, deleteRole, roleExists, giveRole, getRoleById, getRolesOfUser, getUsersOfRole, userHasRole,
     userExistsError, loginError, userNonExistant,
     roleExistsError, roleNonExistant,
-}
+};

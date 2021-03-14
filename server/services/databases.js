@@ -272,7 +272,7 @@ const user_rolesSchema = {
             final: true,
         }
     },
-    indexes: ['user_roleID'],
+    indexes: ['user_roleID', 'user', 'role'],
     required: ['user_roleID', 'user', 'role'],
 };
 
