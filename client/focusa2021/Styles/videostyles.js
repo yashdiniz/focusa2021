@@ -67,7 +67,7 @@ export default StyleSheet.create({
         justifyContent:"center",
         borderWidth:1,
         borderColor:"black",
-        backgroundColor:"green",
+        backgroundColor:"#3CF20E",
         width: 90,
         height:30,
         borderRadius: 15,
