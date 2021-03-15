@@ -1,6 +1,7 @@
 import {useEffect, useState } from 'react';
 import { create } from 'axios';
 import { Alert } from "react-native";
+import { setGraphQLToken } from '../apollo';
 
 const axios = create({
     baseURL: 'http://192.168.43.71:1897',
@@ -20,6 +21,7 @@ const authenticate = (username, password, setLoggedIn) => {
     .then(res => {
         console.log(res)
         setLoggedIn(res.data.token);    // set the token to the state
+        setGraphQLToken(res.data.token);
     });
 }
 

@@ -1,16 +1,19 @@
 import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client';
-// import { setContext } from '@apollo/link-context';
+import { setContext } from '@apollo/link-context';
 
 // see: https://github.com/graphql/swapi-graphql
-const GRAPHQL_API_URL = 'https://swapi-graphql.netlify.app/.netlify/functions/index';
+// Used to be 'https://swapi-graphql.netlify.app/.netlify/functions/index'
+const GRAPHQL_API_URL = 'https://localhost:1896/graphql';
 
 /*
 uncomment the code below in case you are using a GraphQL API that requires some form of
 authentication. asyncAuthLink will run every time your request is made and use the token
 you provide while making the request.
-
-
-const TOKEN = '';
+*/
+let TOKEN = '';
+export const setGraphQLToken = (token) => {
+  TOKEN = token;
+}
 const asyncAuthLink = setContext(async () => {
   return {
     headers: {
@@ -19,14 +22,12 @@ const asyncAuthLink = setContext(async () => {
   };
 });
 
-*/
-
 const httpLink = new HttpLink({
   uri: GRAPHQL_API_URL,
 });
 
 export const apolloClient = new ApolloClient({
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache(), // can switch to another cache for offline use
   link: httpLink,
   // link: asyncAuthLink.concat(httpLink),
 });
