@@ -24,6 +24,7 @@ const pbkdfIters = 1<<14,
     pbkdfDigest = 'sha256',
     currentPasswordScheme = 'pbkdf2',
     minPasswordLength = 8,
+    maxNameLength = 20,
     UUIDSize = 24;
 const rolePattern = /\w+/;
 
@@ -65,6 +66,6 @@ module.exports = {
     projectRoot, graphiql, secret, realm, remote, 
     JWTsignOptions, JWTverifyOptions, JWTsecret, rolePattern,
     pbkdfIters, pbkdfDigest, pbkdfLen, UUIDSize, currentPasswordScheme,
-    minPasswordLength, usernamePattern, maxModRolesforCourse,
+    minPasswordLength, usernamePattern, maxModRolesforCourse, maxNameLength,
     defaultProfilePic, defaultfullName, defaultAbout
 };

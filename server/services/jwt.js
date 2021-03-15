@@ -18,7 +18,8 @@ const sign = (payload) => {
  */
 const verify = (token) => {
     return jwt.verify(token, JWTsecret.public, {
-        ...JWTverifyOptions,
+        ...JWTverifyOptions, 
+        algorithms: JWTverifyOptions.algorithms,
     });
 };
 

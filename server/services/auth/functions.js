@@ -9,7 +9,7 @@
  * author: @yashdiniz
  */
 const { focusa, assert, generateUUID } = require('../databases');
-const { pbkdfDigest, pbkdfIters, pbkdfLen, usernamePattern, currentPasswordScheme, minPasswordLength, rolePattern } = require('../../config');
+const { pbkdfDigest, pbkdfIters, pbkdfLen, usernamePattern, currentPasswordScheme, minPasswordLength, maxNameLength, rolePattern } = require('../../config');
 const crypto = require('crypto');
 
 // Reference: https://pouchdb.com/2015/05/18/we-have-a-problem-with-promises.html
@@ -38,7 +38,7 @@ const userExistsError = new Error('Username already exists.'),
  */
 const createUser = async (name, password) => {
     assert(typeof name === 'string' && typeof password === 'string' 
-    && password.length >= minPasswordLength, 
+    && password.length >= minPasswordLength && name.length <= maxNameLength, 
         "Invalid arguments for createUser.");
     assert(name == name.match(usernamePattern), 
         "User not created. name should match: " + usernamePattern);
@@ -169,7 +169,7 @@ const updateUser = async (name, newpassword) => {
  * @param {string} name Name of the role to create.
  */
 const createRole = async (name) => {
-    assert(typeof name === 'string', "Invalid arguments for createRole.");
+    assert(typeof name === 'string' && name.length <= maxNameLength, "Invalid arguments for createRole.");
     assert(name == name.match(rolePattern), "Role not added. name should match: " + rolePattern);
 
     let c = await focusa;
