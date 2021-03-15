@@ -1,5 +1,6 @@
 import {useEffect } from 'react';
 import { create } from 'axios';
+import {setgraphQLToken} from '../apollo';
 
 const axios = create({
     baseURL: 'http://focusa-auth.herokuapp.com',
@@ -19,6 +20,7 @@ const authenticate = (username, password, setLoggedIn) => {
     .then(res => {
         console.log('Login Token: ', res.data.token);
         setLoggedIn(res.data.token);    // set the token to the state
+        setgraphQLToken(res.data.token);
     });
 }
 
