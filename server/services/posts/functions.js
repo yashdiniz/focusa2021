@@ -39,12 +39,12 @@ const deletePost = async (uuid) => {
 const createPost = async (text, author, course, attachmentURL, parent ) => {
     assert(typeof text === 'string' && typeof author === 'string' && typeof course === 'string' && typeof attachmentURL === 'string' && typeof parent === 'string');
     
-    uuid = generateUUID();
+    let uuid = generateUUID();
     let time = new Date();
 
     let f = await focusa;
 
-    let newPost = await f.posts.insert({
+    return await f.posts.insert({
         uuid, parent, text, course, author,
         reported: false,
         approved: false,
