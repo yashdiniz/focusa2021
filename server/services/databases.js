@@ -88,7 +88,6 @@ const userSchema = {
     indexes: ['name'],
 };
 
-// TODO : add an index for courses to maintain uniqueness
 const coursesSchema = {
     name: 'courses',
     title: 'FOCUSA course schema',
@@ -102,14 +101,13 @@ const coursesSchema = {
         },
         name: {
             type: 'string',
-            unique: true,
         },
         description: {
             type: 'string'
         },
         mods: {
             type: 'array',
-            uniqueItems: true,
+            uniqueItems: true,  // if empty, default to admin
             maxItems: 2 || maxModRolesforCourse,
             items: {
                 type: 'string',
