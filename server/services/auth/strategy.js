@@ -15,6 +15,7 @@ async (req, username, password, done) => {
         // on successful validation, no error will be thrown
         let user = await validateUser(username, password);
         let session = { // create a session.
+            uuid: user.uuid,
             name: user.name,
             time: Date.now(),
             ip: req.ip,
