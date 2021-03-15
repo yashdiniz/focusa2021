@@ -12,7 +12,7 @@ const QueryType = new GraphQLObjectType({
         token: {
             type: GraphQLString,
             resolve(_, args, ctx) {
-                return ctx.headers.Authorization;
+                return ctx.headers.authorization;
             }
         }
         // getProfile(ID)

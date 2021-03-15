@@ -2,11 +2,14 @@ import {useEffect, useState } from 'react';
 import { create } from 'axios';
 import { Alert } from "react-native";
 import { setGraphQLToken } from '../apollo';
+import { gql } from '@apollo/client';
 
 const axios = create({
     baseURL: 'http://192.168.43.71:1897',
     timeout: 5000,
 });
+
+import { apolloClient } from '../apollo';
 
 /**
  * 
@@ -19,9 +22,11 @@ const authenticate = (username, password, setLoggedIn) => {
         params: { username, password }
     })
     .then(res => {
-        console.log(res)
         setLoggedIn(res.data.token);    // set the token to the state
         setGraphQLToken(res.data.token);
+
+        apolloClient.query({ query: gql`{token}`})
+        .then(console.log).catch(console.error);
     });
 }
 
