@@ -1,7 +1,8 @@
 const passport = require('passport');
 const express = require('express');
 const express_session = require('express-session');
-const bodyParser = require('body-parser');
+const bodyParser = require('body-parser').urlencoded({ extended: true });
+const cookieParser = require('cookie-parser');
 const app = express();
 
 const { authPort, secret } = require('../../config');
@@ -22,7 +23,8 @@ app.use(express_session({
 }));
 app.use(passport.session());
 
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser);
+app.use(cookieParser());
 
 /**
  * Passport session setup.
@@ -54,6 +56,7 @@ app.get('/login',
 
 app.get('/check', ensureAuthenticated, (req, res) => {
     res.json({ 
+        cookie: req.cookies,
         name: req.user.name,
         token: req.user.token,
         match: req.user.token === req.body.token,    // check a match
