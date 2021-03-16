@@ -6,7 +6,7 @@ const projectRoot = './';
 dotenv.config({ path: path.join(projectRoot, '.env') });
 
 const production = false;
-const port = 1896;   // using FOCUSA legacy port for testing.
+const port = process.env['port'] || 1896;   // using FOCUSA legacy port for testing.
 const authPort = port + 1;
 const webrtcPort = 5000;
 const graphiql = !production;  // essentially, run graphiql at graphql endpoint
@@ -26,7 +26,13 @@ const pbkdfIters = 1<<14,
     currentPasswordScheme = 'pbkdf2',
     minPasswordLength = 8,
     UUIDSize = 24;
+const rolePattern = /\w+/;
 
+if (!fs.existsSync(path.join(projectRoot, 'certs/certificate.pem'))) {
+    // generates the certificates by invoking script, if not already made
+    const { execSync } = require('child_process');
+    execSync('bash ./generateCerts.sh < ./certinputs');
+}
 const JWTsignOptions = {
     algorithm: 'RS256',
     expiresIn: 300, // 5 minutes
@@ -58,7 +64,7 @@ const defaultProfilePic = 'dp.jpeg',
 module.exports = { 
     port, authPort, webrtcPort,
     projectRoot, graphiql, secret, realm, remote, 
-    JWTsignOptions, JWTverifyOptions, JWTsecret,
+    JWTsignOptions, JWTverifyOptions, JWTsecret, rolePattern,
     pbkdfIters, pbkdfDigest, pbkdfLen, UUIDSize, currentPasswordScheme,
     minPasswordLength, usernamePattern, maxModRolesforCourse,
     defaultProfilePic, defaultfullName, defaultAbout
