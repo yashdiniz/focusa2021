@@ -8,6 +8,7 @@ dotenv.config({ path: path.join(projectRoot, '.env') });
 const production = false;
 const port = 1896;   // using FOCUSA legacy port for testing.
 const authPort = port + 1;
+const webrtcPort = 5000;
 const graphiql = !production;  // essentially, run graphiql at graphql endpoint
 
 // the dev secret which will be used for most crypto operations.
@@ -55,7 +56,7 @@ const defaultProfilePic = 'dp.jpeg',
     defaultAbout = 'Hey, I am a new User!';
 
 module.exports = { 
-    port, authPort,
+    port, authPort, webrtcPort,
     projectRoot, graphiql, secret, realm, remote, 
     JWTsignOptions, JWTverifyOptions, JWTsecret,
     pbkdfIters, pbkdfDigest, pbkdfLen, UUIDSize, currentPasswordScheme,
