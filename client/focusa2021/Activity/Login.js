@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ScrollView,Text,StatusBar,Image, TextInput, Button, Alert, TouchableOpacity} from 'react-native';
 import styles from '../Styles/LoginStyles';
 
 import { authenticate } from "./ensureAuthenticated";
 
-const Login=({navigation, setLoggedIn}) =>{
+const Login=({navigation, token, setLoggedIn}) =>{
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     let passwordTextInput;
@@ -34,7 +34,7 @@ const Login=({navigation, setLoggedIn}) =>{
                 <Image  style={styles.focusaText} source={require('../assets/images/focusalogosmall.png')} />
                 <TextInput style={styles.inputBox} placeholder="Username" require={true}
                     returnKeyType='next' autoFocus={true} autoCapitalize='none' autoCorrect={false} 
-                    onChangeText={(x) => setUsername(x)} 
+                    onChangeText={(x) => setUsername(x)}
                     onSubmitEditing={() => { passwordTextInput.focus(); }}/>
                 <TextInput style={styles.inputBox} placeholder="Password" 
                     secureTextEntry={true} returnKeyType='done' 
@@ -53,9 +53,7 @@ const Login=({navigation, setLoggedIn}) =>{
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.forgotpassword} onPress={forgotpassword}>
-                <Text>
-                    Forgot Password?
-                </Text>
+                <Text>Forgot Password?</Text>
         </TouchableOpacity>
             </ScrollView>
     );
