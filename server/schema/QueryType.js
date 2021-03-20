@@ -24,30 +24,24 @@ const QueryType = new GraphQLObjectType({
                 return ctx.headers.authorization;
             }
         },
-        getUserByName: {
+        user: {
             type: UserType,
-            description: "Gets user of the given name.",
+            description: "Gets user of the details mentioned in arguments.",
             args: {
-                name: { type: GraphQLNonNull(GraphQLID) },
+                name: { type: GraphQLID },
+                id: { type: GraphQLID },
             },
-            async resolve(_, { name }, ctx) {
-                return await auth.get('/getUserByName', {
-                    params: { name },
-                    headers: { authorization: ctx.headers.authorization }
-                }).then(res => res.data);
-            }
-        },
-        getUserById: {
-            type: UserType,
-            description: "Gets user of the given ID.",
-            args: {
-                id: { type: GraphQLNonNull(GraphQLID) },
-            },
-            async resolve(_, { id }, ctx) {
-                return await auth.get('/getUserById', {
-                    params: { id },
-                    headers: { authorization: ctx.headers.authorization }
-                }).then(res => res.data);
+            async resolve(_, { id, name }, ctx) {
+                if(id)    // prioritizing id over name
+                    return await auth.get('/getUserById', {
+                        params: { id },
+                        headers: { authorization: ctx.headers.authorization }
+                    }).then(res => res.data);
+                if(name) 
+                    return await auth.get('/getUserByName', {
+                        params: { name },
+                        headers: { authorization: ctx.headers.authorization }
+                    }).then(res => res.data);
             }
         },
         // getProfile(ID)
