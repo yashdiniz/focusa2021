@@ -78,4 +78,4 @@ const searchPosts = async (query, offsetID) => {
     // add limit to only view top 10 (store as var in config) posts...
 }
 
-module.exports = {getPostByID, deletePost, createPost, editPost};
+module.exports = {getPostByID, deletePost, createPost, editPost, searchPosts };
