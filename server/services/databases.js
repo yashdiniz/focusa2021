@@ -193,11 +193,11 @@ const postsSchema = {
         },
         reported: {
             type: 'number',
-            default: false,
+            default: 0,
         },
         approved: {
             type: 'number',
-            default: true,
+            default: 1,
         },
         time: {
             type: 'number', // save timestamp

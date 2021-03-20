@@ -41,14 +41,12 @@ const createPost = async (text, author, course, attachmentURL, parent ) => {
     assert(typeof text === 'string' && typeof author === 'string' && typeof course === 'string' && typeof attachmentURL === 'string' && typeof parent === 'string');
     
     let uuid = generateUUID();
-    let time = new Date();
+    let time = Date.now();
 
     let f = await focusa;
 
     return await f.posts.insert({
         uuid, parent, text, course, author,
-        reported: false,
-        approved: false,
         time, attachmentURL    
     });
 }
@@ -69,6 +67,15 @@ const editPost = async (uuid, text) => {
     });
     
 
+}
+
+/**
+ * Searches for posts with a matching query.
+ * @param {string} query Query string to search posts. Empty for all posts.
+ */
+const searchPosts = async (query, offsetID) => {
+    // for now implement only implement empty query
+    // add limit to only view top 10 (store as var in config) posts...
 }
 
 module.exports = {getPostByID, deletePost, createPost, editPost};
