@@ -35,6 +35,7 @@ async (req, username, password, done) => {
  */
 const refreshToken = (req) => {
     let session = {
+        uuid: req.user.uuid,
         name: req.user.name,
         time: req.user.time,    // do not refresh time! Will determine time since login
         ip:   req.ip            // update the IP

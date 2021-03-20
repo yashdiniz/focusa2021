@@ -14,9 +14,9 @@ const UserType = require('./UserType');
 const CourseType = require('./CourseType');
 
 const PostType = new GraphQLObjectType({
-    type: 'Post',
+    name: 'Post',
     description: "This node holds all Post details, and references to their comments.",
-    fields: {
+    fields: () => ({
         id: {
             type: GraphQLNonNull(GraphQLID),
         },
@@ -68,7 +68,7 @@ const PostType = new GraphQLObjectType({
             type: GraphQLBoolean,
             description: "Flag signifying the post has been approved.",
         },
-    }
+    })
 });
 
 module.exports = PostType;

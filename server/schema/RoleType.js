@@ -13,7 +13,7 @@ const UserType = require('./UserType');
 const RoleType = new GraphQLObjectType({
     name: 'Role',
     description: "This node describes a Role for a list of users.",
-    fields: {
+    fields: () => ({
         id:{
             type: GraphQLNonNull(GraphQLID)
         },
@@ -28,7 +28,7 @@ const RoleType = new GraphQLObjectType({
                 // currently stub, return null
             }
         }
-    }
+    })
 });
 
 module.exports = RoleType;

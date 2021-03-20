@@ -17,36 +17,36 @@ const RoleType = require('./RoleType');
 const UserType = new GraphQLObjectType({
     name: 'User',
     description: "This node holds all the necessary user details.",
-    fields: {
-        id: { 
+    fields: () => ({
+        uuid: { 
             type: GraphQLNonNull(GraphQLID),
         },
         name: { 
             type: GraphQLNonNull(GraphQLString),
             description: "A unique username.",
         },
-        profile: { 
-            type: ProfileType,
-            description: "Profile that maps to this User.",
-            resolve(parent, args, ctx, info) {
-                // currently stub, return null
-            }
-        },
-        posts: {
-            type: GraphQLNonNull(GraphQLList(PostType)),
-            description: "Posts written by this Person.",
-            resolve(parent, args, ctx, info) {
-                // currently stub, return null
-            }
-        },
-        roles: {
-            type: GraphQLNonNull(GraphQLList(RoleType)),
-            description: "Roles that the User is assigned.",
-            resolve(parent, args, ctx, info) {
-                // currently stub, return null
-            }
-        },
-    }
+        // profile: { 
+        //     type: ProfileType,
+        //     description: "Profile that maps to this User.",
+        //     resolve(parent, args, ctx, info) {
+        //         // currently stub, return null
+        //     }
+        // },
+        // posts: {
+        //     type: GraphQLNonNull(GraphQLList(PostType)),
+        //     description: "Posts written by this Person.",
+        //     resolve(parent, args, ctx, info) {
+        //         // currently stub, return null
+        //     }
+        // },
+        // roles: {
+        //     type: GraphQLNonNull(GraphQLList(RoleType)),
+        //     description: "Roles that the User is assigned.",
+        //     resolve(parent, args, ctx, info) {
+        //         // currently stub, return null
+        //     }
+        // },
+    })
 });
 
 module.exports = UserType;

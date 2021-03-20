@@ -1,5 +1,6 @@
 const { JWTsignOptions, JWTverifyOptions, JWTsecret } = require('../config');
 const jwt = require('jsonwebtoken');
+const { assert } = require('./databases');
 
 /**
  * Signs a token using JWT.
@@ -23,4 +24,20 @@ const verify = (token) => {
     });
 };
 
-module.exports = { sign, verify }
+/**
+ * Verifies the token, and logs on failure.
+ * @param {string} token The JWT token to verify.
+ */
+const ensureLoggedIn = (token) => {
+    assert(typeof token === 'string',
+    "Invalid arguments for ensureLoggedIn.");
+    token = token.split(' ');
+    try {
+        return verify(token[token.length-1]);
+    } catch(e) {
+        console.log(e);
+        return false;
+    }
+}
+
+module.exports = { sign, verify, ensureLoggedIn }

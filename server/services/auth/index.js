@@ -5,9 +5,11 @@ const bodyParser = require('body-parser').urlencoded({ extended: true });
 const cookieParser = require('cookie-parser');
 const app = express();
 
-const { authPort, secret } = require('../../config');
+const { authPort, secret, JWTsignOptions } = require('../../config');
 const { localStrategy, refreshToken } = require('./strategy.js');
 const { ensureAuthenticated } = require('./ensureAuthenticated');
+const { getUserById, userExists } = require('./functions');
+const jwt = require('../jwt');
 
 process.title = 'FOCUSA authenticator service';
 
@@ -56,10 +58,10 @@ app.get('/login',
 
 app.get('/check', ensureAuthenticated, (req, res) => {
     res.json({ 
-        cookie: req.cookies,
+        cookies: req.cookies,
         name: req.user.name,
         token: req.user.token,
-        match: req.user.token === req.body.token,    // check a match
+        match: req.user.token === req.headers.authorization,    // check a match
     });
 });
 
@@ -68,12 +70,28 @@ app.get('/error', (req, res) => {
     res.status(401).json({ login: false, message: 'User not authenticated.' });
 });
 
-app.get('/refresh', ensureAuthenticated, (req, res) =>{
+app.get('/refresh', ensureAuthenticated, (req, res) => {
     refreshToken(req);  // refresh token of the session
     res.json({
         token: req.user.token,
         login: true,
     });
+});
+
+app.get('/getUserById', (req, res) => {
+    if (jwt.ensureLoggedIn(req.headers.authorization)) {
+        getUserById(req.query.id)
+        .then(doc => res.json({ name: doc.name, uuid: doc.uuid }))
+        .catch(e => res.status(404).json({ message: 'User not found' }));
+    } else res.status(407).json({ message: 'User not authenticated.' });
+});
+
+app.get('/getUserByName', (req, res) => {
+    if (jwt.ensureLoggedIn(req.headers.authorization)) {
+        userExists(req.query.name)
+        .then(doc => res.json({ name: doc.name, uuid: doc.uuid }))
+        .catch(e => res.status(404).json({ message: 'User not found' }));
+    } else res.status(407).json({ message: 'User not authenticated.' });
 });
 
 app.listen(authPort, () => {

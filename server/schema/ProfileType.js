@@ -11,20 +11,31 @@ const {
     GraphQLNonNull,
 } = require('graphql');
 const UserType = require('./UserType');
+const { create } = require('axios');
+const { authRealm } = require('../config');
+
+const auth = create({
+    baseURL: `${authRealm}`,
+    timeout: 5000,
+});
+
 const CourseType = require('./CourseType');
 
 const ProfileType = new GraphQLObjectType({
     name: 'Profile',
     description: "This node holds additional information related to a User.",
-    fields: {
+    fields: () => ({
         id: {
             type: GraphQLNonNull(GraphQLID),
         },
         user: {
             type: GraphQLNonNull(UserType),
             description: "User that maps to this profile.",
-            resolve(parent, args, ctx, info) {
-                // currently stub, return null
+            async resolve({ uuid }, args, ctx) {
+                return await auth.get('/getUserById', {
+                    params: { id: uuid },
+                    headers: { authorization: ctx.headers.authorization }
+                });
             }
         },
         displayName: {
@@ -42,7 +53,7 @@ const ProfileType = new GraphQLObjectType({
                 // currently stub, return null
             }
         },
-    }
+    })
 });
 
 module.exports = ProfileType;

@@ -3,7 +3,15 @@
  * It contains fields which we can use for traversing through the graph
  * and obtaining information.
  */
-const { GraphQLObjectType, GraphQLString } = require('graphql');
+const { GraphQLObjectType, GraphQLString, GraphQLNonNull, GraphQLID } = require('graphql');
+const UserType = require('./UserType');
+const { create } = require('axios');
+const { authRealm } = require('../config');
+
+const auth = create({
+    baseURL: `${authRealm}`,
+    timeout: 5000,
+});
 
 const QueryType = new GraphQLObjectType({
     name: 'Query',
@@ -11,12 +19,38 @@ const QueryType = new GraphQLObjectType({
     fields: {
         token: {
             type: GraphQLString,
+            description: "Echoes the authorization token of the user.",
             resolve(_, args, ctx) {
                 return ctx.headers.authorization;
             }
-        }
+        },
+        getUserByName: {
+            type: UserType,
+            description: "Gets user of the given name.",
+            args: {
+                name: { type: GraphQLNonNull(GraphQLID) },
+            },
+            async resolve(_, { name }, ctx) {
+                return await auth.get('/getUserByName', {
+                    params: { name },
+                    headers: { authorization: ctx.headers.authorization }
+                }).then(res => res.data);
+            }
+        },
+        getUserById: {
+            type: UserType,
+            description: "Gets user of the given ID.",
+            args: {
+                id: { type: GraphQLNonNull(GraphQLID) },
+            },
+            async resolve(_, { id }, ctx) {
+                return await auth.get('/getUserById', {
+                    params: { id },
+                    headers: { authorization: ctx.headers.authorization }
+                }).then(res => res.data);
+            }
+        },
         // getProfile(ID)
-        // getUser(ID)
         // getCourse(ID)
         // searchCourses(string search query)
         // getPost(ID)

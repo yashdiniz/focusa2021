@@ -6,15 +6,15 @@ const projectRoot = './';
 dotenv.config({ path: path.join(projectRoot, '.env') });
 
 const production = false;
+// the realm stores the DNS/server name.
+const realm = process.env['REALM'];
 const port = process.env['port'] || 1896;   // using FOCUSA legacy port for testing.
+const authRealm = "http://localhost:1897";
 const authPort = port + 1;
 const graphiql = !production;  // essentially, run graphiql at graphql endpoint
 
 // the dev secret which will be used for most crypto operations.
 const secret = process.env['SECRET'];
-
-// the realm stores the DNS/server name.
-const realm = process.env['REALM'];
 
 const remote = 'http://admin:admin@localhost:5984/';  // remote couchDB URL
 
@@ -62,7 +62,7 @@ const defaultProfilePic = 'dp.jpeg',
     defaultAbout = 'Hey, I am a new User!';
 
 module.exports = { 
-    port, authPort,
+    port, authPort, authRealm,
     projectRoot, graphiql, secret, realm, remote, 
     JWTsignOptions, JWTverifyOptions, JWTsecret, rolePattern,
     pbkdfIters, pbkdfDigest, pbkdfLen, UUIDSize, currentPasswordScheme,

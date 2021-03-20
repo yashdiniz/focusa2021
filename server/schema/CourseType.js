@@ -16,7 +16,7 @@ const RoleType = require('./RoleType');
 const CourseType = new GraphQLObjectType({
     name:'Course',
     descrption: "This node stores details of all the possible courses.",
-    fields: {
+    fields: () => ({
         id: {
             type: GraphQLNonNull(GraphQLID)
         },
@@ -42,7 +42,7 @@ const CourseType = new GraphQLObjectType({
                 // currently stub, return null
             }
         }
-    }
+    })
 });
 
 module.exports = CourseType;
