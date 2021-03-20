@@ -31,6 +31,7 @@ const deletePost = async (uuid) => {
     .then(async doc => {
         if(doc){
             doc.remove();
+            console.log("post removed successfully!");
         }
         else throw noSuchPost;
     });
@@ -52,4 +53,22 @@ const createPost = async (text, author, course, attachmentURL, parent ) => {
     });
 }
 
-module.exports = {getPostByID, deletePost, createPost};
+//to be done: editpost function
+
+const editPost = async (uuid, text) => {
+    assert(typeof uuid === 'string' && typeof text === 'string');
+
+    let f = await focusa;
+
+    let post = await f.posts.findOne(uuid).exec();
+
+    console.log("Post is getting edited");
+
+    return await post.atomicPatch({
+        text
+    });
+    
+
+}
+
+module.exports = {getPostByID, deletePost, createPost, editPost};
