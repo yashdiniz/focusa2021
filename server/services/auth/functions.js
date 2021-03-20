@@ -169,8 +169,10 @@ const updateUser = async (name, newpassword) => {
  * @param {string} name Name of the role to create.
  */
 const createRole = async (name) => {
-    assert(typeof name === 'string' && name.length <= maxNameLength, "Invalid arguments for createRole.");
-    assert(name == name.match(rolePattern), "Role not added. name should match: " + rolePattern);
+    assert(typeof name === 'string' && name.length <= maxNameLength, 
+        "Invalid arguments for createRole.");
+    assert(name == name.match(rolePattern), 
+        "Role not added. name should match: " + rolePattern);
 
     let c = await focusa;
     let uuid = generateUUID();  // generate the UUID
@@ -301,10 +303,13 @@ const userHasRole = async (user, role) => {
 
 // create admin if does not already exist
 // TODO: make this process more secure!!
-createUser('admin', 'gyroscope').catch(e => console.error('Attempted creating admin. ' + e.message));
+createUser('admin', 'gyroscope')
+.catch(e => console.error('Attempted creating admin. ' + e.message));
 // also give admin user admin role
-createRole('admin').catch(e => console.error('Attempted creating admin.' + e.message))
-.finally(o => giveRole('admin', 'admin')).catch(e => console.error('Attempted giving role to admin.' + e.message));
+createRole('admin')
+.catch(e => console.error('Attempted creating admin. ' + e.message))
+.finally(o => giveRole('admin', 'admin'))
+.catch(e => console.error('Attempted giving role to admin. ' + e.message));
 
 module.exports = {
     createUser, deleteUser, validateUser, updateUser, userExists, getUserById,
