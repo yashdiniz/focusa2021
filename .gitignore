@@ -32,5 +32,6 @@ db/
 # ignoring the DS store 
 .DS_Store
 
-# ignoring the certificates!!
+# ignoring the certificates (but not the public key)!!
 certs/
+!certs/certificate.pem
