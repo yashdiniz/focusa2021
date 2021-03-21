@@ -17,6 +17,7 @@ const crypto = require('crypto');
  * The hashing technique used for passwords.
  * @param {string} word The word to hash.
  * @param {string} salt A random salt to use for hash obfuscation.
+ * @returns {Promise} A hashed key.
  */
 const pbkdf = (word, salt) => new Promise((resolve, reject) => 	// will return a Promise!
 		crypto.pbkdf2(word, salt, pbkdfIters, pbkdfLen, pbkdfDigest,
@@ -35,6 +36,7 @@ const userExistsError = new Error('Username already exists.'),
  * Create a User in the database, and add the username to the auth index.
  * @param {string} name User name.
  * @param {string} password used for validation.
+ * @returns {Promise} The user object just created, without the sensitive information.
  */
 const createUser = async (name, password) => {
     assert(typeof name === 'string' && typeof password === 'string' 
@@ -64,6 +66,7 @@ const createUser = async (name, password) => {
 /**
  * Delete an existing User from a database, along with the respective auth index entry.
  * @param {string} name User name.
+ * @returns {Promise} The User object just deleted, without the sensitive information.
  */
 const deleteUser = async (name) => {
     assert(typeof name === 'string', 
@@ -85,6 +88,7 @@ const deleteUser = async (name) => {
  * Validate a User, returns user details if password matches.
  * @param {string} name User name.
  * @param {string} password used for validation.
+ * @returns {Promise} A User object.
  */
 const validateUser = async (name, password) => {
     assert(typeof name === 'string' && typeof password === 'string', 
@@ -108,6 +112,7 @@ const validateUser = async (name, password) => {
 /**
  * Check if User exists in database, return user details.
  * @param {string} name User name.
+ * @returns {Promise} A User object.
  */
 const userExists = async (name) => {
     assert(typeof name === 'string', 
@@ -123,6 +128,7 @@ const userExists = async (name) => {
 /**
  * Gets a user by their ID.
  * @param {string} id Database UUID key used to identify user.
+ * @returns {Promise} A User object.
  */
 const getUserById = async (id) => {
     assert(typeof id === 'string', 
@@ -140,6 +146,7 @@ const getUserById = async (id) => {
  * Update the User password.
  * @param {string} name User name.
  * @param {string} newpassword The new password, will update the previous password.
+ * @returns {Promise} The User object just updated.
  */
 const updateUser = async (name, newpassword) => {
     assert(typeof name === 'string' && typeof newpassword === 'string' 
@@ -167,6 +174,7 @@ const updateUser = async (name, newpassword) => {
 /**
  * Creates a role in the database.
  * @param {string} name Name of the role to create.
+ * @returns {Promise} The Role object just created.
  */
 const createRole = async (name) => {
     assert(typeof name === 'string' && name.length <= maxNameLength, 
@@ -191,6 +199,7 @@ const createRole = async (name) => {
 /**
  * Deletes a role from the database.
  * @param {string} name Name of the role to delete.
+ * @returns {Promise} The Role object just deleted.
  */
 const deleteRole = async (name) => {
     assert(typeof name === 'string', 
@@ -211,6 +220,7 @@ const deleteRole = async (name) => {
 /**
  * Checks if a role is already created in the database.
  * @param {string} name Name of the role to check.
+ * @returns {Promise} A Role object.
  */
 const roleExists = async (name) => {
     assert(typeof name == 'string',
@@ -227,6 +237,7 @@ const roleExists = async (name) => {
  * Gives a role to a user.
  * @param {string} role The role to give.
  * @param {string} user The user to give the role to.
+ * @returns {Promise} A user_roles pair.
  */
 const giveRole = async (role, user) => {
     assert(typeof role === 'string' && typeof user === 'string', 
@@ -246,6 +257,7 @@ const giveRole = async (role, user) => {
 /**
  * Get a role by their ID.
  * @param {string} id Database UUID used to identify role.
+ * @returns {Promise} A Role object.
  */
 const getRoleById = async (id) => {
     assert(typeof id === 'string', 
@@ -261,6 +273,7 @@ const getRoleById = async (id) => {
 /**
  * Gets a list of Roles assigned to the User.
  * @param {string} user The User name to find the roles of.
+ * @returns {Array<Promise>} An array of Roles.
  */
 const getRolesOfUser = async (user) => {
     assert(typeof user === 'string', 
@@ -270,12 +283,14 @@ const getRolesOfUser = async (user) => {
     return await userExists(user)
     .then(doc => c.user_roles.find({ selector: 
         { user: doc.uuid }
-    }).exec());
+    }).exec())
+    .then(docs => Promise.all(docs.map(async doc => await doc.populate('role'))));
 };
 
 /**
  * Gets a list of Roles assigned to a User.
  * @param {string} role The Role name to find the users for.
+ * @returns {Array<Promise>} An array of Users.
  */
 const getUsersOfRole = async (role) => {
     assert(typeof role === 'string', 
@@ -284,13 +299,15 @@ const getUsersOfRole = async (role) => {
     return await roleExists(role)
     .then(doc => c.user_roles.find({ selector: 
         { role: doc.uuid }
-    }).exec());
+    }).exec())
+    .then(docs => Promise.all(docs.map(async doc => await doc.populate('user'))));
 };
 
 /**
  * Finds if a user_role pair exists in the database.
  * @param {string} user The User name to check.
  * @param {string} role The Role name to check.
+ * @returns {Promise} A user_role pair.
  */
 const userHasRole = async (user, role) => {
     assert(typeof user === 'string' && typeof role === 'string', 
