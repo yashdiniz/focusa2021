@@ -16,13 +16,13 @@ const auth = create({
     baseURL: `${authRealm}`,
     timeout: 5000,
 });
-
 const { RoleType, UserType } = require('./types');
 
 const QueryType = new GraphQLObjectType({
     name: 'Query',
     description: "This node serves as an immutable entrypoint to the graph. It contains fields which we can use for traversing through the graph and obtaining information.",
-    fields: {
+    fields: () => {
+        return {
         token: {
             type: GraphQLString,
             description: "Echoes the authorization token of the user.",
@@ -75,7 +75,7 @@ const QueryType = new GraphQLObjectType({
         // searchCourses(string search query)
         // getPost(ID)
         // searchPosts(string search query)
-    }
+    }}
 })
 
 module.exports = QueryType;
