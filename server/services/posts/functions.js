@@ -31,6 +31,7 @@ const deletePost = async (uuid) => {
     .then(async doc => {
         if(doc){
             doc.remove();
+            console.log("post removed successfully!");
         }
         else throw noSuchPost;
     });
@@ -40,16 +41,41 @@ const createPost = async (text, author, course, attachmentURL, parent ) => {
     assert(typeof text === 'string' && typeof author === 'string' && typeof course === 'string' && typeof attachmentURL === 'string' && typeof parent === 'string');
     
     let uuid = generateUUID();
-    let time = new Date();
+    let time = Date.now();
 
     let f = await focusa;
 
     return await f.posts.insert({
         uuid, parent, text, course, author,
-        reported: false,
-        approved: false,
         time, attachmentURL    
     });
 }
 
-module.exports = {getPostByID, deletePost, createPost};
+//to be done: editpost function
+
+const editPost = async (uuid, text) => {
+    assert(typeof uuid === 'string' && typeof text === 'string');
+
+    let f = await focusa;
+
+    let post = await f.posts.findOne(uuid).exec();
+
+    console.log("Post is getting edited");
+
+    return await post.atomicPatch({
+        text
+    });
+    
+
+}
+
+/**
+ * Searches for posts with a matching query.
+ * @param {string} query Query string to search posts. Empty for all posts.
+ */
+const searchPosts = async (query, offsetID) => {
+    // for now implement only implement empty query
+    // add limit to only view top 10 (store as var in config) posts...
+}
+
+module.exports = {getPostByID, deletePost, createPost, editPost, searchPosts };
