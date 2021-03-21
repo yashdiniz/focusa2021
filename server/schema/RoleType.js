@@ -8,27 +8,38 @@ const {
     GraphQLNonNull,
     GraphQLList
 } = require('graphql');
-const UserType = require('./UserType');
+const { create } = require('axios');
+const { authRealm } = require('../config');
+
+const auth = create({
+    baseURL: `${authRealm}`,
+    timeout: 5000,
+});
 
 const RoleType = new GraphQLObjectType({
     name: 'Role',
     description: "This node describes a Role for a list of users.",
-    fields: () => ({
-        id:{
+    fields: () => {
+        const { UserType } = require('./types');
+        return {
+        uuid:{
             type: GraphQLNonNull(GraphQLID)
         },
         name:{
             type: GraphQLNonNull(GraphQLString),
             description:"The name of the role."
         },
-        users:{
-            type: GraphQLList(UserType),
+        users: {    // TODO: check the type here. Apparently, GraphQLList is not a GraphQL Type.
+            type: GraphQLNonNull(GraphQLList(UserType)),
             description:"List of users that have the role.",
-            resolve(parent, args, ctx, info) {
-                // currently stub, return null
+            async resolve(parent, args, ctx, info) {
+                return await auth.get('/getUsersOfRole', {
+                    params: { name: parent['name'] },
+                    headers: { authorization: ctx.headers.authorization },
+                }).then(res => res.data);
             }
-        }
-    })
+        }}
+    }
 });
 
 module.exports = RoleType;
