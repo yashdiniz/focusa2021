@@ -10,7 +10,6 @@ const {
     GraphQLString,
     GraphQLNonNull,
 } = require('graphql');
-const UserType = require('./UserType');
 const { create } = require('axios');
 const { authRealm } = require('../config');
 
@@ -19,12 +18,12 @@ const auth = create({
     timeout: 5000,
 });
 
-const CourseType = require('./CourseType');
-
 const ProfileType = new GraphQLObjectType({
     name: 'Profile',
     description: "This node holds additional information related to a User.",
-    fields: () => ({
+    fields: () => {
+        const { CourseType, UserType } = require('./types');
+        return {
         id: {
             type: GraphQLNonNull(GraphQLID),
         },
@@ -52,8 +51,8 @@ const ProfileType = new GraphQLObjectType({
             resolve(parent, args, ctx, info) {
                 // currently stub, return null
             }
-        },
-    })
+        }}
+    }
 });
 
 module.exports = ProfileType;

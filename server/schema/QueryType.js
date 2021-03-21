@@ -3,8 +3,12 @@
  * It contains fields which we can use for traversing through the graph
  * and obtaining information.
  */
-const { GraphQLObjectType, GraphQLString, GraphQLNonNull, GraphQLID } = require('graphql');
-const UserType = require('./UserType');
+const { 
+    GraphQLObjectType, 
+    GraphQLString, 
+    GraphQLNonNull, 
+    GraphQLID 
+} = require('graphql');
 const { create } = require('axios');
 const { authRealm } = require('../config');
 
@@ -12,6 +16,8 @@ const auth = create({
     baseURL: `${authRealm}`,
     timeout: 5000,
 });
+
+const { RoleType, UserType } = require('./types');
 
 const QueryType = new GraphQLObjectType({
     name: 'Query',
@@ -26,9 +32,9 @@ const QueryType = new GraphQLObjectType({
         },
         user: {
             type: UserType,
-            description: "Gets user of the details mentioned in arguments.",
+            description: "Gets the details of the User mentioned in arguments.",
             args: {
-                name: { type: GraphQLID },
+                name: { type: GraphQLString },
                 id: { type: GraphQLID },
             },
             async resolve(_, { id, name }, ctx) {
@@ -39,6 +45,26 @@ const QueryType = new GraphQLObjectType({
                     }).then(res => res.data);
                 if(name) 
                     return await auth.get('/getUserByName', {
+                        params: { name },
+                        headers: { authorization: ctx.headers.authorization }
+                    }).then(res => res.data);
+            }
+        },
+        role: {
+            type: RoleType,
+            description: "Gets the details of the Role mentioned in arguments.",
+            args: {
+                name: { type: GraphQLString },
+                id: { type: GraphQLID },
+            },
+            async resolve(_, { id, name }, ctx) {
+                if(id)    // prioritizing id over name
+                    return await auth.get('/getRoleById', {
+                        params: { id },
+                        headers: { authorization: ctx.headers.authorization }
+                    }).then(res => res.data);
+                if(name) 
+                    return await auth.get('/getRoleByName', {
                         params: { name },
                         headers: { authorization: ctx.headers.authorization }
                     }).then(res => res.data);
