@@ -1,11 +1,11 @@
-import {useEffect, useState } from 'react';
+import {useEffect } from 'react';
 import { create } from 'axios';
 import { Alert } from "react-native";
 import { setGraphQLToken } from '../apollo';
 import { gql } from '@apollo/client';
 
 const axios = create({
-    baseURL: 'http://192.168.43.71:1897',
+    baseURL: 'http://focusa-auth.herokuapp.com',
     timeout: 5000,
 });
 
@@ -33,8 +33,8 @@ const authenticate = (username, password, setLoggedIn) => {
 function ensureAuthenticated(navigation, token) {
     useEffect(() => {
         console.log('Current login state: ',token.length>0);
-        if(!token) navigation.navigate('Login');
+        if(!token) return navigation.navigate('Login');
     });
-};
+}
 
 export { authenticate, ensureAuthenticated };

@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react';
-import { View, Text, StatusBar,ScrollView, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { StatusBar,ScrollView, TouchableOpacity } from 'react-native';
 import SearchBar from '../Components/SearchBar';
 import styles from '../Styles/CourseStyles';
 import Course from '../Components/Course';

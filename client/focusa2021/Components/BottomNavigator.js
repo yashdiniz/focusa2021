@@ -1,6 +1,4 @@
 import React, {useState} from 'react';
-import { Text, View } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -28,9 +26,11 @@ function BottomNavigator() {
           tabBarVisible: false,
           tabBarLabel: 'Login',
           tabBarButton: () => null,
+          gestureEnabled: false,
+          swipeEnabled: false,
         }}
       >
-        {props => <Login {...props} setLoggedIn={setLoggedIn}/>}
+        {props => <Login {...props} setLoggedIn={setLoggedIn} token={token}/>}
       </Tab.Screen>
 
       <Tab.Screen
