@@ -1,8 +1,0 @@
-{
-  "dependencies": {
-    "react-native-camera": "^3.43.0",
-    "react-native-video": "^5.1.1",
-    "simple-peer": "^9.9.3",
-    "socket.io-client": "^4.0.0"
-  }
-}
