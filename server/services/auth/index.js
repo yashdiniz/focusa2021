@@ -102,52 +102,40 @@ app.get('/refresh', ensureAuthenticated, (req, res) => {
     });
 });
 
-app.get('/getUserById', (req, res) => {
-    if (jwt.ensureLoggedIn(req.headers?.authorization)) {
-        getUserById(req.query.id)
-        .then(doc => res.json({ name: doc.name, uuid: doc.uuid }))
-        .catch(e => res.status(404).json({ message: 'User not found.', e }));
-    } else res.status(407).json({ message: 'User not authenticated.' });
+app.get('/getUserById', jwt.ensureLoggedIn, (req, res) => {
+    getUserById(req.query.id)
+    .then(doc => res.json({ name: doc.name, uuid: doc.uuid }))
+    .catch(e => res.status(404).json({ message: 'User not found.', e }));
 });
 
-app.get('/getUserByName', (req, res) => {
-    if (jwt.ensureLoggedIn(req.headers?.authorization)) {
-        userExists(req.query.name)
-        .then(doc => res.json({ name: doc.name, uuid: doc.uuid }))
-        .catch(e => res.status(404).json({ message: 'User not found.', e }));
-    } else res.status(407).json({ message: 'User not authenticated.' });
+app.get('/getUserByName', jwt.ensureLoggedIn, (req, res) => {
+    userExists(req.query.name)
+    .then(doc => res.json({ name: doc.name, uuid: doc.uuid }))
+    .catch(e => res.status(404).json({ message: 'User not found.', e }));
 });
 
-app.get('/getRoleById', (req, res) => {
-    if (jwt.ensureLoggedIn(req.headers?.authorization)) {
-        getRoleById(req.query.id)
-        .then(doc => res.json({ name: doc.name, uuid: doc.uuid }))
-        .catch(e => res.status(404).json({ message: 'Role not found.', e }));
-    } else res.status(407).json({ message: 'User not authenticated.' });
+app.get('/getRoleById', jwt.ensureLoggedIn, (req, res) => {
+    getRoleById(req.query.id)
+    .then(doc => res.json({ name: doc.name, uuid: doc.uuid }))
+    .catch(e => res.status(404).json({ message: 'Role not found.', e }));
 });
 
-app.get('/getRoleByName', (req, res) => {
-    if (jwt.ensureLoggedIn(req.headers?.authorization)) {
-        roleExists(req.query.name)
-        .then(doc => res.json({ name: doc.name, uuid: doc.uuid }))
-        .catch(e => res.status(404).json({ message: 'Role not found.', e }));
-    } else res.status(407).json({ message: 'User not authenticated.' });
+app.get('/getRoleByName', jwt.ensureLoggedIn, (req, res) => {
+    roleExists(req.query.name)
+    .then(doc => res.json({ name: doc.name, uuid: doc.uuid }))
+    .catch(e => res.status(404).json({ message: 'Role not found.', e }));
 });
 
-app.get('/getRolesOfUser', (req, res) => {
-    if (jwt.ensureLoggedIn(req.headers?.authorization)) {
-        getRolesOfUser(req.query.name)  // user name
-        .then(docs => res.json(docs.map(doc => ({ name: doc.name, uuid: doc.uuid }))))
-        .catch(e => res.status(404).json({ message: 'User not found.', e }))
-    } else res.status(407).json({ message: 'User not authenticated.' });
+app.get('/getRolesOfUser', jwt.ensureLoggedIn, (req, res) => {
+    getRolesOfUser(req.query.name)  // user name
+    .then(docs => res.json(docs.map(doc => ({ name: doc.name, uuid: doc.uuid }))))
+    .catch(e => res.status(404).json({ message: 'User not found.', e }));
 });
 
-app.get('/getUsersOfRole', (req, res) => {
-    if (jwt.ensureLoggedIn(req.headers?.authorization)) {
-        getUsersOfRole(req.query.name)
-        .then(docs => res.json(docs.map(doc => ({ name: doc.name, uuid: doc.uuid }))))
-        .catch(e => res.status(404).json({ message: 'Role not found.', e }))
-    } else res.status(407).json({ message: 'User not authenticated.' });
+app.get('/getUsersOfRole', jwt.ensureLoggedIn, (req, res) => {
+    getUsersOfRole(req.query.name)
+    .then(docs => res.json(docs.map(doc => ({ name: doc.name, uuid: doc.uuid }))))
+    .catch(e => res.status(404).json({ message: 'Role not found.', e }))
 });
 
 app.get('/createUser', (req, res) => {

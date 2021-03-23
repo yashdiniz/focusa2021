@@ -45,27 +45,13 @@ const JWTsignOptions = {
 },
 JWTverifyOptions = {
     algorithms: ['RS256'],
-    audience: 'react-native-app',
+    audience: ['react-native-app', 'microservice-auth'],
     issuer: 'FOCUSA',
-    subject: 'graphql',
+    subject: ['graphql', 'microservice'],
 },
 JWTsecret = {
     public:  fs.readFileSync(path.join(projectRoot, 'certs/certificate.pem')),
     private: fs.readFileSync(path.join(projectRoot, 'certs/key.pem')),
-};
-const serviceSignOptions = {
-    algorithm: 'RS256',
-    expiresIn: 300, // 5 minutes
-    notBefore: 0,   // available from current timestamp
-    audience: 'microservice-auth',
-    issuer: 'FOCUSA',
-    subject: 'microservice',
-},
-serviceVerifyOptions = {
-    algorithms: ['RS256'],
-    audience: 'microservice-auth',
-    issuer: 'FOCUSA',
-    subject: 'microservice',
 };
 const usernamePattern = /\w+/;  // almost alphanumeric pattern(URL safe)
 

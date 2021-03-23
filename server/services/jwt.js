@@ -27,9 +27,9 @@ const verify = (token) => {
  * Verifies the token, and logs on failure.
  * @param {string} token The JWT token to verify.
  */
-const ensureLoggedIn = (token) => {
+const loginCheck = (token) => {
     assert(typeof token === 'string',
-    "Invalid arguments for ensureLoggedIn.");
+    "Invalid arguments for loginCheck.");
     token = token.split(' ');
     // token[0] === 'Bearer' NO NEED TO CHECK since JWT will fail if invalid anyway?
     try {
@@ -38,26 +38,25 @@ const ensureLoggedIn = (token) => {
         console.log(e);
         return false;
     }
-}
+};
+
+/**
+ * Authenticator middleware. Goes next on success.
+ */
+const ensureLoggedIn = (req, res, next) => {
+    if (loginCheck(req.headers?.authorization)) next();
+    else res.status(407).json({ message: 'User not authenticated.', e });
+};
 
 /**
  * Signs a token using JWT.
  * @param {object} payload The other session information stored in payload.
  */
- const serviceSign = (payload) => {
+const serviceSign = (payload) => {
     return jwt.sign(payload, JWTsecret.private, {
-        ...serviceSignOptions,
-    });
-};
-
-/**
- * Verifies and returns the payload of the JWT token.
- * @param {string} token The JWT token to verify.
- */
-const serviceVerify = (token) => {
-    return jwt.verify(token, JWTsecret.public, {
-        ...serviceVerifyOptions, 
-        algorithms: serviceVerifyOptions.algorithms,
+        ...JWTsignOptions,
+        audience: 'microservice-auth',
+        subject: 'microservice',
     });
 };
 
