@@ -10,6 +10,7 @@ const production = false;
 const realm = process.env['REALM'];
 const port = process.env['port'] || 1896;   // using FOCUSA legacy port for testing.
 const authRealm = "http://localhost:1897";
+const serviceAuthPass = process.env['authPass']; // password to authenticate microservice webhooks
 const authPort = port + 1;
 const webrtcPort = 5000;
 const graphiql = !production;  // essentially, run graphiql at graphql endpoint
@@ -17,7 +18,7 @@ const graphiql = !production;  // essentially, run graphiql at graphql endpoint
 // the dev secret which will be used for most crypto operations.
 const secret = process.env['SECRET'];
 
-const remote = 'http://admin:admin@localhost:5984/';  // remote couchDB URL
+const remote = process.env['REMOTEDB'];  // basic-auth remote couchDB URL
 
 // auth-related, PBKDF arguments
 const pbkdfIters = 1<<14, 
@@ -52,6 +53,20 @@ JWTsecret = {
     public:  fs.readFileSync(path.join(projectRoot, 'certs/certificate.pem')),
     private: fs.readFileSync(path.join(projectRoot, 'certs/key.pem')),
 };
+const serviceSignOptions = {
+    algorithm: 'RS256',
+    expiresIn: 300, // 5 minutes
+    notBefore: 0,   // available from current timestamp
+    audience: 'microservice-auth',
+    issuer: 'FOCUSA',
+    subject: 'microservice',
+},
+serviceVerifyOptions = {
+    algorithms: ['RS256'],
+    audience: 'microservice-auth',
+    issuer: 'FOCUSA',
+    subject: 'microservice',
+};
 const usernamePattern = /\w+/;  // almost alphanumeric pattern(URL safe)
 
 // course-related
@@ -63,9 +78,10 @@ const defaultProfilePic = 'dp.jpeg',
     defaultAbout = 'Hey, I am a new User!';
 
 module.exports = { 
-    port, authPort, authRealm, webrtcPort,
+    port, authPort, authRealm, serviceAuthPass, webrtcPort,
     projectRoot, graphiql, secret, realm, remote, 
     JWTsignOptions, JWTverifyOptions, JWTsecret, rolePattern,
+    serviceSignOptions, serviceVerifyOptions,
     pbkdfIters, pbkdfDigest, pbkdfLen, UUIDSize, currentPasswordScheme,
     minPasswordLength, usernamePattern, maxModRolesforCourse, maxNameLength,
     defaultProfilePic, defaultfullName, defaultAbout
