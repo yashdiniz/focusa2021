@@ -41,13 +41,13 @@ const JWTsignOptions = {
     notBefore: 0,   // available from current timestamp
     audience: 'react-native-app',
     issuer: 'FOCUSA',
-    subject: 'session',
+    subject: 'graphql',
 },
 JWTverifyOptions = {
     algorithms: ['RS256'],
     audience: ['react-native-app', 'microservice-auth'],
     issuer: 'FOCUSA',
-    subject: 'session',
+    subject: ['graphql', 'microservice'],
 },
 JWTsecret = {
     public:  fs.readFileSync(path.join(projectRoot, 'certs/certificate.pem')),
@@ -67,6 +67,7 @@ module.exports = {
     port, authPort, authRealm, serviceAuthPass, webrtcPort,
     projectRoot, graphiql, secret, realm, remote, 
     JWTsignOptions, JWTverifyOptions, JWTsecret, rolePattern,
+    serviceSignOptions, serviceVerifyOptions,
     pbkdfIters, pbkdfDigest, pbkdfLen, UUIDSize, currentPasswordScheme,
     minPasswordLength, usernamePattern, maxModRolesforCourse, maxNameLength,
     defaultProfilePic, defaultfullName, defaultAbout
