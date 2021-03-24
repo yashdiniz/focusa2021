@@ -55,11 +55,8 @@ const loginCheck = (token) => {
  * Authenticator middleware. Goes next on success.
  */
 const ensureLoggedIn = (req, res, next) => {
-    let payload = loginCheck(req.headers?.authorization);
-    if (payload) {
-        req.user = payload;
-        return next();
-    } else res.status(407).json({ message: 'User not authenticated.' });
+    if (loginCheck(req.headers?.authorization)) next();
+    else res.status(407).json({ message: 'User not authenticated.', e });
 };
 
 module.exports = { sign, verify, ensureLoggedIn, serviceSign }
