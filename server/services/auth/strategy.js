@@ -43,18 +43,6 @@ const refreshToken = (req) => {
     return (req.user.token = jwt.sign(session));
 }
 
-// const gStrategy = new GoogleStrategy({
-//     returnURL: path.join(realm, '/callback'),   // options
-//     realm
-// }, (identifier, profile, done) => { // validate function
-//     // will validate the data returned from Google Strategy code
-    
-//     /* TODO: sign a JWT with profile data here. */
-
-//     profile['identifier'] = identifier;
-//     return done(null, profile); // serializes the profile object into session.
-// });
-
 module.exports = {
     localStrategy, refreshToken
 }

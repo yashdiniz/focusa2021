@@ -5,7 +5,7 @@ const bodyParser = require('body-parser').urlencoded({ extended: true });
 const cookieParser = require('cookie-parser');
 const app = express();
 
-const { authPort, secret, JWTsignOptions } = require('../../config');
+const { authPort, secret, JWTsignOptions, serviceAuthPass } = require('../../config');
 const { localStrategy, refreshToken } = require('./strategy.js');
 const { ensureAuthenticated } = require('./ensureAuthenticated');
 const { getUserById, userExists, getRoleById, roleExists, getRolesOfUser, getUsersOfRole } = require('./functions');
@@ -44,6 +44,30 @@ passport.use(localStrategy);
 
 app.use(require('helmet')());
 
+/**
+ * NOTE: BASIC AUTH CHECKS THE Authorization header(for base64 username:password)
+ * Creating a basic-auth endpoint to simplify 
+ * microservice-microservice authorization.
+ * Only microservices will use this communication method
+ * to obtain JWT session tokens for microservice comms.
+ * 
+ * *This JWT session will offer very high privleges.*
+ * TODO: Ensure ONLY microservices can authenticate through here!!
+ */
+app.get('/', (req, res) => {
+    let user = require('basic-auth')(req);
+    if (serviceAuthPass === user?.pass) {
+        res.json({
+            token: jwt.serviceSign({
+                time: Date.now(),
+                ip: req.ip,
+                name: user.name,
+            })
+        });
+        console.log(`${user.name} microservice shook hands.`);
+    } else res.status(401).json({ message: 'microservice not authenticated.' });
+});
+
 app.get('/login', 
     passport.authenticate('local', 
     {
@@ -59,9 +83,8 @@ app.get('/login',
 app.get('/check', ensureAuthenticated, (req, res) => {
     res.json({ 
         cookies: req.cookies,
-        name: req.user.name,
-        token: req.user.token,
-        match: req.user.token === req.headers.authorization,    // check a match
+        name: req.user?.name,
+        token: req.user?.token,
     });
 });
 
@@ -73,57 +96,49 @@ app.get('/error', (req, res) => {
 app.get('/refresh', ensureAuthenticated, (req, res) => {
     refreshToken(req);  // refresh token of the session
     res.json({
-        token: req.user.token,
+        token: req.user?.token,
         login: true,
     });
 });
 
-app.get('/getUserById', (req, res) => {
-    if (jwt.ensureLoggedIn(req.headers.authorization)) {
-        getUserById(req.query.id)
-        .then(doc => res.json({ name: doc.name, uuid: doc.uuid }))
-        .catch(e => res.status(404).json({ message: 'User not found.', e }));
-    } else res.status(407).json({ message: 'User not authenticated.' });
+app.get('/getUserById', jwt.ensureLoggedIn, (req, res) => {
+    if(req.user) getUserById(req.query.id)
+    .then(doc => res.json({ name: doc.name, uuid: doc.uuid }))
+    .catch(e => res.status(404).json({ message: 'User not found.', e }));
 });
 
-app.get('/getUserByName', (req, res) => {
-    if (jwt.ensureLoggedIn(req.headers.authorization)) {
-        userExists(req.query.name)
-        .then(doc => res.json({ name: doc.name, uuid: doc.uuid }))
-        .catch(e => res.status(404).json({ message: 'User not found.', e }));
-    } else res.status(407).json({ message: 'User not authenticated.' });
+app.get('/getUserByName', jwt.ensureLoggedIn, (req, res) => {
+    if(req.user) userExists(req.query.name)
+    .then(doc => res.json({ name: doc.name, uuid: doc.uuid }))
+    .catch(e => res.status(404).json({ message: 'User not found.', e }));
 });
 
-app.get('/getRoleById', (req, res) => {
-    if (jwt.ensureLoggedIn(req.headers.authorization)) {
-        getRoleById(req.query.id)
-        .then(doc => res.json({ name: doc.name, uuid: doc.uuid }))
-        .catch(e => res.status(404).json({ message: 'Role not found.', e }));
-    } else res.status(407).json({ message: 'User not authenticated.' });
+app.get('/getRoleById', jwt.ensureLoggedIn, (req, res) => {
+    if(req.user) getRoleById(req.query.id)
+    .then(doc => res.json({ name: doc.name, uuid: doc.uuid }))
+    .catch(e => res.status(404).json({ message: 'Role not found.', e }));
 });
 
-app.get('/getRoleByName', (req, res) => {
-    if (jwt.ensureLoggedIn(req.headers.authorization)) {
-        roleExists(req.query.name)
-        .then(doc => res.json({ name: doc.name, uuid: doc.uuid }))
-        .catch(e => res.status(404).json({ message: 'Role not found.', e }));
-    } else res.status(407).json({ message: 'User not authenticated.' });
+app.get('/getRoleByName', jwt.ensureLoggedIn, (req, res) => {
+    if(req.user) roleExists(req.query.name)
+    .then(doc => res.json({ name: doc.name, uuid: doc.uuid }))
+    .catch(e => res.status(404).json({ message: 'Role not found.', e }));
 });
 
-app.get('/getRolesOfUser', (req, res) => {
-    if (jwt.ensureLoggedIn(req.headers.authorization)) {
-        getRolesOfUser(req.query.name)  // user name
-        .then(docs => res.json(docs.map(doc => ({ name: doc.name, uuid: doc.uuid }))))
-        .catch(e => res.status(404).json({ message: 'User not found.', e }))
-    } else res.status(407).json({ message: 'User not authenticated.' });
+app.get('/getRolesOfUser', jwt.ensureLoggedIn, (req, res) => {
+    if(req.user) getRolesOfUser(req.query.name)  // user name
+    .then(docs => res.json(docs.map(doc => ({ name: doc.name, uuid: doc.uuid }))))
+    .catch(e => res.status(404).json({ message: 'User not found.', e }));
 });
 
-app.get('/getUsersOfRole', (req, res) => {
-    if (jwt.ensureLoggedIn(req.headers.authorization)) {
-        getUsersOfRole(req.query.name)
-        .then(docs => res.json(docs.map(doc => ({ name: doc.name, uuid: doc.uuid }))))
-        .catch(e => res.status(404).json({ message: 'Role not found.', e }))
-    } else res.status(407).json({ message: 'User not authenticated.' });
+app.get('/getUsersOfRole', jwt.ensureLoggedIn, (req, res) => {
+    if(req.user) getUsersOfRole(req.query.name)
+    .then(docs => res.json(docs.map(doc => ({ name: doc.name, uuid: doc.uuid }))))
+    .catch(e => res.status(404).json({ message: 'Role not found.', e }))
+});
+
+app.get('/createUser', jwt.ensureLoggedIn, (req, res) => {
+    res.json({...req.user});
 });
 
 app.listen(authPort, () => {
