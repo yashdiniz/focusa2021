@@ -11,8 +11,6 @@
 const { focusa, assert, generateUUID } = require('../databases');
 const { create } = require('axios');
 const { maxModRolesforCourse, authRealm, serviceAuthPass, JWTsignOptions } = require('../../config');
-const { name } = require('dayjs/locale/*');
-const e = require('express');
 
 const CourseExistsError = new Error('Course alredy exists'),
       CourseNonExsistent = new Error('Course Does not exists');
@@ -23,9 +21,7 @@ const auth = create({
     timeout: 5000,
     headers: { 'authorization': token },
 });
-// TODO: add the base64 encode function
-// TODO: also take care of the refresh session scenario!
-let loginDetails = base64Encode(`courses:${serviceAuthPass}`);
+let loginDetails = Buffer.from(`courses:${serviceAuthPass}`).toString('base64');
 setInterval(() => auth.get('/', {
     headers: `Basic ${loginDetails}`
 }).then(res => token = res.data.token), (JWTsignOptions.expiresIn-10)*1000);

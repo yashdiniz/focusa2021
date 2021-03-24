@@ -11,6 +11,7 @@ const realm = process.env['REALM'];
 const port = process.env['port'] || 1896;   // using FOCUSA legacy port for testing.
 const authRealm = "http://localhost:1897";
 const authPort = port + 1;
+const coursesPort = port + 2;
 const webrtcPort = 5000;
 const graphiql = !production;  // essentially, run graphiql at graphql endpoint
 
@@ -63,7 +64,7 @@ const defaultProfilePic = 'dp.jpeg',
     defaultAbout = 'Hey, I am a new User!';
 
 module.exports = { 
-    port, authPort, authRealm, webrtcPort,
+    port, authPort, authRealm, webrtcPort, coursesPort,
     projectRoot, graphiql, secret, realm, remote, 
     JWTsignOptions, JWTverifyOptions, JWTsecret, rolePattern,
     pbkdfIters, pbkdfDigest, pbkdfLen, UUIDSize, currentPasswordScheme,
