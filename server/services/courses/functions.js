@@ -128,5 +128,5 @@ const deleteCourse = async (id) =>{
 }
 
 module.exports = {
-    addCourse, getCourseById,getCourseByName,updateCourse,
+    addCourse, getCourseById,getCourseByName,updateCourse,deleteCourse,
 };
