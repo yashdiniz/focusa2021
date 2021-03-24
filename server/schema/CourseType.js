@@ -10,13 +10,13 @@ const {
     GraphQLNonNull,
     GraphQLList
 } = require('graphql');
-const UserType = require('./UserType');
-const RoleType = require('./RoleType');
 
 const CourseType = new GraphQLObjectType({
     name:'Course',
     descrption: "This node stores details of all the possible courses.",
-    fields: {
+    fields: () => {
+        const { UserType, RoleType } = require('./types');
+        return {
         id: {
             type: GraphQLNonNull(GraphQLID)
         },
@@ -41,7 +41,7 @@ const CourseType = new GraphQLObjectType({
             resolve(parent, args, ctx, info){
                 // currently stub, return null
             }
-        }
+        }}
     }
 });
 

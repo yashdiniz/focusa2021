@@ -8,5 +8,5 @@ const mutation = require('./MutationType');
 
 module.exports = new GraphQLSchema({
     query,
-    mutation,
+    // mutation,
 });

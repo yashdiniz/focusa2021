@@ -14,4 +14,24 @@ omit*.*
 .vscode/
 
 # ignore everything inside db folder
-server/services/db/
+db/
+!db/keepdir
+
+# LaTeX auxiliaries
+*.aux
+*.bbl
+*.blg
+*.fdb*
+*.fls
+*.lof
+*.log
+*.lot
+*.synctex.gz
+*.toc
+ 
+# ignoring the DS store 
+.DS_Store
+
+# ignoring the certificates (but not the public key)!!
+certs/
+!certs/certificate.pem

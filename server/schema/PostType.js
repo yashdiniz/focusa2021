@@ -10,13 +10,13 @@ const {
     GraphQLList,
     GraphQLNonNull,
 } = require('graphql');
-const UserType = require('./UserType');
-const CourseType = require('./CourseType');
 
 const PostType = new GraphQLObjectType({
-    type: 'Post',
+    name: 'Post',
     description: "This node holds all Post details, and references to their comments.",
-    fields: {
+    fields: () => {
+        const { UserType, CourseType } = require('./types');
+        return {
         id: {
             type: GraphQLNonNull(GraphQLID),
         },
@@ -67,7 +67,7 @@ const PostType = new GraphQLObjectType({
         approved: {
             type: GraphQLBoolean,
             description: "Flag signifying the post has been approved.",
-        },
+        }}
     }
 });
 

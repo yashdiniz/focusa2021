@@ -1,50 +1,131 @@
 const passport = require('passport');
 const express = require('express');
+const express_session = require('express-session');
+const bodyParser = require('body-parser').urlencoded({ extended: true });
+const cookieParser = require('cookie-parser');
 const app = express();
 
-const ensureAuthenticated = require('./ensureAuthenticated.js');
-const GoogleStrategy = require('./strategy.js');
+const { authPort, secret, JWTsignOptions } = require('../../config');
+const { localStrategy, refreshToken } = require('./strategy.js');
+const { ensureAuthenticated } = require('./ensureAuthenticated');
+const { getUserById, userExists, getRoleById, roleExists, getRolesOfUser, getUsersOfRole } = require('./functions');
+const jwt = require('../jwt');
 
-app.configure(()=> {
-    app.use(passport.initialize());
-    app.use(passport.session());
-});
+process.title = 'FOCUSA authenticator service';
+
+app.use(passport.initialize());
+app.use(express_session({ 
+    secret,
+    cookie: {
+        httpOnly: true,
+        sameSite: true,
+    },
+    saveUninitialized: false,
+    resave: false,
+}));
+app.use(passport.session());
+
+app.use(bodyParser);
+app.use(cookieParser());
 
 /**
  * Passport session setup.
  * To support persistent login sessions, Passport needs to be able to
  * serialize users into and deserialize users out of the session.
 */
-passport.serializeUser(function(user, done) {
-    done(null, user);
-});  
-passport.deserializeUser(function(obj, done) {
-done(null, obj);
-});
+passport.serializeUser((user, done) => done(null, user));  
+passport.deserializeUser((sess, done) => done(null, sess));
 
 /**
- * Google Strategy from Passport. 
+ * Local Strategy from Passport. 
  * Also coding such that strategy can be upgraded in future.
 */ 
-passport.use(GoogleStrategy);
+passport.use(localStrategy);
 
-// STUB!! TODO: create the simple frontend to serve here.
+app.use(require('helmet')());
+
 app.get('/login', 
-    passport.authenticate('google', 
+    passport.authenticate('local', 
     {
-        failureRedirect: '/login'
+        failureRedirect: '/error',
     }),
     (req, res) => {
-        res.redirect('/');
+        res.json({
+            token: req.user.token,
+            login: true });
     }
 );
 
-app.get('/callback',
-    passport.authenticate('google',
-    {
-        failureRedirect: '/login' 
-    }),
-    (req, res) => {
-        res.redirect('/');
-    }
-)
+app.get('/check', ensureAuthenticated, (req, res) => {
+    res.json({ 
+        cookies: req.cookies,
+        name: req.user.name,
+        token: req.user.token,
+        match: req.user.token === req.headers.authorization,    // check a match
+    });
+});
+
+app.get('/error', (req, res) => {
+    // umm yes, this always returns login false, it's just an error broadcast
+    res.status(401).json({ login: false, message: 'User not authenticated.' });
+});
+
+app.get('/refresh', ensureAuthenticated, (req, res) => {
+    refreshToken(req);  // refresh token of the session
+    res.json({
+        token: req.user.token,
+        login: true,
+    });
+});
+
+app.get('/getUserById', (req, res) => {
+    if (jwt.ensureLoggedIn(req.headers.authorization)) {
+        getUserById(req.query.id)
+        .then(doc => res.json({ name: doc.name, uuid: doc.uuid }))
+        .catch(e => res.status(404).json({ message: 'User not found.', e }));
+    } else res.status(407).json({ message: 'User not authenticated.' });
+});
+
+app.get('/getUserByName', (req, res) => {
+    if (jwt.ensureLoggedIn(req.headers.authorization)) {
+        userExists(req.query.name)
+        .then(doc => res.json({ name: doc.name, uuid: doc.uuid }))
+        .catch(e => res.status(404).json({ message: 'User not found.', e }));
+    } else res.status(407).json({ message: 'User not authenticated.' });
+});
+
+app.get('/getRoleById', (req, res) => {
+    if (jwt.ensureLoggedIn(req.headers.authorization)) {
+        getRoleById(req.query.id)
+        .then(doc => res.json({ name: doc.name, uuid: doc.uuid }))
+        .catch(e => res.status(404).json({ message: 'Role not found.', e }));
+    } else res.status(407).json({ message: 'User not authenticated.' });
+});
+
+app.get('/getRoleByName', (req, res) => {
+    if (jwt.ensureLoggedIn(req.headers.authorization)) {
+        roleExists(req.query.name)
+        .then(doc => res.json({ name: doc.name, uuid: doc.uuid }))
+        .catch(e => res.status(404).json({ message: 'Role not found.', e }));
+    } else res.status(407).json({ message: 'User not authenticated.' });
+});
+
+app.get('/getRolesOfUser', (req, res) => {
+    if (jwt.ensureLoggedIn(req.headers.authorization)) {
+        getRolesOfUser(req.query.name)  // user name
+        .then(docs => res.json(docs.map(doc => ({ name: doc.name, uuid: doc.uuid }))))
+        .catch(e => res.status(404).json({ message: 'User not found.', e }))
+    } else res.status(407).json({ message: 'User not authenticated.' });
+});
+
+app.get('/getUsersOfRole', (req, res) => {
+    if (jwt.ensureLoggedIn(req.headers.authorization)) {
+        getUsersOfRole(req.query.name)
+        .then(docs => res.json(docs.map(doc => ({ name: doc.name, uuid: doc.uuid }))))
+        .catch(e => res.status(404).json({ message: 'Role not found.', e }))
+    } else res.status(407).json({ message: 'User not authenticated.' });
+});
+
+app.listen(authPort, () => {
+    console.warn(`Auth listening on port ${ authPort }`);
+});

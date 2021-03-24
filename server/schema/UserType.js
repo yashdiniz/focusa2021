@@ -10,15 +10,21 @@ const {
     GraphQLList,
     GraphQLNonNull,
 } = require('graphql');
-const ProfileType = require('./ProfileType');
-const PostType = require('./PostType');
-const RoleType = require('./RoleType');
+const { create } = require('axios');
+const { authRealm } = require('../config');
+
+const auth = create({
+    baseURL: `${authRealm}`,
+    timeout: 5000,
+});
 
 const UserType = new GraphQLObjectType({
     name: 'User',
     description: "This node holds all the necessary user details.",
-    fields: {
-        id: { 
+    fields: () => {
+        const { ProfileType, PostType, RoleType } = require('./types');
+        return {
+        uuid: { 
             type: GraphQLNonNull(GraphQLID),
         },
         name: { 
@@ -42,10 +48,13 @@ const UserType = new GraphQLObjectType({
         roles: {
             type: GraphQLNonNull(GraphQLList(RoleType)),
             description: "Roles that the User is assigned.",
-            resolve(parent, args, ctx, info) {
-                // currently stub, return null
+            async resolve({ name }, args, ctx, info) {
+                return await auth.get('/getRolesOfUser', {
+                    params: { name },
+                    headers: { authorization: ctx.headers.authorization },
+                }).then(res => res.data);
             }
-        },
+        }}
     }
 });
 
