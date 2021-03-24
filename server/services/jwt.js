@@ -1,4 +1,4 @@
-const { JWTsignOptions, JWTverifyOptions, JWTsecret } = require('../config');
+const { JWTsignOptions, JWTverifyOptions, JWTsecret, serviceAudience } = require('../config');
 const jwt = require('jsonwebtoken');
 const { assert } = require('./databases');
 
@@ -19,7 +19,7 @@ const sign = (payload) => {
  const serviceSign = (payload) => {
     return jwt.sign(payload, JWTsecret.private, {
         ...JWTsignOptions,
-        audience: 'microservice-auth',
+        audience: serviceAudience,
     });
 };
 

@@ -5,10 +5,10 @@ const bodyParser = require('body-parser').urlencoded({ extended: true });
 const cookieParser = require('cookie-parser');
 const app = express();
 
-const { authPort, secret, JWTsignOptions, serviceAuthPass } = require('../../config');
+const { authPort, secret, JWTsignOptions, serviceAuthPass, serviceAudience } = require('../../config');
 const { localStrategy, refreshToken } = require('./strategy.js');
 const { ensureAuthenticated } = require('./ensureAuthenticated');
-const { getUserById, userExists, getRoleById, roleExists, getRolesOfUser, getUsersOfRole } = require('./functions');
+const { getUserById, userExists, getRoleById, roleExists, getRolesOfUser, getUsersOfRole, createUser } = require('./functions');
 const jwt = require('../jwt');
 
 process.title = 'FOCUSA authenticator service';
@@ -134,11 +134,17 @@ app.get('/getRolesOfUser', jwt.ensureLoggedIn, (req, res) => {
 app.get('/getUsersOfRole', jwt.ensureLoggedIn, (req, res) => {
     if(req.user) getUsersOfRole(req.query.name)
     .then(docs => res.json(docs.map(doc => ({ name: doc.name, uuid: doc.uuid }))))
-    .catch(e => res.status(404).json({ message: 'Role not found.', e }))
+    .catch(e => res.status(404).json({ message: 'Role not found.', e }));
 });
 
 app.get('/createUser', jwt.ensureLoggedIn, (req, res) => {
-    res.json({...req.user});
+    console.log(req.user);
+    if(req.user?.aud === serviceAudience 
+        && getRolesOfUser(req.user?.name).find(doc => doc.name === 'admin'))
+        createUser(req.query.name, req.query.password)
+        .then(doc => res.json({ name: doc.name, uuid: doc.uuid }))
+        .catch(e => res.status(404).json({ e }));
+    else res.status(403).json({ message: 'Operation not allowed.' });
 });
 
 app.listen(authPort, () => {
