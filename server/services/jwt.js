@@ -1,4 +1,4 @@
-const { JWTsignOptions, JWTverifyOptions, JWTsecret, serviceSignOptions, serviceVerifyOptions } = require('../config');
+const { JWTsignOptions, JWTverifyOptions, JWTsecret, serviceAudience } = require('../config');
 const jwt = require('jsonwebtoken');
 const { assert } = require('./databases');
 
@@ -9,6 +9,17 @@ const { assert } = require('./databases');
 const sign = (payload) => {
     return jwt.sign(payload, JWTsecret.private, {
         ...JWTsignOptions,
+    });
+};
+
+/**
+ * Signs a token using JWT, used exclusively for service-service communication.
+ * @param {object} payload The other session information stored in payload.
+ */
+ const serviceSign = (payload) => {
+    return jwt.sign(payload, JWTsecret.private, {
+        ...JWTsignOptions,
+        audience: serviceAudience,
     });
 };
 
@@ -48,16 +59,4 @@ const ensureLoggedIn = (req, res, next) => {
     else res.status(407).json({ message: 'User not authenticated.', e });
 };
 
-/**
- * Signs a token using JWT.
- * @param {object} payload The other session information stored in payload.
- */
-const serviceSign = (payload) => {
-    return jwt.sign(payload, JWTsecret.private, {
-        ...JWTsignOptions,
-        audience: 'microservice-auth',
-        subject: 'microservice',
-    });
-};
-
-module.exports = { sign, verify, ensureLoggedIn, serviceSign, serviceVerify }
+module.exports = { sign, verify, ensureLoggedIn, serviceSign }

@@ -44,6 +44,7 @@ const JWTsignOptions = {
     issuer: 'FOCUSA',
     subject: 'graphql',
 },
+serviceAudience = 'microservice-auth',
 JWTverifyOptions = {
     algorithms: ['RS256'],
     audience: ['react-native-app', 'microservice-auth'],
@@ -67,8 +68,7 @@ const defaultProfilePic = 'dp.jpeg',
 module.exports = { 
     port, authPort, authRealm, coursesPort, serviceAuthPass, webrtcPort,
     projectRoot, graphiql, secret, realm, remote, 
-    JWTsignOptions, JWTverifyOptions, JWTsecret, rolePattern,
-    serviceSignOptions, serviceVerifyOptions,
+    JWTsignOptions, JWTverifyOptions, JWTsecret, rolePattern, serviceAudience,
     pbkdfIters, pbkdfDigest, pbkdfLen, UUIDSize, currentPasswordScheme,
     minPasswordLength, usernamePattern, maxModRolesforCourse, maxNameLength,
     defaultProfilePic, defaultfullName, defaultAbout
