@@ -10,6 +10,7 @@ const production = false;
 const realm = process.env['REALM'];
 const port = process.env['port'] || 1896;   // using FOCUSA legacy port for testing.
 const authRealm = "http://localhost:1897";
+const serviceAuthPass = process.env['authPass']; // password to authenticate microservice webhooks
 const authPort = port + 1;
 const coursesPort = port + 2;
 const webrtcPort = 5000;
@@ -18,7 +19,7 @@ const graphiql = !production;  // essentially, run graphiql at graphql endpoint
 // the dev secret which will be used for most crypto operations.
 const secret = process.env['SECRET'];
 
-const remote = 'http://admin:admin@localhost:5984/';  // remote couchDB URL
+const remote = process.env['REMOTEDB'];  // basic-auth remote couchDB URL
 
 // auth-related, PBKDF arguments
 const pbkdfIters = 1<<14, 
@@ -41,13 +42,13 @@ const JWTsignOptions = {
     notBefore: 0,   // available from current timestamp
     audience: 'react-native-app',
     issuer: 'FOCUSA',
-    subject: 'graphql',
+    subject: 'session',
 },
 JWTverifyOptions = {
     algorithms: ['RS256'],
-    audience: 'react-native-app',
+    audience: ['react-native-app', 'microservice-auth'],
     issuer: 'FOCUSA',
-    subject: 'graphql',
+    subject: 'session',
 },
 JWTsecret = {
     public:  fs.readFileSync(path.join(projectRoot, 'certs/certificate.pem')),
@@ -64,7 +65,7 @@ const defaultProfilePic = 'dp.jpeg',
     defaultAbout = 'Hey, I am a new User!';
 
 module.exports = { 
-    port, authPort, authRealm, webrtcPort, coursesPort,
+    port, authPort, authRealm, coursesPort, serviceAuthPass, webrtcPort,
     projectRoot, graphiql, secret, realm, remote, 
     JWTsignOptions, JWTverifyOptions, JWTsecret, rolePattern,
     pbkdfIters, pbkdfDigest, pbkdfLen, UUIDSize, currentPasswordScheme,

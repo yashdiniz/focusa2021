@@ -48,9 +48,9 @@ const UserType = new GraphQLObjectType({
         roles: {
             type: GraphQLNonNull(GraphQLList(RoleType)),
             description: "Roles that the User is assigned.",
-            async resolve(parent, args, ctx, info) {
+            async resolve({ name }, args, ctx, info) {
                 return await auth.get('/getRolesOfUser', {
-                    params: { name: parent['name'] },
+                    params: { name },
                     headers: { authorization: ctx.headers.authorization },
                 }).then(res => res.data);
             }
