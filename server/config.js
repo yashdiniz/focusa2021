@@ -41,14 +41,14 @@ const JWTsignOptions = {
     notBefore: 0,   // available from current timestamp
     audience: 'react-native-app',
     issuer: 'FOCUSA',
-    subject: 'graphql',
+    subject: 'session',
 },
 serviceAudience = 'microservice-auth',
 JWTverifyOptions = {
     algorithms: ['RS256'],
     audience: ['react-native-app', 'microservice-auth'],
     issuer: 'FOCUSA',
-    subject: ['graphql', 'microservice'],
+    subject: 'session',
 },
 JWTsecret = {
     public:  fs.readFileSync(path.join(projectRoot, 'certs/certificate.pem')),
