@@ -8,8 +8,9 @@ const app = express();
 const { authPort, secret, JWTsignOptions, serviceAuthPass, serviceAudience } = require('../../config');
 const { localStrategy, refreshToken } = require('./strategy.js');
 const { ensureAuthenticated } = require('./ensureAuthenticated');
-const { getUserById, userExists, getRoleById, roleExists, getRolesOfUser, getUsersOfRole, createUser } = require('./functions');
+const { getUserById, userExists, getRoleById, roleExists, getRolesOfUser, getUsersOfRole, createUser, giveRole } = require('./functions');
 const jwt = require('../jwt');
+const { isRxDocument } = require('rxdb');
 
 process.title = 'FOCUSA authenticator service';
 
@@ -137,12 +138,22 @@ app.get('/getUsersOfRole', jwt.ensureLoggedIn, (req, res) => {
     .catch(e => res.status(404).json({ message: 'Role not found.', e }));
 });
 
-app.get('/createUser', jwt.ensureLoggedIn, (req, res) => {
-    console.log(req.user);
-    if(req.user?.aud === serviceAudience 
-        && getRolesOfUser(req.user?.name).find(doc => doc.name === 'admin'))
-        createUser(req.query.name, req.query.password)
+app.get('/createUser', jwt.ensureLoggedIn, async (req, res) => {
+    if (req.user?.aud === serviceAudience 
+        ^ isRxDocument(await getRolesOfUser(req.user?.name)
+        .then(docs => docs.find(doc => doc.name === 'admin'))))
+        createUser(req.query.username, req.query.password)
         .then(doc => res.json({ name: doc.name, uuid: doc.uuid }))
+        .catch(e => res.status(404).json({ e }));
+    else res.status(403).json({ message: 'Operation not allowed.' });
+});
+
+app.get('/giveRole', jwt.ensureLoggedIn, async (req, res) => {
+    if (req.user?.aud === serviceAudience 
+        ^ isRxDocument(await getRolesOfUser(req.user?.name)
+        .then(docs => docs.find(doc => doc.name === 'admin'))))
+        giveRole(req.query.role, req.query.username)
+        .then(doc => res.json({ user_roleID: doc.user_roleID, user: doc.user, role: doc.role }))
         .catch(e => res.status(404).json({ e }));
     else res.status(403).json({ message: 'Operation not allowed.' });
 });
