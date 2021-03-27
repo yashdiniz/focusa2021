@@ -10,7 +10,7 @@ const { defaultfullName, defaultAbout } = require('../../config');
 const profileNonExistant = new Error('Profile does not exist.');
 
 /**
- * 
+ * Creates a profile for a User with matching UUID.
  * @param {string} userID The ID of the user which references profile.
  */
 const createProfile = async (userID)=> {
@@ -29,6 +29,11 @@ const createProfile = async (userID)=> {
     });
 };
 
+/**
+ * Gets a profile with matching userID.
+ * @param {string} userID The ID of the user which references profile.
+ * @returns 
+ */
 const getProfile = async (userID)=> {
     assert(typeof userID === 'string',
     'Invalid arguments for getProfile.');
