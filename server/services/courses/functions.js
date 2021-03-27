@@ -10,10 +10,10 @@
  */
 const { focusa, assert, generateUUID } = require('../databases');
 const { create } = require('axios');
-const { maxModRolesforCourse, authRealm, serviceAuthPass, JWTsignOptions } = require('../../config');
+const { authRealm, serviceAuthPass, JWTsignOptions } = require('../../config');
 
-const CourseExistsError = new Error('Course alredy exists'),
-      CourseNonExsistent = new Error('Course Does not exists');
+const courseExistsError = new Error('Course already exists.'),
+      courseNonExistant = new Error('Course does not exist.');
 
 let token = '';
 const auth = create({
@@ -39,90 +39,81 @@ const addCourse = async (name, description) => {
 
     let admin = await auth.get('/getRoleByName', {
         params: { name: 'admin' },
-        // headers: { Authorization:  }
+        headers: { authorization: token }
     }).then(res => res.data.uuid);
 
     return await f.courses.insert({
         uuid,name, description,
         mods: [ admin ] // allowing only admin users to moderate
-    }).catch(e => { throw CourseExistsError });
+    }).catch(e => { throw courseExistsError });
 };
 
 /**
- * get a course with the matching id
- * @param {string} id database key to identify the course
- * @returns the  course object with matching id
+ * Get a course with matching ID.
+ * @param {string} id Database key to identify the course.
+ * @returns Course object with matching ID.
  */
 const getCourseById = async (id) => {
     assert(typeof id === 'string', 'Invalid arguments for getCourseById.');
     let c = await focusa;
-
     return await c.courses.findOne(id).exec()
     .then(async doc=>{
         if (doc) return doc;
-
-        else throw CourseNonExsistent;
+        else throw courseNonExistant;
     });
-
 }
 
 /**
- * get course with the matching name
- * @param {string} name name of the course to find
- * @returns the course object with the matching name
+ * Get a course with matching name.
+ * @param {string} name The name of the course to find.
+ * @returns Course object with the matching name.
  */
 const getCourseByName = async(name) => {
     assert(typeof name === 'string', 'Invalid arguments for getCourseByName');
     let c = await focusa;
-
     return await c.courses.find({selector:{name}}).exec()
     .then(async doc=>{
         if (doc) return doc;
-
-        else throw CourseNonExsistent;
+        else throw courseNonExistant;
     });
 }
 
 /**
- * update course with matching id
- * @param {string} id id of the course to update
- * @param {string} name name to update the course to
- * @param {string} description description to update the course to
- * @returns the updated name and description of the course
+ * Update a course with matching ID.
+ * @param {string} id The database key of the course to update.
+ * @param {string} name Update the course name.
+ * @param {string} description Update the course description.
+ * @returns Course object after updating.
  */
 const updateCourse = async(id,name,description) => {
-
     assert(typeof id ==='string' && typeof name === 'string' && typeof description === 'string', 'Invalid arguments for updateCourse');
     let c = await focusa;
-
     return await c.courses.findOne(id).exec()
     .then(async doc =>{
-
         if(doc) return await doc.atomicPatch({
             name, description
         });
-
-        else throw CourseNonExsistent;
+        else throw courseNonExistant;
     });
-
 }
 
+/**
+ * Deletes a course with the matching ID.
+ * @param {string} id The database key of the course to delete.
+ * @returns Course object of the deleted course.
+ */
 const deleteCourse = async (id) =>{
-    assert(typeof id === 'string');
+    assert(typeof id === 'string', "Invalid arguments for deleteCourse.");
     let c = await focusa;
-
     return await c.courses.findOne(id).exec()
     .then(async doc=>{
-        
         if(doc){
             doc.remove();
             return doc;
-        }
-
-        else throw CourseNonExsistent;
+        } else throw courseNonExistant;
     });
 }
 
 module.exports = {
-    addCourse, getCourseById,getCourseByName,updateCourse,deleteCourse,
+    addCourse, getCourseById, getCourseByName, updateCourse, deleteCourse,
 };
