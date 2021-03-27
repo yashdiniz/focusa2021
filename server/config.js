@@ -9,10 +9,11 @@ const production = false;
 // the realm stores the DNS/server name.
 const realm = process.env['REALM'];
 const port = process.env['port'] || 1896;   // using FOCUSA legacy port for testing.
-const authRealm = "http://localhost:1897";
 const serviceAuthPass = process.env['authPass']; // password to authenticate microservice webhooks
 const authPort = port + 1;
+const authRealm = "http://localhost:1897";
 const coursesPort = port + 2;
+const coursesRealm = "http://localhost:1898";
 const webrtcPort = 5000;
 const graphiql = !production;  // essentially, run graphiql at graphql endpoint
 
@@ -66,7 +67,7 @@ const defaultProfilePic = 'dp.jpeg',
     defaultAbout = 'Hey, I am a new User!';
 
 module.exports = { 
-    port, authPort, authRealm, coursesPort, serviceAuthPass, webrtcPort,
+    port, authPort, authRealm, coursesPort, coursesRealm, serviceAuthPass, webrtcPort,
     projectRoot, graphiql, secret, realm, remote, 
     JWTsignOptions, JWTverifyOptions, JWTsecret, rolePattern, serviceAudience,
     pbkdfIters, pbkdfDigest, pbkdfLen, UUIDSize, currentPasswordScheme,

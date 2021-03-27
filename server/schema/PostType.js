@@ -10,6 +10,13 @@ const {
     GraphQLList,
     GraphQLNonNull,
 } = require('graphql');
+const { create } = require('axios');
+const { coursesRealm } = require('../config');
+
+const courses = create({
+    baseURL: `${coursesRealm}`,
+    timeout: 5000,
+});
 
 const PostType = new GraphQLObjectType({
     name: 'Post',
@@ -51,9 +58,12 @@ const PostType = new GraphQLObjectType({
         },
         course: {
             type: CourseType,
-            description: "The course under which the post belongs. Null be default. No edits allowed.",
-            resolve(parent, args, ctx, info) {
-                // currently stub, return null
+            description: "The course under which the post belongs. Null by default. No edits allowed.",
+            async resolve({ uuid }, args, ctx, info) {
+                return await courses.get('/getCourseById', {
+                    params: { id: uuid },
+                    headers: { authorization: req.headers?.authorization }
+                }).then(res => res.data);
             }
         },
         comments: {

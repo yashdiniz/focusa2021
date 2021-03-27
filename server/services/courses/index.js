@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const { coursesPort, serviceAudience, serviceAuthPass, JWTsignOptions, authRealm } = require('../../config');
-const { getCourseById, getCourseByName, addCourse, updateCourse, deleteCourse } = require('./functions');
+const { getCourseById, getCoursesByName, addCourse, updateCourse, deleteCourse } = require('./functions');
 const jwt = require('../jwt');
 
 const { create } = require('axios');
@@ -22,16 +22,22 @@ setInterval(() => auth.get('/', {
 app.get('/getCourseById', jwt.ensureLoggedIn, (req, res) => {
     if (req.user) getCourseById(req.query.id)
         .then(doc => {
-            res.json({ name: doc.name, uuid: doc.uuid });
+            res.json({ name: doc.name, uuid: doc.uuid, description: doc.description, mods: doc.mods });
         }).catch(e => {
             res.status(404).json({ message: 'course not found.', e });
         })
 })
 
-app.get('/getCourseByName', jwt.ensureLoggedIn, (req, res) => {
-    if (req.user) getCourseByName(req.query.name)
-        .then(doc => {
-            res.json({ name: doc.name, uuid: doc.uuid });
+app.get('/getCoursesByName', jwt.ensureLoggedIn, (req, res) => {
+    if (req.user) getCoursesByName(req.query.name)
+        .then((docs) => {
+            res.json(
+                docs.map(doc => ({ name: doc.name, 
+                uuid: doc.uuid, 
+                description: doc.description, 
+                mods: doc.mods })
+                )
+            );
         }).catch(e => {
             res.status(404).json({ message: 'course not found', e })
         })
@@ -40,30 +46,28 @@ app.get('/getCourseByName', jwt.ensureLoggedIn, (req, res) => {
 
 app.get('/addCourse', jwt.ensureLoggedIn, async (req, res) => {
     if (req.user?.aud === serviceAudience
-        ^ await auth.get('/getRolesOfUser', {
+        ^ typeof await auth.get('/getRolesOfUser', {
             params: { name: req.user?.name },
             headers: { authorization: token },
-        }).then(r => r.data.find(doc => doc.name === 'admin'))) {
+        }).then(r => r.data.find(doc => doc.name === 'admin')) !== 'undefined') {
         addCourse(req.query.name, req.query.description)
             .then(doc => {
-                res.json({ name: doc.name, uuid: doc.uuid });
+                res.json({ name: doc.name, uuid: doc.uuid, description: doc.description, mods: doc.mods });
             }).catch(e => {
                 res.status(404).json({ e })
             })
-    }
-
-    else res.status(403).json({ message: 'Operation not allowed.' });
+    } else res.status(403).json({ message: 'Operation not allowed.' });
 });
 
 app.get('/updateCourse', jwt.ensureLoggedIn, async (req, res) => {
     if (req.user?.aud === serviceAudience
-        ^ await auth.get('/getRolesOfUser', {
+        ^ typeof await auth.get('/getRolesOfUser', {
             params: { name: req.user?.name },
             headers: { authorization: token },
-        }).then(r => r.data.find(doc => doc.name === 'admin'))) {
+        }).then(r => r.data.find(doc => doc.name === 'admin')) !== 'undefined') {
             updateCourse(req.query.id, req.query.name, req.query.description)
             .then(doc => {
-                res.json({ name: doc.name, uuid: doc.uuid });
+                res.json({ name: doc.name, uuid: doc.uuid, description: doc.description, mods: doc.mods });
             }).catch(e => {
                 res.status(404).json({ message: 'course not found', e })
             })
@@ -74,13 +78,13 @@ app.get('/updateCourse', jwt.ensureLoggedIn, async (req, res) => {
 
 app.get('/deleteCourse', jwt.ensureLoggedIn, async (req, res) => {
     if (req.user?.aud === serviceAudience
-        ^ await auth.get('/getRolesOfUser', {
+        ^ typeof await auth.get('/getRolesOfUser', {
             params: { name: req.user?.name },
             headers: { authorization: token },
-        }).then(r => r.data.find(doc => doc.name === 'admin'))) {
+        }).then(r => r.data.find(doc => doc.name === 'admin')) !== 'undefined') {
             deleteCourse(req.query.id)
             .then(doc => {
-                res.json({ name: doc.name, uuid: doc.uuid });
+                res.json({ name: doc.name, uuid: doc.uuid, description: doc.description, mods: doc.mods });
             }).catch(e => {
                 res.status(404).json({ message: 'course not found', e })
             })
