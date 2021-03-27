@@ -85,7 +85,15 @@ const searchPosts = async (query, offsetID) => {
 }
 
 const getPostsByAuthor = async (author) => {
+    assert(typeof author === 'string');
 
+    let f = await focusa;
+
+    return await f.posts.find(author).exec()
+    .then(async doc => {
+        if(doc) return doc;
+        else throw noSuchPost;
+    })
 }
 
 const getPostsByCourse = async (course) => {
