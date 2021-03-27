@@ -1,3 +1,9 @@
+/**
+ * Functions required for interacting with 
+ * Posts collection in CRUD fashion.
+ * author: @PranavParanjape
+ */
+
 const {focusa, assert, generateUUID} = require('../databases');
 
 const noSuchPost = new Error('Post with such id does not exist');

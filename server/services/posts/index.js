@@ -1,6 +1,13 @@
 const express = require('express');
 const app = express();
-const { coursesPort } = require('../../config');
 const {getPostByID, deletePost, createPost, editPost, searchPosts, getPostsByAuthor, getPostsByCourse} = require('./functions');
 const jwt = require('../jwt');
 
+app.get('/getPostById', jwt.ensureLoggedIn, (req , res)=>{
+    if(req.user) getPostById(req.query.id)
+    .then(doc=>{
+        res.json({});
+    }).catch(e=>{
+        res.status(404).json({message: 'Post not found.',e});
+    })
+})
