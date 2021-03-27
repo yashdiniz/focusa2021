@@ -2,6 +2,8 @@ const {focusa, assert, generateUUID} = require('../databases');
 
 const noSuchPost = new Error('Post with such id does not exist');
 const noPostsYet = new Error('There are no posts yet!');
+const noSuchAuthor = new Error('There exists no author with the given name!');
+const noSuchCourse = new Error('There is no course with the given name');
 /**
  * Gets the post with matching UUID.
  * @param {string} uuid uuid of the post.
@@ -92,12 +94,20 @@ const getPostsByAuthor = async (author) => {
     return await f.posts.find(author).exec()
     .then(async doc => {
         if(doc) return doc;
-        else throw noSuchPost;
+        else throw noSuchAuthor;
     })
 }
 
 const getPostsByCourse = async (course) => {
+    assert(typeof course === 'string');
 
+    let f = await focusa;
+
+    return await f.posts.find(course).exec()
+    .then(async doc => {
+        if(doc) return doc;
+        else throw noSuchCourse;
+    })
 }
 
-module.exports = {getPostByID, deletePost, createPost, editPost, searchPosts };
+module.exports = {getPostByID, deletePost, createPost, editPost, searchPosts, getPostsByAuthor, getPostsByCourse};
