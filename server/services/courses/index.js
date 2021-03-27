@@ -32,7 +32,7 @@ app.get('/addCourse', jwt.ensureLoggedIn, (req, res) => {
             .then(doc => {
                 res.json({ name: doc.name, uuid: doc.uuid });
             }).catch(e => {
-                res.status(404).json({ message: 'course not found', e })
+                res.status(404).json({ message: 'course exists', e })
             })
     }
 
