@@ -23,10 +23,10 @@ const auth = create({
 });
 let loginDetails = Buffer.from(`courses:${serviceAuthPass}`).toString('base64');
 auth.get('/', {
-    headers: `Basic ${loginDetails}`
+    headers: {authorization:`Basic ${loginDetails}`}
 }).then(res => token = res.data.token);
 setInterval(() => auth.get('/', {
-    headers: `Basic ${loginDetails}`
+    headers: {authorization:`Basic ${loginDetails}`}
 }).then(res => token = res.data.token), (JWTsignOptions.expiresIn-10)*1000);
 
 /**

@@ -12,10 +12,10 @@ const auth = create({
 });
 let loginDetails = Buffer.from(`courses:${serviceAuthPass}`).toString('base64');
 auth.get('/', {
-    headers: `Basic ${loginDetails}`
+    headers: {authorization: `Basic ${loginDetails}`}
 }).then(res => token = res.data.token);
 setInterval(() => auth.get('/', {
-    headers: `Basic ${loginDetails}`
+    headers: {authorization:`Basic ${loginDetails}`}
 }).then(res => token = res.data.token), (JWTsignOptions.expiresIn-10)*1000);
 
 
@@ -43,7 +43,7 @@ app.get('/addCourse', jwt.ensureLoggedIn, async (req, res) => {
         ^ await auth.get('/getRolesOfUser', {
             params: { name: req.user?.name },
             headers: { authorization: token },
-        }).then(res => res.data.find(doc => doc.name === 'admin'))) {
+        }).then(r => r.data.find(doc => doc.name === 'admin'))) {
         addCourse(req.query.name, req.query.description)
             .then(doc => {
                 res.json({ name: doc.name, uuid: doc.uuid });
@@ -60,7 +60,7 @@ app.get('/updateCourse', jwt.ensureLoggedIn, async (req, res) => {
         ^ await auth.get('/getRolesOfUser', {
             params: { name: req.user?.name },
             headers: { authorization: token },
-        }).then(res => res.data.find(doc => doc.name === 'admin'))) {
+        }).then(r => r.data.find(doc => doc.name === 'admin'))) {
             updateCourse(req.query.id, req.query.name, req.query.description)
             .then(doc => {
                 res.json({ name: doc.name, uuid: doc.uuid });
@@ -77,7 +77,7 @@ app.get('/deleteCourse', jwt.ensureLoggedIn, async (req, res) => {
         ^ await auth.get('/getRolesOfUser', {
             params: { name: req.user?.name },
             headers: { authorization: token },
-        }).then(res => res.data.find(doc => doc.name === 'admin'))) {
+        }).then(r => r.data.find(doc => doc.name === 'admin'))) {
             deleteCourse(req.query.id)
             .then(doc => {
                 res.json({ name: doc.name, uuid: doc.uuid });
@@ -85,7 +85,6 @@ app.get('/deleteCourse', jwt.ensureLoggedIn, async (req, res) => {
                 res.status(404).json({ message: 'course not found', e })
             })
         }
-
         else res.status(403).json({ message: 'Operation not allowed.' });
 });
 
