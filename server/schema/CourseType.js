@@ -10,6 +10,13 @@ const {
     GraphQLNonNull,
     GraphQLList
 } = require('graphql');
+const { create } = require('axios');
+const { authRealm } = require('../config');
+
+const auth = create({
+    baseURL: `${authRealm}`,
+    timeout: 5000,
+});
 
 const CourseType = new GraphQLObjectType({
     name:'Course',
@@ -17,7 +24,7 @@ const CourseType = new GraphQLObjectType({
     fields: () => {
         const { UserType, RoleType } = require('./types');
         return {
-        id: {
+        uuid: {
             type: GraphQLNonNull(GraphQLID)
         },
         name: {
@@ -27,8 +34,13 @@ const CourseType = new GraphQLObjectType({
         mods:{
             type: GraphQLNonNull(GraphQLList(GraphQLNonNull(RoleType))),
             description: "Moderator roles for the course.",
-            resolve(parent, args, ctx, info){
-                // currently stub, return null
+            resolve({ mods }, args, ctx, info){
+                return mods.map(async id => {
+                    return await auth.get('/getRoleById', {
+                        params: { id },
+                        headers: { authorization: ctx.headers?.authorization }
+                    }).then(res => res.data);
+                })
             }
         },
         description: {

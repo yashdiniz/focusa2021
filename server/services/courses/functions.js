@@ -69,14 +69,14 @@ const getCourseById = async (id) => {
 /**
  * Get a course with matching name.
  * @param {string} name The name of the course to find.
- * @returns Course object with the matching name.
+ * @returns Array of Course objects with the matching name.
  */
-const getCourseByName = async(name) => {
+const getCoursesByName = async(name) => {
     assert(typeof name === 'string', 'Invalid arguments for getCourseByName');
     let c = await focusa;
     return await c.courses.find({selector:{name}}).exec()
-    .then(async doc=>{
-        if (doc) return doc;
+    .then(async docs=>{
+        if (docs) return docs;
         else throw courseNonExistant;
     });
 }
@@ -118,5 +118,5 @@ const deleteCourse = async (id) =>{
 }
 
 module.exports = {
-    addCourse, getCourseById, getCourseByName, updateCourse, deleteCourse,
+    addCourse, getCourseById, getCoursesByName, updateCourse, deleteCourse,
 };
