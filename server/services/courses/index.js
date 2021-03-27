@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const { coursesPort } = require('../../config');
-const { getCourseById, getCourseByName, addCourse, updateCourse} = require('./functions');
+const { getCourseById, getCourseByName, addCourse, updateCourse, deleteCourse } = require('./functions');
 const jwt = require('../jwt');
 
 

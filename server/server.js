@@ -10,6 +10,7 @@ const app = express();  // create a router
 app.use(cookieParser);
 
 require('./services/auth/index');   // importing the auth service (strictly for auth purposes)  
+require('./services/courses/index');// importing the courses service
 
 // let the /graphql endpoint use the graphql adapter middleware
 app.use('/graphql', graphqlHTTP({

@@ -17,7 +17,7 @@ const webrtcPort = 5000;
 const graphiql = !production;  // essentially, run graphiql at graphql endpoint
 
 // the dev secret which will be used for most crypto operations.
-const secret = process.env['SECRET'];
+const secret = process.env['SECRET'] || 'focusa cookies';
 
 const remote = process.env['REMOTEDB'];  // basic-auth remote couchDB URL
 
