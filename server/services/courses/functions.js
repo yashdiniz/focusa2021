@@ -19,7 +19,6 @@ let token = '';
 const auth = create({
     baseURL: `${authRealm}`,
     timeout: 5000,
-    headers: { 'authorization': token },
 });
 let loginDetails = Buffer.from(`courses:${serviceAuthPass}`).toString('base64');
 setInterval(() => auth.get('/', {
