@@ -55,7 +55,11 @@ const loginCheck = (token) => {
  * Authenticator middleware. Goes next on success.
  */
 const ensureLoggedIn = (req, res, next) => {
-    if (loginCheck(req.headers?.authorization)) next();
+    let payload = loginCheck(req.headers?.authorization);
+    if (payload) {
+        req.user = payload;
+        next();
+    }
     else res.status(407).json({ message: 'User not authenticated.', e });
 };
 
