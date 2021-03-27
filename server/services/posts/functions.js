@@ -2,6 +2,7 @@ const {focusa, assert, generateUUID} = require('../databases');
 
 const noSuchPost = new Error('Post with such id does not exist');
 
+
 /**
  * Gets the post with matching UUID.
  * @param {string} uuid uuid of the post.
