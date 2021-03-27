@@ -1,9 +1,8 @@
 const express = require('express');
 const app = express();
 const { coursesPort } = require('../../config');
-const { getCourseById, getCourseByName, addCourse, updateCourse,  } = require('./functions');
+const { getCourseById, getCourseByName, addCourse, updateCourse, deleteCourse } = require('./functions');
 const jwt = require('../jwt');
-
 
 app.get('/getCourseById', jwt.ensureLoggedIn, (req, res) => {
     if (req.user) getCourseById(req.query.id)
