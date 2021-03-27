@@ -1,7 +1,7 @@
 const {focusa, assert, generateUUID} = require('../databases');
 
 const noSuchPost = new Error('Post with such id does not exist');
-
+const noPostsYet = new Error('There are no posts yet!');
 /**
  * Gets the post with matching UUID.
  * @param {string} uuid uuid of the post.
@@ -51,8 +51,6 @@ const createPost = async (text, author, course, attachmentURL, parent ) => {
     });
 }
 
-//to be done: editpost function
-
 const editPost = async (uuid, text) => {
     assert(typeof uuid === 'string' && typeof text === 'string');
 
@@ -70,12 +68,28 @@ const editPost = async (uuid, text) => {
 }
 
 /**
- * Searches for posts with a matching query.
+ * Searches for posts with a matching query in text body.
  * @param {string} query Query string to search posts. Empty for all posts.
+ * @returns top 10 posts 
  */
 const searchPosts = async (query, offsetID) => {
     // for now implement only implement empty query
     // add limit to only view top 10 (store as var in config) posts...
+    let f = await focusa;
+
+    return await f.posts.find().skip(offsetID).limit(10).exec()
+    .then(async d => {
+        if(d) return d;
+        else throw noPostsYet;
+    });
+}
+
+const getPostsByAuthor = async (author) => {
+
+}
+
+const getPostsByCourse = async (course) => {
+
 }
 
 module.exports = {getPostByID, deletePost, createPost, editPost, searchPosts };

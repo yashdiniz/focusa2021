@@ -62,11 +62,14 @@ const defaultProfilePic = 'dp.jpeg',
     defaultfullName = 'User Profile Name',
     defaultAbout = 'Hey, I am a new User!';
 
+// posts related
+const postsLimit = 10;
+
 module.exports = { 
     port, authPort, authRealm, webrtcPort,
     projectRoot, graphiql, secret, realm, remote, 
     JWTsignOptions, JWTverifyOptions, JWTsecret, rolePattern,
     pbkdfIters, pbkdfDigest, pbkdfLen, UUIDSize, currentPasswordScheme,
     minPasswordLength, usernamePattern, maxModRolesforCourse, maxNameLength,
-    defaultProfilePic, defaultfullName, defaultAbout
+    defaultProfilePic, defaultfullName, defaultAbout,postsLimit
 };
