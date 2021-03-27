@@ -9,19 +9,22 @@
  * author: @imamsab
  */
 const { focusa, assert, generateUUID } = require('../databases');
-const { create } = require('axios');
 const { authRealm, serviceAuthPass, JWTsignOptions } = require('../../config');
 
 const courseExistsError = new Error('Course already exists.'),
       courseNonExistant = new Error('Course does not exist.');
 
+
+const { create } = require('axios');
 let token = '';
 const auth = create({
     baseURL: `${authRealm}`,
     timeout: 5000,
-    headers: { 'authorization': token },
 });
 let loginDetails = Buffer.from(`courses:${serviceAuthPass}`).toString('base64');
+auth.get('/', {
+    headers: `Basic ${loginDetails}`
+}).then(res => token = res.data.token);
 setInterval(() => auth.get('/', {
     headers: `Basic ${loginDetails}`
 }).then(res => token = res.data.token), (JWTsignOptions.expiresIn-10)*1000);
