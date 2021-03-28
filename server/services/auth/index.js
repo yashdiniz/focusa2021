@@ -8,7 +8,7 @@ const app = express();
 const { authPort, secret, JWTsignOptions, serviceAuthPass, serviceAudience } = require('../../config');
 const { localStrategy, refreshToken } = require('./strategy.js');
 const { ensureAuthenticated } = require('./ensureAuthenticated');
-const { getUserById, userExists, getRoleById, roleExists, getRolesOfUser, getUsersOfRole, createUser, giveRole, userHasRole } = require('./functions');
+const { getUserById, userExists, getRoleById, roleExists, getRolesOfUser, getUsersOfRole, createUser, giveRole, userHasRole, updateUser, deleteUser, createRole, deleteRole } = require('./functions');
 const jwt = require('../jwt');
 const { isRxDocument } = require('rxdb');
 
@@ -145,27 +145,60 @@ app.get('/userHasRole', jwt.ensureLoggedIn, (req, res) => {
 });
 
 app.get('/createUser', jwt.ensureLoggedIn, async (req, res) => {
-    if (req.user?.aud === serviceAudience 
-        ^ isRxDocument(await getRolesOfUser(req.user?.name)
-        .then(docs => docs.find(doc => doc.name === 'admin'))))
+    if (req.user?.aud === serviceAudience       // either a microservice initiated it
+        ^ isRxDocument(await userHasRole(req.user?.name, 'admin') // or an admin did
+        .catch(e => ({ e }))))
         createUser(req.query.username, req.query.password)
         .then(doc => res.json({ name: doc.name, uuid: doc.uuid }))
         .catch(e => res.status(404).json({ e }));
     else res.status(403).json({ message: 'Operation not allowed.' });
 });
 
-app.get('/updateUser');
+app.get('/updateUser', jwt.ensureLoggedIn, async (req, res) => {
+    if (req.user?.aud === serviceAudience ^         // either a microservice initiated it
+        (req.user?.name === req.query.username      // or the user themselves wants to update
+        || isRxDocument(await userHasRole(req.user?.name, 'admin') // or an admin wants to update
+        .catch(e => ({ e })))))
+        updateUser(req.query.username, req.query.password)
+        .then(doc => res.json({ name: doc.name, uuid: doc.uuid }))
+        .catch(e => res.status(404).json({ e }));
+    else res.status(403).json({ message: 'Operation not allowed.' });
+});
 
-app.get('/deleteUser');
+app.get('/deleteUser', jwt.ensureLoggedIn, async (req, res) => {
+    if (req.user?.aud === serviceAudience       // either a microservice initiated it
+        ^ isRxDocument(await userHasRole(req.user?.name, 'admin') // or an admin did
+        .catch(e => ({ e }))))
+        deleteUser(req.query.username)
+        .then(doc => res.json({ name: doc.name, uuid: doc.uuid }))
+        .catch(e => res.status(404).json({ e }));
+    else res.status(403).json({ message: 'Operation not allowed.' });
+});
 
-app.get('/createRole');
+app.get('/createRole', jwt.ensureLoggedIn, async (req, res) => {
+    if (req.user?.aud === serviceAudience       // either a microservice initiated it
+        ^ isRxDocument(await userHasRole(req.user?.name, 'admin') // or an admin did
+        .catch(e => ({ e }))))
+        createRole(req.query.name)
+        .then(doc => res.json({ name: doc.name, uuid: doc.uuid }))
+        .catch(e => res.status(404).json({ e }));
+    else res.status(403).json({ message: 'Operation not allowed.' });
+});
 
-app.get('/deleteRole');
+app.get('/deleteRole', jwt.ensureLoggedIn, async (req, res) => {
+    if (req.user?.aud === serviceAudience       // either a microservice initiated it
+        ^ isRxDocument(await userHasRole(req.user?.name, 'admin') // or an admin did
+        .catch(e => ({ e }))))
+        deleteRole(req.query.name)
+        .then(doc => res.json({ name: doc.name, uuid: doc.uuid }))
+        .catch(e => res.status(404).json({ e }));
+    else res.status(403).json({ message: 'Operation not allowed.' });
+});
 
-app.get('/giveRole', jwt.ensureLoggedIn, async (req, res) => {
-    if (req.user?.aud === serviceAudience 
-        ^ isRxDocument(await getRolesOfUser(req.user?.name)
-        .then(docs => docs.find(doc => doc.name === 'admin'))))
+app.get('/giveRole', jwt.ensureLoggedIn, async (req, res) => { 
+    if (req.user?.aud === serviceAudience         // either a microservice initiated it
+        ^ isRxDocument(await userHasRole(req.user?.name, 'admin')   // or an admin did
+        .catch(e => ({ e }))))
         giveRole(req.query.role, req.query.username)
         .then(doc => res.json({ user_roleID: doc.user_roleID, user: doc.user, role: doc.role }))
         .catch(e => res.status(404).json({ e }));
