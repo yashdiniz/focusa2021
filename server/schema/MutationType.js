@@ -31,6 +31,18 @@ const MutationType = new GraphQLObjectType({
                 }).then(res => res.data);
             }
         },
+        updateUser: {
+
+        },
+        deleteUser: {
+
+        },
+        createRole: {
+
+        },
+        deleteRole: {
+
+        },
         giveRole: {
             type: RoleType,
             description: "Give Role to a User.",
