@@ -154,6 +154,14 @@ app.get('/createUser', jwt.ensureLoggedIn, async (req, res) => {
     else res.status(403).json({ message: 'Operation not allowed.' });
 });
 
+app.get('/updateUser');
+
+app.get('/deleteUser');
+
+app.get('/createRole');
+
+app.get('/deleteRole');
+
 app.get('/giveRole', jwt.ensureLoggedIn, async (req, res) => {
     if (req.user?.aud === serviceAudience 
         ^ isRxDocument(await getRolesOfUser(req.user?.name)
