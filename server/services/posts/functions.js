@@ -5,14 +5,26 @@
  */
 
 const {focusa, assert, generateUUID} = require('../databases');
+const { authRealm, serviceAuthPass, JWTsignOptions } = require('../../config');
+
 
 const noSuchPost = new Error('Post with such id does not exist');
 const noPostsYet = new Error('There are no posts yet!');
 const noSuchAuthor = new Error('There exists no author with the given name!');
 const noSuchCourse = new Error('There is no course with the given name');
 
-const {create} = require('Axios');
+const {create} = require('axios');
+let token = '';
+const auth = create({
+    baseURL: `${authRealm}`,
+    timeout: 5000,
+});
 
+let loginDetails = Buffer.from(`Posts:${serviceAuthPass}`).toString('base64');
+setInterval(() => auth.get('/', {
+headers: {authorization:`Basic ${loginDetails}`}
+})
+.then(res => token = res.data.token), (JWTsignOptions.expiresIn-10)*1000);
 
 /**
  * Gets the post with matching UUID.
@@ -101,7 +113,12 @@ const getPostsByAuthor = async (author) => {
 
     let f = await focusa;
 
-    return await f.posts.find(author).exec()
+    let authorID = await auth.get('/getUserByName', {
+        params: {name: author},
+        headers: { authorization: token}
+    }).then(res => res.data.uuid);
+
+    return await f.posts.find().where('author').eq(authorID)
     .then(async doc => {
         if(doc) return doc;
         else throw noSuchAuthor;
