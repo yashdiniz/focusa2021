@@ -45,6 +45,8 @@ const addCourse = async (name, description) => {
         headers: { authorization: token }
     }).then(res => res.data.uuid);
 
+    // TODO: Create a role with name matching Course being added.
+    // TODO: Allow the role created to become moderator.
     return await f.courses.insert({
         uuid,name, description,
         mods: [ admin ] // allowing only admin users to moderate
