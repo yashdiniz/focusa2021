@@ -23,11 +23,11 @@ const pbkdf = (word, salt) => new Promise((resolve, reject) => 	// will return a
 		crypto.pbkdf2(word, salt, pbkdfIters, pbkdfLen, pbkdfDigest,
 		(err, key) => err !== null ? reject(err) : resolve(key.toString('base64'))));
 
-const userExistsError = 'Username already exists.',
-      loginError = 'Login failed. Incorrect username or password.',
-      userNonExistant = 'User does not exist.',
-      roleExistsError = 'Role already exists.',
-      roleNonExistant = 'Role does not exist.';
+const userExistsError = new Error('Username already exists.'),
+      loginError = new Error('Login failed. Incorrect username or password.'),
+      userNonExistant = new Error('User does not exist.'),
+      roleExistsError = new Error('Role already exists.'),
+      roleNonExistant = new Error('Role does not exist.');
 
 // Built auth index to enforce one form of low-risk-low-conflict uniqueness.
 // Reference: https://stackoverflow.com/a/1933616
