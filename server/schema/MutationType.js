@@ -45,6 +45,15 @@ const MutationType = new GraphQLObjectType({
                 }).then(res => res.data.role);
             }
         },
+        addCourse: {
+
+        },
+        deleteCourse: {
+
+        },
+        updateCourse: {
+
+        },
         // publishPost(input MakePost)
         // adding mutations will be subject to frontend requirements for now.
     }
