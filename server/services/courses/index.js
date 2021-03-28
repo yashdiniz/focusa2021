@@ -46,10 +46,10 @@ app.get('/getCoursesByName', jwt.ensureLoggedIn, (req, res) => {
 
 app.get('/addCourse', jwt.ensureLoggedIn, async (req, res) => {
     if (req.user?.aud === serviceAudience
-        ^ typeof await auth.get('/getRolesOfUser', {
-            params: { name: req.user?.name },
+        ^ typeof await auth.get('/userHasRole', {
+            params: { user: req.user?.name, role: 'admin' },
             headers: { authorization: token },
-        }).then(r => r.data.find(doc => doc.name === 'admin')) !== 'undefined') {
+        }).then(r => r.data).catch(e => undefined) !== 'undefined') {
         addCourse(req.query.name, req.query.description)
             .then(doc => {
                 res.json({ name: doc.name, uuid: doc.uuid, description: doc.description, mods: doc.mods });
@@ -61,10 +61,10 @@ app.get('/addCourse', jwt.ensureLoggedIn, async (req, res) => {
 
 app.get('/updateCourse', jwt.ensureLoggedIn, async (req, res) => {
     if (req.user?.aud === serviceAudience
-        ^ typeof await auth.get('/getRolesOfUser', {
-            params: { name: req.user?.name },
+        ^ typeof await auth.get('/userHasRole', {
+            params: { user: req.user?.name, role: 'admin' },
             headers: { authorization: token },
-        }).then(r => r.data.find(doc => doc.name === 'admin')) !== 'undefined') {
+        }).then(r => r.data).catch(e => undefined) !== 'undefined') {
             updateCourse(req.query.id, req.query.name, req.query.description)
             .then(doc => {
                 res.json({ name: doc.name, uuid: doc.uuid, description: doc.description, mods: doc.mods });
@@ -78,10 +78,10 @@ app.get('/updateCourse', jwt.ensureLoggedIn, async (req, res) => {
 
 app.get('/deleteCourse', jwt.ensureLoggedIn, async (req, res) => {
     if (req.user?.aud === serviceAudience
-        ^ typeof await auth.get('/getRolesOfUser', {
-            params: { name: req.user?.name },
+        ^ typeof await auth.get('/userHasRole', {
+            params: { user: req.user?.name, role: 'admin' },
             headers: { authorization: token },
-        }).then(r => r.data.find(doc => doc.name === 'admin')) !== 'undefined') {
+        }).then(r => r.data).catch(e => undefined) !== 'undefined') {
             deleteCourse(req.query.id)
             .then(doc => {
                 res.json({ name: doc.name, uuid: doc.uuid, description: doc.description, mods: doc.mods });
