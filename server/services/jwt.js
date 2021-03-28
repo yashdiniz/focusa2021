@@ -60,7 +60,7 @@ const ensureLoggedIn = (req, res, next) => {
         req.user = payload;
         next();
     }
-    else res.status(407).json({ message: 'User not authenticated.', e });
+    else res.status(407).json({ message: 'User not authenticated.' });
 };
 
 module.exports = { sign, verify, ensureLoggedIn, serviceSign }

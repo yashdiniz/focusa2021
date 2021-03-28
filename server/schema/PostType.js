@@ -31,7 +31,7 @@ const PostType = new GraphQLObjectType({
         author: {
             type: GraphQLNonNull(UserType),
             description: "The Post author details.",
-            resolve({ uuid }, args, ctx, info) {
+            async resolve({ uuid }, args, ctx, info) {
                 return await auth.get('/getUserById', {
                     params: { id: uuid },
                     headers: { authorization: ctx.headers.authorization }
