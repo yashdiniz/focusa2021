@@ -8,7 +8,7 @@ const app = express();
 const { authPort, secret, JWTsignOptions, serviceAuthPass, serviceAudience } = require('../../config');
 const { localStrategy, refreshToken } = require('./strategy.js');
 const { ensureAuthenticated } = require('./ensureAuthenticated');
-const { getUserById, userExists, getRoleById, roleExists, getRolesOfUser, getUsersOfRole, createUser, giveRole } = require('./functions');
+const { getUserById, userExists, getRoleById, roleExists, getRolesOfUser, getUsersOfRole, createUser, giveRole, userHasRole } = require('./functions');
 const jwt = require('../jwt');
 const { isRxDocument } = require('rxdb');
 
@@ -136,6 +136,12 @@ app.get('/getUsersOfRole', jwt.ensureLoggedIn, (req, res) => {
     if(req.user) getUsersOfRole(req.query.name)
     .then(docs => res.json(docs.map(doc => ({ name: doc.name, uuid: doc.uuid }))))
     .catch(e => res.status(404).json({ message: 'Role not found.', e }));
+});
+
+app.get('/userHasRole', jwt.ensureLoggedIn, (req, res) => {
+    if(req.user) userHasRole(req.query.user, req.query.role)
+    .then(doc => res.json({ uuid: doc.uuid, user: doc.user, role: doc.role }))
+    .catch(e => res.status(404).json({ message: 'User does not have Role.', e }))
 });
 
 app.get('/createUser', jwt.ensureLoggedIn, async (req, res) => {
