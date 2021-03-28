@@ -27,21 +27,62 @@ const MutationType = new GraphQLObjectType({
             async resolve(_, { username, password }, ctx) {
                 return await auth.get('/createUser', {
                     params: { username, password },
-                    headers: { authorization: ctx.headers.authorization }
+                    headers: { authorization: ctx.headers?.authorization }
                 }).then(res => res.data);
             }
         },
         updateUser: {
-
+            type: UserType,
+            description: "Update User details to given credentials.",
+            args: {
+                username: { type: GraphQLNonNull(GraphQLString) },
+                newPassword: { type: GraphQLNonNull(GraphQLString) },
+            },
+            async resolve(_, { username, newPassword }, ctx) {
+                return await auth.get('/updateUser', {
+                    params: { username, password: newPassword },
+                    headers: { authorization: ctx.headers?.authorization }
+                }).then(res => res.data);
+            }
         },
         deleteUser: {
-
+            type: UserType,
+            description: "Delete User of given credentials.",
+            args: {
+                username: { type: GraphQLNonNull(GraphQLString) },
+            },
+            async resolve(_, { username }, ctx) {
+                return await auth.get('/deleteUser', {
+                    params: { username },
+                    headers: { authorization: ctx.headers?.authorization }
+                }).then(res => res.data);
+            }
         },
         createRole: {
-
+            type: RoleType,
+            description: "Create Role with given name.",
+            args: {
+                name: { type: GraphQLNonNull(GraphQLString) },
+            },
+            async resolve(_, { name }, ctx) {
+                return await auth.get('/createRole', {
+                    params: { name },
+                    headers: { authorization: ctx.headers?.authorization }
+                })
+            }
         },
         deleteRole: {
-
+            type: RoleType,
+            description: "Delete Role of given name.",
+            args: {
+                name: { type: GraphQLNonNull(GraphQLString) },
+            },
+            async resolve(_, { name }, ctx) {
+                return await auth.get('/deleteRole', {
+                    params: { name },
+                    headers: { authorization: ctx.headers?.authorization }
+                })
+            }
         },
         giveRole: {
             type: RoleType,
@@ -53,7 +94,7 @@ const MutationType = new GraphQLObjectType({
             async resolve(_, { username, role }, ctx) {
                 return await auth.get('/giveRole', {
                     params: { username, role },
-                    headers: { authorization: ctx.headers.authorization }
+                    headers: { authorization: ctx.headers?.authorization }
                 }).then(res => res.data.role);
             }
         },
