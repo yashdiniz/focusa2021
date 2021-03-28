@@ -144,10 +144,15 @@ app.get('/userHasRole', jwt.ensureLoggedIn, (req, res) => {
     .catch(e => res.status(404).json({ message: 'User does not have Role.', e }))
 });
 
+const isAdminUser = async (username) => {
+    try {
+        return isRxDocument(await userHasRole(username, 'admin'));
+    } catch(e) { return false; }
+}
+
 app.get('/createUser', jwt.ensureLoggedIn, async (req, res) => {
-    let isAdminUser = isRxDocument(await userHasRole(req.user?.name, 'admin'));
     if (req.user?.aud === serviceAudience       // either a microservice initiated it
-        ^ isAdminUser) // or an admin did
+        ^ await isAdminUser(req.user?.name)) // or an admin did
         createUser(req.query.username, req.query.password)
         .then(doc => res.json({ name: doc.name, uuid: doc.uuid }))
         .catch(e => res.status(404).json({ e }));
@@ -155,10 +160,9 @@ app.get('/createUser', jwt.ensureLoggedIn, async (req, res) => {
 });
 
 app.get('/updateUser', jwt.ensureLoggedIn, async (req, res) => {
-    let isAdminUser = isRxDocument(await userHasRole(req.user?.name, 'admin'));
     if (req.user?.aud === serviceAudience ^         // either a microservice initiated it
         (req.user?.name === req.query.username      // or the user themselves wants to update
-        || isAdminUser)) // or an admin wants to
+        || await isAdminUser(req.user?.name))) // or an admin wants to
         updateUser(req.query.username, req.query.password)
         .then(doc => res.json({ name: doc.name, uuid: doc.uuid }))
         .catch(e => res.status(404).json({ e }));
@@ -166,9 +170,8 @@ app.get('/updateUser', jwt.ensureLoggedIn, async (req, res) => {
 });
 
 app.get('/deleteUser', jwt.ensureLoggedIn, async (req, res) => {
-    let isAdminUser = isRxDocument(await userHasRole(req.user?.name, 'admin'));
     if (req.user?.aud === serviceAudience       // either a microservice initiated it
-        ^ isAdminUser) // or an admin did
+        ^ await isAdminUser(req.user?.name)) // or an admin did
         deleteUser(req.query.username)
         .then(doc => res.json({ name: doc.name, uuid: doc.uuid }))
         .catch(e => res.status(404).json({ e }));
@@ -176,9 +179,8 @@ app.get('/deleteUser', jwt.ensureLoggedIn, async (req, res) => {
 });
 
 app.get('/createRole', jwt.ensureLoggedIn, async (req, res) => {
-    let isAdminUser = isRxDocument(await userHasRole(req.user?.name, 'admin'));
     if (req.user?.aud === serviceAudience       // either a microservice initiated it
-        ^ isAdminUser) // or an admin did
+        ^ await isAdminUser(req.user?.name)) // or an admin did
         createRole(req.query.name)
         .then(doc => res.json({ name: doc.name, uuid: doc.uuid }))
         .catch(e => res.status(404).json({ e }));
@@ -186,9 +188,8 @@ app.get('/createRole', jwt.ensureLoggedIn, async (req, res) => {
 });
 
 app.get('/deleteRole', jwt.ensureLoggedIn, async (req, res) => {
-    let isAdminUser = isRxDocument(await userHasRole(req.user?.name, 'admin'));
     if (req.user?.aud === serviceAudience       // either a microservice initiated it
-        ^ isAdminUser) // or an admin did
+        ^ await isAdminUser(req.user?.name)) // or an admin did
         deleteRole(req.query.name)
         .then(doc => res.json({ name: doc.name, uuid: doc.uuid }))
         .catch(e => res.status(404).json({ e }));
@@ -196,9 +197,8 @@ app.get('/deleteRole', jwt.ensureLoggedIn, async (req, res) => {
 });
 
 app.get('/giveRole', jwt.ensureLoggedIn, async (req, res) => { 
-    let isAdminUser = isRxDocument(await userHasRole(req.user?.name, 'admin'));
     if (req.user?.aud === serviceAudience         // either a microservice initiated it
-        ^ isAdminUser) // or an admin did
+        ^ await isAdminUser(req.user?.name)) // or an admin did
         giveRole(req.query.role, req.query.username)
         .then(doc => res.json({ user_roleID: doc.user_roleID, user: doc.user, role: doc.role }))
         .catch(e => res.status(404).json({ e }));
