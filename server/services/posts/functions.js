@@ -154,7 +154,7 @@ const getPostsByCourse = async (course) => {
     assert(typeof course === 'string');
 
     let f = await focusa;
-
+    let courseID = await auth.get('./')
     return await f.posts.find(course).exec()
     .then(async doc => {
         if(doc) return doc;
