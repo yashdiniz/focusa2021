@@ -25,12 +25,15 @@ const createProfile = async (userID)=> {
         userID,
         fullName: defaultfullName, 
         about: defaultAbout,
-        interests: [],
+        interests: [
+            { course: }
+        ],
     });
 };
 
 /**
  * Gets a profile with matching userID.
+ * Also creates a profile if does not exist.
  * @param {string} userID The ID of the user which references profile.
  * @returns 
  */
@@ -68,7 +71,7 @@ const updateProfile = async (userID, fullName, about, display_pic)=> {
     } else throw profileNonExistant;
 };
 
-const addInterest = async () => {
+const addInterest = async () => { createProfile, 
     // TODO
 };
 
@@ -77,5 +80,5 @@ const removeInterest = async () => {
 }
 
 module.exports = {
-    getProfile, updateProfile
+    getProfile, updateProfile,
 }
