@@ -138,7 +138,7 @@ const getPostsByAuthor = async (author) => {
         params: {name: author},
         headers: { authorization: token }
     }).then(res => res.data.uuid);
-    return await f.posts.find().where('author').eq(authorID)
+    return await f.posts.find().where('author').eq(authorID).exec()
     .then(async doc => {
         if(doc) return doc;
         else throw noSuchAuthor;
