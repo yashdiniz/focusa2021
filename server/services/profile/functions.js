@@ -34,24 +34,23 @@ const createProfile = async (id)=> {
     let c = await focusa;
     // Rule of JAMstack: isolation. 
     // We cannot access user collection inside profile activity.
-    
-    let userID = await auth.get('/getUserById',{
-        params : {
-            id
-        },
-        headers: {
-            authorization : token
-        }
-    }).then(res=>res.data.uuid);
-
-    return await c.profile.insert({
-        userID,
-        fullName: defaultfullName, 
-        about: defaultAbout,
-        interests: [
-            // { course: }
-        ],
-    });
+    // hence invoking the auth service through axios.
+    try {
+        return await auth.get('/getUserById', {
+            params: { id },
+            headers: { authorization : token }
+        }).then(res => c.profile.insert({
+            userID: res.data.uuid,
+            fullName: defaultfullName, 
+            about: defaultAbout,
+            interests: [
+                // { course: }
+            ],
+        }));
+    } catch (e) {
+        console.error('createProfile:', e.message);
+        // throw profileNonExistant;
+    }
 };
 
 /**
