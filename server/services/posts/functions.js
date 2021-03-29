@@ -138,7 +138,6 @@ const getPostsByAuthor = async (author) => {
         params: {name: author},
         headers: { authorization: token }
     }).then(res => res.data.uuid);
-
     return await f.posts.find().where('author').eq(authorID)
     .then(async doc => {
         if(doc) return doc;
