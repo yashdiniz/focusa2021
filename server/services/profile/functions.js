@@ -35,22 +35,15 @@ const createProfile = async (id)=> {
     // Rule of JAMstack: isolation. 
     // We cannot access user collection inside profile activity.
     // hence invoking the auth service through axios.
-    try {
-        return await auth.get('/getUserById', {
-            params: { id },
-            headers: { authorization : token }
-        }).then(res => c.profile.insert({
-            userID: res.data.uuid,
-            fullName: defaultfullName, 
-            about: defaultAbout,
-            interests: [
-                // { course: }
-            ],
-        }));
-    } catch (e) {
-        console.error('createProfile:', e.message);
-        // throw profileNonExistant;
-    }
+    return await auth.get('/getUserById', {
+        params: { id },
+        headers: { authorization : token }
+    }).then(res => c.profile.insert({
+        userID: res.data.uuid,
+        fullName: defaultfullName, 
+        about: defaultAbout,
+        interests: [],
+    }));
 };
 
 /**
@@ -69,10 +62,18 @@ const getProfile = async (userID)=> {
     .then(doc => {
         if(doc) return doc;
         // otherwise, create the profile if non-existant.
-        else createProfile(userID);
+        else return createProfile(userID);
     });
 }
 
+/**
+ * Updates a profile with matching userID.
+ * @param {string} userID The ID of the user which references profile.
+ * @param {string} fullName The fullName to update to.
+ * @param {string} about The about to update to.
+ * @param {string} display_pic The display_pic URL to update to.
+ * @returns Promise containing Profile object.
+ */
 const updateProfile = async (userID, fullName, about, display_pic)=> {
     assert(typeof userID === 'string' &&
     typeof fullName === 'string' &&
@@ -93,16 +94,23 @@ const updateProfile = async (userID, fullName, about, display_pic)=> {
     } else throw profileNonExistant;
 };
 
+/**
+ * Deletes the Profile with a matching userID
+ * @param {string} userID The id of the profile to be deleted.
+ * @returns Promise deleted Profile object.
+ */
 const deleteProfile = async (userID) => {
     assert(typeof userID === 'string', 'Invalid arguments for deleteProfile.');
 
     let c = await focusa;
 
-    let profile = await c.profile.findOne(userID).exec();
-    if(profile) {
-        profile.remove();
-        return profile;
-    } else throw profileNonExistant;
+    return await c.profile.findOne(userID).exec()
+    .then(profile => {
+        if(profile) {
+            profile.remove();
+            return profile;
+        } else throw profileNonExistant;
+    });
 }
 
 const addInterest = async () => {  
