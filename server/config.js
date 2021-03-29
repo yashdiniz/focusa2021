@@ -13,7 +13,7 @@ const authRealm = "http://localhost:1897";
 const authPort = port + 1;
 const webrtcPort = 5000;
 const graphiql = !production;  // essentially, run graphiql at graphql endpoint
-
+const postPort = port + 3;
 // the dev secret which will be used for most crypto operations.
 const secret = process.env['SECRET'];
 
@@ -71,5 +71,5 @@ module.exports = {
     JWTsignOptions, JWTverifyOptions, JWTsecret, rolePattern,
     pbkdfIters, pbkdfDigest, pbkdfLen, UUIDSize, currentPasswordScheme,
     minPasswordLength, usernamePattern, maxModRolesforCourse, maxNameLength,
-    defaultProfilePic, defaultfullName, defaultAbout,postsLimit
+    defaultProfilePic, defaultfullName, defaultAbout,postsLimit,postPort
 };
