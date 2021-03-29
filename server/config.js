@@ -12,6 +12,7 @@ const port = process.env['port'] || 1896;   // using FOCUSA legacy port for test
 const authRealm = "http://localhost:1897";
 const serviceAuthPass = process.env['authPass']; // password to authenticate microservice webhooks
 const authPort = port + 1;
+const profilePort = port + 3;
 const webrtcPort = 5000;
 const graphiql = !production;  // essentially, run graphiql at graphql endpoint
 
@@ -65,7 +66,7 @@ const defaultProfilePic = 'dp.jpeg',
     defaultAbout = 'Hey, I am a new User!';
 
 module.exports = { 
-    port, authPort, authRealm, serviceAuthPass, webrtcPort,
+    port, authPort, authRealm, serviceAuthPass, webrtcPort, profilePort,
     projectRoot, graphiql, secret, realm, remote, 
     JWTsignOptions, JWTverifyOptions, JWTsecret, rolePattern, serviceAudience,
     pbkdfIters, pbkdfDigest, pbkdfLen, UUIDSize, currentPasswordScheme,
