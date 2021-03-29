@@ -3,12 +3,101 @@
  * It contains fields which we can use for traversing through the graph
  * and performing write, update and delete operations.
  */
-const { GraphQLObjectType } = require('graphql');
+const { GraphQLObjectType, GraphQLString, GraphQLNonNull } = require('graphql');
+const { RoleType, UserType } = require('./types');
+const { create } = require('axios');
+const { authRealm } = require('../config');
+
+const auth = create({
+    baseURL: `${authRealm}`,
+    timeout: 5000,
+});
 
 const MutationType = new GraphQLObjectType({
     name: 'Mutation',
     description: "This node serves as a mutable entrypoint to the graph. It contains fields which we can use for traversing through the graph and performing write, update and delete operations.",
     fields: {
+        createUser: {
+            type: UserType,
+            description: "Create User with given credentials.",
+            args: {
+                username: { type: GraphQLNonNull(GraphQLString) },
+                password: { type: GraphQLNonNull(GraphQLString) },
+            },
+            async resolve(_, { username, password }, ctx) {
+                return await auth.get('/createUser', {
+                    params: { username, password },
+                    headers: { authorization: ctx.headers?.authorization }
+                }).then(res => res.data);
+            }
+        },
+        updateUser: {
+            type: UserType,
+            description: "Update User details to given credentials.",
+            args: {
+                username: { type: GraphQLNonNull(GraphQLString) },
+                newPassword: { type: GraphQLNonNull(GraphQLString) },
+            },
+            async resolve(_, { username, newPassword }, ctx) {
+                return await auth.get('/updateUser', {
+                    params: { username, password: newPassword },
+                    headers: { authorization: ctx.headers?.authorization }
+                }).then(res => res.data);
+            }
+        },
+        deleteUser: {
+            type: UserType,
+            description: "Delete User of given credentials.",
+            args: {
+                username: { type: GraphQLNonNull(GraphQLString) },
+            },
+            async resolve(_, { username }, ctx) {
+                return await auth.get('/deleteUser', {
+                    params: { username },
+                    headers: { authorization: ctx.headers?.authorization }
+                }).then(res => res.data);
+            }
+        },
+        createRole: {
+            type: RoleType,
+            description: "Create Role with given name.",
+            args: {
+                name: { type: GraphQLNonNull(GraphQLString) },
+            },
+            async resolve(_, { name }, ctx) {
+                return await auth.get('/createRole', {
+                    params: { name },
+                    headers: { authorization: ctx.headers?.authorization }
+                })
+            }
+        },
+        deleteRole: {
+            type: RoleType,
+            description: "Delete Role of given name.",
+            args: {
+                name: { type: GraphQLNonNull(GraphQLString) },
+            },
+            async resolve(_, { name }, ctx) {
+                return await auth.get('/deleteRole', {
+                    params: { name },
+                    headers: { authorization: ctx.headers?.authorization }
+                })
+            }
+        },
+        giveRole: {
+            type: RoleType,
+            description: "Give Role to a User.",
+            args: {
+                username: { type: GraphQLNonNull(GraphQLString) },
+                role: { type: GraphQLNonNull(GraphQLString) },
+            },
+            async resolve(_, { username, role }, ctx) {
+                return await auth.get('/giveRole', {
+                    params: { username, role },
+                    headers: { authorization: ctx.headers?.authorization }
+                }).then(res => res.data.role);
+            }
+        },
         // publishPost(input MakePost)
         // adding mutations will be subject to frontend requirements for now.
     }

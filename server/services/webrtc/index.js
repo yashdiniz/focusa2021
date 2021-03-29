@@ -4,7 +4,7 @@ const server = https.createServer(app);
 const { webrtcPort, realm } = require('../../config');
 const io = require('socket.io')(server, {
     cors: {
-        origin: realm + ':' + webrtcPort,
+        // origin: realm + ':' + webrtcPort,
         methods: [ 'GET', 'POST' ]
     }
 });

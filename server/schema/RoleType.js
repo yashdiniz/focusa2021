@@ -29,12 +29,12 @@ const RoleType = new GraphQLObjectType({
             type: GraphQLNonNull(GraphQLString),
             description:"The name of the role."
         },
-        users: {    // TODO: check the type here. Apparently, GraphQLList is not a GraphQL Type.
+        users: {
             type: GraphQLNonNull(GraphQLList(UserType)),
             description:"List of users that have the role.",
-            async resolve(parent, args, ctx, info) {
+            async resolve({ name }, args, ctx, info) {
                 return await auth.get('/getUsersOfRole', {
-                    params: { name: parent['name'] },
+                    params: { name },
                     headers: { authorization: ctx.headers.authorization },
                 }).then(res => res.data);
             }

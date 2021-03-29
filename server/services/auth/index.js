@@ -5,11 +5,12 @@ const bodyParser = require('body-parser').urlencoded({ extended: true });
 const cookieParser = require('cookie-parser');
 const app = express();
 
-const { authPort, secret, JWTsignOptions } = require('../../config');
+const { authPort, secret, JWTsignOptions, serviceAuthPass, serviceAudience } = require('../../config');
 const { localStrategy, refreshToken } = require('./strategy.js');
 const { ensureAuthenticated } = require('./ensureAuthenticated');
-const { getUserById, userExists, getRoleById, roleExists, getRolesOfUser, getUsersOfRole } = require('./functions');
+const { getUserById, userExists, getRoleById, roleExists, getRolesOfUser, getUsersOfRole, createUser, giveRole, userHasRole, updateUser, deleteUser, createRole, deleteRole } = require('./functions');
 const jwt = require('../jwt');
+const { isRxDocument } = require('rxdb');
 
 process.title = 'FOCUSA authenticator service';
 
@@ -44,6 +45,30 @@ passport.use(localStrategy);
 
 app.use(require('helmet')());
 
+/**
+ * NOTE: BASIC AUTH CHECKS THE Authorization header(for base64 username:password)
+ * Creating a basic-auth endpoint to simplify 
+ * microservice-microservice authorization.
+ * Only microservices will use this communication method
+ * to obtain JWT session tokens for microservice comms.
+ * 
+ * *This JWT session will offer very high privleges.*
+ * TODO: Ensure ONLY microservices can authenticate through here!!
+ */
+app.get('/', (req, res) => {
+    let user = require('basic-auth')(req);
+    if (serviceAuthPass === user?.pass) {
+        res.json({
+            token: jwt.serviceSign({
+                time: Date.now(),
+                ip: req.ip,
+                name: user.name,
+            })
+        });
+        console.log(`${user.name} microservice shook hands.`);
+    } else res.status(401).json({ message: 'microservice not authenticated.' });
+});
+
 app.get('/login', 
     passport.authenticate('local', 
     {
@@ -51,7 +76,7 @@ app.get('/login',
     }),
     (req, res) => {
         res.json({
-            token: req.user.token,
+            token: req.user?.token,
             login: true });
     }
 );
@@ -59,9 +84,8 @@ app.get('/login',
 app.get('/check', ensureAuthenticated, (req, res) => {
     res.json({ 
         cookies: req.cookies,
-        name: req.user.name,
-        token: req.user.token,
-        match: req.user.token === req.headers.authorization,    // check a match
+        name: req.user?.name,
+        token: req.user?.token,
     });
 });
 
@@ -73,57 +97,112 @@ app.get('/error', (req, res) => {
 app.get('/refresh', ensureAuthenticated, (req, res) => {
     refreshToken(req);  // refresh token of the session
     res.json({
-        token: req.user.token,
+        token: req.user?.token,
         login: true,
     });
 });
 
-app.get('/getUserById', (req, res) => {
-    if (jwt.ensureLoggedIn(req.headers.authorization)) {
-        getUserById(req.query.id)
+app.get('/getUserById', jwt.ensureLoggedIn, (req, res) => {
+    if(req.user) getUserById(req.query.id)
+    .then(doc => res.json({ name: doc.name, uuid: doc.uuid }))
+    .catch(e => res.status(404).json({ message: 'User not found.', e }));
+});
+
+app.get('/getUserByName', jwt.ensureLoggedIn, (req, res) => {
+    if(req.user) userExists(req.query.name)
+    .then(doc => res.json({ name: doc.name, uuid: doc.uuid }))
+    .catch(e => res.status(404).json({ message: 'User not found.', e }));
+});
+
+app.get('/getRoleById', jwt.ensureLoggedIn, (req, res) => {
+    if(req.user) getRoleById(req.query.id)
+    .then(doc => res.json({ name: doc.name, uuid: doc.uuid }))
+    .catch(e => res.status(404).json({ message: 'Role not found.', e }));
+});
+
+app.get('/getRoleByName', jwt.ensureLoggedIn, (req, res) => {
+    if(req.user) roleExists(req.query.name)
+    .then(doc => res.json({ name: doc.name, uuid: doc.uuid }))
+    .catch(e => res.status(404).json({ message: 'Role not found.', e }));
+});
+
+app.get('/getRolesOfUser', jwt.ensureLoggedIn, (req, res) => {
+    if(req.user) getRolesOfUser(req.query.name)  // user name
+    .then(docs => res.json(docs.map(doc => ({ name: doc.name, uuid: doc.uuid }))))
+    .catch(e => res.status(404).json({ message: 'User not found.', e }));
+});
+
+app.get('/getUsersOfRole', jwt.ensureLoggedIn, (req, res) => {
+    if(req.user) getUsersOfRole(req.query.name)
+    .then(docs => res.json(docs.map(doc => ({ name: doc.name, uuid: doc.uuid }))))
+    .catch(e => res.status(404).json({ message: 'Role not found.', e }));
+});
+
+app.get('/userHasRole', jwt.ensureLoggedIn, (req, res) => {
+    if(req.user) userHasRole(req.query.user, req.query.role)
+    .then(doc => res.json({ uuid: doc.uuid, user: doc.user, role: doc.role }))
+    .catch(e => res.status(404).json({ message: 'User does not have Role.', e }))
+});
+
+const isAdminUser = async (username) => {
+    try {
+        return isRxDocument(await userHasRole(username, 'admin'));
+    } catch(e) { return false; }
+}
+
+app.get('/createUser', jwt.ensureLoggedIn, async (req, res) => {
+    if (req.user?.aud === serviceAudience       // either a microservice initiated it
+        ^ await isAdminUser(req.user?.name)) // or an admin did
+        createUser(req.query.username, req.query.password)
         .then(doc => res.json({ name: doc.name, uuid: doc.uuid }))
-        .catch(e => res.status(404).json({ message: 'User not found.', e }));
-    } else res.status(407).json({ message: 'User not authenticated.' });
+        .catch(e => res.status(404).json({ e }));
+    else res.status(403).json({ message: 'Operation not allowed.' });
 });
 
-app.get('/getUserByName', (req, res) => {
-    if (jwt.ensureLoggedIn(req.headers.authorization)) {
-        userExists(req.query.name)
+app.get('/updateUser', jwt.ensureLoggedIn, async (req, res) => {
+    if (req.user?.aud === serviceAudience ^         // either a microservice initiated it
+        (req.user?.name === req.query.username      // or the user themselves wants to update
+        || await isAdminUser(req.user?.name))) // or an admin wants to
+        updateUser(req.query.username, req.query.password)
         .then(doc => res.json({ name: doc.name, uuid: doc.uuid }))
-        .catch(e => res.status(404).json({ message: 'User not found.', e }));
-    } else res.status(407).json({ message: 'User not authenticated.' });
+        .catch(e => res.status(404).json({ e }));
+    else res.status(403).json({ message: 'Operation not allowed.' });
 });
 
-app.get('/getRoleById', (req, res) => {
-    if (jwt.ensureLoggedIn(req.headers.authorization)) {
-        getRoleById(req.query.id)
+app.get('/deleteUser', jwt.ensureLoggedIn, async (req, res) => {
+    if (req.user?.aud === serviceAudience       // either a microservice initiated it
+        ^ await isAdminUser(req.user?.name)) // or an admin did
+        deleteUser(req.query.username)
         .then(doc => res.json({ name: doc.name, uuid: doc.uuid }))
-        .catch(e => res.status(404).json({ message: 'Role not found.', e }));
-    } else res.status(407).json({ message: 'User not authenticated.' });
+        .catch(e => res.status(404).json({ e }));
+    else res.status(403).json({ message: 'Operation not allowed.' });
 });
 
-app.get('/getRoleByName', (req, res) => {
-    if (jwt.ensureLoggedIn(req.headers.authorization)) {
-        roleExists(req.query.name)
+app.get('/createRole', jwt.ensureLoggedIn, async (req, res) => {
+    if (req.user?.aud === serviceAudience       // either a microservice initiated it
+        ^ await isAdminUser(req.user?.name)) // or an admin did
+        createRole(req.query.name)
         .then(doc => res.json({ name: doc.name, uuid: doc.uuid }))
-        .catch(e => res.status(404).json({ message: 'Role not found.', e }));
-    } else res.status(407).json({ message: 'User not authenticated.' });
+        .catch(e => res.status(404).json({ e }));
+    else res.status(403).json({ message: 'Operation not allowed.' });
 });
 
-app.get('/getRolesOfUser', (req, res) => {
-    if (jwt.ensureLoggedIn(req.headers.authorization)) {
-        getRolesOfUser(req.query.name)  // user name
-        .then(docs => res.json(docs.map(doc => ({ name: doc.name, uuid: doc.uuid }))))
-        .catch(e => res.status(404).json({ message: 'User not found.', e }))
-    } else res.status(407).json({ message: 'User not authenticated.' });
+app.get('/deleteRole', jwt.ensureLoggedIn, async (req, res) => {
+    if (req.user?.aud === serviceAudience       // either a microservice initiated it
+        ^ await isAdminUser(req.user?.name)) // or an admin did
+        deleteRole(req.query.name)
+        .then(doc => res.json({ name: doc.name, uuid: doc.uuid }))
+        .catch(e => res.status(404).json({ e }));
+    else res.status(403).json({ message: 'Operation not allowed.' });
 });
 
-app.get('/getUsersOfRole', (req, res) => {
-    if (jwt.ensureLoggedIn(req.headers.authorization)) {
-        getUsersOfRole(req.query.name)
-        .then(docs => res.json(docs.map(doc => ({ name: doc.name, uuid: doc.uuid }))))
-        .catch(e => res.status(404).json({ message: 'Role not found.', e }))
-    } else res.status(407).json({ message: 'User not authenticated.' });
+app.get('/giveRole', jwt.ensureLoggedIn, async (req, res) => { 
+    if (req.user?.aud === serviceAudience         // either a microservice initiated it
+        ^ await isAdminUser(req.user?.name)) // or an admin did
+        giveRole(req.query.role, req.query.username)
+        .then(doc => res.json({ user_roleID: doc.user_roleID, user: doc.user, role: doc.role }))
+        .catch(e => res.status(404).json({ e }));
+    else res.status(403).json({ message: 'Operation not allowed.' });
 });
 
 app.listen(authPort, () => {
