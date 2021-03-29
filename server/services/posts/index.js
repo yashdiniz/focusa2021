@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const {getPostByID, deletePost, createPost, editPost, searchPosts, getPostsByAuthor, getPostsByCourse} = require('./functions');
 const jwt = require('../jwt');
+const { postPort }=require('../../config');
 
 app.get('/getPostById', jwt.ensureLoggedIn, (req , res)=>{
     if(req.user) getPostById(req.query.id)
@@ -11,3 +12,7 @@ app.get('/getPostById', jwt.ensureLoggedIn, (req , res)=>{
         res.status(404).json({message: 'Post not found.',e});
     });
 });
+
+app.listen(postPort, () => {
+    console.warn(`Posts listening on port ${postPort}`);
+})

@@ -20,7 +20,10 @@ const auth = create({
     timeout: 5000,
 });
 
-let loginDetails = Buffer.from(`Posts:${serviceAuthPass}`).toString('base64');
+let loginDetails = Buffer.from(`posts:${serviceAuthPass}`).toString('base64');
+auth.get('/', {
+    headers: {authorization: `Basic ${loginDetails}`}
+    }).then(res => token = res.data.token);
 setInterval(() => auth.get('/', {
 headers: {authorization:`Basic ${loginDetails}`}
 })
@@ -133,7 +136,7 @@ const getPostsByAuthor = async (author) => {
 
     let authorID = await auth.get('/getUserByName', {
         params: {name: author},
-        headers: { authorization: token}
+        headers: { authorization: token }
     }).then(res => res.data.uuid);
 
     return await f.posts.find().where('author').eq(authorID)
