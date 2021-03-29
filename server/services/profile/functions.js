@@ -5,28 +5,51 @@
  */
 
 const { focusa, assert } = require('../databases');
-const { defaultfullName, defaultAbout } = require('../../config');
+const { defaultfullName, defaultAbout, authRealm, serviceAuthPass, JWTsignOptions } = require('../../config');
+
+const { create } = require('axios');
+let token = '';
+const auth = create({
+    baseURL: `${authRealm}`,
+    timeout: 5000,
+});
+let loginDetails = Buffer.from(`profile:${serviceAuthPass}`).toString('base64');
+auth.get('/', {
+    headers: {authorization: `Basic ${loginDetails}`}
+}).then(res => token = res.data.token);
+setInterval(() => auth.get('/', {
+    headers: {authorization:`Basic ${loginDetails}`}
+}).then(res => token = res.data.token), (JWTsignOptions.expiresIn-10)*1000);
 
 const profileNonExistant = new Error('Profile does not exist.');
 
 /**
  * Creates a profile for a User with matching UUID.
- * @param {string} userID The ID of the user which references profile.
+ * @param {string} id The ID of the user which references profile.
  */
-const createProfile = async (userID)=> {
-    assert(typeof userID === 'string',
+const createProfile = async (id)=> {
+    assert(typeof id === 'string',
     'Invalid arguments for createProfile.');
 
     let c = await focusa;
     // Rule of JAMstack: isolation. 
     // We cannot access user collection inside profile activity.
-    // Trusting that profiles will not be spammed.
+    
+    let userID = await auth.get('/getUserById',{
+        params : {
+            id
+        },
+        headers: {
+            authorization : token
+        }
+    }).then(res=>res.data.uuid);
+
     return await c.profile.insert({
         userID,
         fullName: defaultfullName, 
         about: defaultAbout,
         interests: [
-            // { course:  }
+            // { course: }
         ],
     });
 };
