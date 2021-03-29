@@ -26,14 +26,14 @@ const createProfile = async (userID)=> {
         fullName: defaultfullName, 
         about: defaultAbout,
         interests: [
-            { course: }
+            // { course:  }
         ],
     });
 };
 
 /**
  * Gets a profile with matching userID.
- * Also creates a profile if does not exist.
+ * Also creates a profile if it does not exist.
  * @param {string} userID The ID of the user which references profile.
  * @returns 
  */
@@ -71,7 +71,19 @@ const updateProfile = async (userID, fullName, about, display_pic)=> {
     } else throw profileNonExistant;
 };
 
-const addInterest = async () => { createProfile, 
+const deleteProfile = async (userID) => {
+    assert(typeof userID === 'string', 'Invalid arguments for deleteProfile.');
+
+    let c = await focusa;
+
+    let profile = await c.profile.findOne(userID).exec();
+    if(profile) {
+        profile.remove();
+        return profile;
+    } else throw profileNonExistant;
+}
+
+const addInterest = async () => {  
     // TODO
 };
 
@@ -80,5 +92,5 @@ const removeInterest = async () => {
 }
 
 module.exports = {
-    getProfile, updateProfile,
+    getProfile, updateProfile, deleteProfile,
 }
