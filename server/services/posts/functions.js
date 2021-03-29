@@ -154,10 +154,13 @@ const getPostsByCourse = async (course) => {
     assert(typeof course === 'string');
 
     let f = await focusa;
-    let courseID = await auth.get('./')
-    return await f.posts.find(course).exec()
-    .then(async doc => {
-        if(doc) return doc;
+    let courseID = await auth.get('./getCoursesByName',{
+        params:{name:course},
+        headers: {authorization:token}
+    }).then(res => res.data.uuid);
+    return await f.posts.find().where('course').eq(courseID).exec()
+    .then(async d => {
+        if(d) return d;
         else throw noSuchCourse;
     })
 }
