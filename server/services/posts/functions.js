@@ -29,6 +29,7 @@ headers: {authorization:`Basic ${loginDetails}`}
 /**
  * Gets the post with matching UUID.
  * @param {string} uuid uuid of the post.
+ * @returns Post with the specified ID
  */
 const getPostByID = async (uuid) => {
     assert(typeof uuid === 'string', "Invalid post id");
@@ -61,6 +62,14 @@ const deletePost = async (uuid) => {
     });
 }
 
+/**
+ * Create a new post
+ * @param {string} text the content of the post
+ * @param {string} author the author of the post
+ * @param {string} course the course to which the post belongs
+ * @param {string} attachmentURL any attachment for reference
+ * @param {string} parent the parent post of this post
+ */
 const createPost = async (text, author, course, attachmentURL, parent ) => {
     assert(typeof text === 'string' && typeof author === 'string' && typeof course === 'string' && typeof attachmentURL === 'string' && typeof parent === 'string');
     
@@ -75,6 +84,11 @@ const createPost = async (text, author, course, attachmentURL, parent ) => {
     });
 }
 
+/**
+ * Edit a post with a given ID
+ * @param {string} uuid ID of the post 
+ * @param {string} text the new contents of the post
+ */
 const editPost = async (uuid, text) => {
     assert(typeof uuid === 'string' && typeof text === 'string');
 
@@ -107,7 +121,11 @@ const searchPosts = async (query, offsetID) => {
         else throw noPostsYet;
     });
 }
-
+/**
+ * Searches for all posts made by a particular author
+ * @param {string} author author name
+ * @returns all the posts made by the author
+ */
 const getPostsByAuthor = async (author) => {
     assert(typeof author === 'string');
 
@@ -125,6 +143,11 @@ const getPostsByAuthor = async (author) => {
     })
 }
 
+/**
+ * Get posts of a particular course
+ * @param {string} course the course name
+ * @returns all the posts under a particular course
+ */
 const getPostsByCourse = async (course) => {
     assert(typeof course === 'string');
 
