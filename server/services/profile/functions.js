@@ -5,7 +5,7 @@
  */
 
 const { focusa, assert } = require('../databases');
-const { defaultfullName, defaultAbout, authRealm, serviceAuthPass, JWTsignOptions } = require('../../config');
+const { defaultfullName, defaultAbout, authRealm, serviceAuthPass, JWTsignOptions, defaultProfilePic } = require('../../config');
 
 const { create } = require('axios');
 let token = '';
@@ -26,6 +26,7 @@ const profileNonExistant = new Error('Profile does not exist.');
 /**
  * Creates a profile for a User with matching UUID.
  * @param {string} id The ID of the user which references profile.
+ * @returns Profile object with matching ID.
  */
 const createProfile = async (id)=> {
     assert(typeof id === 'string',
@@ -42,6 +43,7 @@ const createProfile = async (id)=> {
         userID: res.data.uuid,
         fullName: defaultfullName, 
         about: defaultAbout,
+        display_pic: defaultProfilePic, 
         interests: [],
     }));
 };
@@ -50,7 +52,7 @@ const createProfile = async (id)=> {
  * Gets a profile with matching userID.
  * Also creates a profile if it does not exist.
  * @param {string} userID The ID of the user which references profile.
- * @returns 
+ * @returns Profile object with matching ID.
  */
 const getProfile = async (userID)=> {
     assert(typeof userID === 'string',

@@ -23,7 +23,8 @@ app.get('/getProfile', jwt.ensureLoggedIn, (req, res) => {
     .then(doc => res.json({ userID: doc.userID, 
         fullName: doc.fullName, 
         about: doc.about, 
-        interests: doc.interests 
+        interests: doc.interests,
+        display_pic: doc.display_pic, 
     })).catch(e => {
         res.status(404).json({ message: 'Profile not found.', e });
     });
@@ -39,11 +40,11 @@ app.get('/updateProfile', jwt.ensureLoggedIn, async (req, res) => {
         .then(doc => res.json({ userID: doc.userID, 
             fullName: doc.fullName, 
             about: doc.about, 
-            interests: doc.interests 
+            interests: doc.interests,
+            display_pic: doc.display_pic, 
         })).catch(e => {
             res.status(404).json({ message: 'Profile not found.', e });
         });
-            
     } else res.status(403).json({ message: 'Operation not allowed.' });
 });
 
@@ -58,7 +59,8 @@ app.get('/deleteProfile', jwt.ensureLoggedIn, async (req, res) => {
         .then(doc => res.json({ userID: doc.userID, 
             fullName: doc.fullName, 
             about: doc.about, 
-            interests: doc.interests 
+            interests: doc.interests,
+            display_pic: doc.display_pic, 
         })).catch(e => {
             res.status(404).json({ message: 'Profile not found.', e })
         });
