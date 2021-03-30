@@ -73,7 +73,7 @@ const deletePost = async (uuid) => {
  * @param {string} attachmentURL any attachment for reference
  * @param {string} parent the parent post of this post
  */
-const createPost = async (text, author, course, attachmentURL, parent ) => {
+const createPost = async (text, author, course, attachmentURL, parent) => {
     assert(typeof text === 'string' && typeof author === 'string' && typeof course === 'string' && typeof attachmentURL === 'string' && typeof parent === 'string');
     
     let uuid = generateUUID();
@@ -139,25 +139,21 @@ const getPostsByAuthor = async (author) => {
         headers: { authorization: token }
     }).then(res => res.data.uuid);
     return await f.posts.find().where('author').eq(authorID).exec()
-    .then(async doc => {
-        if(doc) return doc;
+    .then(async docs => {
+        if(docs) return docs;
         else throw noSuchAuthor;
     })
 }
 
 /**
  * Get posts of a particular course
- * @param {string} course the course name
+ * @param {string} courseID the course ID.
  * @returns all the posts under a particular course
  */
-const getPostsByCourse = async (course) => {
+const getPostsByCourse = async (courseID) => {
     assert(typeof course === 'string');
 
     let f = await focusa;
-    let courseID = await auth.get('./getCoursesByName',{
-        params:{name:course},
-        headers: {authorization:token}
-    }).then(res => res.data.uuid);
     return await f.posts.find().where('course').eq(courseID).exec()
     .then(async d => {
         if(d) return d;
