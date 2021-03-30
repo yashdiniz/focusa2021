@@ -11,10 +11,14 @@ const {
     GraphQLNonNull,
 } = require('graphql');
 const { create } = require('axios');
-const { authRealm } = require('../config');
+const { authRealm, profileRealm } = require('../config');
 
 const auth = create({
     baseURL: `${authRealm}`,
+    timeout: 5000,
+});
+const profile = create({
+    baseURL: `${profileRealm}`,
     timeout: 5000,
 });
 
@@ -34,8 +38,11 @@ const UserType = new GraphQLObjectType({
         profile: { 
             type: ProfileType,
             description: "Profile that maps to this User.",
-            resolve(parent, args, ctx, info) {
-                // currently stub, return null
+            async resolve({ uuid }, args, ctx, info) {
+                return await profile.get('/getProfile', {
+                    params: { id: uuid },
+                    headers: { authorization: ctx.headers.authorization }
+                }).then(res => res.data);
             }
         },
         posts: {
