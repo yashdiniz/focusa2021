@@ -13,6 +13,10 @@ app.get('/getPostById', jwt.ensureLoggedIn, (req , res)=>{
     });
 });
 
+app.get('/deletePost', jwt.ensureLoggedIn, (req , res)=>{
+    
+})
+
 app.listen(postPort, () => {
     console.warn(`Posts listening on port ${postPort}`);
 })

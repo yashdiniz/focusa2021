@@ -117,7 +117,7 @@ const searchPosts = async (query, offsetID) => {
     // for now implement only implement empty query
     // add limit to only view top 10 (store as var in config) posts...
     let f = await focusa;
-
+    assert(typeof offsetID === 'string');
     return await f.posts.find().skip(offsetID).limit(10).exec()
     .then(async d => {
         if(d) return d;
