@@ -43,7 +43,7 @@ const QueryType = new GraphQLObjectType({
                         params: { id },
                         headers: { authorization: ctx.headers.authorization }
                     }).then(res => res.data);
-                if(name) 
+                else if(name) 
                     return await auth.get('/getUserByName', {
                         params: { name },
                         headers: { authorization: ctx.headers.authorization }
@@ -63,7 +63,7 @@ const QueryType = new GraphQLObjectType({
                         params: { id },
                         headers: { authorization: ctx.headers.authorization }
                     }).then(res => res.data);
-                if(name) 
+                else if(name) 
                     return await auth.get('/getRoleByName', {
                         params: { name },
                         headers: { authorization: ctx.headers.authorization }
