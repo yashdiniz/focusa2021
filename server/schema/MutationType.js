@@ -104,7 +104,7 @@ const MutationType = new GraphQLObjectType({
         },
         updateProfile: {
             type: ProfileType,
-            description: "TODO",
+            description: "Updates the Profile according to arguments.",
             args: {
                 id: { type: GraphQLNonNull(GraphQLID) },
                 fullName: { type: GraphQLNonNull(GraphQLString) },
@@ -120,7 +120,7 @@ const MutationType = new GraphQLObjectType({
         },
         deleteProfile: {
             type: ProfileType,
-            description: "TODO",
+            description: "Deletes the Profile according to the ID.",
             args: {
                 id: { type: GraphQLNonNull(GraphQLID) },
             },
