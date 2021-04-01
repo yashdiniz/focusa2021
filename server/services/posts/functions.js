@@ -38,11 +38,10 @@ const getPostByID = async (uuid) => {
     assert(typeof uuid === 'string', "Invalid post id");
 
     let f = await focusa;
+    
     return await f.posts.findOne(uuid).exec()
     .then(async doc => {
-        if(doc) {
-            return doc;
-        }
+        if(doc) return doc;
         else throw noSuchPost;
     });
 }
@@ -55,9 +54,10 @@ const deletePost = async (uuid) => {
     assert(typeof uuid === 'string', "Invalid post id");
 
     let f = await focusa;
+
     return await f.posts.findOne(uuid).exec()
     .then(async doc => {
-        if(doc){
+        if(doc) {
             doc.remove();
             console.log("post removed successfully!");
         }
@@ -78,7 +78,6 @@ const createPost = async (text, author, course, attachmentURL, parent) => {
     
     let uuid = generateUUID();
     let time = Date.now();
-
     let f = await focusa;
 
     return await f.posts.insert({
@@ -100,12 +99,9 @@ const editPost = async (uuid, text) => {
     let post = await f.posts.findOne(uuid).exec();
 
     console.log("Post is getting edited");
-
     return await post.atomicPatch({
-        text
+        text,
     });
-    
-
 }
 
 /**
@@ -131,13 +127,13 @@ const searchPosts = async (query, offsetID) => {
  */
 const getPostsByAuthor = async (author) => {
     assert(typeof author === 'string');
-
     let f = await focusa;
 
     let authorID = await auth.get('/getUserByName', {
         params: {name: author},
         headers: { authorization: token }
     }).then(res => res.data.uuid);
+
     return await f.posts.find().where('author').eq(authorID).exec()
     .then(async docs => {
         if(docs) return docs;
@@ -152,13 +148,12 @@ const getPostsByAuthor = async (author) => {
  */
 const getPostsByCourse = async (courseID) => {
     assert(typeof course === 'string');
-
     let f = await focusa;
     return await f.posts.find().where('course').eq(courseID).exec()
     .then(async d => {
         if(d) return d;
         else throw noSuchCourse;
-    })
+    });
 }
 
 module.exports = {getPostByID, deletePost, createPost, editPost, searchPosts, getPostsByAuthor, getPostsByCourse};
