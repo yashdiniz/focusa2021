@@ -17,10 +17,10 @@ app.get('/deletePost', jwt.ensureLoggedIn, (req , res)=>{
     //get the author id of the post
     //get the user id
     //match if both are same or is an admin => then allow and delete the post
-    post_author_id = getPostByID(req.query.id).then(res=>{res.})
-    if(req.user?.aud === serviceAudience ^ )
-})
+    // post_author_id = getPostByID(req.query.id).then(res=>{res.})
+    // if(req.user?.aud === serviceAudience ^ )
+});
 
 app.listen(postPort, () => {
     console.warn(`Posts listening on port ${postPort}`);
-})
+});
