@@ -141,7 +141,7 @@ app.get('/getUsersOfRole', jwt.ensureLoggedIn, (req, res) => {
 app.get('/userHasRole', jwt.ensureLoggedIn, (req, res) => {
     if(req.user) userHasRole(req.query.user, req.query.role)
     .then(doc => res.json({ uuid: doc.uuid, user: doc.user, role: doc.role }))
-    .catch(e => res.status(404).json({ message: 'User does not have Role.', e }))
+    .catch(e => res.status(404).json({ message: 'User does not have Role.', e }));
 });
 
 const isAdminUser = async (username) => {
