@@ -41,12 +41,12 @@ const QueryType = new GraphQLObjectType({
                 if(id)    // prioritizing id over name
                     return await auth.get('/getUserById', {
                         params: { id },
-                        headers: { authorization: ctx.headers.authorization }
+                        headers: { authorization: ctx.headers.authorization, realip: ctx.ip }
                     }).then(res => res.data);
                 else if(name) 
                     return await auth.get('/getUserByName', {
                         params: { name },
-                        headers: { authorization: ctx.headers.authorization }
+                        headers: { authorization: ctx.headers.authorization, realip: ctx.ip }
                     }).then(res => res.data);
             }
         },
@@ -61,12 +61,12 @@ const QueryType = new GraphQLObjectType({
                 if(id)    // prioritizing id over name
                     return await auth.get('/getRoleById', {
                         params: { id },
-                        headers: { authorization: ctx.headers.authorization }
+                        headers: { authorization: ctx.headers.authorization, realip: ctx.ip }
                     }).then(res => res.data);
                 else if(name) 
                     return await auth.get('/getRoleByName', {
                         params: { name },
-                        headers: { authorization: ctx.headers.authorization }
+                        headers: { authorization: ctx.headers.authorization, realip: ctx.ip }
                     }).then(res => res.data);
             }
         },

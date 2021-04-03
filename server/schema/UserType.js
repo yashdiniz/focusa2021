@@ -51,7 +51,7 @@ const UserType = new GraphQLObjectType({
             async resolve({ name }, args, ctx, info) {
                 return await auth.get('/getRolesOfUser', {
                     params: { name },
-                    headers: { authorization: ctx.headers.authorization },
+                    headers: { authorization: ctx.headers.authorization, realip: ctx.ip },
                 }).then(res => res.data);
             }
         }}
