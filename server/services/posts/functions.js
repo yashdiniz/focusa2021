@@ -35,7 +35,7 @@ headers: {authorization:`Basic ${loginDetails}`}
  * @returns Post with the specified ID
  */
 const getPostByID = async (uuid) => {
-    assert(typeof uuid === 'string', "Invalid post id");
+    assert(typeof uuid === 'string', "Invalid post ID at getPostByID.");
 
     let f = await focusa;
     
@@ -51,7 +51,7 @@ const getPostByID = async (uuid) => {
  * @param {string} uuid uuid of the post.
  */
 const deletePost = async (uuid) => {
-    assert(typeof uuid === 'string', "Invalid post id");
+    assert(typeof uuid === 'string', "Invalid post ID at deletePost.");
 
     let f = await focusa;
 
@@ -60,6 +60,7 @@ const deletePost = async (uuid) => {
         if(doc) {
             doc.remove();
             console.log("post removed successfully!");
+            return doc;
         }
         else throw noSuchPost;
     });
@@ -74,7 +75,11 @@ const deletePost = async (uuid) => {
  * @param {string} parent the parent post of this post
  */
 const createPost = async (text, author, course, attachmentURL, parent) => {
-    assert(typeof text === 'string' && typeof author === 'string' && typeof course === 'string' && typeof attachmentURL === 'string' && typeof parent === 'string');
+    assert(typeof text === 'string' 
+    && typeof author === 'string' 
+    && typeof course === 'string' 
+    && typeof attachmentURL === 'string' 
+    && typeof parent === 'string', "Invalid arguments for createPost.");
     
     let uuid = generateUUID();
     let time = Date.now();
@@ -82,7 +87,7 @@ const createPost = async (text, author, course, attachmentURL, parent) => {
 
     return await f.posts.insert({
         uuid, parent, text, course, author,
-        time, attachmentURL    
+        time, attachmentURL
     });
 }
 
@@ -92,7 +97,8 @@ const createPost = async (text, author, course, attachmentURL, parent) => {
  * @param {string} text the new contents of the post
  */
 const editPost = async (uuid, text) => {
-    assert(typeof uuid === 'string' && typeof text === 'string');
+    assert(typeof uuid === 'string' 
+    && typeof text === 'string', "Invalid arguments for editPost.");
 
     let f = await focusa;
 
@@ -113,7 +119,7 @@ const searchPosts = async (query, offsetID) => {
     // for now implement only implement empty query
     // add limit to only view top 10 (store as var in config) posts...
     let f = await focusa;
-    assert(typeof offsetID === 'string');
+    assert(typeof offsetID === 'string', "Invalid arguments for searchPosts.");
     return await f.posts.find().skip(offsetID).limit(10).exec()
     .then(async d => {
         if(d) return d;
@@ -126,7 +132,7 @@ const searchPosts = async (query, offsetID) => {
  * @returns all the posts made by the author
  */
 const getPostsByAuthor = async (author) => {
-    assert(typeof author === 'string');
+    assert(typeof author === 'string', "Invalid arguments for getPostsByAuthor.");
     let f = await focusa;
 
     let authorID = await auth.get('/getUserByName', {
@@ -147,7 +153,7 @@ const getPostsByAuthor = async (author) => {
  * @returns all the posts under a particular course
  */
 const getPostsByCourse = async (courseID) => {
-    assert(typeof course === 'string');
+    assert(typeof courseID === 'string', "Invalid arguments for getPostsByCourse.");
     let f = await focusa;
     return await f.posts.find().where('course').eq(courseID).exec()
     .then(async d => {
@@ -157,3 +163,4 @@ const getPostsByCourse = async (courseID) => {
 }
 
 module.exports = {getPostByID, deletePost, createPost, editPost, searchPosts, getPostsByAuthor, getPostsByCourse};
+console.log('Request IP, Payload IP, Proxied IP: ', req.ip, payload.ip, req.headers.realip);
