@@ -27,7 +27,7 @@ const MutationType = new GraphQLObjectType({
             async resolve(_, { username, password }, ctx) {
                 return await auth.get('/createUser', {
                     params: { username, password },
-                    headers: { authorization: ctx.headers?.authorization }
+                    headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
                 }).then(res => res.data);
             }
         },
@@ -41,7 +41,7 @@ const MutationType = new GraphQLObjectType({
             async resolve(_, { username, newPassword }, ctx) {
                 return await auth.get('/updateUser', {
                     params: { username, password: newPassword },
-                    headers: { authorization: ctx.headers?.authorization }
+                    headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
                 }).then(res => res.data);
             }
         },
@@ -54,7 +54,7 @@ const MutationType = new GraphQLObjectType({
             async resolve(_, { username }, ctx) {
                 return await auth.get('/deleteUser', {
                     params: { username },
-                    headers: { authorization: ctx.headers?.authorization }
+                    headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
                 }).then(res => res.data);
             }
         },
@@ -67,7 +67,7 @@ const MutationType = new GraphQLObjectType({
             async resolve(_, { name }, ctx) {
                 return await auth.get('/createRole', {
                     params: { name },
-                    headers: { authorization: ctx.headers?.authorization }
+                    headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
                 })
             }
         },
@@ -80,7 +80,7 @@ const MutationType = new GraphQLObjectType({
             async resolve(_, { name }, ctx) {
                 return await auth.get('/deleteRole', {
                     params: { name },
-                    headers: { authorization: ctx.headers?.authorization }
+                    headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
                 })
             }
         },
@@ -94,7 +94,7 @@ const MutationType = new GraphQLObjectType({
             async resolve(_, { username, role }, ctx) {
                 return await auth.get('/giveRole', {
                     params: { username, role },
-                    headers: { authorization: ctx.headers?.authorization }
+                    headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
                 }).then(res => res.data.role);
             }
         },

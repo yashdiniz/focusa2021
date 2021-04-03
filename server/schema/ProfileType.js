@@ -33,7 +33,7 @@ const ProfileType = new GraphQLObjectType({
             async resolve({ uuid }, args, ctx) {
                 return await auth.get('/getUserById', {
                     params: { id: uuid },
-                    headers: { authorization: ctx.headers.authorization }
+                    headers: { authorization: ctx.headers.authorization, realip: ctx.ip }
                 });
             }
         },
