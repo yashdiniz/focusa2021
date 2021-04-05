@@ -21,13 +21,14 @@ const auth = create({
     baseURL: `${authRealm}`,
     timeout: 5000,
 });
+
 let loginDetails = Buffer.from(`courses:${serviceAuthPass}`).toString('base64');
 auth.get('/', {
     headers: {authorization:`Basic ${loginDetails}`}
-}).then(res => token = res.data.token);
+}).then(res => token = res.data.token).catch(console.error);
 setInterval(() => auth.get('/', {
     headers: {authorization:`Basic ${loginDetails}`}
-}).then(res => token = res.data.token), (JWTsignOptions.expiresIn-10)*1000);
+}).then(res => token = res.data.token).catch(console.error), (JWTsignOptions.expiresIn-10)*1000);
 
 /**
  * Adds a course to the database.
