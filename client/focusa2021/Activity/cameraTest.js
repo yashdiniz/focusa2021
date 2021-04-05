@@ -82,6 +82,7 @@ const callUser = (id) => {
         peer.signal(signal);
     });
     connectionRef.current = peer;
+    return 0;
 }
 
 const answerCall = () => {
@@ -102,6 +103,8 @@ const answerCall = () => {
 
     peer.signal(callerSignal)
     connectionRef.current = peer
+
+    return 0;
 }
 
 const leaveCall = () =>{
