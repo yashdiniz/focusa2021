@@ -41,10 +41,9 @@ const verify = (token) => {
 const loginCheck = (token) => {
     assert(typeof token === 'string',
     "Invalid arguments for loginCheck.");
-    token = token.split(' ');
-    // token[0] === 'Bearer' NO NEED TO CHECK since JWT will fail if invalid anyway?
+    token = token.replace('Bearer ', '');
     try {
-        return verify(token[token.length-1]);
+        return verify(token);
     } catch(e) {
         console.log(e);
         return false;
