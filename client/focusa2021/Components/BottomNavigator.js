@@ -77,6 +77,7 @@ function BottomNavigator() {
       >
         {props => <Courses {...props} token={token}/>}
       </Tab.Screen>
+
       <Tab.Screen
         name="Video"
         options={{
@@ -88,6 +89,7 @@ function BottomNavigator() {
       >
         {props => <Video {...props} token={token}/>}
       </Tab.Screen>
+      
       <Tab.Screen
         name="Profile"
         options={{
