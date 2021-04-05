@@ -6,8 +6,6 @@ import {Overlay} from 'react-native-elements';
 
 import {ensureAuthenticated} from './ensureAuthenticated';
 
-
-
 const Video = ({ navigation, route, token }) =>{
     ensureAuthenticated(navigation, token);
 
@@ -74,7 +72,7 @@ const Video = ({ navigation, route, token }) =>{
                             </View>
                             
                             <View>
-                                <TouchableOpacity style={styles.submitButton} onPress={navigator.navigate('CameraTest')}>
+                                <TouchableOpacity style={styles.submitButton} onPress={() => navigation.navigate('CameraTest')}>
                                     <Text> Submit</Text>
                                 </TouchableOpacity>
                             </View>
@@ -87,4 +85,4 @@ const Video = ({ navigation, route, token }) =>{
     )
 }
 
-export default Video
+export default Video;
