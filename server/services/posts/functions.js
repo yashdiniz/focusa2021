@@ -163,4 +163,4 @@ const getPostsByCourse = async (courseID) => {
 }
 
 module.exports = {getPostByID, deletePost, createPost, editPost, searchPosts, getPostsByAuthor, getPostsByCourse};
-console.log('Request IP, Payload IP, Proxied IP: ', req.ip, payload.ip, req.headers.realip);
+//console.log('Request IP, Payload IP, Proxied IP: ', req.ip, payload.ip, req.headers.realip);
