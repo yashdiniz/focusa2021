@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const {getPostByID, deletePost, createPost, editPost, searchPosts, getPostsByAuthor, getPostsByCourse} = require('./functions');
 const jwt = require('../jwt');
-const { postPort }=require('../../config');
+const { postPort, serviceAudience }=require('../../config');
 
 app.get('/getPostById', jwt.ensureLoggedIn, (req , res)=>{
     if(req.user) getPostById(req.query.id)
@@ -14,7 +14,11 @@ app.get('/getPostById', jwt.ensureLoggedIn, (req , res)=>{
 });
 
 app.get('/deletePost', jwt.ensureLoggedIn, (req , res)=>{
-    
+    //get the author id of the post
+    //get the user id
+    //match if both are same or is an admin => then allow and delete the post
+    post_author_id = getPostByID(req.query.id).then(res=>{res.})
+    if(req.user?.aud === serviceAudience ^ )
 })
 
 app.listen(postPort, () => {
