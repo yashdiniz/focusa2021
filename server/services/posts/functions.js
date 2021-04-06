@@ -59,7 +59,7 @@ const deletePost = async (uuid) => {
     .then(async doc => {
         if(doc) {
             doc.remove();
-            console.log("post removed successfully!");
+            console.log("post removed successfully!", doc);
             return doc;
         }
         else throw noSuchPost;

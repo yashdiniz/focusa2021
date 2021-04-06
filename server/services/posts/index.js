@@ -13,21 +13,20 @@ app.get('/getPostById', jwt.ensureLoggedIn, (req , res)=>{
     });
 });
 
-app.get('/deletePost', jwt.ensureLoggedIn, (req , res)=>{
+app.get('/deletePost', jwt.ensureLoggedIn, async (req , res)=>{
     //get the author id of the post
     //get the user id
     //match if both are same or is an admin => then allow and delete the post
     // post_author_id = getPostByID(req.query.id).then(res=>{res.})
-    let authorid = null;
-    
-    if(req.user) getPostByID(req.query.id)
-    .then(doc=>{authorid=doc.author;});
-
-    if(req.user?.aud === serviceAudience ^ authorid === req.user?.id)
-    deletePost(req.query.id)
-    .then(doc=>{
+    getPostByID(req.query.id)
+    .then(post => {
+        if(req.user?.aud === serviceAudience ^ post.author === req.user?.uuid)
+            return deletePost(req.query.id)
+        else throw 'not authorised';
+    }).then(doc=>{
         res.json({uuid:doc.uuid, parent: doc.parent, text:doc.text, course: doc.course, author: doc.author, reported: doc.reported, approved: doc.approved, time: doc.time, attachmentURL: doc.attachmentURL});
-    }).catch(e => {
+    }).catch(e => { 
+        console.error(e);
         res.status(404).json({ message: 'post not found',e})
     });
 
