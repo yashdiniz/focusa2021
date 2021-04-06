@@ -73,5 +73,5 @@ module.exports = {
     JWTsignOptions, JWTverifyOptions, JWTsecret, rolePattern, serviceAudience,
     pbkdfIters, pbkdfDigest, pbkdfLen, UUIDSize, currentPasswordScheme,
     minPasswordLength, usernamePattern, maxModRolesforCourse, maxNameLength,
-    defaultProfilePic, defaultfullName, defaultAbout,postsLimit,postPort
+    defaultProfilePic, defaultfullName, defaultAbout, postsLimit, postPort
 };

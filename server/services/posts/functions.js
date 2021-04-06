@@ -5,11 +5,11 @@
  */
 
 const {focusa, assert, generateUUID} = require('../databases');
-const { authRealm, serviceAuthPass, JWTsignOptions } = require('../../config');
+const { authRealm, serviceAuthPass, JWTsignOptions, postsLimit } = require('../../config');
 
 
 const noSuchPost = new Error('Post with such id does not exist');
-const noPostsYet = new Error('There are no posts yet!');
+const noPostsFound = new Error('There are no matching posts found!');
 const noSuchAuthor = new Error('There exists no author with the given name!');
 const noSuchCourse = new Error('There is no course with the given name');
 
@@ -59,7 +59,6 @@ const deletePost = async (uuid) => {
     .then(async doc => {
         if(doc) {
             doc.remove();
-            console.log("post removed successfully!", doc);
             return doc;
         }
         else throw noSuchPost;
@@ -76,10 +75,11 @@ const deletePost = async (uuid) => {
  */
 const createPost = async (text, author, course, attachmentURL, parent) => {
     assert(typeof text === 'string' 
-    && typeof author === 'string' 
-    && typeof course === 'string' 
-    && typeof attachmentURL === 'string' 
-    && typeof parent === 'string', "Invalid arguments for createPost.");
+        && typeof author === 'string' 
+        && typeof course === 'string' 
+        && typeof attachmentURL === 'string' 
+        && typeof parent === 'string', 
+        "Invalid arguments for createPost.");
     
     let uuid = generateUUID();
     let time = Date.now();
@@ -98,13 +98,12 @@ const createPost = async (text, author, course, attachmentURL, parent) => {
  */
 const editPost = async (uuid, text) => {
     assert(typeof uuid === 'string' 
-    && typeof text === 'string', "Invalid arguments for editPost.");
+        && typeof text === 'string', 
+        "Invalid arguments for editPost.");
 
     let f = await focusa;
 
     let post = await f.posts.findOne(uuid).exec();
-
-    console.log("Post is getting edited");
     return await post.atomicPatch({
         text,
     });
@@ -112,33 +111,32 @@ const editPost = async (uuid, text) => {
 
 /**
  * Searches for posts with a matching query in text body.
+ * @param {string} offsetID ID to skip to, and continue searching from.
  * @param {string} query Query string to search posts. Empty for all posts.
  * @returns top 10 posts 
  */
-const searchPosts = async (q, offsetID) => {
-    // for now implement only implement empty query
-    // add limit to only view top 10 (store as var in config) posts...
-    let f = await focusa;
+const searchPosts = async (offsetID, query) => {
     assert(typeof offsetID === 'string', "Invalid arguments for searchPosts.");
-    return await f.posts.find().skip(offsetID).limit(10).exec()
-    .then(async d => {
-        if(d) return d;
-        else throw noPostsYet;
+
+    // TODO: for now implement only implement empty query
+    // add limit to only view top 10 (store as var in config) posts...
+    // TODO: Also, will implement tf-idf search soon.
+    let f = await focusa;
+
+    return await f.posts.find().skip(offsetID).limit(postsLimit).exec()
+    .then(async docs => {
+        if(docs) return docs;
+        else throw noPostsFound;
     });
 }
 /**
  * Searches for all posts made by a particular author
- * @param {string} author author name
+ * @param {string} authorID author ID
  * @returns all the posts made by the author
  */
-const getPostsByAuthor = async (author) => {
-    assert(typeof author === 'string', "Invalid arguments for getPostsByAuthor.");
+const getPostsByAuthor = async (authorID) => {
+    assert(typeof authorID === 'string', "Invalid arguments for getPostsByAuthor.");
     let f = await focusa;
-
-    let authorID = await auth.get('/getUserByName', {
-        params: {name: author},
-        headers: { authorization: token }
-    }).then(res => res.data.uuid);
 
     return await f.posts.find().where('author').eq(authorID).exec()
     .then(async docs => {
@@ -156,8 +154,8 @@ const getPostsByCourse = async (courseID) => {
     assert(typeof courseID === 'string', "Invalid arguments for getPostsByCourse.");
     let f = await focusa;
     return await f.posts.find().where('course').eq(courseID).exec()
-    .then(async d => {
-        if(d) return d;
+    .then(async docs => {
+        if(docs) return docs;
         else throw noSuchCourse;
     });
 }
