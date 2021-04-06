@@ -5,7 +5,7 @@
  */
 
 const {focusa, assert, generateUUID} = require('../databases');
-const { authRealm, serviceAuthPass, JWTsignOptions, postsLimit } = require('../../config');
+const { authRealm, serviceAuthPass, JWTsignOptions, postsLimit, minPostBodyLength } = require('../../config');
 
 
 const noSuchPost = new Error('Post with such id does not exist');
@@ -34,7 +34,7 @@ headers: {authorization:`Basic ${loginDetails}`}
  * @param {string} uuid uuid of the post.
  * @returns Post with the specified ID
  */
-const getPostByID = async (uuid) => {
+const getPostById = async (uuid) => {
     assert(typeof uuid === 'string', "Invalid post ID at getPostByID.");
 
     let f = await focusa;
@@ -74,7 +74,7 @@ const deletePost = async (uuid) => {
  * @param {string} parent the parent post of this post
  */
 const createPost = async (text, author, course, attachmentURL, parent) => {
-    assert(typeof text === 'string' 
+    assert(typeof text === 'string' && text.length > minPostBodyLength
         && typeof author === 'string' 
         && typeof course === 'string' 
         && typeof attachmentURL === 'string' 
@@ -98,7 +98,7 @@ const createPost = async (text, author, course, attachmentURL, parent) => {
  */
 const editPost = async (uuid, text) => {
     assert(typeof uuid === 'string' 
-        && typeof text === 'string', 
+        && typeof text === 'string' && text.length > minPostBodyLength,
         "Invalid arguments for editPost.");
 
     let f = await focusa;
@@ -160,4 +160,4 @@ const getPostsByCourse = async (courseID) => {
     });
 }
 
-module.exports = {getPostByID, deletePost, createPost, editPost, searchPosts, getPostsByAuthor, getPostsByCourse};
+module.exports = {getPostById, deletePost, createPost, editPost, searchPosts, getPostsByAuthor, getPostsByCourse};
