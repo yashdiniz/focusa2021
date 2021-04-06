@@ -14,6 +14,46 @@ const isAdminUser = async (user) => {
     return typeof admin !== 'undefined';
 }
 
+app.get('/searchPosts', jwt.ensureLoggedIn, (req, res)=>{
+    //currently returns the array of objects obtained from searchPosts functions
+    if(req.user) searchPosts(req.query.q, req.query.offsetID)
+    .then(docs=> {
+        let posts = []; // not necessary, can use docs.map...
+        docs.map(doc => ({uuid: doc.uuid, parent: doc.parent, text: doc.text, course: doc.course, author: doc.author, reported: doc.reported, approved: doc.approved, time: doc.time, attachmentURL: doc.attachmentURL}))
+        //docs.forEach(doc => posts.push(doc));
+        res.json({posts});  // TODO: graphql expects array of objects... Response has object wrapping array
+    })
+    .catch(e => {
+        res.status(404).json({ message: 'No post found.', e });
+    });
+});
+
+app.get('/getPostsByAuthor', jwt.ensureLoggedIn, (req, res)=>{
+    if(req.user) getPostsByAuthor(req.query.id)
+    .then(docs => {
+        let posts = []; // not necessary, can use docs.map...
+        docs.map(doc => ({uuid: doc.uuid, parent: doc.parent, text: doc.text, course: doc.course, author: doc.author, reported: doc.reported, approved: doc.approved, time: doc.time, attachmentURL: doc.attachmentURL}))
+        //docs.forEach(doc => posts.push(doc));
+        res.json({posts});  // TODO: graphql expects array of objects... Response has object wrapping array
+    })
+    .catch(e => {
+        res.status(404).json({ message: 'No post found.', e});
+    });
+});
+
+app.get('/getPostsByCourse', jwt.ensureLoggedIn, (req, res)=> {
+    if(req.user) getPostsByCourse(req.query.id)
+    .then(docs => {
+        let posts = []; // not necessary, can use docs.map...
+        docs.map(doc => ({uuid: doc.uuid, parent: doc.parent, text: doc.text, course: doc.course, author: doc.author, reported: doc.reported, approved: doc.approved, time: doc.time, attachmentURL: doc.attachmentURL}))
+        //docs.forEach(doc => posts.push(doc));
+        res.json({posts});  // TODO: graphql expects array
+    })
+    .catch(e => {
+        res.status(404).json({ message: 'No post found.', e});
+    });
+});
+
 app.get('/getPostById', jwt.ensureLoggedIn, (req , res)=>{
     if(req.user) getPostById(req.query.id)
     .then(doc=>{
@@ -23,8 +63,20 @@ app.get('/getPostById', jwt.ensureLoggedIn, (req , res)=>{
     });
 });
 
+app.get('/createPost', jwt.ensureLoggedIn, (req, res)=>{
+    // authorID is obtained from session: req.user?.uuid
+    if(req.user) createPost(req.query.text, req.user?.uuid, req.query.course, req.query.attachmentURL, req.query.parent)
+    .then(doc =>{
+        res.json({uuid: doc.uuid, parent: doc.parent, text: doc.text, course: doc.course, author: doc.author, reported: doc.reported, approved: doc.approved, time: doc.time, attachmentURL: doc.attachmentURL})
+    })
+    .catch(e => {
+        res.status(404).json({ message: 'Cannot create post.',e});
+    });
+    else res.status(403).json({ message: 'Operation not allowed.' });
+});
+
 app.get('/deletePost', jwt.ensureLoggedIn, async (req , res)=>{
-    getPostByID(req.query.id)
+    getPostByID(req.query.id)   // getPostByID used to get author ID for validating the request
     .then(post => {
         if(req.user?.aud === serviceAudience 
             ^ (post.author === req.user?.uuid || isAdminUser(req.user?.name)))
@@ -33,70 +85,22 @@ app.get('/deletePost', jwt.ensureLoggedIn, async (req , res)=>{
     }).then(doc=>{
         res.json({uuid:doc.uuid, parent: doc.parent, text:doc.text, course: doc.course, author: doc.author, reported: doc.reported, approved: doc.approved, time: doc.time, attachmentURL: doc.attachmentURL});
     }).catch(e => { 
-        console.error(e);
         res.status(404).json({ message: 'post not found',e})
     });
 
 });
 
-app.get('/createPost', jwt.ensureLoggedIn, (req, res)=>{
-    if(req.user) createPost(req.query.text, req.query.author, req.query.course, req.query.attachmentURL, req.query.parent)
-    .then(doc =>{
-        res.json({uuid: doc.uuid, parent: doc.parent, text: doc.text, course: doc.course, author: doc.author, reported: doc.reported, approved: doc.approved, time: doc.time, attachmentURL: doc.attachmentURL})
-    })
-    .catch(e => {
-        res.status(403).json({ message: 'Operation not allowed.',e});
-    });
-});
-
 app.get('/editPost', jwt.ensureLoggedIn, (req, res)=>{
-    getPostByID(req.query.id)
+    getPostByID(req.query.id)   // getPostByID used to get author ID for validating the request
     .then(post => {
-        if(req.user?.aud === serviceAudience ^ post.author === req.user?.uuid)
+        if(req.user?.aud === serviceAudience 
+            ^ (post.author === req.user?.uuid || isAdminUser(req.user?.name)))
             return editPost(req.query.id, req.query.text);
         else throw 'not authorized';
     }).then(doc=>{
         res.json({uuid:doc.uuid, parent: doc.parent, text:doc.text, course: doc.course, author: doc.author, reported: doc.reported, approved: doc.approved, time: doc.time, attachmentURL: doc.attachmentURL});
     }).catch(e => { 
-        console.error(e);
         res.status(404).json({ message: 'Post not found.',e})
-    });
-});
-
-app.get('/searchPosts', jwt.ensureLoggedIn, (req, res)=>{
-    let posts = [];
-    //currently returns the array of objects obtained from searchPosts functions
-    if(req.user) searchPosts(req.query.q, req.query.offsetID)
-    .then(docs=> {
-        docs.forEach(doc => posts.push(doc));
-        res.json({posts});
-    })
-    .catch(e => {
-        res.status(404).json({ message: 'No post found.', e });
-    });
-});
-
-app.get('/getPostsByAuthor', jwt.ensureLoggedIn, (req, res)=>{
-    let posts = [];
-    if(req.user) getPostsByAuthor(req.query.author)
-    .then(docs => {
-        docs.forEach(doc => posts.push(doc));
-        res.json({posts});
-    })
-    .catch(e => {
-        res.status(404).json({ message: 'No post found.', e});
-    });
-});
-
-app.get('/getPostsByCourse', jwt.ensureLoggedIn, (req, res)=>{
-    let posts = [];
-    if(req.user) getPostsByCourse(req.query.id)
-    .then(docs => {
-        docs.forEach(doc => posts.push(doc));
-        res.json({posts});
-    })
-    .catch(e => {
-        res.status(404).json({ message: 'No post found.', e});
     });
 });
 
