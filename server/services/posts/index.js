@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const {getPostByID, deletePost, createPost, editPost, searchPosts, getPostsByAuthor, getPostsByCourse} = require('./functions');
+const {getPostById, deletePost, createPost, editPost, searchPosts, getPostsByAuthor, getPostsByCourse} = require('./functions');
 const jwt = require('../jwt');
 const { postPort, serviceAudience }=require('../../config');
 
@@ -18,10 +18,10 @@ app.get('/searchPosts', jwt.ensureLoggedIn, (req, res)=>{
     //currently returns the array of objects obtained from searchPosts functions
     if(req.user) searchPosts(req.query.q, req.query.offsetID)
     .then(docs=> {
-        let posts = []; // not necessary, can use docs.map...
+        let posts = // not necessary, can use docs.map...
         docs.map(doc => ({uuid: doc.uuid, parent: doc.parent, text: doc.text, course: doc.course, author: doc.author, reported: doc.reported, approved: doc.approved, time: doc.time, attachmentURL: doc.attachmentURL}))
         //docs.forEach(doc => posts.push(doc));
-        res.json({posts});  // TODO: graphql expects array of objects... Response has object wrapping array
+        res.json(posts);  // TODO: graphql expects array of objects... Response has object wrapping array
     })
     .catch(e => {
         res.status(404).json({ message: 'No post found.', e });
@@ -31,10 +31,10 @@ app.get('/searchPosts', jwt.ensureLoggedIn, (req, res)=>{
 app.get('/getPostsByAuthor', jwt.ensureLoggedIn, (req, res)=>{
     if(req.user) getPostsByAuthor(req.query.id)
     .then(docs => {
-        let posts = []; // not necessary, can use docs.map...
+        let posts = // not necessary, can use docs.map...
         docs.map(doc => ({uuid: doc.uuid, parent: doc.parent, text: doc.text, course: doc.course, author: doc.author, reported: doc.reported, approved: doc.approved, time: doc.time, attachmentURL: doc.attachmentURL}))
         //docs.forEach(doc => posts.push(doc));
-        res.json({posts});  // TODO: graphql expects array of objects... Response has object wrapping array
+        res.json(posts);  // TODO: graphql expects array of objects... Response has object wrapping array
     })
     .catch(e => {
         res.status(404).json({ message: 'No post found.', e});
@@ -44,10 +44,10 @@ app.get('/getPostsByAuthor', jwt.ensureLoggedIn, (req, res)=>{
 app.get('/getPostsByCourse', jwt.ensureLoggedIn, (req, res)=> {
     if(req.user) getPostsByCourse(req.query.id)
     .then(docs => {
-        let posts = []; // not necessary, can use docs.map...
+        let posts = // not necessary, can use docs.map...
         docs.map(doc => ({uuid: doc.uuid, parent: doc.parent, text: doc.text, course: doc.course, author: doc.author, reported: doc.reported, approved: doc.approved, time: doc.time, attachmentURL: doc.attachmentURL}))
         //docs.forEach(doc => posts.push(doc));
-        res.json({posts});  // TODO: graphql expects array
+        res.json(posts);  // TODO: graphql expects array
     })
     .catch(e => {
         res.status(404).json({ message: 'No post found.', e});
@@ -76,7 +76,7 @@ app.get('/createPost', jwt.ensureLoggedIn, (req, res)=>{
 });
 
 app.get('/deletePost', jwt.ensureLoggedIn, async (req , res)=>{
-    getPostByID(req.query.id)   // getPostByID used to get author ID for validating the request
+    getPostById(req.query.id)   // getPostByID used to get author ID for validating the request
     .then(post => {
         if(req.user?.aud === serviceAudience 
             ^ (post.author === req.user?.uuid || isAdminUser(req.user?.name)))
@@ -91,7 +91,7 @@ app.get('/deletePost', jwt.ensureLoggedIn, async (req , res)=>{
 });
 
 app.get('/editPost', jwt.ensureLoggedIn, (req, res)=>{
-    getPostByID(req.query.id)   // getPostByID used to get author ID for validating the request
+    getPostById(req.query.id)   // getPostByID used to get author ID for validating the request
     .then(post => {
         if(req.user?.aud === serviceAudience 
             ^ (post.author === req.user?.uuid || isAdminUser(req.user?.name)))
