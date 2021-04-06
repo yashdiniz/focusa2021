@@ -9,6 +9,7 @@ const { assert } = require('./databases');
 const sign = (payload) => {
     return jwt.sign(payload, JWTsecret.private, {
         ...JWTsignOptions,
+        subject: payload.name,  // setting the subject based on payload name
     });
 };
 
@@ -20,6 +21,7 @@ const sign = (payload) => {
     return jwt.sign(payload, JWTsecret.private, {
         ...JWTsignOptions,
         audience: serviceAudience,
+        subject: payload.name,  // setting the subject based on payload name
     });
 };
 
