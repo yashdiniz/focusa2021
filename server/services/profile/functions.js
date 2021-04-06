@@ -123,6 +123,22 @@ const removeInterest = async () => {
     // TODO
 }
 
+const profileHasInterest = async () => {
+    // TODO
+}
+
+const getInterestsOfProfile = async (userID) => {
+    return await getProfile(userID)
+    .then(doc => {
+        if(doc) return doc.interests;
+        else throw profileNonExistant;
+    });
+}
+
+const getProfilesWithInterest = async () => {
+    // TODO
+}
+
 module.exports = {
     getProfile, updateProfile, deleteProfile,
 }
