@@ -4,6 +4,16 @@ const {getPostByID, deletePost, createPost, editPost, searchPosts, getPostsByAut
 const jwt = require('../jwt');
 const { postPort, serviceAudience }=require('../../config');
 
+const isAdminUser = async (user) => {
+    var admin = await auth.get('/userHasRole', {
+        params: { user, role: 'admin' },
+        headers: { authorization: token },
+    })
+    .then(res => res.data)
+    .catch(e => undefined);
+    return typeof admin !== 'undefined';
+}
+
 app.get('/getPostById', jwt.ensureLoggedIn, (req , res)=>{
     if(req.user) getPostById(req.query.id)
     .then(doc=>{
@@ -20,9 +30,10 @@ app.get('/deletePost', jwt.ensureLoggedIn, async (req , res)=>{
     // post_author_id = getPostByID(req.query.id).then(res=>{res.})
     getPostByID(req.query.id)
     .then(post => {
-        if(req.user?.aud === serviceAudience ^ post.author === req.user?.uuid)
+        if(req.user?.aud === serviceAudience 
+            ^ (post.author === req.user?.uuid || isAdminUser(req.user?.name)))
             return deletePost(req.query.id)
-        else throw 'not authorised';
+        else throw 'not authorized';
     }).then(doc=>{
         res.json({uuid:doc.uuid, parent: doc.parent, text:doc.text, course: doc.course, author: doc.author, reported: doc.reported, approved: doc.approved, time: doc.time, attachmentURL: doc.attachmentURL});
     }).catch(e => { 
@@ -38,36 +49,59 @@ app.get('/createPost', jwt.ensureLoggedIn, (req, res)=>{
         res.json({uuid: doc.uuid, parent: doc.parent, text: doc.text, course: doc.course, author: doc.author, reported: doc.reported, approved: doc.approved, time: doc.time, attachmentURL: doc.attachmentURL})
     })
     .catch(e => {
-        res.status(403).json({ message: 'Operation not allowed.'});
-    })
+        res.status(403).json({ message: 'Operation not allowed.',e});
+    });
 });
 
 app.get('/editPost', jwt.ensureLoggedIn, (req, res)=>{
-    let authorid = null;
-    
-    if(req.user) getPostByID(req.query.id)
-    .then(doc=>{authorid=doc.author;});
-
-    if(req.user?.aud === serviceAudience ^ authorid === req.user?.id)
-    editPost(req.query.id, req.query.text)
-    .then(doc=>{
+    getPostByID(req.query.id)
+    .then(post => {
+        if(req.user?.aud === serviceAudience ^ post.author === req.user?.uuid)
+            return editPost(req.query.id, req.query.text);
+        else throw 'not authorized';
+    }).then(doc=>{
         res.json({uuid:doc.uuid, parent: doc.parent, text:doc.text, course: doc.course, author: doc.author, reported: doc.reported, approved: doc.approved, time: doc.time, attachmentURL: doc.attachmentURL});
-    }).catch(e => {
-        res.status(404).json({ message: 'post not found',e});
+    }).catch(e => { 
+        console.error(e);
+        res.status(404).json({ message: 'Post not found.',e})
     });
-    //add catch or else if operation not allowed!
 });
 
-app.get('/searchPost', jwt.ensureLoggedIn, (req, res)=>{
-
+app.get('/searchPosts', jwt.ensureLoggedIn, (req, res)=>{
+    let posts = [];
+    //currently returns the array of objects obtained from searchPosts functions
+    if(req.user) searchPosts(req.query.q, req.query.offsetID)
+    .then(docs=> {
+        docs.forEach(doc => posts.push(doc));
+        res.json({posts});
+    })
+    .catch(e => {
+        res.status(404).json({ message: 'No post found.', e });
+    });
 });
 
 app.get('/getPostsByAuthor', jwt.ensureLoggedIn, (req, res)=>{
-
+    let posts = [];
+    if(req.user) getPostsByAuthor(req.query.author)
+    .then(docs => {
+        docs.forEach(doc => posts.push(doc));
+        res.json({posts});
+    })
+    .catch(e => {
+        res.status(404).json({ message: 'No post found.', e});
+    });
 });
 
 app.get('/getPostsByCourse', jwt.ensureLoggedIn, (req, res)=>{
-
+    let posts = [];
+    if(req.user) getPostsByCourse(req.query.id)
+    .then(docs => {
+        docs.forEach(doc => posts.push(doc));
+        res.json({posts});
+    })
+    .catch(e => {
+        res.status(404).json({ message: 'No post found.', e});
+    });
 });
 
 app.listen(postPort, () => {

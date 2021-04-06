@@ -115,7 +115,7 @@ const editPost = async (uuid, text) => {
  * @param {string} query Query string to search posts. Empty for all posts.
  * @returns top 10 posts 
  */
-const searchPosts = async (query, offsetID) => {
+const searchPosts = async (q, offsetID) => {
     // for now implement only implement empty query
     // add limit to only view top 10 (store as var in config) posts...
     let f = await focusa;
