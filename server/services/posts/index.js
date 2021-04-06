@@ -24,10 +24,6 @@ app.get('/getPostById', jwt.ensureLoggedIn, (req , res)=>{
 });
 
 app.get('/deletePost', jwt.ensureLoggedIn, async (req , res)=>{
-    //get the author id of the post
-    //get the user id
-    //match if both are same or is an admin => then allow and delete the post
-    // post_author_id = getPostByID(req.query.id).then(res=>{res.})
     getPostByID(req.query.id)
     .then(post => {
         if(req.user?.aud === serviceAudience 
