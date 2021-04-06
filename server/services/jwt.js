@@ -7,6 +7,10 @@ const { assert } = require('./databases');
  * @param {object} payload The other session information stored in payload.
  */
 const sign = (payload) => {
+    // TODO: payload.name and subject are the same value.
+    // Reduce the overall token size by removing the 'redundancy'.
+    // Keep subject only. Also, make changes to verify so that 
+    // payload.name = subject (since modules directly access payload.name)
     return jwt.sign(payload, JWTsecret.private, {
         ...JWTsignOptions,
         subject: payload.name,  // setting the subject based on payload name
