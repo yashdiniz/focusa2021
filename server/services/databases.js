@@ -235,18 +235,13 @@ const profileSchema = {
             uniqueItems: true,
             type: 'array',
             items: {
-                type: 'object',
-                properties: {
-                    course: {
-                        type: 'string',
-                        ref: 'courses',
-                    }
-                }
+                type: 'string',
+                ref: 'courses',
             }
         },
     },
     required: ['fullName', 'about', 'display_pic'],
-    indexes: ['interests.[].course'],   // find out who is subscribed
+    indexes: ['interests.[]'],   // find out who is subscribed
 };
 const user_rolesSchema = {
     name: 'user_roles',
