@@ -41,13 +41,19 @@ app.get('/getCoursesByName', jwt.ensureLoggedIn, (req, res) => {
         })
 });
 
+const isAdminUser = async (user) => {
+    var admin = await auth.get('/userHasRole', {
+        params: { user, role: 'admin' },
+        headers: { authorization: token },
+    })
+    .then(res => res.data)
+    .catch(e => undefined);
+    return typeof admin !== 'undefined';
+}
 
 app.get('/addCourse', jwt.ensureLoggedIn, async (req, res) => {
     if (req.user?.aud === serviceAudience
-        ^ typeof await auth.get('/userHasRole', {
-            params: { user: req.user?.name, role: 'admin' },
-            headers: { authorization: token },
-        }).then(r => r.data).catch(e => undefined) !== 'undefined') {
+        ^ isAdminUser(req.user?.name)) {
         addCourse(req.query.name, req.query.description)
             .then(doc => {
                 res.json({ name: doc.name, uuid: doc.uuid, description: doc.description, mods: doc.mods });
@@ -59,10 +65,7 @@ app.get('/addCourse', jwt.ensureLoggedIn, async (req, res) => {
 
 app.get('/updateCourse', jwt.ensureLoggedIn, async (req, res) => {
     if (req.user?.aud === serviceAudience
-        ^ typeof await auth.get('/userHasRole', {
-            params: { user: req.user?.name, role: 'admin' },
-            headers: { authorization: token },
-        }).then(r => r.data).catch(e => undefined) !== 'undefined') {
+        ^ isAdminUser(req.user?.name)) {
             updateCourse(req.query.id, req.query.name, req.query.description)
             .then(doc => {
                 res.json({ name: doc.name, uuid: doc.uuid, description: doc.description, mods: doc.mods });
@@ -76,10 +79,7 @@ app.get('/updateCourse', jwt.ensureLoggedIn, async (req, res) => {
 
 app.get('/deleteCourse', jwt.ensureLoggedIn, async (req, res) => {
     if (req.user?.aud === serviceAudience
-        ^ typeof await auth.get('/userHasRole', {
-            params: { user: req.user?.name, role: 'admin' },
-            headers: { authorization: token },
-        }).then(r => r.data).catch(e => undefined) !== 'undefined') {
+        ^ isAdminUser(req.user?.name)) {
             deleteCourse(req.query.id)
             .then(doc => {
                 res.json({ name: doc.name, uuid: doc.uuid, description: doc.description, mods: doc.mods });
