@@ -53,7 +53,7 @@ const isAdminUser = async (user) => {
 
 app.get('/addCourse', jwt.ensureLoggedIn, async (req, res) => {
     if (req.user?.aud === serviceAudience
-        ^ isAdminUser(req.user?.name)) {
+        ^ await isAdminUser(req.user?.name)) {
         addCourse(req.query.name, req.query.description)
             .then(doc => {
                 res.json({ name: doc.name, uuid: doc.uuid, description: doc.description, mods: doc.mods });
@@ -65,7 +65,7 @@ app.get('/addCourse', jwt.ensureLoggedIn, async (req, res) => {
 
 app.get('/updateCourse', jwt.ensureLoggedIn, async (req, res) => {
     if (req.user?.aud === serviceAudience
-        ^ isAdminUser(req.user?.name)) {
+        ^ await isAdminUser(req.user?.name)) {
             updateCourse(req.query.id, req.query.name, req.query.description)
             .then(doc => {
                 res.json({ name: doc.name, uuid: doc.uuid, description: doc.description, mods: doc.mods });
@@ -79,7 +79,7 @@ app.get('/updateCourse', jwt.ensureLoggedIn, async (req, res) => {
 
 app.get('/deleteCourse', jwt.ensureLoggedIn, async (req, res) => {
     if (req.user?.aud === serviceAudience
-        ^ isAdminUser(req.user?.name)) {
+        ^ await isAdminUser(req.user?.name)) {
             deleteCourse(req.query.id)
             .then(doc => {
                 res.json({ name: doc.name, uuid: doc.uuid, description: doc.description, mods: doc.mods });
