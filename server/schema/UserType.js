@@ -9,9 +9,10 @@ const {
     GraphQLString,
     GraphQLList,
     GraphQLNonNull,
+    GraphQLInt,
 } = require('graphql');
 const { create } = require('axios');
-const { authRealm, profileRealm } = require('../config');
+const { authRealm, profileRealm, postRealm } = require('../config');
 
 const auth = create({
     baseURL: `${authRealm}`,
@@ -19,6 +20,10 @@ const auth = create({
 });
 const profile = create({
     baseURL: `${profileRealm}`,
+    timeout: 5000,
+});
+const post = create({
+    baseURL: `${postRealm}`,
     timeout: 5000,
 });
 
@@ -48,8 +53,14 @@ const UserType = new GraphQLObjectType({
         posts: {
             type: GraphQLNonNull(GraphQLList(PostType)),
             description: "Posts written by this Person.",
-            resolve(parent, args, ctx, info) {
-                // currently stub, return null
+            args: {
+                offset: { type: GraphQLInt },
+            },
+            async resolve({ uuid }, { offset }, ctx, info) {
+                return await post.get('/getPostsByAuthor', {
+                    params: { id: uuid, offset },
+                    headers: { authorization: ctx.headers.authorization, realip: ctx.ip }
+                }).then(res => res.data);
             }
         },
         roles: {

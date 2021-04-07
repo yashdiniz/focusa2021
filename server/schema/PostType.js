@@ -9,7 +9,19 @@ const {
     GraphQLBoolean,
     GraphQLList,
     GraphQLNonNull,
+    GraphQLInt,
 } = require('graphql');
+const { authRealm, postRealm } = require('../config');
+
+const {create} = require('axios');
+const auth = create({
+    baseURL: `${authRealm}`,
+    timeout: 5000,
+});
+const post = create({
+    baseURL: `${postRealm}`,
+    timeout: 5000,
+});
 
 const PostType = new GraphQLObjectType({
     name: 'Post',
@@ -17,7 +29,7 @@ const PostType = new GraphQLObjectType({
     fields: () => {
         const { UserType, CourseType } = require('./types');
         return {
-        id: {
+        uuid: {
             type: GraphQLNonNull(GraphQLID),
         },
         time: {
@@ -31,18 +43,21 @@ const PostType = new GraphQLObjectType({
         author: {
             type: GraphQLNonNull(UserType),
             description: "The Post author details.",
-            async resolve({ uuid }, args, ctx, info) {
+            async resolve({ author }, args, ctx, info) {
                 return await auth.get('/getUserById', {
-                    params: { id: uuid },
+                    params: { id: author },
                     headers: { authorization: ctx.headers.authorization, realip: ctx.ip }
                 }).then(res => res.data);
             }
         },
         parent: {
             type: PostType,
-            description: "ID of the parent post. Null by default. No edits allowed.",
-            resolve(parent, args, ctx, info) {
-                // currently stub, return null
+            description: "The parent post. Null by default. No edits allowed.",
+            async resolve({ parent }, args, ctx, info) {
+                return await post.get('/getPostById', {
+                    params: { id: parent },
+                    headers: { authorization: ctx.headers.authorization, realip: ctx.ip }
+                }).then(res => res.data);
             }
         },
         attachmentURL: {
@@ -59,8 +74,14 @@ const PostType = new GraphQLObjectType({
         comments: {
             type: GraphQLNonNull(GraphQLList(PostType)),
             description: "A list containing all comments made under the Post.",
-            resolve(parent, args, ctx, info) {
-                // currently stub, return null
+            args: {
+                offset: { type: GraphQLInt},
+            },
+            async resolve({ uuid }, { offset }, ctx, info) {
+                return await post.get('/getPostsByParent', {
+                    params: { id: uuid, offset },
+                    headers: { authorization: ctx.headers.authorization, realip: ctx.ip }
+                }).then(res => res.data);
             }
         },
         reported: {
