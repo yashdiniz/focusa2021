@@ -24,24 +24,24 @@ const ProfileType = new GraphQLObjectType({
     fields: () => {
         const { CourseType, UserType } = require('./types');
         return {
-        id: {
+        userID: {
             type: GraphQLNonNull(GraphQLID),
         },
         user: {
             type: GraphQLNonNull(UserType),
             description: "User that maps to this profile.",
-            async resolve({ uuid }, args, ctx) {
+            async resolve({ userID }, args, ctx) {
                 return await auth.get('/getUserById', {
-                    params: { id: uuid },
+                    params: { id: userID },
                     headers: { authorization: ctx.headers.authorization }
-                });
+                }).then(res => res.data);
             }
         },
-        displayName: {
+        fullName: {
             type: GraphQLNonNull(GraphQLString),
             description: "The full name of the profile.",
         },
-        displayPicture: {
+        display_pic: {
             type: GraphQLNonNull(GraphQLString),
             description: "URL to the display picture of the profile.",
         },

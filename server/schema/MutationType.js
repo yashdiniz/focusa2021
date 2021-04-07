@@ -3,13 +3,17 @@
  * It contains fields which we can use for traversing through the graph
  * and performing write, update and delete operations.
  */
-const { GraphQLObjectType, GraphQLString, GraphQLNonNull } = require('graphql');
-const { RoleType, UserType } = require('./types');
+const { GraphQLObjectType, GraphQLString, GraphQLNonNull, GraphQLID } = require('graphql');
+const { RoleType, UserType, ProfileType } = require('./types');
 const { create } = require('axios');
-const { authRealm } = require('../config');
+const { authRealm, profilePort, profileRealm } = require('../config');
 
 const auth = create({
     baseURL: `${authRealm}`,
+    timeout: 5000,
+});
+const profile = create({
+    baseURL: `${profileRealm}`,
     timeout: 5000,
 });
 
@@ -98,6 +102,35 @@ const MutationType = new GraphQLObjectType({
                 }).then(res => res.data.role);
             }
         },
+        updateProfile: {
+            type: ProfileType,
+            description: "Updates the Profile according to arguments.",
+            args: {
+                id: { type: GraphQLNonNull(GraphQLID) },
+                fullName: { type: GraphQLNonNull(GraphQLString) },
+                about: { type: GraphQLNonNull(GraphQLString) },
+                display_pic: { type: GraphQLNonNull(GraphQLString) },
+            },
+            async resolve(_, { id, fullName, about, display_pic }, ctx) {
+                return await profile.get('/updateProfile', {
+                    params: { id, fullName, about, display_pic, },
+                    headers: { authorization: ctx.headers.authorization },
+                }).then(res => res.data);
+            }
+        },
+        deleteProfile: {
+            type: ProfileType,
+            description: "Deletes the Profile according to the ID.",
+            args: {
+                id: { type: GraphQLNonNull(GraphQLID) },
+            },
+            async resolve(_, { id }, ctx) {
+                return await profile.get('/deleteProfile', {
+                    params: { id },
+                    headers: { authorization: ctx.headers.authorization },
+                }).then(res => res.data);
+            }
+        }
         // publishPost(input MakePost)
         // adding mutations will be subject to frontend requirements for now.
     }
