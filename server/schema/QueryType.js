@@ -7,10 +7,11 @@ const {
     GraphQLObjectType, 
     GraphQLString, 
     GraphQLNonNull, 
+    GraphQLList,
     GraphQLID 
 } = require('graphql');
 const { create } = require('axios');
-const { authRealm, profileRealm } = require('../config');
+const { authRealm, profileRealm, postRealm } = require('../config');
 
 const auth = create({
     baseURL: `${authRealm}`,
@@ -20,7 +21,11 @@ const profile = create({
     baseURL: `${profileRealm}`,
     timeout: 5000,
 });
-const { RoleType, UserType, ProfileType } = require('./types');
+const post = create({
+    baseURL: `${postRealm}`,
+    timeout: 5000,
+});
+const { RoleType, UserType, ProfileType, PostType } = require('./types');
 
 const QueryType = new GraphQLObjectType({
     name: 'Query',
@@ -83,13 +88,34 @@ const QueryType = new GraphQLObjectType({
             async resolve(_, { id }, ctx) {
                 return await profile.get('/getProfile', {
                     params: { id },
-                    headers: { authorization: ctx.headers.authorization }
+                    headers: { authorization: ctx.headers.authorization, realip: ctx.ip }
                 }).then(res => res.data);
             }
         },
+        post: {
+            type: GraphQLList(PostType),
+            description: "TODO",
+            args: {
+                id: { type: GraphQLID },
+                q: { type: GraphQLString },
+                offset: { type: GraphQLID }
+            },
+            async resolve(_, { id, q, offset }, ctx) {
+                if(id)
+                    return [await post.get('/getPostById', {
+                        params: { id },
+                        headers: { authorization: ctx.headers.authorization, realip: ctx.ip }
+                    }).then(res => res.data)];
+                else if(q) {
+                    return await post.get('/searchPosts', {
+                        params: { q, offset },
+                        headers: { authorization: ctx.headers.authorization, realip: ctx.ip }
+                    }).then(res => res.data);
+                }
+            }
+        }
         // getCourse(ID)
         // searchCourses(string search query)
-        // getPost(ID)
         // searchPosts(string search query)
     }}
 })

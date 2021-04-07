@@ -39,7 +39,6 @@ app.get('/getPostsByAuthor', jwt.ensureLoggedIn, (req, res)=>{
         res.json(posts);
     })
     .catch(e => {
-        console.log(e);
         res.status(404).json({ message: 'No post found.', e});
     });
 });

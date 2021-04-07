@@ -32,7 +32,7 @@ const ProfileType = new GraphQLObjectType({
             description: "User that maps to this profile.",
             async resolve({ userID }, args, ctx) {
                 return await auth.get('/getUserById', {
-                    params: { id: uuid },
+                    params: { id: userID },
                     headers: { authorization: ctx.headers.authorization, realip: ctx.ip }
                 }).then(res => res.data);
             }
