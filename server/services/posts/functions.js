@@ -111,19 +111,17 @@ const editPost = async (uuid, text) => {
 
 /**
  * Searches for posts with a matching query in text body.
- * @param {string} offsetID ID to skip to, and continue searching from.
+ * @param {string} offset ID to skip to, and continue searching from.
  * @param {string} query Query string to search posts. Empty for all posts.
  * @returns top 10 posts 
  */
-const searchPosts = async (offsetID, query) => {
-    assert(typeof offsetID === 'string', "Invalid arguments for searchPosts.");
-
+const searchPosts = async (query, offset) => {
     // TODO: for now implement only implement empty query
     // add limit to only view top 10 (store as var in config) posts...
     // TODO: Also, will implement tf-idf search soon.
     let f = await focusa;
 
-    return await f.posts.find().skip(offsetID).limit(postsLimit).exec()
+    return await f.posts.find().skip(offset).limit(postsLimit).exec()
     .then(async docs => {
         if(docs) return docs;
         else throw noPostsFound;
@@ -134,11 +132,11 @@ const searchPosts = async (offsetID, query) => {
  * @param {string} authorID author ID
  * @returns all the posts made by the author
  */
-const getPostsByAuthor = async (authorID) => {
+const getPostsByAuthor = async (authorID, offset) => {
     assert(typeof authorID === 'string', "Invalid arguments for getPostsByAuthor.");
     let f = await focusa;
 
-    return await f.posts.find().where('author').eq(authorID).exec()
+    return await f.posts.find().where('author').eq(authorID).skip(offset).limit(postsLimit).exec()
     .then(async docs => {
         if(docs) return docs;
         else throw noSuchAuthor;
@@ -150,14 +148,29 @@ const getPostsByAuthor = async (authorID) => {
  * @param {string} courseID the course ID.
  * @returns all the posts under a particular course
  */
-const getPostsByCourse = async (courseID) => {
+const getPostsByCourse = async (courseID, offset) => {
     assert(typeof courseID === 'string', "Invalid arguments for getPostsByCourse.");
     let f = await focusa;
-    return await f.posts.find().where('course').eq(courseID).exec()
+    return await f.posts.find().where('course').eq(courseID).skip(offset).limit(postsLimit).exec()
     .then(async docs => {
         if(docs) return docs;
         else throw noSuchCourse;
     });
 }
 
-module.exports = {getPostById, deletePost, createPost, editPost, searchPosts, getPostsByAuthor, getPostsByCourse};
+/**
+ * Gets posts which are comments to a particular parent post.
+ * @param {string} parentID The ID of the parent post.
+ * @returns All the posts with a matching parent ID.
+ */
+const getPostsByParent = async (parentID, offset) => {
+    assert(typeof parentID === 'string', "Invalid arguments for getPostsByParent.");
+    let f = await focusa;
+    return await f.posts.find().where('parent').eq(parentID).skip(offset).limit(postsLimit).exec()
+    .then(async docs => {
+        if(docs) return docs;
+        else throw noSuchPost;
+    });
+}
+
+module.exports = {getPostById, deletePost, createPost, editPost, searchPosts, getPostsByAuthor, getPostsByCourse, getPostsByParent };

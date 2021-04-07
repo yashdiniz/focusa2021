@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const {getPostById, deletePost, createPost, editPost, searchPosts, getPostsByAuthor, getPostsByCourse} = require('./functions');
+const {getPostById, deletePost, createPost, editPost, searchPosts, getPostsByAuthor, getPostsByCourse, getPostsByParent} = require('./functions');
 const jwt = require('../jwt');
 const { postPort, serviceAudience, authRealm, serviceAuthPass, JWTsignOptions }=require('../../config');
 
@@ -22,7 +22,7 @@ headers: {authorization:`Basic ${loginDetails}`}
 
 app.get('/searchPosts', jwt.ensureLoggedIn, (req, res)=>{
     //currently returns the array of objects obtained from searchPosts functions
-    if(req.user) searchPosts(req.query.q, req.query.offsetID)
+    if(req.user) searchPosts(req.query.q, req.query.offset)
     .then(docs=> {
         let posts = docs.map(doc => ({uuid: doc.uuid, parent: doc.parent, text: doc.text, course: doc.course, author: doc.author, reported: doc.reported, approved: doc.approved, time: doc.time, attachmentURL: doc.attachmentURL}));
         res.json(posts);
@@ -33,7 +33,19 @@ app.get('/searchPosts', jwt.ensureLoggedIn, (req, res)=>{
 });
 
 app.get('/getPostsByAuthor', jwt.ensureLoggedIn, (req, res)=>{
-    if(req.user) getPostsByAuthor(req.query.id)
+    if(req.user) getPostsByAuthor(req.query.id, req.query.offset)
+    .then(docs => {
+        let posts = docs.map(doc => ({uuid: doc.uuid, parent: doc.parent, text: doc.text, course: doc.course, author: doc.author, reported: doc.reported, approved: doc.approved, time: doc.time, attachmentURL: doc.attachmentURL}));
+        res.json(posts);
+    })
+    .catch(e => {
+        console.log(e);
+        res.status(404).json({ message: 'No post found.', e});
+    });
+});
+
+app.get('/getPostsByCourse', jwt.ensureLoggedIn, (req, res)=> {
+    if(req.user) getPostsByCourse(req.query.id, req.query.offset)
     .then(docs => {
         let posts = docs.map(doc => ({uuid: doc.uuid, parent: doc.parent, text: doc.text, course: doc.course, author: doc.author, reported: doc.reported, approved: doc.approved, time: doc.time, attachmentURL: doc.attachmentURL}));
         res.json(posts);
@@ -43,8 +55,8 @@ app.get('/getPostsByAuthor', jwt.ensureLoggedIn, (req, res)=>{
     });
 });
 
-app.get('/getPostsByCourse', jwt.ensureLoggedIn, (req, res)=> {
-    if(req.user) getPostsByCourse(req.query.id)
+app.get('/getPostsByParent', jwt.ensureLoggedIn, (req, res) => {
+    if(req.user) getPostsByParent(req.query.id, req.query.offset)
     .then(docs => {
         let posts = docs.map(doc => ({uuid: doc.uuid, parent: doc.parent, text: doc.text, course: doc.course, author: doc.author, reported: doc.reported, approved: doc.approved, time: doc.time, attachmentURL: doc.attachmentURL}));
         res.json(posts);
@@ -52,7 +64,7 @@ app.get('/getPostsByCourse', jwt.ensureLoggedIn, (req, res)=> {
     .catch(e => {
         res.status(404).json({ message: 'No post found.', e});
     });
-});
+})
 
 app.get('/getPostById', jwt.ensureLoggedIn, (req , res)=>{
     if(req.user) getPostById(req.query.id)
