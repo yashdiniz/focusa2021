@@ -16,7 +16,8 @@ const profilePort = port + 3;
 const profileRealm = "http://localhost:" + profilePort;
 const webrtcPort = 5000;
 const graphiql = !production;  // essentially, run graphiql at graphql endpoint
-const postPort = port + 3;
+const postPort = port + 4;
+const postRealm = "http://localhost:" + postPort;
 // the dev secret which will be used for most crypto operations.
 const secret = process.env['SECRET'] || 'FOCUSA secret';
 
@@ -72,7 +73,7 @@ const postsLimit = 10,
 
 module.exports = { 
     port, authPort, authRealm, serviceAuthPass, webrtcPort, profilePort, profileRealm,
-    projectRoot, graphiql, secret, realm, remote, 
+    projectRoot, graphiql, secret, realm, remote, postRealm,
     JWTsignOptions, JWTverifyOptions, JWTsecret, rolePattern, serviceAudience,
     pbkdfIters, pbkdfDigest, pbkdfLen, UUIDSize, currentPasswordScheme,
     minPasswordLength, usernamePattern, maxModRolesforCourse, maxNameLength,
