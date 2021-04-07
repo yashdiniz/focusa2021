@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const {getPostById, deletePost, createPost, editPost, searchPosts, getPostsByAuthor, getPostsByCourse} = require('./functions');
 const jwt = require('../jwt');
-const { postPort, serviceAudience }=require('../../config');
+const { postPort, serviceAudience, authRealm, serviceAuthPass, JWTsignOptions }=require('../../config');
 
 const {create} = require('axios');
 let token = '';
@@ -24,10 +24,8 @@ app.get('/searchPosts', jwt.ensureLoggedIn, (req, res)=>{
     //currently returns the array of objects obtained from searchPosts functions
     if(req.user) searchPosts(req.query.q, req.query.offsetID)
     .then(docs=> {
-        let posts = // not necessary, can use docs.map...
-        docs.map(doc => ({uuid: doc.uuid, parent: doc.parent, text: doc.text, course: doc.course, author: doc.author, reported: doc.reported, approved: doc.approved, time: doc.time, attachmentURL: doc.attachmentURL}))
-        //docs.forEach(doc => posts.push(doc));
-        res.json(posts);  // TODO: graphql expects array of objects... Response has object wrapping array
+        let posts = docs.map(doc => ({uuid: doc.uuid, parent: doc.parent, text: doc.text, course: doc.course, author: doc.author, reported: doc.reported, approved: doc.approved, time: doc.time, attachmentURL: doc.attachmentURL}));
+        res.json(posts);
     })
     .catch(e => {
         res.status(404).json({ message: 'No post found.', e });
@@ -37,10 +35,8 @@ app.get('/searchPosts', jwt.ensureLoggedIn, (req, res)=>{
 app.get('/getPostsByAuthor', jwt.ensureLoggedIn, (req, res)=>{
     if(req.user) getPostsByAuthor(req.query.id)
     .then(docs => {
-        let posts = // not necessary, can use docs.map...
-        docs.map(doc => ({uuid: doc.uuid, parent: doc.parent, text: doc.text, course: doc.course, author: doc.author, reported: doc.reported, approved: doc.approved, time: doc.time, attachmentURL: doc.attachmentURL}))
-        //docs.forEach(doc => posts.push(doc));
-        res.json(posts);  // TODO: graphql expects array of objects... Response has object wrapping array
+        let posts = docs.map(doc => ({uuid: doc.uuid, parent: doc.parent, text: doc.text, course: doc.course, author: doc.author, reported: doc.reported, approved: doc.approved, time: doc.time, attachmentURL: doc.attachmentURL}));
+        res.json(posts);
     })
     .catch(e => {
         res.status(404).json({ message: 'No post found.', e});
@@ -50,10 +46,8 @@ app.get('/getPostsByAuthor', jwt.ensureLoggedIn, (req, res)=>{
 app.get('/getPostsByCourse', jwt.ensureLoggedIn, (req, res)=> {
     if(req.user) getPostsByCourse(req.query.id)
     .then(docs => {
-        let posts = // not necessary, can use docs.map...
-        docs.map(doc => ({uuid: doc.uuid, parent: doc.parent, text: doc.text, course: doc.course, author: doc.author, reported: doc.reported, approved: doc.approved, time: doc.time, attachmentURL: doc.attachmentURL}))
-        //docs.forEach(doc => posts.push(doc));
-        res.json(posts);  // TODO: graphql expects array
+        let posts = docs.map(doc => ({uuid: doc.uuid, parent: doc.parent, text: doc.text, course: doc.course, author: doc.author, reported: doc.reported, approved: doc.approved, time: doc.time, attachmentURL: doc.attachmentURL}));
+        res.json(posts);
     })
     .catch(e => {
         res.status(404).json({ message: 'No post found.', e});
@@ -95,7 +89,7 @@ app.get('/deletePost', jwt.ensureLoggedIn, async (req , res)=>{
     getPostById(req.query.id)   // getPostByID used to get author ID for validating the request
     .then(post => {
         if(req.user?.aud === serviceAudience 
-            ^ (post.author === req.user?.uuid || await isAdminUser(req.user?.name)))
+            ^ (await (isAdminUser(req.user?.name)) || post.author === req.user?.uuid))
             return deletePost(req.query.id)
         else throw 'not authorized';
     }).then(doc=>{
@@ -110,7 +104,7 @@ app.get('/editPost', jwt.ensureLoggedIn, (req, res)=>{
     getPostById(req.query.id)   // getPostByID used to get author ID for validating the request
     .then(post => {
         if(req.user?.aud === serviceAudience 
-            ^ (post.author === req.user?.uuid || await isAdminUser(req.user?.name)))
+            ^ (await (isAdminUser(req.user?.name)) || post.author === req.user?.uuid))
             return editPost(req.query.id, req.query.text);
         else throw 'not authorized';
     }).then(doc=>{
