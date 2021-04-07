@@ -10,13 +10,17 @@ const {
     GraphQLID 
 } = require('graphql');
 const { create } = require('axios');
-const { authRealm } = require('../config');
+const { authRealm, profileRealm } = require('../config');
 
 const auth = create({
     baseURL: `${authRealm}`,
     timeout: 5000,
 });
-const { RoleType, UserType } = require('./types');
+const profile = create({
+    baseURL: `${profileRealm}`,
+    timeout: 5000,
+});
+const { RoleType, UserType, ProfileType } = require('./types');
 
 const QueryType = new GraphQLObjectType({
     name: 'Query',
@@ -70,7 +74,19 @@ const QueryType = new GraphQLObjectType({
                     }).then(res => res.data);
             }
         },
-        // getProfile(ID)
+        profile: {
+            type: ProfileType,
+            description: "Gets the details of the Profile mentioned in arguments.",
+            args: {
+                id: { type: GraphQLNonNull(GraphQLID) },
+            },
+            async resolve(_, { id }, ctx) {
+                return await profile.get('/getProfile', {
+                    params: { id },
+                    headers: { authorization: ctx.headers.authorization }
+                }).then(res => res.data);
+            }
+        },
         // getCourse(ID)
         // searchCourses(string search query)
         // getPost(ID)

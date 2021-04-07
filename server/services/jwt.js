@@ -20,6 +20,7 @@ const sign = (payload) => {
     return jwt.sign(payload, JWTsecret.private, {
         ...JWTsignOptions,
         audience: serviceAudience,
+        expiresIn: 360,
     });
 };
 
