@@ -6,6 +6,10 @@ const schema = require('./schema/schema');
 
 process.title = "FOCUSA graphQL";
 
+// TODO: store the timestamp as part of logs!! (i.e. timestamp at every change)
+// TODO: also store the IP address in the logs of the for listing.
+// TODO: also store the user-agent and other possibly fingerprintable information.
+
 const app = express();  // create a router
 app.use(cookieParser);
 
