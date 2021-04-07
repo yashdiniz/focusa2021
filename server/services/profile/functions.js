@@ -84,7 +84,6 @@ const updateProfile = async (userID, fullName, about, display_pic)=> {
     (!display_pic ||  typeof display_pic === 'string'),
     'Invalid arguments for createProfile.');
 
-    let c = await focusa;
     // find a profile with matching userID
     let profile = await getProfile(userID);
     if(profile) {
@@ -121,7 +120,7 @@ const addInterest = async (userID, courseID) => {
     && typeof courseID === 'string', 
     'Invalid arguments for addInterest.');
     return await getProfile(userID)
-    .then(doc => {
+    .then(async doc => {
         if(doc) {
             doc.update({
                 $addToSet: {
