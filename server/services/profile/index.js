@@ -30,12 +30,19 @@ app.get('/getProfile', jwt.ensureLoggedIn, (req, res) => {
     });
 });
 
+const isAdminUser = async (user) => {
+    var admin = await auth.get('/userHasRole', {
+        params: { user, role: 'admin' },
+        headers: { authorization: token },
+    })
+    .then(res => res.data)
+    .catch(e => undefined);
+    return typeof admin !== 'undefined';
+}
+
 app.get('/updateProfile', jwt.ensureLoggedIn, async (req, res) => {
     if (req.user?.aud === serviceAudience
-        ^ typeof await auth.get('/userHasRole', {
-            params: { user: req.user?.name, role: 'admin' },
-            headers: { authorization: token },
-        }).then(r => r.data).catch(e => undefined) !== 'undefined') {
+        ^ await isAdminUser(req.user?.name)) {
         updateProfile(req.query.id, req.query.fullName, req.query.about, req.query.display_pic)
         .then(doc => res.json({ userID: doc.userID, 
             fullName: doc.fullName, 
@@ -51,10 +58,7 @@ app.get('/updateProfile', jwt.ensureLoggedIn, async (req, res) => {
 
 app.get('/deleteProfile', jwt.ensureLoggedIn, async (req, res) => {
     if (req.user?.aud === serviceAudience
-        ^ typeof await auth.get('/userHasRole', {
-            params: { user: req.user?.name, role: 'admin' },
-            headers: { authorization: token },
-        }).then(r => r.data).catch(e => undefined) !== 'undefined') {
+        ^ await isAdminUser(req.user?.name)) {
         deleteProfile(req.query.id)
         .then(doc => res.json({ userID: doc.userID, 
             fullName: doc.fullName, 
