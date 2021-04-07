@@ -4,15 +4,21 @@ const {getPostById, deletePost, createPost, editPost, searchPosts, getPostsByAut
 const jwt = require('../jwt');
 const { postPort, serviceAudience }=require('../../config');
 
-const isAdminUser = async (user) => {
-    var admin = await auth.get('/userHasRole', {
-        params: { user, role: 'admin' },
-        headers: { authorization: token },
-    })
-    .then(res => res.data)
-    .catch(e => undefined);
-    return typeof admin !== 'undefined';
-}
+const {create} = require('axios');
+let token = '';
+const auth = create({
+    baseURL: `${authRealm}`,
+    timeout: 5000,
+});
+
+let loginDetails = Buffer.from(`posts:${serviceAuthPass}`).toString('base64');
+auth.get('/', {
+    headers: {authorization: `Basic ${loginDetails}`}
+    }).then(res => token = res.data.token);
+setInterval(() => auth.get('/', {
+headers: {authorization:`Basic ${loginDetails}`}
+})
+.then(res => token = res.data.token), (JWTsignOptions.expiresIn-10)*1000);
 
 app.get('/searchPosts', jwt.ensureLoggedIn, (req, res)=>{
     //currently returns the array of objects obtained from searchPosts functions
@@ -75,11 +81,21 @@ app.get('/createPost', jwt.ensureLoggedIn, (req, res)=>{
     else res.status(403).json({ message: 'Operation not allowed.' });
 });
 
+const isAdminUser = async (user) => {
+    var admin = await auth.get('/userHasRole', {
+        params: { user, role: 'admin' },
+        headers: { authorization: token },
+    })
+    .then(res => res.data)
+    .catch(e => undefined);
+    return typeof admin !== 'undefined';
+}
+
 app.get('/deletePost', jwt.ensureLoggedIn, async (req , res)=>{
     getPostById(req.query.id)   // getPostByID used to get author ID for validating the request
     .then(post => {
         if(req.user?.aud === serviceAudience 
-            ^ (post.author === req.user?.uuid || isAdminUser(req.user?.name)))
+            ^ (post.author === req.user?.uuid || await isAdminUser(req.user?.name)))
             return deletePost(req.query.id)
         else throw 'not authorized';
     }).then(doc=>{
@@ -94,7 +110,7 @@ app.get('/editPost', jwt.ensureLoggedIn, (req, res)=>{
     getPostById(req.query.id)   // getPostByID used to get author ID for validating the request
     .then(post => {
         if(req.user?.aud === serviceAudience 
-            ^ (post.author === req.user?.uuid || isAdminUser(req.user?.name)))
+            ^ (post.author === req.user?.uuid || await isAdminUser(req.user?.name)))
             return editPost(req.query.id, req.query.text);
         else throw 'not authorized';
     }).then(doc=>{
