@@ -61,12 +61,14 @@ const getProfile = async (userID)=> {
 
     let c = await focusa;
     // return the profile if it exists
-    return await c.profile.findOne(userID).exec()
-    .then(doc => {
-        if(doc) return doc;
-        // otherwise, create the profile if non-existant.
-        else return createProfile(userID);
-    });
+    if(userID)
+        return await c.profile.findOne(userID).exec()
+        .then(doc => {
+            if(doc) return doc;
+            // otherwise, create the profile if non-existant.
+            else return createProfile(userID);
+        });
+    else return {};
 }
 
 /**
@@ -106,13 +108,15 @@ const deleteProfile = async (userID) => {
 
     let c = await focusa;
 
-    return await c.profile.findOne(userID).exec()
-    .then(profile => {
-        if(profile) {
-            profile.remove();
-            return profile;
-        } else throw profileNonExistant;
-    });
+    if(userID)
+        return await c.profile.findOne(userID).exec()
+        .then(profile => {
+            if(profile) {
+                profile.remove();
+                return profile;
+            } else throw profileNonExistant;
+        });
+    else return {};
 }
 
 const addInterest = async (userID, courseID) => {  
