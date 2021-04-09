@@ -73,15 +73,17 @@ const deleteUser = async (name) => {
         "Invalid arguments for deleteUser.");
     let c = await focusa;
     // execute a search on auth index to find username
-    return await c.auth.findOne(name).exec()
-    .then(async doc => {  // then remove the doc after finding it
-        if (doc) {
-            let user = await doc.populate('uuid');
-            doc.remove();   // remove the auth entry
-            user.remove();  // also remove the ref user entry
-            return doc;
-        } else throw userNonExistant;
-    });
+    if(name)
+        return await c.auth.findOne(name).exec()
+        .then(async doc => {  // then remove the doc after finding it
+            if (doc) {
+                let user = await doc.populate('uuid');
+                doc.remove();   // remove the auth entry
+                user.remove();  // also remove the ref user entry
+                return doc;
+            } else throw userNonExistant;
+        });
+    else throw userNonExistant;
 };
 
 /**
@@ -95,18 +97,20 @@ const validateUser = async (name, password) => {
         "Invalid arguments for validateUser.");
     let c = await focusa;
     // find the auth with matching name
-    return await c.auth.findOne(name).exec()
-    .then(async doc => {  // then collect the user details
-        if (doc) {
-            let user = await doc.populate('uuid');
-            
-            // TODO: ensure to check password scheme before checking password.
-            let hash = await pbkdf(password, user.salt);
-            // if the password hashes match
-            if (hash == user.hash) return user;
-            else throw loginError;
-        } else throw userNonExistant;
-    });
+    if(name)
+        return await c.auth.findOne(name).exec()
+        .then(async doc => {  // then collect the user details
+            if (doc) {
+                let user = await doc.populate('uuid');
+                
+                // TODO: ensure to check password scheme before checking password.
+                let hash = await pbkdf(password, user.salt);
+                // if the password hashes match
+                if (hash == user.hash) return user;
+                else throw loginError;
+            } else throw userNonExistant;
+        });
+    else throw userNonExistant;
 };
 
 /**
@@ -118,11 +122,13 @@ const userExists = async (name) => {
     assert(typeof name === 'string', 
     "Invalid arguments for userExists.");
     let c = await focusa;
-    return await c.auth.findOne(name).exec()
-    .then(async doc => {
-        if (doc) return await doc.populate('uuid');
-        else throw userNonExistant;
-    });
+    if(name)
+        return await c.auth.findOne(name).exec()
+        .then(async doc => {
+            if (doc) return await doc.populate('uuid');
+            else throw userNonExistant;
+        });
+    else throw userNonExistant;
 };
 
 /**
@@ -134,11 +140,13 @@ const getUserById = async (id) => {
     assert(typeof id === 'string', 
     "Invalid arguments for getUserById.");
     let c = await focusa;
-    return await c.user.findOne(id).exec()
-    .then(async doc => {
-        if (doc) return doc;
-        else throw userNonExistant;
-    });
+    if(id)
+        return await c.user.findOne(id).exec()
+        .then(async doc => {
+            if (doc) return doc;
+            else throw userNonExistant;
+        });
+    else throw userNonExistant;
 }
 
 // TODO(long term): maybe add functionality to update the user name?
@@ -154,21 +162,23 @@ const updateUser = async (name, newpassword) => {
         "Invalid arguments for updateUser.");
     let c = await focusa;
     // find the auth with matching name
-    return await c.auth.findOne(name).exec()
-    .then(async doc => {
-        if(doc) {
-            let user = await doc.populate('uuid');
+    if(name)
+        return await c.auth.findOne(name).exec()
+        .then(async doc => {
+            if(doc) {
+                let user = await doc.populate('uuid');
 
-            // TODO: ensure to check password scheme before checking password.
-            // generate a new password hash
-            let salt = generateUUID();
-            let hash = await pbkdf(newpassword, salt);    // hash the password
+                // TODO: ensure to check password scheme before checking password.
+                // generate a new password hash
+                let salt = generateUUID();
+                let hash = await pbkdf(newpassword, salt);    // hash the password
 
-            return await user.atomicPatch({
-                salt, hash, scheme: currentPasswordScheme
-            });
-        } else throw userNonExistant;
-    })
+                return await user.atomicPatch({
+                    salt, hash, scheme: currentPasswordScheme
+                });
+            } else throw userNonExistant;
+        });
+    else throw userNonExistant;
 };
 
 /**
@@ -206,15 +216,17 @@ const deleteRole = async (name) => {
         "Invalid arguments for deleteRole.");
     let c = await focusa;
     // execute a search on role index to find username
-    return await c.role.findOne(name).exec()
-    .then(async doc => {  // then remove the doc after finding it
-        if (doc) {
-            let role = await doc.populate('uuid');
-            doc.remove();   // remove the role entry
-            role.remove();  // also remove the ref roles entry
-            return doc;
-        } else throw roleNonExistant;
-    });
+    if(name)
+        return await c.role.findOne(name).exec()
+        .then(async doc => {  // then remove the doc after finding it
+            if (doc) {
+                let role = await doc.populate('uuid');
+                doc.remove();   // remove the role entry
+                role.remove();  // also remove the ref roles entry
+                return doc;
+            } else throw roleNonExistant;
+        });
+    else throw roleNonExistant;
 };
 
 /**
@@ -226,11 +238,13 @@ const roleExists = async (name) => {
     assert(typeof name == 'string',
         "Invalid arguments for roleExists.");
     let c = await focusa;
-    return await c.role.findOne(name).exec()
-    .then(async doc => {
-        if(doc) return await doc.populate('uuid');
-        else throw roleNonExistant;
-    });
+    if(name)
+        return await c.role.findOne(name).exec()
+        .then(async doc => {
+            if(doc) return await doc.populate('uuid');
+            else throw roleNonExistant;
+        });
+    else throw roleNonExistant;
 };
 
 /**
@@ -263,11 +277,13 @@ const getRoleById = async (id) => {
     assert(typeof id === 'string', 
     "Invalid arguments for getRoleById.");
     let c = await focusa;
-    return await c.roles.findOne(id).exec()
-    .then(doc => {
-        if (doc) return doc;
-        else throw roleNonExistant;
-    });
+    if(id)
+        return await c.roles.findOne(id).exec()
+        .then(doc => {
+            if (doc) return doc;
+            else throw roleNonExistant;
+        });
+    else throw roleNonExistant;
 };
 
 /**

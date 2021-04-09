@@ -7,8 +7,13 @@ const { assert } = require('./databases');
  * @param {object} payload The other session information stored in payload.
  */
 const sign = (payload) => {
+    // TODO: payload.name and subject are the same value.
+    // Reduce the overall token size by removing the 'redundancy'.
+    // Keep subject only. Also, make changes to verify so that 
+    // payload.name = subject (since modules directly access payload.name)
     return jwt.sign(payload, JWTsecret.private, {
         ...JWTsignOptions,
+        subject: payload.name,  // setting the subject based on payload name
     });
 };
 
@@ -21,6 +26,7 @@ const sign = (payload) => {
         ...JWTsignOptions,
         audience: serviceAudience,
         expiresIn: 360,
+        subject: payload.name,  // setting the subject based on payload name
     });
 };
 
@@ -42,10 +48,9 @@ const verify = (token) => {
 const loginCheck = (token) => {
     assert(typeof token === 'string',
     "Invalid arguments for loginCheck.");
-    token = token.split(' ');
-    // token[0] === 'Bearer' NO NEED TO CHECK since JWT will fail if invalid anyway?
+    token = token.replace('Bearer ', '');
     try {
-        return verify(token[token.length-1]);
+        return verify(token);
     } catch(e) {
         console.log(e);
         return false;
