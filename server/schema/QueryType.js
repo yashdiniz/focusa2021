@@ -7,7 +7,8 @@ const {
     GraphQLObjectType, 
     GraphQLString, 
     GraphQLNonNull, 
-    GraphQLID 
+    GraphQLID, 
+    GraphQLBoolean
 } = require('graphql');
 const { create } = require('axios');
 const { authRealm, profileRealm } = require('../config');
@@ -83,10 +84,29 @@ const QueryType = new GraphQLObjectType({
             async resolve(_, { id }, ctx) {
                 return await profile.get('/getProfile', {
                     params: { id },
-                    headers: { authorization: ctx.headers.authorization }
+                    headers: { authorization: ctx.headers.authorization, realip: ctx.ip }
                 }).then(res => res.data);
             }
         },
+        isSubscribed: {
+            type: GraphQLBoolean,
+            description: "TODO",
+            args: {
+                userID: { type: GraphQLNonNull(GraphQLID) },
+                courseID: { type: GraphQLNonNull(GraphQLID) },
+            },
+            async resolve(_, { userID, courseID }, ctx) {
+                try {
+                    await profile.get('/profileHasInterest', {
+                        params: { userID, courseID },
+                        headers: { authorization: ctx.headers.authorization, realip: ctx.ip }
+                    }).then(res => res.data);   // will throw 404 if profile not have interest.
+                    return true;
+                } catch(e) {
+                    return false;
+                }
+            }
+        }
         // getCourse(ID)
         // searchCourses(string search query)
         // getPost(ID)

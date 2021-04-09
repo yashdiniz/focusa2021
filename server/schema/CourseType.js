@@ -10,12 +10,19 @@ const {
     GraphQLNonNull,
     GraphQLList
 } = require('graphql');
+const { create } = require('axios');
+const { profileRealm } = require('../config');
+
+const profile = create({
+    baseURL: `${profileRealm}`,
+    timeout: 5000,
+});
 
 const CourseType = new GraphQLObjectType({
     name:'Course',
     descrption: "This node stores details of all the possible courses.",
     fields: () => {
-        const { UserType, RoleType } = require('./types');
+        const { RoleType, ProfileType } = require('./types');
         return {
         id: {
             type: GraphQLNonNull(GraphQLID)
@@ -36,10 +43,13 @@ const CourseType = new GraphQLObjectType({
             description: "Course Description."
         },
         subscribers: {
-            type: GraphQLList(UserType),
+            type: GraphQLList(ProfileType),
             description: "Users subscribed to the course.",
-            resolve(parent, args, ctx, info){
-                // currently stub, return null
+            resolve({ id }, args, ctx, info){
+                return await profile.get('/getProfilesWithInterest', {
+                    params: { courseID: id },
+                    headers: { authorization: ctx.headers.authorization, realip: ctx.ip },
+                }).then(res => res.data);
             }
         }}
     }
