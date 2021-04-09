@@ -68,7 +68,7 @@ const getProfile = async (userID)=> {
             // otherwise, create the profile if non-existant.
             else return createProfile(userID);
         });
-    else return {};
+    else throw profileNonExistant;
 }
 
 /**
@@ -116,7 +116,7 @@ const deleteProfile = async (userID) => {
                 return profile;
             } else throw profileNonExistant;
         });
-    else return {};
+    else throw profileNonExistant;
 }
 
 const addInterest = async (userID, courseID) => {  
