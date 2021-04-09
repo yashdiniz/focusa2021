@@ -4,9 +4,9 @@
  * and performing write, update and delete operations.
  */
 const { GraphQLObjectType, GraphQLString, GraphQLNonNull, GraphQLID } = require('graphql');
-const { RoleType, UserType, ProfileType } = require('./types');
+const { RoleType, UserType, ProfileType, PostType } = require('./types');
 const { create } = require('axios');
-const { authRealm, profilePort, profileRealm } = require('../config');
+const { authRealm, profilePort, profileRealm, postRealm } = require('../config');
 
 const auth = create({
     baseURL: `${authRealm}`,
@@ -14,6 +14,10 @@ const auth = create({
 });
 const profile = create({
     baseURL: `${profileRealm}`,
+    timeout: 5000,
+});
+const post = create({
+    baseURL: `${postRealm}`,
     timeout: 5000,
 });
 
@@ -114,7 +118,7 @@ const MutationType = new GraphQLObjectType({
             async resolve(_, { id, fullName, about, display_pic }, ctx) {
                 return await profile.get('/updateProfile', {
                     params: { id, fullName, about, display_pic, },
-                    headers: { authorization: ctx.headers.authorization },
+                    headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
                 }).then(res => res.data);
             }
         },
@@ -127,11 +131,58 @@ const MutationType = new GraphQLObjectType({
             async resolve(_, { id }, ctx) {
                 return await profile.get('/deleteProfile', {
                     params: { id },
-                    headers: { authorization: ctx.headers.authorization },
+                    headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
+                }).then(res => res.data);
+            }
+        },
+        createPost: {
+            type: PostType,
+            description: "TODO",
+            args: {
+                text: { type: GraphQLNonNull(GraphQLString),
+                    description: "The text body of the post. Supports markdown." },
+                course: { type: GraphQLNonNull(GraphQLID),
+                    description: "The Course ID the post should be added under." },
+                attachmentURL: { type: GraphQLString,
+                    description: "URL to attach to the post." },
+                parent: { type: GraphQLID, 
+                    description: "ID of the parent post. To be added only if the post currently being created is a comment." },
+            },
+            async resolve(_, { text, course, attachmentURL, parent }, ctx) {
+                return await post.get('/createPost', {
+                    params: { text, course, attachmentURL, parent },
+                    headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
+                }).then(res => res.data);
+            }
+        },
+        editPost: {
+            type: PostType,
+            description: "TODO",
+            args: {
+                id: { type: GraphQLNonNull(GraphQLID) },
+                text: { type: GraphQLNonNull(GraphQLString),
+                    description: "The text body of the post. Supports markdown." },
+            },
+            async resolve(_, { id, text }, ctx) {
+                return await post.get('/editPost', {
+                    params: { id, text },
+                    headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
+                }).then(res => res.data);
+            }
+        },
+        deletePost: {
+            type: PostType,
+            description: "TODO",
+            args: {
+                id: { type: GraphQLNonNull(GraphQLID) },
+            },
+            async resolve(_, { id }, ctx) {
+                return await post.get('/deletePost', {
+                    params: { id },
+                    headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
                 }).then(res => res.data);
             }
         }
-        // publishPost(input MakePost)
         // adding mutations will be subject to frontend requirements for now.
     }
 })
