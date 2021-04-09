@@ -141,7 +141,7 @@ const MutationType = new GraphQLObjectType({
             args: {
                 text: { type: GraphQLNonNull(GraphQLString),
                     description: "The text body of the post. Supports markdown." },
-                course: { type: GraphQLNonNull(GraphQLID),
+                course: { type: GraphQLID,
                     description: "The Course ID the post should be added under." },
                 attachmentURL: { type: GraphQLString,
                     description: "URL to attach to the post." },
@@ -150,7 +150,7 @@ const MutationType = new GraphQLObjectType({
             },
             async resolve(_, { text, course, attachmentURL, parent }, ctx) {
                 return await post.get('/createPost', {
-                    params: { text, course, attachmentURL, parent },
+                    params: { text, course: course?course:"", attachmentURL: attachmentURL?attachmentURL:"", parent: parent?parent:"" },
                     headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
                 }).then(res => res.data);
             }
