@@ -8,10 +8,12 @@ const {
     GraphQLString, 
     GraphQLNonNull, 
     GraphQLID, 
-    GraphQLBoolean
+    GraphQLBoolean,
+    GraphQLList,
+    GraphQLInt
 } = require('graphql');
 const { create } = require('axios');
-const { authRealm, profileRealm } = require('../config');
+const { authRealm, profileRealm, postRealm } = require('../config');
 
 const auth = create({
     baseURL: `${authRealm}`,
@@ -21,7 +23,11 @@ const profile = create({
     baseURL: `${profileRealm}`,
     timeout: 5000,
 });
-const { RoleType, UserType, ProfileType } = require('./types');
+const post = create({
+    baseURL: `${postRealm}`,
+    timeout: 5000,
+});
+const { RoleType, UserType, ProfileType, PostType } = require('./types');
 
 const QueryType = new GraphQLObjectType({
     name: 'Query',
@@ -46,12 +52,12 @@ const QueryType = new GraphQLObjectType({
                 if(id)    // prioritizing id over name
                     return await auth.get('/getUserById', {
                         params: { id },
-                        headers: { authorization: ctx.headers.authorization }
+                        headers: { authorization: ctx.headers.authorization, realip: ctx.ip }
                     }).then(res => res.data);
                 else if(name) 
                     return await auth.get('/getUserByName', {
                         params: { name },
-                        headers: { authorization: ctx.headers.authorization }
+                        headers: { authorization: ctx.headers.authorization, realip: ctx.ip }
                     }).then(res => res.data);
             }
         },
@@ -66,12 +72,12 @@ const QueryType = new GraphQLObjectType({
                 if(id)    // prioritizing id over name
                     return await auth.get('/getRoleById', {
                         params: { id },
-                        headers: { authorization: ctx.headers.authorization }
+                        headers: { authorization: ctx.headers.authorization, realip: ctx.ip }
                     }).then(res => res.data);
                 else if(name) 
                     return await auth.get('/getRoleByName', {
                         params: { name },
-                        headers: { authorization: ctx.headers.authorization }
+                        headers: { authorization: ctx.headers.authorization, realip: ctx.ip }
                     }).then(res => res.data);
             }
         },
@@ -106,10 +112,31 @@ const QueryType = new GraphQLObjectType({
                     return false;
                 }
             }
+        },
+        post: {
+            type: GraphQLList(PostType),
+            description: "TODO",
+            args: {
+                id: { type: GraphQLID },
+                q: { type: GraphQLString },
+                offset: { type: GraphQLInt }
+            },
+            async resolve(_, { id, q, offset }, ctx) {
+                if(id)
+                    return [await post.get('/getPostById', {
+                        params: { id },
+                        headers: { authorization: ctx.headers.authorization, realip: ctx.ip }
+                    }).then(res => res.data)];
+                else if(q) {
+                    return await post.get('/searchPosts', {
+                        params: { q, offset },
+                        headers: { authorization: ctx.headers.authorization, realip: ctx.ip }
+                    }).then(res => res.data);
+                }
+            }
         }
         // getCourse(ID)
         // searchCourses(string search query)
-        // getPost(ID)
         // searchPosts(string search query)
     }}
 })

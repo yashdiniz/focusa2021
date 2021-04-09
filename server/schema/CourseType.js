@@ -8,13 +8,18 @@ const {
     GraphQLID,
     GraphQLString,
     GraphQLNonNull,
-    GraphQLList
+    GraphQLList,
+    GraphQLInt
 } = require('graphql');
 const { create } = require('axios');
-const { profileRealm } = require('../config');
+const { profileRealm, postRealm } = require('../config');
 
 const profile = create({
     baseURL: `${profileRealm}`,
+    timeout: 5000,
+});
+const post = create({
+    baseURL: `${postRealm}`,
     timeout: 5000,
 });
 
@@ -22,36 +27,50 @@ const CourseType = new GraphQLObjectType({
     name:'Course',
     descrption: "This node stores details of all the possible courses.",
     fields: () => {
-        const { RoleType, ProfileType } = require('./types');
+        const { RoleType, PostType } = require('./types');
         return {
-        id: {
-            type: GraphQLNonNull(GraphQLID)
-        },
-        name: {
-            type: GraphQLNonNull(GraphQLString),
-            description: "Name of the course."
-        },
-        mods:{
-            type: GraphQLNonNull(GraphQLList(GraphQLNonNull(RoleType))),
-            description: "Moderator roles for the course.",
-            resolve(parent, args, ctx, info){
-                // currently stub, return null
+            id: {
+                type: GraphQLNonNull(GraphQLID)
+            },
+            name: {
+                type: GraphQLNonNull(GraphQLString),
+                description: "Name of the course."
+            },
+            mods:{
+                type: GraphQLNonNull(GraphQLList(GraphQLNonNull(RoleType))),
+                description: "Moderator roles for the course.",
+                resolve(parent, args, ctx, info){
+                    // currently stub, return null
+                }
+            },
+            description: {
+                type: GraphQLString,
+                description: "Course Description."
+            },
+            subscribers: {
+                type: GraphQLList(ProfileType),
+                description: "Users subscribed to the course.",
+                async resolve({ id }, args, ctx, info){
+                    return await profile.get('/getProfilesWithInterest', {
+                        params: { courseID: id },
+                        headers: { authorization: ctx.headers.authorization, realip: ctx.ip },
+                    }).then(res => res.data);
+                }
+            },
+            posts: {
+                type: GraphQLList(PostType),
+                description: "TODO",
+                args: {
+                    offset: { type: GraphQLInt }
+                },
+                async resolve({ uuid }, { offset }, ctx) {
+                    return await post.get('/getPostsByCourse', {
+                        params: { id: uuid, offset },
+                        headers: { authorization: ctx.headers.authorization, realip: ctx.ip }
+                    }).then(res => res.data);
+                }
             }
-        },
-        description: {
-            type: GraphQLString,
-            description: "Course Description."
-        },
-        subscribers: {
-            type: GraphQLList(ProfileType),
-            description: "Users subscribed to the course.",
-            resolve({ id }, args, ctx, info){
-                return await profile.get('/getProfilesWithInterest', {
-                    params: { courseID: id },
-                    headers: { authorization: ctx.headers.authorization, realip: ctx.ip },
-                }).then(res => res.data);
-            }
-        }}
+        }
     }
 });
 
