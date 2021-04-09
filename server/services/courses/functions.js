@@ -62,11 +62,13 @@ const addCourse = async (name, description) => {
 const getCourseById = async (id) => {
     assert(typeof id === 'string', 'Invalid arguments for getCourseById.');
     let c = await focusa;
-    return await c.courses.findOne(id).exec()
-    .then(async doc=>{
-        if (doc) return doc;
-        else throw courseNonExistant;
-    });
+    if(id)
+        return await c.courses.findOne(id).exec()
+        .then(async doc=>{
+            if (doc) return doc;
+            else throw courseNonExistant;
+        });
+    else throw courseNonExistant;
 }
 
 /**
@@ -91,16 +93,19 @@ const getCoursesByName = async(name) => {
  * @param {string} description Update the course description.
  * @returns Course object after updating.
  */
-const updateCourse = async(id,name,description) => {
+const updateCourse = async(id, name, description) => {
     assert(typeof id ==='string' && typeof name === 'string' && typeof description === 'string', 'Invalid arguments for updateCourse');
     let c = await focusa;
-    return await c.courses.findOne(id).exec()
-    .then(async doc =>{
-        if(doc) return await doc.atomicPatch({
-            name, description
+
+    if(id)
+        return await c.courses.findOne(id).exec()
+        .then(async doc =>{
+            if(doc) return await doc.atomicPatch({
+                name, description
+            });
+            else throw courseNonExistant;
         });
-        else throw courseNonExistant;
-    });
+    else throw courseNonExistant;
 }
 
 /**
@@ -111,13 +116,15 @@ const updateCourse = async(id,name,description) => {
 const deleteCourse = async (id) =>{
     assert(typeof id === 'string', "Invalid arguments for deleteCourse.");
     let c = await focusa;
-    return await c.courses.findOne(id).exec()
-    .then(async doc=>{
-        if(doc){
-            doc.remove();
-            return doc;
-        } else throw courseNonExistant;
-    });
+    if(id)
+        return await c.courses.findOne(id).exec()
+        .then(async doc=>{
+            if(doc){
+                doc.remove();
+                return doc;
+            } else throw courseNonExistant;
+        });
+    else throw courseNonExistant;
 }
 
 module.exports = {
