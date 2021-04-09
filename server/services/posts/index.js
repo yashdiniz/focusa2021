@@ -115,7 +115,7 @@ app.get('/editPost', jwt.ensureLoggedIn, (req, res)=>{
     getPostById(req.query.id)   // getPostByID used to get author ID for validating the request
     .then(post => {
         if(req.user?.aud === serviceAudience 
-            ^ (await (isAdminUser(req.user?.name)) || post.author === req.user?.uuid))
+            ^ (post.author === req.user?.uuid))
             return editPost(req.query.id, req.query.text);
         else throw 'not authorized';
     }).then(doc=>{
