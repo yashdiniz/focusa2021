@@ -61,12 +61,14 @@ const getProfile = async (userID)=> {
 
     let c = await focusa;
     // return the profile if it exists
-    return await c.profile.findOne(userID).exec()
-    .then(doc => {
-        if(doc) return doc;
-        // otherwise, create the profile if non-existant.
-        else return createProfile(userID);
-    });
+    if(userID)
+        return await c.profile.findOne(userID).exec()
+        .then(doc => {
+            if(doc) return doc;
+            // otherwise, create the profile if non-existant.
+            else return createProfile(userID);
+        });
+    else throw profileNonExistant;
 }
 
 /**
@@ -106,15 +108,23 @@ const deleteProfile = async (userID) => {
 
     let c = await focusa;
 
-    return await c.profile.findOne(userID).exec()
-    .then(profile => {
-        if(profile) {
-            profile.remove();
-            return profile;
-        } else throw profileNonExistant;
-    });
+    if(userID)
+        return await c.profile.findOne(userID).exec()
+        .then(profile => {
+            if(profile) {
+                profile.remove();
+                return profile;
+            } else throw profileNonExistant;
+        });
+    else throw profileNonExistant;
 }
 
+/**
+ * Add an interest to the profile.
+ * @param {string} userID The userID to add interest to.
+ * @param {string} courseID The courseID to add to profile.
+ * @returns The profile object after update.
+ */
 const addInterest = async (userID, courseID) => {  
     assert(typeof userID === 'string'
     && typeof courseID === 'string', 
@@ -132,6 +142,12 @@ const addInterest = async (userID, courseID) => {
     });
 };
 
+/**
+ * Removes an interest from the profile.
+ * @param {string} userID The userID to remove interest from.
+ * @param {string} courseID The courseID to remove from profile.
+ * @returns The profile object after update.
+ */
 const removeInterest = async (userID, courseID) => {
     assert(typeof userID === 'string'
     && typeof courseID === 'string', 
@@ -147,6 +163,12 @@ const removeInterest = async (userID, courseID) => {
     });
 }
 
+/**
+ * Check if a profile has an interest.
+ * @param {string} userID The userID to check.
+ * @param {string} courseID The courseID to check.
+ * @returns A profile object with the matching userID and courseID.
+ */
 const profileHasInterest = async (userID, courseID) => {
     assert(typeof userID === 'string'
     && typeof courseID === 'string', 
@@ -166,6 +188,11 @@ const profileHasInterest = async (userID, courseID) => {
     })
 }
 
+/**
+ * Gets the interests of a profile.
+ * @param {string} userID The userID to check interests of.
+ * @returns A list of courseIDs the profile is interested in.
+ */
 const getInterestsOfProfile = async (userID) => {
     assert(typeof userID === 'string', 'Invalid arguments for getInterestsOfProfile.');
 
@@ -176,6 +203,11 @@ const getInterestsOfProfile = async (userID) => {
     });
 }
 
+/**
+ * Get a list of profiles that have subscribed to the same course.
+ * @param {string} courseID The interest to find in the profiles.
+ * @returns An array of profile objects that contain the said interest.
+ */
 const getProfilesWithInterest = async (courseID) => {
     assert(typeof courseID === 'string', 
     'Invalid arguments for getProfilesWithInterest.');
@@ -193,6 +225,6 @@ const getProfilesWithInterest = async (courseID) => {
 }
 
 module.exports = {
-    getProfile, updateProfile, deleteProfile,addInterest, removeInterest, profileHasInterest,
+    getProfile, updateProfile, deleteProfile, addInterest, removeInterest, profileHasInterest,
     getInterestsOfProfile, getProfilesWithInterest
 }

@@ -130,7 +130,13 @@ const MutationType = new GraphQLObjectType({
                     headers: { authorization: ctx.headers.authorization },
                 }).then(res => res.data);
             }
-        }
+        },
+        // subscribe: {
+            // TODO
+        // },
+        // unsubscribe: {
+
+        // }
         // publishPost(input MakePost)
         // adding mutations will be subject to frontend requirements for now.
     }

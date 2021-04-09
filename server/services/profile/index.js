@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const { profilePort, JWTsignOptions, serviceAuthPass, serviceAudience, authRealm } = require('../../config');
-const { getProfile, updateProfile, deleteProfile } = require('./functions');
+const { getProfile, updateProfile, deleteProfile, addInterest, profileHasInterest, getInterestsOfProfile, getProfilesWithInterest } = require('./functions');
 const jwt = require('../jwt');
 
 const { create } = require('axios');
@@ -27,6 +27,66 @@ app.get('/getProfile', jwt.ensureLoggedIn, (req, res) => {
         display_pic: doc.display_pic, 
     })).catch(e => {
         res.status(404).json({ message: 'Profile not found.', e });
+    });
+});
+
+app.get('/addInterest', jwt.ensureLoggedIn, async (req, res) => {
+    if (req.user) addInterest(req.user?.uuid, req.query.courseID)
+    .then(doc => res.json({ userID: doc.userID, 
+        fullName: doc.fullName, 
+        about: doc.about, 
+        interests: doc.interests,
+        display_pic: doc.display_pic, 
+    })).catch(e => {
+        res.status(404).json({ message: 'Not found.', e });
+    });
+});
+
+app.get('/removeInterest', jwt.ensureLoggedIn, async (req, res) => {
+    if (req.user) removeInterest(req.user?.uuid, req.query.courseID)
+    .then(doc => res.json({ userID: doc.userID, 
+        fullName: doc.fullName, 
+        about: doc.about, 
+        interests: doc.interests,
+        display_pic: doc.display_pic, 
+    })).catch(e => {
+        res.status(404).json({ message: 'Not found.', e });
+    });
+});
+
+app.get('/profileHasInterest', jwt.ensureLoggedIn, async (req, res) => {
+    if (req.user) profileHasInterest(req.query.userID, req.query.courseID)
+    .then(doc => res.json({ userID: doc.userID, 
+        fullName: doc.fullName, 
+        about: doc.about, 
+        interests: doc.interests,
+        display_pic: doc.display_pic, 
+    })).catch(e => {
+        res.status(404).json({ message: 'Not found.', e });
+    });
+});
+
+app.get('/getInterestsOfProfile', jwt.ensureLoggedIn, async (req, res) => {
+    if (req.user) getInterestsOfProfile(req.query.userID)
+    .then(doc => res.json({ userID: doc.userID, 
+        fullName: doc.fullName, 
+        about: doc.about, 
+        interests: doc.interests,
+        display_pic: doc.display_pic, 
+    })).catch(e => {
+        res.status(404).json({ message: 'Not found.', e });
+    });
+});
+
+app.get('/getProfilesWithInterest', jwt.ensureLoggedIn, async (req, res) => {
+    if (req.user) getProfilesWithInterest(req.query.courseID)
+    .then(doc => res.json({ userID: doc.userID, 
+        fullName: doc.fullName, 
+        about: doc.about, 
+        interests: doc.interests,
+        display_pic: doc.display_pic, 
+    })).catch(e => {
+        res.status(404).json({ message: 'Not found.', e });
     });
 });
 
