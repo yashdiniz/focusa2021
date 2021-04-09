@@ -35,15 +35,17 @@ headers: {authorization:`Basic ${loginDetails}`}
  * @returns Post with the specified ID
  */
 const getPostById = async (uuid) => {
-    assert(typeof uuid === 'string', "Invalid post ID at getPostByID.");
+    assert(typeof uuid === 'string', "Invalid post ID at getPostById.");
 
     let f = await focusa;
     
-    return await f.posts.findOne(uuid).exec()
-    .then(async doc => {
-        if(doc) return doc;
-        else throw noSuchPost;
-    });
+    if(uuid)
+        return await f.posts.findOne(uuid).exec()
+        .then(async doc => {
+            if(doc) return doc;
+            else throw noSuchPost;
+        });
+    return {};
 }
 
 /**
@@ -55,14 +57,16 @@ const deletePost = async (uuid) => {
 
     let f = await focusa;
 
-    return await f.posts.findOne(uuid).exec()
-    .then(async doc => {
-        if(doc) {
-            doc.remove();
-            return doc;
-        }
-        else throw noSuchPost;
-    });
+    if(uuid)
+        return await f.posts.findOne(uuid).exec()
+        .then(async doc => {
+            if(doc) {
+                doc.remove();
+                return doc;
+            }
+            else throw noSuchPost;
+        });
+    return {};
 }
 
 /**
@@ -84,6 +88,7 @@ const createPost = async (text, author, course, attachmentURL, parent) => {
     let uuid = generateUUID();
     let time = Date.now();
     let f = await focusa;
+    console.log('In createPost', parent);
 
     return await f.posts.insert({
         uuid, parent, text, course, author,
@@ -102,11 +107,13 @@ const editPost = async (uuid, text) => {
         "Invalid arguments for editPost.");
 
     let f = await focusa;
-
-    let post = await f.posts.findOne(uuid).exec();
-    return await post.atomicPatch({
-        text,
-    });
+    
+    if(uuid)
+        return await f.posts.findOne(uuid).exec()
+        .then(doc => doc.atomicPatch({
+            text,
+        }));
+    return {};
 }
 
 /**

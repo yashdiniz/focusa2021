@@ -98,14 +98,14 @@ const isAdminUser = async (user) => {
 
 app.get('/deletePost', jwt.ensureLoggedIn, async (req , res)=>{
     getPostById(req.query.id)   // getPostByID used to get author ID for validating the request
-    .then(post => {
+    .then(async post => {
         if(req.user?.aud === serviceAudience 
             ^ (await (isAdminUser(req.user?.name)) || post.author === req.user?.uuid))
-            return deletePost(req.query.id)
+            return deletePost(req.query.id);
         else throw 'not authorized';
     }).then(doc=>{
         res.json({uuid:doc.uuid, parent: doc.parent, text:doc.text, course: doc.course, author: doc.author, reported: doc.reported, approved: doc.approved, time: doc.time, attachmentURL: doc.attachmentURL});
-    }).catch(e => { 
+    }).catch(e => {
         res.status(404).json({ message: 'post not found',e})
     });
 
@@ -113,7 +113,7 @@ app.get('/deletePost', jwt.ensureLoggedIn, async (req , res)=>{
 
 app.get('/editPost', jwt.ensureLoggedIn, (req, res)=>{
     getPostById(req.query.id)   // getPostByID used to get author ID for validating the request
-    .then(post => {
+    .then(async post => {
         if(req.user?.aud === serviceAudience 
             ^ (post.author === req.user?.uuid))
             return editPost(req.query.id, req.query.text);
