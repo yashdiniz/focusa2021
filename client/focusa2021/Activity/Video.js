@@ -1,7 +1,8 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {View,Text,StatusBar,Image,TouchableOpacity, TextInput} from 'react-native';
 import styles from '../Styles/videostyles'
 import {Overlay} from 'react-native-elements';
+
 
 import {ensureAuthenticated} from './ensureAuthenticated';
 
@@ -18,7 +19,6 @@ const Video = ({ navigation, route, token }) =>{
     const toggleOverlayJoinMeeting = () => {
         setVisibleJoin(!joinvisible);
       };
-
 
     return(
         <View style={styles.container}>
@@ -72,7 +72,7 @@ const Video = ({ navigation, route, token }) =>{
                             </View>
                             
                             <View>
-                                <TouchableOpacity style={styles.submitButton}>
+                                <TouchableOpacity style={styles.submitButton} onPress={() => navigation.navigate('CameraTest')}>
                                     <Text> Submit</Text>
                                 </TouchableOpacity>
                             </View>
@@ -85,4 +85,4 @@ const Video = ({ navigation, route, token }) =>{
     )
 }
 
-export default Video
+export default Video;

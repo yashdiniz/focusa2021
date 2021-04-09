@@ -7,7 +7,8 @@ import Courses from '../Activity/courses';
 import Login from '../Activity/Login';
 import Profile from '../Activity/Profile';
 import Video from '../Activity/Video';
-import SubjectPage from '../Activity/SubjectPage'
+import SubjectPage from '../Activity/SubjectPage';
+import CameraTest from '../Activity/cameraTest';
 
 const Tab = createBottomTabNavigator();
 
@@ -44,6 +45,16 @@ function BottomNavigator() {
       </Tab.Screen>
 
       <Tab.Screen
+        name="CameraTest"
+        options={{
+          tabBarLabel: 'CameraTest',
+          tabBarButton: () => null,
+        }}
+      >
+        {props => <CameraTest {...props} token={token}/>}
+      </Tab.Screen>
+
+      <Tab.Screen
         name="Home"
         options={{
           tabBarLabel: 'Home',
@@ -66,6 +77,7 @@ function BottomNavigator() {
       >
         {props => <Courses {...props} token={token}/>}
       </Tab.Screen>
+
       <Tab.Screen
         name="Video"
         options={{
@@ -77,6 +89,7 @@ function BottomNavigator() {
       >
         {props => <Video {...props} token={token}/>}
       </Tab.Screen>
+      
       <Tab.Screen
         name="Profile"
         options={{
