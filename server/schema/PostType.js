@@ -75,7 +75,7 @@ const PostType = new GraphQLObjectType({
             type: GraphQLNonNull(GraphQLList(PostType)),
             description: "A list containing all comments made under the Post.",
             args: {
-                offset: { type: GraphQLInt},
+                offset: { type: GraphQLInt },
             },
             async resolve({ uuid }, { offset }, ctx, info) {
                 return await post.get('/getPostsByParent', {

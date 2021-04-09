@@ -8,7 +8,8 @@ const {
     GraphQLString, 
     GraphQLNonNull, 
     GraphQLList,
-    GraphQLID 
+    GraphQLID, 
+    GraphQLInt
 } = require('graphql');
 const { create } = require('axios');
 const { authRealm, profileRealm, postRealm } = require('../config');
@@ -98,7 +99,7 @@ const QueryType = new GraphQLObjectType({
             args: {
                 id: { type: GraphQLID },
                 q: { type: GraphQLString },
-                offset: { type: GraphQLID }
+                offset: { type: GraphQLInt }
             },
             async resolve(_, { id, q, offset }, ctx) {
                 if(id)
