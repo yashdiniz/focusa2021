@@ -29,6 +29,7 @@ headers: {authorization:`Basic ${loginDetails}`}
 })
 .then(res => token = res.data.token), (JWTsignOptions.expiresIn-10)*1000);
 
+
 /**
  * Gets the post with matching UUID.
  * @param {string} uuid uuid of the post.

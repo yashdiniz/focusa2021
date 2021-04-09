@@ -12,8 +12,10 @@ const port = process.env['port'] || 1896;   // using FOCUSA legacy port for test
 const serviceAuthPass = process.env['authPass']; // password to authenticate microservice webhooks
 const authPort = port + 1;
 const authRealm = "http://localhost:" + authPort;
-const profilePort = port + 3;
+const profilePort = port + 2;
 const profileRealm = "http://localhost:" + profilePort;
+const coursesPort = port + 3;
+const coursesRealm = "http://localhost:" + coursesPort;
 const webrtcPort = 5000;
 const graphiql = !production;  // essentially, run graphiql at graphql endpoint
 const postPort = port + 4;
@@ -73,7 +75,7 @@ const postsLimit = 10,
 
 module.exports = { 
     port, authPort, authRealm, serviceAuthPass, webrtcPort, profilePort, profileRealm,
-    projectRoot, graphiql, secret, realm, remote, postRealm,
+    projectRoot, graphiql, secret, realm, remote, postRealm, coursesPort, coursesRealm,
     JWTsignOptions, JWTverifyOptions, JWTsecret, rolePattern, serviceAudience,
     pbkdfIters, pbkdfDigest, pbkdfLen, UUIDSize, currentPasswordScheme,
     minPasswordLength, usernamePattern, maxModRolesforCourse, maxNameLength,

@@ -183,6 +183,15 @@ const MutationType = new GraphQLObjectType({
                 }).then(res => res.data);
             }
         },
+        // addCourse: {
+            // TODO
+        // },
+        // deleteCourse: {
+
+        // },
+        // updateCourse: {
+
+        // },
         // subscribe: {
             // TODO
         // },

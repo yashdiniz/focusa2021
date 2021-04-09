@@ -13,7 +13,7 @@ const {
     GraphQLInt
 } = require('graphql');
 const { create } = require('axios');
-const { authRealm, profileRealm, postRealm } = require('../config');
+const { authRealm, profileRealm, postRealm, coursesRealm } = require('../config');
 
 const auth = create({
     baseURL: `${authRealm}`,
@@ -27,7 +27,11 @@ const post = create({
     baseURL: `${postRealm}`,
     timeout: 5000,
 });
-const { RoleType, UserType, ProfileType, PostType } = require('./types');
+const courses = create({
+    baseURL: `${coursesRealm}`,
+    timeout: 5000,
+});
+const { RoleType, UserType, ProfileType, PostType, CourseType } = require('./types');
 
 const QueryType = new GraphQLObjectType({
     name: 'Query',
@@ -134,10 +138,28 @@ const QueryType = new GraphQLObjectType({
                     }).then(res => res.data);
                 }
             }
+        },
+        course: {
+            type: GraphQLList(CourseType),
+            description: "TODO",
+            args: {
+                name: { type: GraphQLString },
+                id: { type: GraphQLID },
+            },
+            async resolve(_, { id, name }, ctx) {
+                if(id) 
+                    return [await courses.get('/getCourseById', {
+                        params: { id },
+                        headers: { authorization: ctx.headers?.authorization }
+                    }).then(res => res.data)]
+                else if(name)
+                    return await courses.get('/getCoursesByName', {
+                        params: { name },
+                        headers: { authorization: ctx.headers?.authorization }
+                    }).then(res => res.data);
+            }
         }
-        // getCourse(ID)
         // searchCourses(string search query)
-        // searchPosts(string search query)
     }}
 })
 

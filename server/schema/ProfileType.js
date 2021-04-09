@@ -11,10 +11,14 @@ const {
     GraphQLNonNull,
 } = require('graphql');
 const { create } = require('axios');
-const { authRealm, profileRealm } = require('../config');
+const { authRealm, profileRealm, coursesRealm } = require('../config');
 
 const auth = create({
     baseURL: `${authRealm}`,
+    timeout: 5000,
+});
+const courses = create({
+    baseURL: `${coursesRealm}`,
     timeout: 5000,
 });
 const profile = create({
@@ -52,11 +56,11 @@ const ProfileType = new GraphQLObjectType({
         interests: {
             type: GraphQLNonNull(GraphQLList(CourseType)),
             description: "The list of courses the user has subscribed to.",
-            async resolve({ userID }, args, ctx, info) {
-                return await profile.get('/getInterestsOfProfile', {
-                    params: { userID },
-                    headers: { authorization: ctx.headers.authorization, realip: ctx.ip },
-                }).then(res => res.data);
+            resolve({ interests }, args, ctx, info) {
+                return interests.map(doc => courses.get('/getCourseById', {
+                    params: { id: doc.course },
+                    headers: { authorization: req.headers?.authorization }
+                }).then(res => res.data.uuid));
             }
         }}
     }

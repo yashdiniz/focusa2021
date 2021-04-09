@@ -68,24 +68,20 @@ app.get('/profileHasInterest', jwt.ensureLoggedIn, async (req, res) => {
 
 app.get('/getInterestsOfProfile', jwt.ensureLoggedIn, async (req, res) => {
     if (req.user) getInterestsOfProfile(req.query.userID)
-    .then(doc => res.json({ userID: doc.userID, 
-        fullName: doc.fullName, 
-        about: doc.about, 
-        interests: doc.interests,
-        display_pic: doc.display_pic, 
-    })).catch(e => {
+    .then(interests => res.json(interests))
+    .catch(e => {
         res.status(404).json({ message: 'Not found.', e });
     });
 });
 
 app.get('/getProfilesWithInterest', jwt.ensureLoggedIn, async (req, res) => {
     if (req.user) getProfilesWithInterest(req.query.courseID)
-    .then(doc => res.json({ userID: doc.userID, 
+    .then(docs => docs.map(doc => res.json({ userID: doc.userID, 
         fullName: doc.fullName, 
         about: doc.about, 
         interests: doc.interests,
         display_pic: doc.display_pic, 
-    })).catch(e => {
+    }))).catch(e => {
         res.status(404).json({ message: 'Not found.', e });
     });
 });
