@@ -45,7 +45,7 @@ const getPostById = async (uuid) => {
             if(doc) return doc;
             else throw noSuchPost;
         });
-    return {};
+    else throw noSuchPost;
 }
 
 /**
@@ -66,7 +66,7 @@ const deletePost = async (uuid) => {
             }
             else throw noSuchPost;
         });
-    return {};
+    else throw noSuchPost;
 }
 
 /**
@@ -113,7 +113,7 @@ const editPost = async (uuid, text) => {
         .then(doc => doc.atomicPatch({
             text,
         }));
-    return {};
+    else throw noSuchPost;
 }
 
 /**
