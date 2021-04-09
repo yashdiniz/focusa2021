@@ -31,7 +31,7 @@ const CourseType = new GraphQLObjectType({
     name:'Course',
     descrption: "This node stores details of all the possible courses.",
     fields: () => {
-        const { RoleType, PostType } = require('./types');
+        const { RoleType, PostType, ProfileType } = require('./types');
         return {
             uuid: {
                 type: GraphQLNonNull(GraphQLID)

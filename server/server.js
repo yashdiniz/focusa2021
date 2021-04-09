@@ -13,11 +13,6 @@ process.title = "FOCUSA graphQL";
 const app = express();  // create a router
 app.use(cookieParser);
 
-require('./services/auth/index');   // importing the auth service (strictly for auth purposes)
-require('./services/posts/index');
-require('./services/profile/index');    // import the profile service  
-require('./services/courses/index');// importing the courses service
-
 // let the /graphql endpoint use the graphql adapter middleware
 app.use('/graphql', graphqlHTTP({
     schema, // ES6, key:value pair coupling
@@ -25,5 +20,10 @@ app.use('/graphql', graphqlHTTP({
 }));
 
 app.listen(port, ()=> {
-    console.warn(`Listening on ${ port }`);
+    console.warn(`GraphQL listening on ${ port }`);
 });
+
+require('./services/auth/index');   // importing the auth service (strictly for auth purposes)
+require('./services/profile/index');    // import the profile service  
+require('./services/courses/index');// importing the courses service
+require('./services/posts/index');
