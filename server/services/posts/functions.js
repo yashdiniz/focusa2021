@@ -121,7 +121,10 @@ const searchPosts = async (query, offset) => {
     // TODO: Also, will implement tf-idf search soon.
     let f = await focusa;
 
-    return await f.posts.find().skip(offset).limit(postsLimit).exec()
+    return await f.posts.find()
+    .where('reported').eq(0)
+    .where('approved').eq(1)
+    .skip(offset).limit(postsLimit).exec()
     .then(async docs => {
         if(docs) return docs;
         else throw noPostsFound;
@@ -136,7 +139,10 @@ const getPostsByAuthor = async (authorID, offset) => {
     assert(typeof authorID === 'string', "Invalid arguments for getPostsByAuthor.");
     let f = await focusa;
 
-    return await f.posts.find().where('author').eq(authorID).skip(offset).limit(postsLimit).exec()
+    return await f.posts.find().where('author').eq(authorID)
+    .where('reported').eq(0)
+    .where('approved').eq(1)
+    .skip(offset).limit(postsLimit).exec()
     .then(async docs => {
         if(docs) return docs;
         else throw noSuchAuthor;
@@ -151,7 +157,10 @@ const getPostsByAuthor = async (authorID, offset) => {
 const getPostsByCourse = async (courseID, offset) => {
     assert(typeof courseID === 'string', "Invalid arguments for getPostsByCourse.");
     let f = await focusa;
-    return await f.posts.find().where('course').eq(courseID).skip(offset).limit(postsLimit).exec()
+    return await f.posts.find().where('course').eq(courseID)
+    .where('reported').eq(0)
+    .where('approved').eq(1)
+    .skip(offset).limit(postsLimit).exec()
     .then(async docs => {
         if(docs) return docs;
         else throw noSuchCourse;
@@ -166,11 +175,17 @@ const getPostsByCourse = async (courseID, offset) => {
 const getPostsByParent = async (parentID, offset) => {
     assert(typeof parentID === 'string', "Invalid arguments for getPostsByParent.");
     let f = await focusa;
-    return await f.posts.find().where('parent').eq(parentID).skip(offset).limit(postsLimit).exec()
+    return await f.posts.find().where('parent').eq(parentID)
+    .where('reported').eq(0)
+    .where('approved').eq(1)
+    .skip(offset).limit(postsLimit).exec()
     .then(async docs => {
         if(docs) return docs;
         else throw noSuchPost;
     });
 }
+
+// TODO: Add provision for reporting and approving posts. Future scope?
+// TODO: Also provision for searching reported and unapproved posts?
 
 module.exports = {getPostById, deletePost, createPost, editPost, searchPosts, getPostsByAuthor, getPostsByCourse, getPostsByParent };
