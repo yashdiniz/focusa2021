@@ -269,6 +269,40 @@ const user_rolesSchema = {
     required: ['user_roleID', 'user', 'role'],
 };
 
+const notificationSchema = {
+    name: 'notifications',
+    title: 'FOCUSA notifications schema',
+    version: 0,
+    description: "Contains the notifications for the posts",
+    type: 'object',
+    properties: {
+        uuid: {
+            type: 'string',
+            primary: true
+        },
+        time: {
+            type: 'string',
+            final: true
+        },
+        event: {
+            type: 'string',
+            enum: ['new_post']
+        },
+        course: {
+            type: 'string',
+            ref: 'courses'
+        },
+        body: {
+            type: 'string'
+        },
+        link: {
+            type: 'string'
+        }
+    },
+    indexes: ['time','event','course'],
+    required: ['time', 'event', 'body', 'link']
+};
+
 const db = RxDB.createRxDatabase({
     name: path.join(projectRoot, 'db/focusa'),
     adapter: leveldown,
@@ -285,6 +319,7 @@ const focusa = db.then(database=> database.addCollections({
     posts: { schema: postsSchema },
     profile: { schema: profileSchema },
     user_roles: { schema: user_rolesSchema },
+    notifications: { schema: notificationSchema }
 })).catch(console.error);
 
 RxDB.addRxPlugin(require('pouchdb-adapter-http'));
