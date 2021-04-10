@@ -112,7 +112,7 @@ const editPost = async (uuid, text) => {
     if(uuid)
         return await f.posts.findOne(uuid).exec()
         .then(doc => doc.atomicPatch({
-            text,
+            text, time: Date.now()
         }));
     else throw noSuchPost;
 }
