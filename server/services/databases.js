@@ -281,10 +281,10 @@ const notificationSchema = {
             primary: true
         },
         time: {
-            type: 'string',
+            type: 'number',
             final: true
         },
-        event: {
+        channel: {
             type: 'string',
             enum: ['new_post']
         },
@@ -299,8 +299,8 @@ const notificationSchema = {
             type: 'string'
         }
     },
-    indexes: ['time','event','course'],
-    required: ['time', 'event', 'body', 'link']
+    indexes: ['time','channel','course'],
+    required: ['time', 'channel', 'body', 'link']
 };
 
 const db = RxDB.createRxDatabase({

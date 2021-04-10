@@ -7,8 +7,8 @@ dotenv.config({ path: path.join(projectRoot, '.env') });
 
 const production = false;
 // the realm stores the DNS/server name.
-const realm = process.env['REALM'];
 const port = process.env['port'] || 1896;   // using FOCUSA legacy port for testing.
+const realm = "http://localhost:" + port;
 const serviceAuthPass = process.env['authPass']; // password to authenticate microservice webhooks
 const authPort = port + 1;
 const authRealm = "http://localhost:" + authPort;
