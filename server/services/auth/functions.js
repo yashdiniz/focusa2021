@@ -9,7 +9,7 @@
  * author: @yashdiniz
  */
 const { focusa, assert, generateUUID } = require('../databases');
-const { pbkdfDigest, pbkdfIters, pbkdfLen, usernamePattern, currentPasswordScheme, minPasswordLength, maxNameLength, rolePattern } = require('../../config');
+const { pbkdfDigest, pbkdfIters, pbkdfLen, usernamePattern, currentPasswordScheme, minPasswordLength, maxNameLength, rolePattern, UUIDpattern } = require('../../config');
 const crypto = require('crypto');
 
 // Reference: https://pouchdb.com/2015/05/18/we-have-a-problem-with-promises.html
@@ -73,7 +73,7 @@ const deleteUser = async (name) => {
         "Invalid arguments for deleteUser.");
     let c = await focusa;
     // execute a search on auth index to find username
-    if(name)
+    if(UUIDpattern.test(name))
         return await c.auth.findOne(name).exec()
         .then(async doc => {  // then remove the doc after finding it
             if (doc) {
@@ -97,7 +97,7 @@ const validateUser = async (name, password) => {
         "Invalid arguments for validateUser.");
     let c = await focusa;
     // find the auth with matching name
-    if(name)
+    if(UUIDpattern.test(name))
         return await c.auth.findOne(name).exec()
         .then(async doc => {  // then collect the user details
             if (doc) {
@@ -122,7 +122,7 @@ const userExists = async (name) => {
     assert(typeof name === 'string', 
     "Invalid arguments for userExists.");
     let c = await focusa;
-    if(name)
+    if(UUIDpattern.test(name))
         return await c.auth.findOne(name).exec()
         .then(async doc => {
             if (doc) return await doc.populate('uuid');
@@ -140,7 +140,7 @@ const getUserById = async (id) => {
     assert(typeof id === 'string', 
     "Invalid arguments for getUserById.");
     let c = await focusa;
-    if(id)
+    if(UUIDpattern.test(id))
         return await c.user.findOne(id).exec()
         .then(async doc => {
             if (doc) return doc;
@@ -162,7 +162,7 @@ const updateUser = async (name, newpassword) => {
         "Invalid arguments for updateUser.");
     let c = await focusa;
     // find the auth with matching name
-    if(name)
+    if(UUIDpattern.test(name))
         return await c.auth.findOne(name).exec()
         .then(async doc => {
             if(doc) {
@@ -216,7 +216,7 @@ const deleteRole = async (name) => {
         "Invalid arguments for deleteRole.");
     let c = await focusa;
     // execute a search on role index to find username
-    if(name)
+    if(UUIDpattern.test(name))
         return await c.role.findOne(name).exec()
         .then(async doc => {  // then remove the doc after finding it
             if (doc) {
@@ -238,7 +238,7 @@ const roleExists = async (name) => {
     assert(typeof name == 'string',
         "Invalid arguments for roleExists.");
     let c = await focusa;
-    if(name)
+    if(UUIDpattern.test(name))
         return await c.role.findOne(name).exec()
         .then(async doc => {
             if(doc) return await doc.populate('uuid');
@@ -277,7 +277,7 @@ const getRoleById = async (id) => {
     assert(typeof id === 'string', 
     "Invalid arguments for getRoleById.");
     let c = await focusa;
-    if(id)
+    if(UUIDpattern.test(id))
         return await c.roles.findOne(id).exec()
         .then(doc => {
             if (doc) return doc;

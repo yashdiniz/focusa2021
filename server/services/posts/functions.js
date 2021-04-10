@@ -5,7 +5,7 @@
  */
 
 const {focusa, assert, generateUUID} = require('../databases');
-const { authRealm, serviceAuthPass, JWTsignOptions, postsLimit, minPostBodyLength } = require('../../config');
+const { authRealm, serviceAuthPass, JWTsignOptions, postsLimit, minPostBodyLength, UUIDpattern } = require('../../config');
 
 
 const noSuchPost = new Error('Post with such id does not exist');
@@ -40,7 +40,7 @@ const getPostById = async (uuid) => {
 
     let f = await focusa;
     
-    if(uuid)
+    if(UUIDpattern.test(uuid))
         return await f.posts.findOne(uuid).exec()
         .then(async doc => {
             if(doc) return doc;
@@ -58,7 +58,7 @@ const deletePost = async (uuid) => {
 
     let f = await focusa;
 
-    if(uuid)
+    if(UUIDpattern.test(uuid))
         return await f.posts.findOne(uuid).exec()
         .then(async doc => {
             if(doc) {
@@ -109,7 +109,7 @@ const editPost = async (uuid, text) => {
 
     let f = await focusa;
     
-    if(uuid)
+    if(UUIDpattern.test(uuid))
         return await f.posts.findOne(uuid).exec()
         .then(doc => doc.atomicPatch({
             text,
@@ -146,15 +146,16 @@ const searchPosts = async (query, offset) => {
 const getPostsByAuthor = async (authorID, offset) => {
     assert(typeof authorID === 'string', "Invalid arguments for getPostsByAuthor.");
     let f = await focusa;
-
-    return await f.posts.find().where('author').eq(authorID)
-    .where('reported').eq(0)
-    .where('approved').eq(1)
-    .skip(offset).limit(postsLimit).exec()
-    .then(async docs => {
-        if(docs) return docs;
-        else throw noSuchAuthor;
-    })
+    if(UUIDpattern.test(authorID))
+        return await f.posts.find().where('author').eq(authorID)
+        .where('reported').eq(0)
+        .where('approved').eq(1)
+        .skip(offset).limit(postsLimit).exec()
+        .then(async docs => {
+            if(docs) return docs;
+            else throw noSuchAuthor;
+        });
+    else return noSuchAuthor;
 }
 
 /**
@@ -165,14 +166,16 @@ const getPostsByAuthor = async (authorID, offset) => {
 const getPostsByCourse = async (courseID, offset) => {
     assert(typeof courseID === 'string', "Invalid arguments for getPostsByCourse.");
     let f = await focusa;
-    return await f.posts.find().where('course').eq(courseID)
-    .where('reported').eq(0)
-    .where('approved').eq(1)
-    .skip(offset).limit(postsLimit).exec()
-    .then(async docs => {
-        if(docs) return docs;
-        else throw noSuchCourse;
-    });
+    if(UUIDpattern.test(courseID))
+        return await f.posts.find().where('course').eq(courseID)
+        .where('reported').eq(0)
+        .where('approved').eq(1)
+        .skip(offset).limit(postsLimit).exec()
+        .then(async docs => {
+            if(docs) return docs;
+            else throw noSuchCourse;
+        });
+    else return noSuchCourse;
 }
 
 /**
@@ -183,14 +186,16 @@ const getPostsByCourse = async (courseID, offset) => {
 const getPostsByParent = async (parentID, offset) => {
     assert(typeof parentID === 'string', "Invalid arguments for getPostsByParent.");
     let f = await focusa;
-    return await f.posts.find().where('parent').eq(parentID)
-    .where('reported').eq(0)
-    .where('approved').eq(1)
-    .skip(offset).limit(postsLimit).exec()
-    .then(async docs => {
-        if(docs) return docs;
-        else throw noSuchPost;
-    });
+    if(UUIDpattern.test(parentID))
+        return await f.posts.find().where('parent').eq(parentID)
+        .where('reported').eq(0)
+        .where('approved').eq(1)
+        .skip(offset).limit(postsLimit).exec()
+        .then(async docs => {
+            if(docs) return docs;
+            else throw noSuchPost;
+        });
+    else return noSuchPost;
 }
 
 // TODO: Add provision for reporting and approving posts. Future scope?

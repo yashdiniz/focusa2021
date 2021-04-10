@@ -9,7 +9,7 @@
  * author: @imamsab
  */
 const { focusa, assert, generateUUID } = require('../databases');
-const { authRealm, serviceAuthPass, JWTsignOptions } = require('../../config');
+const { authRealm, serviceAuthPass, JWTsignOptions, UUIDpattern } = require('../../config');
 
 const courseExistsError = new Error('Course already exists.'),
       courseNonExistant = new Error('Course does not exist.');
@@ -62,7 +62,7 @@ const addCourse = async (name, description) => {
 const getCourseById = async (id) => {
     assert(typeof id === 'string', 'Invalid arguments for getCourseById.');
     let c = await focusa;
-    if(id)
+    if(UUIDpattern.test(id))
         return await c.courses.findOne(id).exec()
         .then(async doc=>{
             if (doc) return doc;
@@ -97,7 +97,7 @@ const updateCourse = async(id, name, description) => {
     assert(typeof id ==='string' && typeof name === 'string' && typeof description === 'string', 'Invalid arguments for updateCourse');
     let c = await focusa;
 
-    if(id)
+    if(UUIDpattern.test(id))
         return await c.courses.findOne(id).exec()
         .then(async doc =>{
             if(doc) return await doc.atomicPatch({
@@ -116,7 +116,7 @@ const updateCourse = async(id, name, description) => {
 const deleteCourse = async (id) =>{
     assert(typeof id === 'string', "Invalid arguments for deleteCourse.");
     let c = await focusa;
-    if(id)
+    if(UUIDpattern.test(id))
         return await c.courses.findOne(id).exec()
         .then(async doc=>{
             if(doc){

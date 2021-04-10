@@ -5,7 +5,7 @@
  */
 
 const { focusa, assert } = require('../databases');
-const { defaultfullName, defaultAbout, authRealm, serviceAuthPass, JWTsignOptions, defaultProfilePic } = require('../../config');
+const { defaultfullName, defaultAbout, authRealm, serviceAuthPass, JWTsignOptions, defaultProfilePic, UUIDpattern } = require('../../config');
 
 const { create } = require('axios');
 let token = '';
@@ -61,7 +61,7 @@ const getProfile = async (userID)=> {
 
     let c = await focusa;
     // return the profile if it exists
-    if(userID)
+    if(UUIDpattern.test(userID))
         return await c.profile.findOne(userID).exec()
         .then(doc => {
             if(doc) return doc;
@@ -108,7 +108,7 @@ const deleteProfile = async (userID) => {
 
     let c = await focusa;
 
-    if(userID)
+    if(UUIDpattern.test(userID))
         return await c.profile.findOne(userID).exec()
         .then(profile => {
             if(profile) {
