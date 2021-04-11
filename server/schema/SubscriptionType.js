@@ -13,36 +13,30 @@ const NotificationType = require('./NotificationType');
 const SubscriptionType = new GraphQLObjectType({
     name: "Subscription",
     description: "todo",
-    fields: () => {
-        return {
-            postAdded: {
-                type: NotificationType,
-                description: "todo",
-                // create a post added subscription resolver function.
-                async resolve(_, __, ctx) {
-                    let iterator = pubsub.asyncIterator('new_post');
-                    return iterator;  // subscribe to changes in a topic
-                }
+    fields: {
+        postAdded: {
+            type: GraphQLNonNull(NotificationType),
+            description: "todo",
+            resolve(parent, args, ctx, info) {
+                return parent;
+            },
+            subscribe(parent, args, ctx, info) {
+                let iterator = pubsub.asyncIterator(['new_post']);
+                return iterator;
             }
         }
     }
 });
 
-pubsub.asyncIterator('new_post').next(data => {
-    console.log('Outer Async Iterator', data);
-});
-
 focusa.then(c => c.posts.insert$
     .subscribe(doc =>
         pubsub.publish('new_post', {
-            postAdded: {
-                uuid: doc.uuid,
-                time: doc.time,
-                channel: doc.channel,
-                course: doc.course,
-                body: doc.body,
-                link: doc.link
-            }
+            uuid: doc.uuid,
+            time: doc.time,
+            channel: doc.channel,
+            course: doc.course,
+            body: doc.body,
+            link: doc.link
         })
     )
 );

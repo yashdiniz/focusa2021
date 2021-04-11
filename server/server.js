@@ -41,7 +41,7 @@ ws.listen(port, ()=> {
 
 //logging
 var onOperation = function (message, params, WebSocket) {
-    console.log('subscription' + message.payload, params);
+    console.log('subscriptionServer' + message.payload, params);
     return Promise.resolve(Object.assign({}, params, { context: message.payload.context }))
 }
 //logging
