@@ -11,8 +11,6 @@ const RxDB = require('rxdb');
 const leveldown = require('leveldown');
 RxDB.addRxPlugin(require('pouchdb-adapter-leveldb'));
 
-// assert(condition, message) simplifies the code structure, 
-// by immediately throwing if condition is not met.
 /**
  * Asserts a condition, and throws a message on violation.
  * @param {boolean} condition Condition to be asserted.
