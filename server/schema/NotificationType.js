@@ -16,16 +16,16 @@ const NotificationType = new GraphQLObjectType({
                 type: GraphQLNonNull(GraphQLID),
             },
             time: {
-                type: GraphQLNonNull(GraphQLInt),
-                description: "The time of publication, as a Date object String.",
+                type: GraphQLNonNull(GraphQLString),
+                description: "Timestamp of the notification.",
             },
             channel: {
                 type: GraphQLNonNull(GraphQLString),
-                description: "The events occured, as a event object String.",
+                description: "The event which triggered the notification.",
             },
             course: {
                 type: (CourseType),
-                description: "The course detail, as a courses object Id.",
+                description: "The course details.",
                 async resolve({ course },_, ctx) {
                     return await courses.get('/getCourseById', {
                         params: { id: course },
@@ -35,11 +35,11 @@ const NotificationType = new GraphQLObjectType({
             },
             body: {
                 type: GraphQLNonNull(GraphQLString),
-                description: "Description of notification, as a body object String.",
+                description: "The notification body.",
             },
             link: {
                 type: GraphQLNonNull(GraphQLString),
-                description: "Link for notification, as a link object String.",
+                description: "The URL to redirect to when the notification is clicked.",
             },
         }
     }
