@@ -1,8 +1,6 @@
-const { port } = require('./config');
-const express = require('express');
+const { port, graphiql } = require('./config');
 const { ApolloServer } = require('apollo-server');
 const schema = require('./schema/schema');
-const { SubscriptionServer } = require('subscriptions-transport-ws');
 
 process.title = "FOCUSA";
 
@@ -16,12 +14,8 @@ const server = new ApolloServer({
     subscriptions: '/subscriptions',
     uploads: false,
     context: ({ req, connection }) => {
-        if(connection) {        // if WebSocket
-            let token = connection.context.authorization || "";
-            return { token };
-        } else {
-            return req;
-        }
+        if(connection) return connection;       // if WebSocket
+        else return req;
     }
 })
 

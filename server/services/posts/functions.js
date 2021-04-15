@@ -89,7 +89,6 @@ const createPost = async (text, author, course, attachmentURL, parent) => {
     let uuid = generateUUID();
     let time = Date.now();
     let f = await focusa;
-    console.log('In createPost', parent);
 
     return await f.posts.insert({
         uuid, parent, text, course, author,

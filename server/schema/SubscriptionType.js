@@ -28,16 +28,9 @@ const SubscriptionType = new GraphQLObjectType({
     }
 });
 
-focusa.then(c => c.posts.insert$
-    .subscribe(doc =>
-        pubsub.publish('new_post', {
-            uuid: doc.uuid,
-            time: doc.time,
-            channel: doc.channel,
-            course: doc.course,
-            body: doc.body,
-            link: doc.link
-        })
+focusa.then(c => c.notifications.insert$
+    .subscribe(doc => 
+        pubsub.publish('new_post', doc.documentData)
     )
 );
 
