@@ -1,7 +1,6 @@
 const { port, graphiql } = require('./config');
 const express = require('express');
 const { ApolloServer } = require('apollo-server');
-// const { graphqlHTTP } = require('express-graphql'); // importing the adapter middleware
 const schema = require('./schema/schema');
 
 process.title = "FOCUSA graphQL";
