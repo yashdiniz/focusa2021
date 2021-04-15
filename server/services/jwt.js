@@ -62,7 +62,7 @@ const loginCheck = (token) => {
  */
 const ensureLoggedIn = (req, res, next) => {
     let payload = loginCheck(req.headers?.authorization);
-    if (payload && (req.ip === payload.ip ^ req.headers.realip === payload.ip)) {
+    if (payload && (req.ip === payload.ip || req.headers?.realip === payload.ip)) {
         req.user = payload;
         next();
     }

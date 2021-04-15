@@ -5,7 +5,7 @@
  */
 
 const { focusa, assert } = require('../databases');
-const { defaultfullName, defaultAbout, authRealm, serviceAuthPass, JWTsignOptions, defaultProfilePic } = require('../../config');
+const { defaultfullName, defaultAbout, authRealm, serviceAuthPass, JWTsignOptions, defaultProfilePic, UUIDpattern } = require('../../config');
 
 const { create } = require('axios');
 let token = '';
@@ -56,19 +56,18 @@ const createProfile = async (id)=> {
  * @returns Profile object with matching ID.
  */
 const getProfile = async (userID)=> {
-    assert(typeof userID === 'string',
+    assert(typeof userID === 'string'
+        && UUIDpattern.test(userID),
     'Invalid arguments for getProfile.');
 
     let c = await focusa;
     // return the profile if it exists
-    if(userID)
-        return await c.profile.findOne(userID).exec()
-        .then(doc => {
-            if(doc) return doc;
-            // otherwise, create the profile if non-existant.
-            else return createProfile(userID);
-        });
-    else throw profileNonExistant;
+    return await c.profile.findOne(userID).exec()
+    .then(doc => {
+        if(doc) return doc;
+        // otherwise, create the profile if non-existant.
+        else return createProfile(userID);
+    });
 }
 
 /**
@@ -104,19 +103,19 @@ const updateProfile = async (userID, fullName, about, display_pic)=> {
  * @returns Promise deleted Profile object.
  */
 const deleteProfile = async (userID) => {
-    assert(typeof userID === 'string', 'Invalid arguments for deleteProfile.');
+    assert(typeof userID === 'string'
+        && UUIDpattern.test(userID), 
+    'Invalid arguments for deleteProfile.');
 
     let c = await focusa;
 
-    if(userID)
-        return await c.profile.findOne(userID).exec()
-        .then(profile => {
-            if(profile) {
-                profile.remove();
-                return profile;
-            } else throw profileNonExistant;
-        });
-    else throw profileNonExistant;
+    return await c.profile.findOne(userID).exec()
+    .then(profile => {
+        if(profile) {
+            profile.remove();
+            return profile;
+        } else throw profileNonExistant;
+    });
 }
 
 /**

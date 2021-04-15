@@ -1,9 +1,6 @@
 const { port } = require('./config');
 const express = require('express');
-const { graphqlHTTP } = require('express-graphql'); // importing the adapter middleware
-const cookieParser = require('cookie-parser')();
-const { execute, subscribe } = require('graphql');
-const { createServer } = require('http');
+const { ApolloServer } = require('apollo-server');
 const schema = require('./schema/schema');
 const { SubscriptionServer } = require('subscriptions-transport-ws');
 
@@ -13,30 +10,23 @@ process.title = "FOCUSA";
 // TODO: also store the IP address in the logs of the for listing.
 // TODO: also store the user-agent and other possibly fingerprintable information.
 
-const app = express();  // create a router
-app.use(cookieParser);
-
-// let the /graphql endpoint use the graphql adapter middleware
-app.use('/graphql', graphqlHTTP({
+const server = new ApolloServer({
     schema, // ES6, key:value pair coupling
-    graphiql: { // use the dev playground for now
-        subscriptionEndpoint: `ws://localhost:${ port }/subscriptions`,
-    },
-}));
+    graphiql, // use the dev playground for now
+    subscriptions: '/subscriptions',
+    uploads: false,
+    context: ({ req, connection }) => {
+        if(connection) {        // if WebSocket
+            let token = connection.context.authorization || "";
+            return { token };
+        } else {
+            return req;
+        }
+    }
+})
 
-const ws = createServer(app);
-
-ws.listen(port, ()=> {
-    console.warn(`GraphQL listening on ${ port }`);
-    new SubscriptionServer({
-        execute,
-        subscribe,
-        schema,
-        onConnect, onOperation, onDisconnect
-    }, {
-        server: ws,
-        path: '/subscriptions',
-    });
+server.listen(port).then(({ url })=> {
+    console.warn(`GraphQL listening on ${ url }`);
 });
 
 //logging

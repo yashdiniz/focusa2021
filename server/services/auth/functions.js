@@ -9,7 +9,7 @@
  * author: @yashdiniz
  */
 const { focusa, assert, generateUUID } = require('../databases');
-const { pbkdfDigest, pbkdfIters, pbkdfLen, usernamePattern, currentPasswordScheme, minPasswordLength, maxNameLength, rolePattern } = require('../../config');
+const { pbkdfDigest, pbkdfIters, pbkdfLen, usernamePattern, currentPasswordScheme, minPasswordLength, maxNameLength, rolePattern, UUIDpattern } = require('../../config');
 const crypto = require('crypto');
 
 // Reference: https://pouchdb.com/2015/05/18/we-have-a-problem-with-promises.html
@@ -69,21 +69,19 @@ const createUser = async (name, password) => {
  * @returns {Promise} The User object just deleted, without the sensitive information.
  */
 const deleteUser = async (name) => {
-    assert(typeof name === 'string', 
+    assert(typeof name === 'string' && UUIDpattern.test(name), 
         "Invalid arguments for deleteUser.");
     let c = await focusa;
     // execute a search on auth index to find username
-    if(name)
-        return await c.auth.findOne(name).exec()
-        .then(async doc => {  // then remove the doc after finding it
-            if (doc) {
-                let user = await doc.populate('uuid');
-                doc.remove();   // remove the auth entry
-                user.remove();  // also remove the ref user entry
-                return doc;
-            } else throw userNonExistant;
-        });
-    else throw userNonExistant;
+    return await c.auth.findOne(name).exec()
+    .then(async doc => {  // then remove the doc after finding it
+        if (doc) {
+            let user = await doc.populate('uuid');
+            doc.remove();   // remove the auth entry
+            user.remove();  // also remove the ref user entry
+            return doc;
+        } else throw userNonExistant;
+    });
 };
 
 /**
@@ -93,24 +91,24 @@ const deleteUser = async (name) => {
  * @returns {Promise} A User object.
  */
 const validateUser = async (name, password) => {
-    assert(typeof name === 'string' && typeof password === 'string', 
+    assert(typeof name === 'string' 
+        && typeof password === 'string' 
+        && UUIDpattern.test(name), 
         "Invalid arguments for validateUser.");
     let c = await focusa;
     // find the auth with matching name
-    if(name)
-        return await c.auth.findOne(name).exec()
-        .then(async doc => {  // then collect the user details
-            if (doc) {
-                let user = await doc.populate('uuid');
-                
-                // TODO: ensure to check password scheme before checking password.
-                let hash = await pbkdf(password, user.salt);
-                // if the password hashes match
-                if (hash == user.hash) return user;
-                else throw loginError;
-            } else throw userNonExistant;
-        });
-    else throw userNonExistant;
+    return await c.auth.findOne(name).exec()
+    .then(async doc => {  // then collect the user details
+        if (doc) {
+            let user = await doc.populate('uuid');
+            
+            // TODO: ensure to check password scheme before checking password.
+            let hash = await pbkdf(password, user.salt);
+            // if the password hashes match
+            if (hash == user.hash) return user;
+            else throw loginError;
+        } else throw userNonExistant;
+    });
 };
 
 /**
@@ -119,16 +117,15 @@ const validateUser = async (name, password) => {
  * @returns {Promise} A User object.
  */
 const userExists = async (name) => {
-    assert(typeof name === 'string', 
+    assert(typeof name === 'string'
+        && UUIDpattern.test(name), 
     "Invalid arguments for userExists.");
     let c = await focusa;
-    if(name)
-        return await c.auth.findOne(name).exec()
-        .then(async doc => {
-            if (doc) return await doc.populate('uuid');
-            else throw userNonExistant;
-        });
-    else throw userNonExistant;
+    return await c.auth.findOne(name).exec()
+    .then(async doc => {
+        if (doc) return await doc.populate('uuid');
+        else throw userNonExistant;
+    });
 };
 
 /**
@@ -137,16 +134,15 @@ const userExists = async (name) => {
  * @returns {Promise} A User object.
  */
 const getUserById = async (id) => {
-    assert(typeof id === 'string', 
+    assert(typeof id === 'string'
+        && UUIDpattern.test(id), 
     "Invalid arguments for getUserById.");
     let c = await focusa;
-    if(id)
-        return await c.user.findOne(id).exec()
-        .then(async doc => {
-            if (doc) return doc;
-            else throw userNonExistant;
-        });
-    else throw userNonExistant;
+    return await c.user.findOne(id).exec()
+    .then(async doc => {
+        if (doc) return doc;
+        else throw userNonExistant;
+    });
 }
 
 // TODO(long term): maybe add functionality to update the user name?
@@ -158,27 +154,26 @@ const getUserById = async (id) => {
  */
 const updateUser = async (name, newpassword) => {
     assert(typeof name === 'string' && typeof newpassword === 'string' 
-    && newpassword.length >= minPasswordLength, 
+        && newpassword.length >= minPasswordLength
+        && UUIDpattern.test(name), 
         "Invalid arguments for updateUser.");
     let c = await focusa;
     // find the auth with matching name
-    if(name)
-        return await c.auth.findOne(name).exec()
-        .then(async doc => {
-            if(doc) {
-                let user = await doc.populate('uuid');
+    return await c.auth.findOne(name).exec()
+    .then(async doc => {
+        if(doc) {
+            let user = await doc.populate('uuid');
 
-                // TODO: ensure to check password scheme before checking password.
-                // generate a new password hash
-                let salt = generateUUID();
-                let hash = await pbkdf(newpassword, salt);    // hash the password
+            // TODO: ensure to check password scheme before checking password.
+            // generate a new password hash
+            let salt = generateUUID();
+            let hash = await pbkdf(newpassword, salt);    // hash the password
 
-                return await user.atomicPatch({
-                    salt, hash, scheme: currentPasswordScheme
-                });
-            } else throw userNonExistant;
-        });
-    else throw userNonExistant;
+            return await user.atomicPatch({
+                salt, hash, scheme: currentPasswordScheme
+            });
+        } else throw userNonExistant;
+    });
 };
 
 /**
@@ -212,21 +207,19 @@ const createRole = async (name) => {
  * @returns {Promise} The Role object just deleted.
  */
 const deleteRole = async (name) => {
-    assert(typeof name === 'string', 
+    assert(typeof name === 'string' && UUIDpattern.test(name), 
         "Invalid arguments for deleteRole.");
     let c = await focusa;
     // execute a search on role index to find username
-    if(name)
-        return await c.role.findOne(name).exec()
-        .then(async doc => {  // then remove the doc after finding it
-            if (doc) {
-                let role = await doc.populate('uuid');
-                doc.remove();   // remove the role entry
-                role.remove();  // also remove the ref roles entry
-                return doc;
-            } else throw roleNonExistant;
-        });
-    else throw roleNonExistant;
+    return await c.role.findOne(name).exec()
+    .then(async doc => {  // then remove the doc after finding it
+        if (doc) {
+            let role = await doc.populate('uuid');
+            doc.remove();   // remove the role entry
+            role.remove();  // also remove the ref roles entry
+            return doc;
+        } else throw roleNonExistant;
+    });
 };
 
 /**
@@ -235,16 +228,14 @@ const deleteRole = async (name) => {
  * @returns {Promise} A Role object.
  */
 const roleExists = async (name) => {
-    assert(typeof name == 'string',
+    assert(typeof name == 'string' && UUIDpattern.test(name),
         "Invalid arguments for roleExists.");
     let c = await focusa;
-    if(name)
-        return await c.role.findOne(name).exec()
-        .then(async doc => {
-            if(doc) return await doc.populate('uuid');
-            else throw roleNonExistant;
-        });
-    else throw roleNonExistant;
+    return await c.role.findOne(name).exec()
+    .then(async doc => {
+        if(doc) return await doc.populate('uuid');
+        else throw roleNonExistant;
+    });
 };
 
 /**
@@ -274,16 +265,14 @@ const giveRole = async (role, user) => {
  * @returns {Promise} A Role object.
  */
 const getRoleById = async (id) => {
-    assert(typeof id === 'string', 
+    assert(typeof id === 'string' && UUIDpattern.test(id), 
     "Invalid arguments for getRoleById.");
     let c = await focusa;
-    if(id)
-        return await c.roles.findOne(id).exec()
-        .then(doc => {
-            if (doc) return doc;
-            else throw roleNonExistant;
-        });
-    else throw roleNonExistant;
+    return await c.roles.findOne(id).exec()
+    .then(doc => {
+        if (doc) return doc;
+        else throw roleNonExistant;
+    });
 };
 
 /**

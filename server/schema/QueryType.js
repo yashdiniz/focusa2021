@@ -56,12 +56,12 @@ const QueryType = new GraphQLObjectType({
                 if(id)    // prioritizing id over name
                     return await auth.get('/getUserById', {
                         params: { id },
-                        headers: { authorization: ctx.headers.authorization, realip: ctx.ip }
+                        headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
                     }).then(res => res.data);
                 else if(name) 
                     return await auth.get('/getUserByName', {
                         params: { name },
-                        headers: { authorization: ctx.headers.authorization, realip: ctx.ip }
+                        headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
                     }).then(res => res.data);
             }
         },
@@ -76,12 +76,12 @@ const QueryType = new GraphQLObjectType({
                 if(id)    // prioritizing id over name
                     return await auth.get('/getRoleById', {
                         params: { id },
-                        headers: { authorization: ctx.headers.authorization, realip: ctx.ip }
+                        headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
                     }).then(res => res.data);
                 else if(name) 
                     return await auth.get('/getRoleByName', {
                         params: { name },
-                        headers: { authorization: ctx.headers.authorization, realip: ctx.ip }
+                        headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
                     }).then(res => res.data);
             }
         },
@@ -94,7 +94,7 @@ const QueryType = new GraphQLObjectType({
             async resolve(_, { id }, ctx) {
                 return await profile.get('/getProfile', {
                     params: { id },
-                    headers: { authorization: ctx.headers.authorization, realip: ctx.ip }
+                    headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
                 }).then(res => res.data);
             }
         },
@@ -109,7 +109,7 @@ const QueryType = new GraphQLObjectType({
                 try {
                     await profile.get('/profileHasInterest', {
                         params: { userID, courseID },
-                        headers: { authorization: ctx.headers.authorization, realip: ctx.ip }
+                        headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
                     }).then(res => res.data);   // will throw 404 if profile not have interest.
                     return true;
                 } catch(e) {
@@ -129,12 +129,12 @@ const QueryType = new GraphQLObjectType({
                 if(id)
                     return [await post.get('/getPostById', {
                         params: { id },
-                        headers: { authorization: ctx.headers.authorization, realip: ctx.ip }
+                        headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
                     }).then(res => res.data)];
                 else if(q) {
                     return await post.get('/searchPosts', {
                         params: { q, offset },
-                        headers: { authorization: ctx.headers.authorization, realip: ctx.ip }
+                        headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
                     }).then(res => res.data);
                 }
             }
@@ -150,12 +150,12 @@ const QueryType = new GraphQLObjectType({
                 if(id) 
                     return [await courses.get('/getCourseById', {
                         params: { id },
-                        headers: { authorization: ctx.headers?.authorization }
-                    }).then(res => res.data)]
+                        headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
+                    }).then(res => res.data)];
                 else if(name)
                     return await courses.get('/getCoursesByName', {
                         params: { name },
-                        headers: { authorization: ctx.headers?.authorization }
+                        headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
                     }).then(res => res.data);
             }
         }

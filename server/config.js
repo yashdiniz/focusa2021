@@ -32,7 +32,8 @@ const pbkdfIters = 1<<14,
     currentPasswordScheme = 'pbkdf2',
     minPasswordLength = 8,
     maxNameLength = 20,
-    UUIDSize = 24;
+    UUIDSize = 24,
+    UUIDpattern = /^[\w.-]+$/i;
 const rolePattern = /\w+/;
 
 if (!fs.existsSync(path.join(projectRoot, 'certs/certificate.pem'))) {
@@ -80,5 +81,5 @@ module.exports = {
     pbkdfIters, pbkdfDigest, pbkdfLen, UUIDSize, currentPasswordScheme,
     minPasswordLength, usernamePattern, maxModRolesforCourse, maxNameLength,
     defaultProfilePic, defaultfullName, defaultAbout, postsLimit, postPort,
-    minPostBodyLength,
+    minPostBodyLength, UUIDpattern
 };
