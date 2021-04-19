@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { ScrollView,Text,StatusBar,Image, TextInput, Button, Alert, TouchableOpacity} from 'react-native';
+import Toast from 'react-native-toast-message';
+import { ScrollView,Text,StatusBar,Image, TextInput, Button, Alert, TouchableOpacity, ToastAndroid} from 'react-native';
 import styles from '../Styles/LoginStyles';
 
 import { authenticate } from "./ensureAuthenticated";
@@ -11,7 +12,13 @@ const Login=({navigation, token, setLoggedIn}) =>{
 
     function presslogin(){
         if(username == '' || password == ''){
-            Alert.alert('Message:','username and pasword can\'t be empty')
+            ToastAndroid.showWithGravityAndOffset(
+                "Username and Password cannot be empty!",
+                ToastAndroid.LONG,
+                ToastAndroid.BOTTOM,
+                25,
+                50
+              );
         }
         else{
             Alert.alert('Logging in', username + password);
