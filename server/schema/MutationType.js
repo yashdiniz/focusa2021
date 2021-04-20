@@ -183,22 +183,46 @@ const MutationType = new GraphQLObjectType({
                 }).then(res => res.data);
             }
         },
-        // addCourse: {
-            // TODO
-        // },
-        // deleteCourse: {
-
-        // },
-        // updateCourse: {
-
-        // },
-        // subscribe: {
-            // TODO
-        // },
-        // unsubscribe: {
-
-        // }
-        // publishPost(input MakePost)
+        subscribeToCourse: {
+            type: ProfileType,
+            description: "TODO",
+            args: {
+                uuid: { 
+                    type: GraphQLID, 
+                    description: "The user's ID." 
+                },
+                courseID: { 
+                    type: GraphQLID, 
+                    description: "The courseID the user is subscribing to." 
+                },
+            },
+            async resolve(_, { uuid, courseID }, ctx) {
+                return await profile.get('/addInterest', {
+                    params: { uuid, courseID },
+                    headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
+                }).then(res => res.data);
+            }
+        },
+        unsubscribeFromCourse: {
+            type: ProfileType,
+            description: "TODO",
+            args: {
+                uuid: { 
+                    type: GraphQLID, 
+                    description: "The user's ID." 
+                },
+                courseID: { 
+                    type: GraphQLID, 
+                    description: "The courseID the user is unsubscribing from." 
+                },
+            },
+            async resolve(_, { uuid, courseID }, ctx) {
+                return await profile.get('/removeInterest', {
+                    params: { uuid, courseID },
+                    headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
+                }).then(res => res.data);
+            }
+        }
         // adding mutations will be subject to frontend requirements for now.
     }
 })
