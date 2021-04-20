@@ -10,6 +10,7 @@ const { UUIDSize, maxModRolesforCourse,
 const RxDB = require('rxdb');
 const leveldown = require('leveldown');
 RxDB.addRxPlugin(require('pouchdb-adapter-leveldb'));
+RxDB.addRxPlugin(require('pouchdb-quick-search'))
 
 /**
  * Asserts a condition, and throws a message on violation.

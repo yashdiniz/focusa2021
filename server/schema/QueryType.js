@@ -154,7 +154,7 @@ const QueryType = new GraphQLObjectType({
                     }).then(res => res.data)];
                 else if(name)
                     return await courses.get('/getCoursesByName', {
-                        params: { name },
+                        params: { name, offset: 0 },
                         headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
                     }).then(res => res.data);
             }

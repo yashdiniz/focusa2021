@@ -9,11 +9,10 @@
  * author: @imamsab
  */
 const { focusa, assert, generateUUID } = require('../databases');
-const { authRealm, serviceAuthPass, JWTsignOptions, UUIDpattern } = require('../../config');
+const { authRealm, serviceAuthPass, JWTsignOptions, UUIDpattern, postsLimit } = require('../../config');
 
 const courseExistsError = new Error('Course already exists.'),
       courseNonExistant = new Error('Course does not exist.');
-
 
 const { create } = require('axios');
 let token = '';
@@ -29,6 +28,15 @@ auth.get('/', {
 setInterval(() => auth.get('/', {
     headers: {authorization:`Basic ${loginDetails}`}
 }).then(res => token = res.data.token).catch(console.error), (JWTsignOptions.expiresIn-10)*1000);
+
+/**
+ * Attempt to build a TF-IDF index for course name and description.
+ * Will be used in getCoursesByName
+ */
+focusa.then(f => f.courses.pouch.search({
+    fields: ['name', 'description'],
+    build: true,
+})).catch(console.error);
 
 /**
  * Adds a course to the database.
@@ -74,16 +82,22 @@ const getCourseById = async (id) => {
 /**
  * Get a course with matching name.
  * @param {string} name The name of the course to find.
+ * @param {number} offset The offset from which to continue the search.
  * @returns Array of Course objects with the matching name.
  */
-const getCoursesByName = async(name) => {
-    assert(typeof name === 'string', 'Invalid arguments for getCourseByName');
+const getCoursesByName = async(name, offset=0) => {
+    assert(typeof name === 'string', 
+    'Invalid arguments for getCoursesByName');
     let c = await focusa;
-    return await c.courses.find({selector:{name}}).exec()
-    .then(async docs=>{
-        if (docs) return docs;
-        else throw courseNonExistant;
-    });
+    // TF-IDF text search
+    return c.courses.pouch.search({
+        query: name,
+        fields: ['name', 'description'],
+        include_docs: true, 
+        limit: postsLimit, skip: offset,
+    })
+    .then(async o => await c.courses.findByIds(o.rows.map(e => e.doc?._id))) // to convert to RxDocuments
+    .then(docs => Array.from(docs, ([key, value]) => value));
 }
 
 /**

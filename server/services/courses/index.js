@@ -29,7 +29,7 @@ app.get('/getCourseById', jwt.ensureLoggedIn, (req, res) => {
 })
 
 app.get('/getCoursesByName', jwt.ensureLoggedIn, (req, res) => {
-    if (req.user) getCoursesByName(req.query.name)
+    if (req.user) getCoursesByName(req.query.name, req.query.offset)
         .then((docs) => {
             res.json(docs.map(doc => ({ name: doc.name, 
                 uuid: doc.uuid, 
