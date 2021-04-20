@@ -126,7 +126,8 @@ const deleteProfile = async (userID) => {
  */
 const addInterest = async (userID, courseID) => {  
     assert(typeof userID === 'string'
-    && typeof courseID === 'string', 
+    && typeof courseID === 'string'
+    && UUIDpattern.test(courseID),
     'Invalid arguments for addInterest.');
     return await getProfile(userID)
     .then(async doc => {
@@ -149,7 +150,8 @@ const addInterest = async (userID, courseID) => {
  */
 const removeInterest = async (userID, courseID) => {
     assert(typeof userID === 'string'
-    && typeof courseID === 'string', 
+    && typeof courseID === 'string'
+    && UUIDpattern.test(courseID), 
     'Invalid arguments for removeInterest.');
     return await getProfile(userID)
     .then(doc => {
@@ -170,7 +172,8 @@ const removeInterest = async (userID, courseID) => {
  */
 const profileHasInterest = async (userID, courseID) => {
     assert(typeof userID === 'string'
-    && typeof courseID === 'string', 
+    && typeof courseID === 'string'
+    && UUIDpattern.test(courseID), 
     'Invalid arguments for profileHasInterest.');
     let c = await focusa;
     return await c.profile.find({
@@ -208,7 +211,8 @@ const getInterestsOfProfile = async (userID) => {
  * @returns An array of profile objects that contain the said interest.
  */
 const getProfilesWithInterest = async (courseID) => {
-    assert(typeof courseID === 'string', 
+    assert(typeof courseID === 'string'
+    && UUIDpattern.test(courseID), 
     'Invalid arguments for getProfilesWithInterest.');
     let c = await focusa;
     return await c.profile.find({
