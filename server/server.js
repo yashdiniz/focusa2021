@@ -11,7 +11,10 @@ process.title = "FOCUSA";
 const server = new ApolloServer({
     schema, // ES6, key:value pair coupling
     graphiql, // use the dev playground for now
-    subscriptions: '/subscriptions',
+    subscriptions: {
+        path: '/subscriptions',
+        onConnect, onDisconnect, onOperation,
+    },
     uploads: false,
     context: ({ req, connection }) => {
         if(connection) return connection;       // if WebSocket
@@ -30,11 +33,11 @@ var onOperation = function (message, params, WebSocket) {
 }
 //logging
 var onConnect = function (connectionParams, WebSocket) {
-    console.log('connecting ....')
+    console.log('connecting...')
 }
 //logging
 var onDisconnect = function (WebSocket) {
-    console.log('disconnecting ...')
+    console.log('disconnecting...')
 }
 
 require('./services/auth/index');   // importing the auth service (strictly for auth purposes)

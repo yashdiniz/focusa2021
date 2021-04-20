@@ -30,6 +30,7 @@ const SubscriptionType = new GraphQLObjectType({
 
 focusa.then(c => c.notifications.insert$
     .subscribe(doc => 
+        // TODO: switch to a more stable version of PubSub
         pubsub.publish('new_post', doc.documentData)
     )
 );
