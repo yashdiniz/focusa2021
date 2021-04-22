@@ -6,12 +6,14 @@
 
 const {focusa, assert, generateUUID} = require('../databases');
 const { authRealm, serviceAuthPass, JWTsignOptions, postsLimit, minPostBodyLength, UUIDpattern } = require('../../config');
-
+const { PubSub } = require('../../libp2p-pubsub');
 
 const noSuchPost = new Error('Post with such id does not exist');
 const noPostsFound = new Error('There are no matching posts found!');
 const noSuchAuthor = new Error('There exists no author with the given name!');
 const noSuchCourse = new Error('There is no course with the given name');
+
+PubSub.create();   // creating a notification publisher
 
 const {create} = require('axios');
 let token = '';
@@ -89,6 +91,14 @@ const createPost = async (text, author, course, attachmentURL, parent) => {
     let uuid = generateUUID();
     let time = Date.now();
     let f = await focusa;
+
+    auth.get('/getUserById', {
+        params: { id: author },
+        headers: { authorization: token }
+    }).then(res => res.data)
+    .then(data => 
+        PubSub.publish(uuid, 'postAdded', course, `${data.name} has posted!`, ""))
+    .catch(console.error);
 
     return await f.posts.insert({
         uuid, parent, text, course, author,
