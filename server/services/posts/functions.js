@@ -13,7 +13,7 @@ const noPostsFound = new Error('There are no matching posts found!');
 const noSuchAuthor = new Error('There exists no author with the given name!');
 const noSuchCourse = new Error('There is no course with the given name');
 
-PubSub.create();   // creating a notification publisher
+const notification = new PubSub();   // creating a notification publisher
 
 const {create} = require('axios');
 let token = '';
@@ -96,8 +96,7 @@ const createPost = async (text, author, course, attachmentURL, parent) => {
         params: { id: author },
         headers: { authorization: token }
     }).then(res => res.data)
-    .then(data => 
-        PubSub.publish(uuid, 'postAdded', course, `${data.name} has posted!`, ""))
+    .then(data => notification.publish(generateUUID(), 'postAdded', course, `${data.name} has posted!`, ""))
     .catch(console.error);
 
     return await f.posts.insert({

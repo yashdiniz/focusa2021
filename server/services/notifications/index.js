@@ -3,7 +3,7 @@ const { PubSub } = require('../../libp2p-pubsub');
 const { addNotification } = require('./functions');
 
 const server = true;
-PubSub.create(server);
+const notification = new PubSub(server);
 
 /**
  * NOTE: The notifications service will be running 
@@ -15,8 +15,11 @@ PubSub.create(server);
  * will be directly unmarshalled and transmitted.
  */
 // the server is subscribed to save to database.
-PubSub.subscribe('postAdded', payload => {
-    addNotification(payload.uuid, payload.time,
-        payload.channel, payload.course,
-        payload.body, payload.link);
-})
+notification.subscribe('postAdded', payload => {
+    console.log(payload.uuid, payload.time,
+            payload.channel, payload.course,
+            payload.body, payload.link);
+    // addNotification(payload.uuid, payload.time,
+    //     payload.channel, payload.course,
+    //     payload.body, payload.link);
+});
