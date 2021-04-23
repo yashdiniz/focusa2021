@@ -20,9 +20,10 @@ const webrtcPort = 5000;
 const graphiql = !production;  // essentially, run graphiql at graphql endpoint
 const postPort = port + 4;
 const postRealm = "http://localhost:" + postPort;
-const libp2pRealm = "/ip4/127.0.0.1/tcp/" + (port + 5); // could be /dnsaddr/auth.herokuapp.com/tcp/8080
+const libp2pPort = port + 5;
+const libp2pRealm = `/ip4/127.0.0.1/tcp/${libp2pPort}/ws`; // could be /dnsaddr/notif.herokuapp.com/tcp/80/ws
 // the dev secret which will be used for most crypto operations.
-const secret = process.env['SECRET'] || 'FOCUSA secret';
+const secret = process.env['SECRET'] || 'FOCUSA secret is here';
 
 const remote = process.env['REMOTEDB'];  // basic-auth remote couchDB URL
 
@@ -37,6 +38,7 @@ const pbkdfIters = 1<<14,
     UUIDpattern = /^[\w.-]+$/i;
 const rolePattern = /\w+/;
 
+const keystorePath = path.join(projectRoot, 'keystore');
 if (!fs.existsSync(path.join(projectRoot, 'certs/certificate.pem'))) {
     // generates the certificates by invoking script, if not already made
     const { execSync } = require('child_process');
@@ -82,5 +84,5 @@ module.exports = {
     pbkdfIters, pbkdfDigest, pbkdfLen, UUIDSize, currentPasswordScheme,
     minPasswordLength, usernamePattern, maxModRolesforCourse, maxNameLength,
     defaultProfilePic, defaultfullName, defaultAbout, postsLimit, postPort,
-    minPostBodyLength, UUIDpattern, libp2pRealm,
+    minPostBodyLength, UUIDpattern, libp2pRealm, keystorePath,
 };

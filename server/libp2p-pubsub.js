@@ -4,11 +4,28 @@
  */
 const libp2p = require('libp2p');
 const TCP = require('libp2p-tcp');
+const Websockets = require('libp2p-websockets');
 const { NOISE } = require('libp2p-noise');
 const MPLEX = require('libp2p-mplex');
 const dht = require('libp2p-kad-dht');
 const pubsub = require('libp2p-gossipsub');
-const { libp2pRealm } = require('./config');
+const { libp2pRealm, serviceAuthPass, JWTsignOptions, authRealm } = require('./config');
+
+const {create} = require('axios');
+let token = '';
+const auth = create({
+    baseURL: `${authRealm}`,
+    timeout: 5000,
+});
+
+let loginDetails = Buffer.from(`pubsub:${serviceAuthPass}`).toString('base64');
+auth.get('/', {
+    headers: {authorization: `Basic ${loginDetails}`}
+    }).then(res => token = res.data.token);
+setInterval(() => auth.get('/', {
+headers: {authorization:`Basic ${loginDetails}`}
+})
+.then(res => token = res.data.token), (JWTsignOptions.expiresIn-10)*1000);
 
 // compiling a protobuf instance for marshalling the data.
 const { Notification } = require('protons')(`
@@ -20,67 +37,95 @@ message Notification {
     required string body = 5;
     required string link = 6;
 }`);
+let addrs= [];  // the singleton data structure holding all the addresses...
 
-let config = {
-    modules: {
-        transport: [TCP],
-        connEncryption: [NOISE],
-        streamMuxer: [MPLEX],
-        dht,
-        pubsub,
-    },
-    connectionManager: {
-        maxConnections: Infinity,
-        minConnections: 0,
-    },
-    config: {
-        pubsub: {   // The pubsub options (and defaults) can be found in the pubsub router documentation
-            enabled: true,
-            emitSelf: true,    // whether the node should emit to self on publish
-        },
-        dht: {      // The DHT options (and defaults) can be found in its documentation
-            kBucketSize: 20,
-            enabled: true,
-            randomWalk: {
-                enabled: true,  // Allows to disable discovery (enabled by default)
-                interval: 300e3,
-                timeout: 10e3
-            }
-        }
+function waitForAddrs(condition) {
+    const poll = resolve => {
+        if (condition()) resolve(addrs);
+        else setTimeout(_ => poll(resolve), 500);
     }
-};
-
+    return new Promise(poll);
+}
+waitForAddrs(() => (addrs.length > 0 && token.length > 0))
+.then(async () => await auth.get('/AddPubSubpeerIds', {
+    params: { addrs },
+    headers: { authorization: token },
+}).catch(e => {
+    console.log('Failed to update PubSub peer ID.');
+    console.error(e);
+}))
 class PubSub {
-    node = {};
-    async create(isServer = false) {
-        if (isServer) { // if not pinging, then listen...
+    node;
+    constructor(isServer = false) {
+        let config = {
+            modules: {
+                transport: [TCP, Websockets],
+                connEncryption: [NOISE],
+                streamMuxer: [MPLEX],
+                dht,
+                pubsub,
+            },
+            connectionManager: {
+                maxConnections: Infinity,
+                minConnections: 0,
+            },
+            config: {
+                pubsub: {   // The pubsub options (and defaults) can be found in the pubsub router documentation
+                    enabled: true,
+                    emitSelf: true,    // whether the node should emit to self on publish
+                },
+                dht: {      // The DHT options (and defaults) can be found in its documentation
+                    kBucketSize: 20,
+                    enabled: true,
+                    randomWalk: {
+                        enabled: true,  // Allows to disable discovery (enabled by default)
+                        interval: 300e3,
+                        timeout: 10e3
+                    }
+                }
+            }
+        };
+        if (isServer) { // if is server, then listen...
             config.addresses = {
                 // add a listen address (localhost) to accept TCP connections on a random port
-                listen: [ libp2pRealm ]
+                listen: [libp2pRealm]
             };
         }
-        this.node = await libp2p.create(config);
+        this.node = libp2p.create(config);
+        this.create(isServer);
+    }
 
-        await this.node.start(); // start libp2p node
-        node.multiaddrs.forEach(addr => 
-            console.log(`libp2p-pubsub listening at ${addr.toString()}/p2p/${node.peerId.toB58String()}`)
-        );
-
-        if (!isServer) {
-            console.log(`Pinging libp2p-pubsub at ${libp2pRealm}`);
-            const latency = await this.node.ping(libp2pRealm);
-            console.log(`Pinged ${libp2pRealm} in ${latency}ms`);
-        }
+    async create(isServer = false) {
+        let node = await this.node;
         
-        this.node.connectionManager.on('peer:connect',
+        await node.start(); // start libp2p node
+        addrs = node.multiaddrs.map(addr => `${addr.toString()}/p2p/${node.peerId.toB58String()}`)
+
+        // Share peerIds to auth server, so that it can be downloaded.
+        if(isServer) {
+            console.log(`libp2p-pubsub listening at ${addrs}`);
+        } else {    // if not server, then ping to establish connection...
+            await waitForAddrs(() => (token.length > 0))
+            .then(async () => {
+                await auth.get('/PubSubpeerIds', {
+                    headers: { authorization: token },
+                }).then(async res => {
+                    console.log(`Pinging libp2p-pubsub at ${res.data.addrs[0]}`);
+                    let latency = await node.ping(res.data.addrs[0]);
+                    console.log(`Pinged ${res.data.addrs[0]} in ${latency}ms`);
+                });
+            })
+        }
+
+        node.connectionManager.on('peer:connect',
             connection => console.log('Connected to %s', connection.remotePeer.toB58String()));
-    
+
         const stop = async () => {
             // stop libp2p node
-            await this.node.stop();
+            await node.stop();
             process.exit(0);
         }
-    
+
         // always stop the socket before terminating process
         process.on('SIGTERM', stop);
         process.on('SIGINT', stop);
@@ -94,10 +139,12 @@ class PubSub {
      * @param {string} body The notification body.
      * @param {string} link The notification link(URL).
      */
-    publish(uuid, channel, course, body, link) {
-        this.node.pubsub.publish(channel, Notification.encode({
+    async publish(uuid, channel, course, body, link) {
+        const node = await this.node;
+        setTimeout(()=> 
+        node.pubsub.publish(channel, Notification.encode({
             uuid, time: Date.now(), channel, course, body, link,
-        }))
+        })), 1000);
     }
 
     /**
@@ -105,11 +152,13 @@ class PubSub {
      * @param {string} channel The channel(topic) to subscribe to.
      * @param {function} callback Callback function to be invoked on any new pubsub payload.
      */
-    subscribe(channel, callback) {
-        this.node.pubsub.subscribe(channel, message =>{
+    async subscribe(channel, callback) {
+        const node = await this.node;
+        setTimeout(() =>
+        node.pubsub.subscribe(channel, message => {
             let payload = Notification.decode(message.data);
             callback(payload, message); // also returning unmarshalled message contents, to check signature.
-        });
+        }), 1000);
     }
 }
 
