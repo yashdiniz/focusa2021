@@ -44,3 +44,4 @@ require('./services/auth/index');   // importing the auth service (strictly for 
 require('./services/profile/index');    // import the profile service  
 require('./services/courses/index');// importing the courses service
 require('./services/posts/index');
+require('./services/notifications/index');
