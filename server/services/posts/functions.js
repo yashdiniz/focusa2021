@@ -96,7 +96,7 @@ const createPost = async (text, author, course, attachmentURL, parent) => {
         params: { id: author },
         headers: { authorization: token }
     }).then(res => res.data)
-    .then(data => notification.publish(generateUUID(), 'postAdded', course, `${data.name} has posted!`, ""))
+    .then(data => notification.publish(generateUUID(), 'postAdded', course, `${data.name} has posted!`, `post/${uuid}`))
     .catch(console.error);
 
     return await f.posts.insert({

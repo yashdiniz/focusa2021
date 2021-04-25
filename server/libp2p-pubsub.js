@@ -110,9 +110,7 @@ class PubSub {
                 await auth.get('/PubSubpeerIds', {
                     headers: { authorization: token },
                 }).then(async res => {
-                    console.log(`Pinging libp2p-pubsub at ${res.data.addrs[0]}`);
-                    let latency = await node.ping(res.data.addrs[0]);
-                    console.log(`Pinged ${res.data.addrs[0]} in ${latency}ms`);
+                    await Promise.all(res.data.addrs.map(o => node.ping(o)));
                 });
             })
         }
@@ -159,6 +157,15 @@ class PubSub {
             let payload = Notification.decode(message.data);
             callback(payload, message); // also returning unmarshalled message contents, to check signature.
         }), 1000);
+    }
+
+    /**
+     * Unsubscribe from a notification channel.
+     * @param {string} channel The channel(topic) to unsubscribe from.
+     */
+    async unsubscribe(channel) {
+        const node = await this.node;
+        node.pubsub.unsubscribe(channel);
     }
 }
 
