@@ -5,10 +5,20 @@ const {
     GraphQLID
 } = require('graphql');
 
-const { PubSub } = require('graphql-subscriptions');
-const { focusa } = require('../services/databases');
+const { PubSub, withFilter } = require('apollo-server');
+const { create } = require('axios');
+const { verify } = require('../services/jwt');
 const pubsub = new PubSub();
 const NotificationType = require('./NotificationType');
+const { profileRealm } = require('../config');
+
+const p2p = require('../libp2p-pubsub');
+const notification = new p2p.PubSub();
+
+const profile = create({
+    baseURL: `${profileRealm}`,
+    timeout: 5000,
+});
 
 const SubscriptionType = new GraphQLObjectType({
     name: "Subscription",
@@ -17,22 +27,32 @@ const SubscriptionType = new GraphQLObjectType({
         postAdded: {
             type: GraphQLNonNull(NotificationType),
             description: "todo",
-            resolve(parent, args, ctx, info) {
-                return parent;
-            },
-            subscribe(parent, args, ctx, info) {
-                let iterator = pubsub.asyncIterator(['new_post']);
-                return iterator;
-            }
+            subscribe: withFilter(
+                () => {
+                    return pubsub.asyncIterator(['postAdded'])
+                },
+                async (payload, _, ctx) => {   // filter notifications to client based on arguments sent
+                    let sess = verify(ctx.headers.authorization?.replace('Bearer ', ''));
+                    return await profile.get('/getProfile', {
+                        params: { id: sess.uuid }, // check the profile ID of the user session...
+                        headers: { authorization: ctx.headers.authorization, realip: ctx.ip }
+                    }).then(res => {
+                        let interests = res.data?.interests;
+                        return interests.includes(payload.postAdded.course);
+                    });
+                },
+            )
         }
     }
 });
 
-focusa.then(c => c.notifications.insert$
-    .subscribe(doc => 
-        // TODO: switch to a more stable version of PubSub
-        pubsub.publish('new_post', doc.documentData)
-    )
-);
+notification.subscribe('postAdded', payload => {
+    // TODO: still performing a forwarding, not the expected way to pubsub.
+    pubsub.publish('postAdded', {
+        postAdded: { uuid: payload.uuid, time: payload.time,
+        channel: payload.channel, course: payload.course,
+        body: payload.body, link: payload.link }
+    });
+});
 
 module.exports = SubscriptionType;
