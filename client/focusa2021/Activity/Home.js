@@ -8,12 +8,10 @@ import { useQuery, gql } from '@apollo/client';
 const getPosts = gql`
     query getPosts($q: String, $offset: Int) {
         post(q:$q, offset:$offset){
-            uuid, time, text, author{
-              uuid
-              name
-            },
-            attachmentURL
-          }
+            uuid, time, text, attachmentURL,
+            author{ uuid, name },
+            course{ uuid, name },
+        }
     }
 `;
 
@@ -31,10 +29,10 @@ const getLatest = (query, offset) => {
     console.log(data);
     if (error) console.error(error);
     let posts = data.map(o =>
-        <Post   uuid={data.uuid} time={data.time}
-                text={data.text} author={data.author}
-                course={data.course} attachmentURL={data.attachmentURL}
-         />
+        <Post uuid={data.uuid} time={data.time}
+            text={data.text} author={data.author}
+            course={data.course} attachmentURL={data.attachmentURL}
+        />
     );
 
     return (
