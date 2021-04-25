@@ -132,8 +132,6 @@ const editPost = async (uuid, text) => {
  * @returns top 10 posts 
  */
 const searchPosts = async (query, offset) => {
-    // TODO: for now implement only implement empty query
-    // add limit to only view top 10 (store as var in config) posts...
     // TODO: Also, will implement tf-idf search soon.
     let f = await focusa;
 

@@ -22,7 +22,7 @@ headers: {authorization:`Basic ${loginDetails}`}
 
 app.get('/searchPosts', jwt.ensureLoggedIn, (req, res)=>{
     //currently returns the array of objects obtained from searchPosts functions
-    if(req.user) searchPosts(req.query.q, req.query.offset)
+    if(req.user) searchPosts(req.query.q, parseInt(req.query.offset))
     .then(docs=> {
         let posts = docs.map(doc => ({uuid: doc.uuid, parent: doc.parent, text: doc.text, course: doc.course, author: doc.author, reported: doc.reported, approved: doc.approved, time: doc.time, attachmentURL: doc.attachmentURL}));
         res.json(posts);
