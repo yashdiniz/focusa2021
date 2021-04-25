@@ -5,12 +5,15 @@ import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 
 import BottomNavigator from './Components/BottomNavigator';
+import { apolloClient } from './apollo';
 
 const App = (props) => {
-    return(
-        <NavigationContainer>
-            <BottomNavigator/>
-        </NavigationContainer>
+    return (
+        <ApolloProvider client={apolloClient}>
+            <NavigationContainer>
+                <BottomNavigator />
+            </NavigationContainer>
+        </ApolloProvider>
     );
 }
 

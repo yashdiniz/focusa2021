@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, } from 'react-native';
 import styles from '../Styles/HomeStyle';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-const Posts = () =>{
+const Post = () =>{
     return(
         <View style={styles.PostView}>
             <Text style={styles.subjectName}>Big Data Analysis</Text>
@@ -45,4 +45,4 @@ const Posts = () =>{
     );
 }
 
-export default Posts
+export default Post
