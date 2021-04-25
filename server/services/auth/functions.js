@@ -331,7 +331,7 @@ createUser('admin', 'gyroscope')
 createRole('admin')
 .catch(e => console.error('Attempted creating admin. ' + e.message))
 .finally(o => giveRole('admin', 'admin'))
-.catch(e => console.error('Attempted giving role to admin. ' + e.message));
+.catch(e => console.error('Attempted giving role to admin. Couldn\'t.'));
 
 module.exports = {
     createUser, deleteUser, validateUser, updateUser, userExists, getUserById,

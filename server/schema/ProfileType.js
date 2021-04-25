@@ -56,11 +56,11 @@ const ProfileType = new GraphQLObjectType({
         interests: {
             type: GraphQLNonNull(GraphQLList(CourseType)),
             description: "The list of courses the user has subscribed to.",
-            resolve({ interests }, args, ctx, info) {
-                return interests.map(doc => courses.get('/getCourseById', {
-                    params: { id: doc.course },
-                    headers: { authorization: req.headers?.authorization }
-                }).then(res => res.data.uuid));
+            async resolve({ interests }, args, ctx, info) {
+                return await Promise.all(interests.map(async doc => await courses.get('/getCourseById', {
+                    params: { id: doc },
+                    headers: { authorization: ctx.headers.authorization, realip: ctx.ip }
+                }).then(res => res.data)));
             }
         }}
     }

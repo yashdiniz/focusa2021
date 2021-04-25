@@ -13,11 +13,22 @@ const server = new ApolloServer({
     graphiql, // use the dev playground for now
     subscriptions: {
         path: '/subscriptions',
-        onConnect, onDisconnect, onOperation,
+        onOperation,
+        onConnect: (params, ws, ctx) => {
+            return {
+                ip: ctx.request.socket.remoteAddress,
+                authorization: params.authorization,
+            };
+        }
     },
     uploads: false,
     context: ({ req, connection }) => {
-        if(connection) return connection;       // if WebSocket
+        if(connection) {       // if WebSocket
+            return {
+                headers: { authorization: connection.context?.authorization },
+                ip: connection.context?.ip,
+            };
+        }
         else return req;
     }
 })
@@ -30,14 +41,6 @@ server.listen(port).then(({ url })=> {
 var onOperation = function (message, params, WebSocket) {
     console.log('subscriptionServer' + message.payload, params);
     return Promise.resolve(Object.assign({}, params, { context: message.payload.context }))
-}
-//logging
-var onConnect = function (connectionParams, WebSocket) {
-    console.log('connecting...')
-}
-//logging
-var onDisconnect = function (WebSocket) {
-    console.log('disconnecting...')
 }
 
 require('./services/auth/index');   // importing the auth service (strictly for auth purposes)

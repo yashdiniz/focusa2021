@@ -65,7 +65,6 @@ app.get('/', (req, res) => {
                 name: user.name,
             })
         });
-        console.log(`${user.name} microservice shook hands.`);
     } else res.status(401).json({ message: 'microservice not authenticated.' });
 });
 
