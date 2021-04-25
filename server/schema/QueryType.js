@@ -131,7 +131,7 @@ const QueryType = new GraphQLObjectType({
                         params: { id },
                         headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
                     }).then(res => res.data)];
-                else if(q) {
+                else {
                     return await post.get('/searchPosts', {
                         params: { q, offset },
                         headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }

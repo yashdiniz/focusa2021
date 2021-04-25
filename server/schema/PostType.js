@@ -74,7 +74,7 @@ const PostType = new GraphQLObjectType({
             async resolve({ uuid }, args, ctx, info) {
                 return await courses.get('/getCourseById', {
                     params: { id: uuid },
-                    headers: { authorization: req.headers?.authorization }
+                    headers: { authorization: ctx.headers?.authorization, realip: ctx.ip  }
                 }).then(res => res.data);
             }
         },
