@@ -34,7 +34,7 @@ function ensureAuthenticated(navigation, token) {
     useEffect(() => {
         // TODO: temporarily setting to bypass login
         // REMOVE THIS LINE IN PRODUCTION
-        token = "true";
+        //token = "true";
 
         console.log('Current login state: ',token.length>0);
         if(!token) return navigation.navigate('Login');

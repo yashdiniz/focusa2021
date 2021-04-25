@@ -27,8 +27,6 @@ function BottomNavigator() {
           tabBarVisible: false,
           tabBarLabel: 'Login',
           tabBarButton: () => null,
-          gestureEnabled: false,
-          swipeEnabled: false,
         }}
       >
         {props => <Login {...props} setLoggedIn={setLoggedIn} token={token}/>}
