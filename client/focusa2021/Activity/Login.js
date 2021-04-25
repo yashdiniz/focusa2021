@@ -9,7 +9,7 @@ const Login=({navigation, token, setLoggedIn}) =>{
     const [password, setPassword] = useState('');
     let passwordTextInput;
 
-    function presslogin(){
+    function presslogin() {
         if(username == '' || password == ''){
             Alert.alert('Message:','username and pasword can\'t be empty')
         }
