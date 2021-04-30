@@ -75,13 +75,16 @@ app.get('/getInterestsOfProfile', jwt.ensureLoggedIn, async (req, res) => {
 });
 
 app.get('/getProfilesWithInterest', jwt.ensureLoggedIn, async (req, res) => {
-    if (req.user) getProfilesWithInterest(req.query.courseID)
-    .then(docs => docs.map(doc => res.json({ userID: doc.userID, 
-        fullName: doc.fullName, 
-        about: doc.about, 
-        interests: doc.interests,
-        display_pic: doc.display_pic, 
-    }))).catch(e => {
+    if (req.user) getProfilesWithInterest(req.query.courseID, parseInt(req.query.offset))
+    .then(docs => {
+        let profiles = docs.map(doc => ({ userID: doc.userID, 
+            fullName: doc.fullName, 
+            about: doc.about, 
+            interests: doc.interests,
+            display_pic: doc.display_pic, 
+        }));
+        res.json(profiles);
+    }).catch(e => {
         res.status(404).json({ message: 'Not found.', e });
     });
 });
