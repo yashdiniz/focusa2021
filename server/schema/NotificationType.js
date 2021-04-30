@@ -5,6 +5,18 @@ const {
     GraphQLID,
     GraphQLInt
 } = require('graphql');
+const { create } = require('axios');
+const { coursesRealm, authRealm } = require('../config');
+
+const auth = create({
+    baseURL: `${authRealm}`,
+    timeout: 5000,
+});
+
+const courses = create({
+    baseURL: `${coursesRealm}`,
+    timeout: 5000,
+});
 
 const NotificationType = new GraphQLObjectType({
     name : "Notification",
@@ -27,10 +39,16 @@ const NotificationType = new GraphQLObjectType({
                 type: (CourseType),
                 description: "The course details.",
                 async resolve({ course },_, ctx) {
-                    return await courses.get('/getCourseById', {
-                        params: { id: course },
-                        headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
-                    }).then(res => res.data)
+                    if (course) {
+                        let token = await auth.get('/check', {  // cannot use JWT here since it will time out!
+                            headers: { cookie: ctx.headers.cookie } // thus using cookies to obtain the latest JWT from auth
+                        }).then(res => res.data?.token);
+
+                        return await courses.get('/getCourseById', {
+                            params: { id: course },
+                            headers: { authorization: token, realip: ctx.ip }
+                        }).then(res => res.data);
+                    }
                 }
             },
             body: {

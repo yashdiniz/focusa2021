@@ -16,6 +16,7 @@ const server = new ApolloServer({
         onOperation,
         onConnect: (params, ws, ctx) => {
             return {
+                cookie: ctx.request.headers.cookie,
                 ip: ctx.request.socket.remoteAddress,
                 authorization: params.authorization,
             };
@@ -25,7 +26,7 @@ const server = new ApolloServer({
     context: ({ req, connection }) => {
         if(connection) {       // if WebSocket
             return {
-                headers: { authorization: connection.context?.authorization },
+                headers: { authorization: connection.context?.authorization, cookie: connection.context?.cookie },
                 ip: connection.context?.ip,
             };
         }
