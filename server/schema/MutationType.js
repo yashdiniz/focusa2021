@@ -120,6 +120,7 @@ const MutationType = new GraphQLObjectType({
                 display_pic: { type: GraphQLNonNull(GraphQLString) },
             },
             async resolve(_, { id, fullName, about, display_pic }, ctx) {
+                // TODO: check if display_pic has a valid image URL
                 return await profile.get('/updateProfile', {
                     params: { id, fullName, about, display_pic, },
                     headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
