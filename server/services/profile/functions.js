@@ -5,7 +5,7 @@
  */
 
 const { focusa, assert } = require('../databases');
-const { defaultfullName, defaultAbout, authRealm, serviceAuthPass, JWTsignOptions, defaultProfilePic, UUIDpattern } = require('../../config');
+const { defaultfullName, defaultAbout, authRealm, serviceAuthPass, JWTsignOptions, defaultProfilePic, UUIDpattern, pageLimit } = require('../../config');
 
 const { create } = require('axios');
 let token = '';
@@ -210,7 +210,7 @@ const getInterestsOfProfile = async (userID) => {
  * @param {string} courseID The interest to find in the profiles.
  * @returns An array of profile objects that contain the said interest.
  */
-const getProfilesWithInterest = async (courseID) => {
+const getProfilesWithInterest = async (courseID, offset=0) => {
     assert(typeof courseID === 'string'
     && UUIDpattern.test(courseID), 
     'Invalid arguments for getProfilesWithInterest.');
@@ -221,10 +221,7 @@ const getProfilesWithInterest = async (courseID) => {
                 $in: [courseID]
             }
         }
-    }).exec()
-    .then(docs => {
-        return docs; // return only the first instance that matches
-    })
+    }).skip(offset).limit(pageLimit).exec();
 }
 
 module.exports = {

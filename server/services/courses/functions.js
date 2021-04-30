@@ -9,7 +9,7 @@
  * author: @imamsab
  */
 const { focusa, assert, generateUUID } = require('../databases');
-const { authRealm, serviceAuthPass, JWTsignOptions, UUIDpattern, postsLimit } = require('../../config');
+const { authRealm, serviceAuthPass, JWTsignOptions, UUIDpattern, pageLimit } = require('../../config');
 
 const courseExistsError = new Error('Course already exists.'),
       courseNonExistant = new Error('Course does not exist.');
@@ -94,7 +94,7 @@ const getCoursesByName = async(name, offset=0) => {
         query: name,
         fields: ['name', 'description'],
         include_docs: true, 
-        limit: postsLimit, skip: offset,
+        limit: pageLimit, skip: offset,
     })
     .then(async o => await c.courses.findByIds(o.rows.map(e => e.doc?._id))) // to convert to RxDocuments
     .then(docs => Array.from(docs, ([key, value]) => value));

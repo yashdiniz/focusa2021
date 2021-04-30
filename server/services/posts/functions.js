@@ -5,7 +5,7 @@
  */
 
 const {focusa, assert, generateUUID} = require('../databases');
-const { authRealm, serviceAuthPass, JWTsignOptions, postsLimit, minPostBodyLength, UUIDpattern } = require('../../config');
+const { authRealm, serviceAuthPass, JWTsignOptions, pageLimit, minPostBodyLength, UUIDpattern } = require('../../config');
 const { PubSub } = require('../../libp2p-pubsub');
 
 const noSuchPost = new Error('Post with such id does not exist');
@@ -148,7 +148,7 @@ const searchPosts = async (query, offset) => {
         query,
         fields: ['text'],
         include_docs: true, 
-        limit: postsLimit, skip: offset,
+        limit: pageLimit, skip: offset,
     })
     .then(async o => await f.posts.findByIds(o.rows.map(e => e.doc?._id))) // to convert to RxDocuments
     .then(docs => Array.from(docs, ([key, value]) => value));
@@ -166,7 +166,7 @@ const getPostsByAuthor = async (authorID, offset) => {
     return await f.posts.find().where('author').eq(authorID)
     .where('reported').eq(0)
     .where('approved').eq(1)
-    .skip(offset).limit(postsLimit).exec()
+    .skip(offset).limit(pageLimit).exec()
     .then(async docs => {
         if(docs) return docs;
         else throw noSuchAuthor;
@@ -186,7 +186,7 @@ const getPostsByCourse = async (courseID, offset) => {
     return await f.posts.find().where('course').eq(courseID)
     .where('reported').eq(0)
     .where('approved').eq(1)
-    .skip(offset).limit(postsLimit).exec()
+    .skip(offset).limit(pageLimit).exec()
     .then(async docs => {
         if(docs) return docs;
         else throw noSuchCourse;
@@ -206,7 +206,7 @@ const getPostsByParent = async (parentID, offset) => {
     return await f.posts.find().where('parent').eq(parentID)
     .where('reported').eq(0)
     .where('approved').eq(1)
-    .skip(offset).limit(postsLimit).exec()
+    .skip(offset).limit(pageLimit).exec()
     .then(async docs => {
         if(docs) return docs;
         else throw noSuchPost;

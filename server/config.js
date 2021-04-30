@@ -74,7 +74,7 @@ const defaultProfilePic = 'dp.jpeg',
     defaultAbout = 'Hey, I am a new User!';
 
 // posts related
-const postsLimit = 10,
+const pageLimit = 10,
     minPostBodyLength = 5;
 
 module.exports = { 
@@ -83,6 +83,6 @@ module.exports = {
     JWTsignOptions, JWTverifyOptions, JWTsecret, rolePattern, serviceAudience,
     pbkdfIters, pbkdfDigest, pbkdfLen, UUIDSize, currentPasswordScheme,
     minPasswordLength, usernamePattern, maxModRolesforCourse, maxNameLength,
-    defaultProfilePic, defaultfullName, defaultAbout, postsLimit, postPort,
+    defaultProfilePic, defaultfullName, defaultAbout, pageLimit, postPort,
     minPostBodyLength, UUIDpattern, libp2pRealm, keystorePath,
 };
