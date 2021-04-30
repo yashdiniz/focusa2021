@@ -7,8 +7,8 @@ dotenv.config({ path: path.join(projectRoot, '.env') });
 
 const production = false;
 // the realm stores the DNS/server name.
-const realm = process.env['REALM'];
 const port = process.env['port'] || 1896;   // using FOCUSA legacy port for testing.
+const realm = "http://localhost:" + port;
 const serviceAuthPass = process.env['authPass']; // password to authenticate microservice webhooks
 const authPort = port + 1;
 const authRealm = "http://localhost:" + authPort;
@@ -20,8 +20,10 @@ const webrtcPort = 5000;
 const graphiql = !production;  // essentially, run graphiql at graphql endpoint
 const postPort = port + 4;
 const postRealm = "http://localhost:" + postPort;
+const libp2pPort = port + 5;
+const libp2pRealm = `/ip4/127.0.0.1/tcp/${libp2pPort}/ws`; // could be /dnsaddr/notif.herokuapp.com/tcp/80/ws
 // the dev secret which will be used for most crypto operations.
-const secret = process.env['SECRET'] || 'FOCUSA secret';
+const secret = process.env['SECRET'] || 'FOCUSA secret is here';
 
 const remote = process.env['REMOTEDB'];  // basic-auth remote couchDB URL
 
@@ -32,9 +34,11 @@ const pbkdfIters = 1<<14,
     currentPasswordScheme = 'pbkdf2',
     minPasswordLength = 8,
     maxNameLength = 20,
-    UUIDSize = 24;
+    UUIDSize = 24,
+    UUIDpattern = /^[\w.-]+$/i;
 const rolePattern = /\w+/;
 
+const keystorePath = path.join(projectRoot, 'keystore');
 if (!fs.existsSync(path.join(projectRoot, 'certs/certificate.pem'))) {
     // generates the certificates by invoking script, if not already made
     const { execSync } = require('child_process');
@@ -70,7 +74,7 @@ const defaultProfilePic = 'dp.jpeg',
     defaultAbout = 'Hey, I am a new User!';
 
 // posts related
-const postsLimit = 10,
+const pageLimit = 10,
     minPostBodyLength = 5;
 
 module.exports = { 
@@ -79,6 +83,6 @@ module.exports = {
     JWTsignOptions, JWTverifyOptions, JWTsecret, rolePattern, serviceAudience,
     pbkdfIters, pbkdfDigest, pbkdfLen, UUIDSize, currentPasswordScheme,
     minPasswordLength, usernamePattern, maxModRolesforCourse, maxNameLength,
-    defaultProfilePic, defaultfullName, defaultAbout, postsLimit, postPort,
-    minPostBodyLength,
+    defaultProfilePic, defaultfullName, defaultAbout, pageLimit, postPort,
+    minPostBodyLength, UUIDpattern, libp2pRealm, keystorePath,
 };

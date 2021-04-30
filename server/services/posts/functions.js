@@ -5,13 +5,15 @@
  */
 
 const {focusa, assert, generateUUID} = require('../databases');
-const { authRealm, serviceAuthPass, JWTsignOptions, postsLimit, minPostBodyLength } = require('../../config');
-
+const { authRealm, serviceAuthPass, JWTsignOptions, pageLimit, minPostBodyLength, UUIDpattern } = require('../../config');
+const { PubSub } = require('../../libp2p-pubsub');
 
 const noSuchPost = new Error('Post with such id does not exist');
 const noPostsFound = new Error('There are no matching posts found!');
 const noSuchAuthor = new Error('There exists no author with the given name!');
 const noSuchCourse = new Error('There is no course with the given name');
+
+const notification = new PubSub();   // creating a notification publisher
 
 const {create} = require('axios');
 let token = '';
@@ -29,6 +31,15 @@ headers: {authorization:`Basic ${loginDetails}`}
 })
 .then(res => token = res.data.token), (JWTsignOptions.expiresIn-10)*1000);
 
+/**
+ * Attempt to build a TF-IDF index for post text.
+ * Will be used in searchPosts
+ */
+ focusa.then(f => f.courses.pouch.search({
+    fields: ['text'],
+    build: true,
+})).catch(console.error);
+
 
 /**
  * Gets the post with matching UUID.
@@ -36,17 +47,17 @@ headers: {authorization:`Basic ${loginDetails}`}
  * @returns Post with the specified ID
  */
 const getPostById = async (uuid) => {
-    assert(typeof uuid === 'string', "Invalid post ID at getPostById.");
+    assert(typeof uuid === 'string'
+        && UUIDpattern.test(uuid), 
+    "Invalid post ID at getPostById.");
 
     let f = await focusa;
     
-    if(uuid)
-        return await f.posts.findOne(uuid).exec()
-        .then(async doc => {
-            if(doc) return doc;
-            else throw noSuchPost;
-        });
-    else throw noSuchPost;
+    return await f.posts.findOne(uuid).exec()
+    .then(async doc => {
+        if(doc) return doc;
+        else throw noSuchPost;
+    });
 }
 
 /**
@@ -54,20 +65,20 @@ const getPostById = async (uuid) => {
  * @param {string} uuid uuid of the post.
  */
 const deletePost = async (uuid) => {
-    assert(typeof uuid === 'string', "Invalid post ID at deletePost.");
+    assert(typeof uuid === 'string'
+        && UUIDpattern.test(uuid), 
+    "Invalid post ID at deletePost.");
 
     let f = await focusa;
 
-    if(uuid)
-        return await f.posts.findOne(uuid).exec()
-        .then(async doc => {
-            if(doc) {
-                doc.remove();
-                return doc;
-            }
-            else throw noSuchPost;
-        });
-    else throw noSuchPost;
+    return await f.posts.findOne(uuid).exec()
+    .then(async doc => {
+        if(doc) {
+            doc.remove();
+            return doc;
+        }
+        else throw noSuchPost;
+    });
 }
 
 /**
@@ -89,7 +100,13 @@ const createPost = async (text, author, course, attachmentURL, parent) => {
     let uuid = generateUUID();
     let time = Date.now();
     let f = await focusa;
-    console.log('In createPost', parent);
+
+    auth.get('/getUserById', {
+        params: { id: author },
+        headers: { authorization: token }
+    }).then(res => res.data)
+    .then(data => notification.publish(generateUUID(), 'postAdded', course, `${data.name} has posted!`, `post/${uuid}`))
+    .catch(console.error);
 
     return await f.posts.insert({
         uuid, parent, text, course, author,
@@ -104,17 +121,17 @@ const createPost = async (text, author, course, attachmentURL, parent) => {
  */
 const editPost = async (uuid, text) => {
     assert(typeof uuid === 'string' 
-        && typeof text === 'string' && text.length > minPostBodyLength,
+        && typeof text === 'string' 
+        && text.length > minPostBodyLength
+        && UUIDpattern.test(uuid),
         "Invalid arguments for editPost.");
 
     let f = await focusa;
     
-    if(uuid)
-        return await f.posts.findOne(uuid).exec()
-        .then(doc => doc.atomicPatch({
-            text,
-        }));
-    else throw noSuchPost;
+    return await f.posts.findOne(uuid).exec()
+    .then(doc => doc.atomicPatch({
+        text, time: Date.now()
+    }));
 }
 
 /**
@@ -124,19 +141,17 @@ const editPost = async (uuid, text) => {
  * @returns top 10 posts 
  */
 const searchPosts = async (query, offset) => {
-    // TODO: for now implement only implement empty query
-    // add limit to only view top 10 (store as var in config) posts...
-    // TODO: Also, will implement tf-idf search soon.
     let f = await focusa;
 
-    return await f.posts.find()
-    .where('reported').eq(0)
-    .where('approved').eq(1)
-    .skip(offset).limit(postsLimit).exec()
-    .then(async docs => {
-        if(docs) return docs;
-        else throw noPostsFound;
-    });
+    // TF-IDF text search
+    return await f.posts.pouch.search({
+        query,
+        fields: ['text'],
+        include_docs: true, 
+        limit: pageLimit, skip: offset,
+    })
+    .then(async o => await f.posts.findByIds(o.rows.map(e => e.doc?._id))) // to convert to RxDocuments
+    .then(docs => Array.from(docs, ([key, value]) => value));
 }
 /**
  * Searches for all posts made by a particular author
@@ -144,17 +159,18 @@ const searchPosts = async (query, offset) => {
  * @returns all the posts made by the author
  */
 const getPostsByAuthor = async (authorID, offset) => {
-    assert(typeof authorID === 'string', "Invalid arguments for getPostsByAuthor.");
+    assert(typeof authorID === 'string'
+        && UUIDpattern.test(authorID), 
+    "Invalid arguments for getPostsByAuthor.");
     let f = await focusa;
-
     return await f.posts.find().where('author').eq(authorID)
     .where('reported').eq(0)
     .where('approved').eq(1)
-    .skip(offset).limit(postsLimit).exec()
+    .skip(offset).limit(pageLimit).exec()
     .then(async docs => {
         if(docs) return docs;
         else throw noSuchAuthor;
-    })
+    });
 }
 
 /**
@@ -163,12 +179,14 @@ const getPostsByAuthor = async (authorID, offset) => {
  * @returns all the posts under a particular course
  */
 const getPostsByCourse = async (courseID, offset) => {
-    assert(typeof courseID === 'string', "Invalid arguments for getPostsByCourse.");
+    assert(typeof courseID === 'string'
+        && UUIDpattern.test(courseID), 
+    "Invalid arguments for getPostsByCourse.");
     let f = await focusa;
     return await f.posts.find().where('course').eq(courseID)
     .where('reported').eq(0)
     .where('approved').eq(1)
-    .skip(offset).limit(postsLimit).exec()
+    .skip(offset).limit(pageLimit).exec()
     .then(async docs => {
         if(docs) return docs;
         else throw noSuchCourse;
@@ -181,12 +199,14 @@ const getPostsByCourse = async (courseID, offset) => {
  * @returns All the posts with a matching parent ID.
  */
 const getPostsByParent = async (parentID, offset) => {
-    assert(typeof parentID === 'string', "Invalid arguments for getPostsByParent.");
+    assert(typeof parentID === 'string'
+        && UUIDpattern.test(parentID), 
+    "Invalid arguments for getPostsByParent.");
     let f = await focusa;
     return await f.posts.find().where('parent').eq(parentID)
     .where('reported').eq(0)
     .where('approved').eq(1)
-    .skip(offset).limit(postsLimit).exec()
+    .skip(offset).limit(pageLimit).exec()
     .then(async docs => {
         if(docs) return docs;
         else throw noSuchPost;

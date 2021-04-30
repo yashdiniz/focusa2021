@@ -4,9 +4,9 @@
  * and performing write, update and delete operations.
  */
 const { GraphQLObjectType, GraphQLString, GraphQLNonNull, GraphQLID } = require('graphql');
-const { RoleType, UserType, ProfileType, PostType } = require('./types');
+const { RoleType, UserType, ProfileType, PostType, CourseType } = require('./types');
 const { create } = require('axios');
-const { authRealm, profilePort, profileRealm, postRealm } = require('../config');
+const { authRealm, profileRealm, postRealm, coursesRealm } = require('../config');
 
 const auth = create({
     baseURL: `${authRealm}`,
@@ -18,6 +18,10 @@ const profile = create({
 });
 const post = create({
     baseURL: `${postRealm}`,
+    timeout: 5000,
+});
+const courses = create({
+    baseURL: `${coursesRealm}`,
     timeout: 5000,
 });
 
@@ -116,6 +120,7 @@ const MutationType = new GraphQLObjectType({
                 display_pic: { type: GraphQLNonNull(GraphQLString) },
             },
             async resolve(_, { id, fullName, about, display_pic }, ctx) {
+                // TODO: check if display_pic has a valid image URL
                 return await profile.get('/updateProfile', {
                     params: { id, fullName, about, display_pic, },
                     headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
@@ -183,22 +188,88 @@ const MutationType = new GraphQLObjectType({
                 }).then(res => res.data);
             }
         },
-        // addCourse: {
-            // TODO
-        // },
-        // deleteCourse: {
-
-        // },
-        // updateCourse: {
-
-        // },
-        // subscribe: {
-            // TODO
-        // },
-        // unsubscribe: {
-
-        // }
-        // publishPost(input MakePost)
+        subscribeToCourse: {
+            type: ProfileType,
+            description: "TODO",
+            args: {
+                uuid: { 
+                    type: GraphQLID, 
+                    description: "The user's ID." 
+                },
+                courseID: { 
+                    type: GraphQLID, 
+                    description: "The courseID the user is subscribing to." 
+                },
+            },
+            async resolve(_, { uuid, courseID }, ctx) {
+                return await profile.get('/addInterest', {
+                    params: { uuid, courseID },
+                    headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
+                }).then(res => res.data);
+            }
+        },
+        addCourse: {
+            type: CourseType,
+            description: "TODO",
+            args: {
+                name: { type: GraphQLString },
+                description: { type: GraphQLString },
+            },
+            async resolve(_, { name, description }, ctx) {
+                return await courses.get('/addCourse', {
+                    params: { name, description },
+                    headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
+                }).then(res => res.data);
+            }
+        },
+        unsubscribeFromCourse: {
+            type: ProfileType,
+            description: "TODO",
+            args: {
+                uuid: { 
+                    type: GraphQLID, 
+                    description: "The user's ID." 
+                },
+                courseID: { 
+                    type: GraphQLID, 
+                    description: "The courseID the user is unsubscribing from." 
+                },
+            },
+            async resolve(_, { uuid, courseID }, ctx) {
+                return await profile.get('/removeInterest', {
+                    params: { uuid, courseID },
+                    headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
+                }).then(res => res.data);
+            }
+        },
+        deleteCourse: {
+            type: CourseType,
+            description: "TODO",
+            args: {
+                id: { type: GraphQLID },
+            },
+            async resolve(_, { id }, ctx) {
+                return await courses.get('/deleteCourse', {
+                    params: { id },
+                    headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
+                }).then(res => res.data);
+            }
+        },
+        updateCourse: {
+            type: CourseType,
+            description: "TODO",
+            args: {
+                id: { type: GraphQLID },
+                name: { type: GraphQLString },
+                description: { type: GraphQLString },
+            },
+            async resolve(_, { id, name, description }, ctx) {
+                return await courses.get('/updateCourse', {
+                    params: { id, name, description },
+                    headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
+                }).then(res => res.data);
+            }
+        },
         // adding mutations will be subject to frontend requirements for now.
     }
 })

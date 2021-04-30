@@ -9,11 +9,10 @@
  * author: @imamsab
  */
 const { focusa, assert, generateUUID } = require('../databases');
-const { authRealm, serviceAuthPass, JWTsignOptions } = require('../../config');
+const { authRealm, serviceAuthPass, JWTsignOptions, UUIDpattern, pageLimit } = require('../../config');
 
 const courseExistsError = new Error('Course already exists.'),
       courseNonExistant = new Error('Course does not exist.');
-
 
 const { create } = require('axios');
 let token = '';
@@ -29,6 +28,15 @@ auth.get('/', {
 setInterval(() => auth.get('/', {
     headers: {authorization:`Basic ${loginDetails}`}
 }).then(res => token = res.data.token).catch(console.error), (JWTsignOptions.expiresIn-10)*1000);
+
+/**
+ * Attempt to build a TF-IDF index for course name and description.
+ * Will be used in getCoursesByName
+ */
+focusa.then(f => f.courses.pouch.search({
+    fields: ['name', 'description'],
+    build: true,
+})).catch(console.error);
 
 /**
  * Adds a course to the database.
@@ -60,30 +68,36 @@ const addCourse = async (name, description) => {
  * @returns Course object with matching ID.
  */
 const getCourseById = async (id) => {
-    assert(typeof id === 'string', 'Invalid arguments for getCourseById.');
+    assert(typeof id === 'string'
+        && UUIDpattern.test(id), 
+    'Invalid arguments for getCourseById.');
     let c = await focusa;
-    if(id)
-        return await c.courses.findOne(id).exec()
-        .then(async doc=>{
-            if (doc) return doc;
-            else throw courseNonExistant;
-        });
-    else throw courseNonExistant;
+    return await c.courses.findOne(id).exec()
+    .then(async doc=>{
+        if (doc) return doc;
+        else throw courseNonExistant;
+    });
 }
 
 /**
  * Get a course with matching name.
  * @param {string} name The name of the course to find.
+ * @param {number} offset The offset from which to continue the search.
  * @returns Array of Course objects with the matching name.
  */
-const getCoursesByName = async(name) => {
-    assert(typeof name === 'string', 'Invalid arguments for getCourseByName');
+const getCoursesByName = async(name, offset=0) => {
+    assert(typeof name === 'string', 
+    'Invalid arguments for getCoursesByName');
     let c = await focusa;
-    return await c.courses.find({selector:{name}}).exec()
-    .then(async docs=>{
-        if (docs) return docs;
-        else throw courseNonExistant;
-    });
+    // TF-IDF text search
+    return await c.courses.pouch.search({
+        query: name,
+        fields: ['name', 'description'],
+        include_docs: true, 
+        limit: pageLimit, skip: offset,
+    })
+    .then(async o => await c.courses.findByIds(o.rows.map(e => e.doc?._id))) // to convert to RxDocuments
+    .then(docs => Array.from(docs, ([key, value]) => value));
 }
 
 /**
@@ -94,18 +108,20 @@ const getCoursesByName = async(name) => {
  * @returns Course object after updating.
  */
 const updateCourse = async(id, name, description) => {
-    assert(typeof id ==='string' && typeof name === 'string' && typeof description === 'string', 'Invalid arguments for updateCourse');
+    assert(typeof id ==='string' 
+        && typeof name === 'string' 
+        && typeof description === 'string'
+        && UUIDpattern.test(id), 
+        'Invalid arguments for updateCourse');
     let c = await focusa;
 
-    if(id)
-        return await c.courses.findOne(id).exec()
-        .then(async doc =>{
-            if(doc) return await doc.atomicPatch({
-                name, description
-            });
-            else throw courseNonExistant;
+    return await c.courses.findOne(id).exec()
+    .then(async doc =>{
+        if(doc) return await doc.atomicPatch({
+            name, description
         });
-    else throw courseNonExistant;
+        else throw courseNonExistant;
+    });
 }
 
 /**
@@ -114,17 +130,17 @@ const updateCourse = async(id, name, description) => {
  * @returns Course object of the deleted course.
  */
 const deleteCourse = async (id) =>{
-    assert(typeof id === 'string', "Invalid arguments for deleteCourse.");
+    assert(typeof id === 'string'
+        && UUIDpattern.test(id), 
+    "Invalid arguments for deleteCourse.");
     let c = await focusa;
-    if(id)
-        return await c.courses.findOne(id).exec()
-        .then(async doc=>{
-            if(doc){
-                doc.remove();
-                return doc;
-            } else throw courseNonExistant;
-        });
-    else throw courseNonExistant;
+    return await c.courses.findOne(id).exec()
+    .then(async doc=>{
+        if(doc){
+            doc.remove();
+            return doc;
+        } else throw courseNonExistant;
+    });
 }
 
 module.exports = {

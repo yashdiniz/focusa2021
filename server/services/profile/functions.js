@@ -5,7 +5,7 @@
  */
 
 const { focusa, assert } = require('../databases');
-const { defaultfullName, defaultAbout, authRealm, serviceAuthPass, JWTsignOptions, defaultProfilePic } = require('../../config');
+const { defaultfullName, defaultAbout, authRealm, serviceAuthPass, JWTsignOptions, defaultProfilePic, UUIDpattern, pageLimit } = require('../../config');
 
 const { create } = require('axios');
 let token = '';
@@ -56,19 +56,18 @@ const createProfile = async (id)=> {
  * @returns Profile object with matching ID.
  */
 const getProfile = async (userID)=> {
-    assert(typeof userID === 'string',
+    assert(typeof userID === 'string'
+        && UUIDpattern.test(userID),
     'Invalid arguments for getProfile.');
 
     let c = await focusa;
     // return the profile if it exists
-    if(userID)
-        return await c.profile.findOne(userID).exec()
-        .then(doc => {
-            if(doc) return doc;
-            // otherwise, create the profile if non-existant.
-            else return createProfile(userID);
-        });
-    else throw profileNonExistant;
+    return await c.profile.findOne(userID).exec()
+    .then(doc => {
+        if(doc) return doc;
+        // otherwise, create the profile if non-existant.
+        else return createProfile(userID);
+    });
 }
 
 /**
@@ -104,19 +103,19 @@ const updateProfile = async (userID, fullName, about, display_pic)=> {
  * @returns Promise deleted Profile object.
  */
 const deleteProfile = async (userID) => {
-    assert(typeof userID === 'string', 'Invalid arguments for deleteProfile.');
+    assert(typeof userID === 'string'
+        && UUIDpattern.test(userID), 
+    'Invalid arguments for deleteProfile.');
 
     let c = await focusa;
 
-    if(userID)
-        return await c.profile.findOne(userID).exec()
-        .then(profile => {
-            if(profile) {
-                profile.remove();
-                return profile;
-            } else throw profileNonExistant;
-        });
-    else throw profileNonExistant;
+    return await c.profile.findOne(userID).exec()
+    .then(profile => {
+        if(profile) {
+            profile.remove();
+            return profile;
+        } else throw profileNonExistant;
+    });
 }
 
 /**
@@ -127,7 +126,8 @@ const deleteProfile = async (userID) => {
  */
 const addInterest = async (userID, courseID) => {  
     assert(typeof userID === 'string'
-    && typeof courseID === 'string', 
+    && typeof courseID === 'string'
+    && UUIDpattern.test(courseID),
     'Invalid arguments for addInterest.');
     return await getProfile(userID)
     .then(async doc => {
@@ -150,7 +150,8 @@ const addInterest = async (userID, courseID) => {
  */
 const removeInterest = async (userID, courseID) => {
     assert(typeof userID === 'string'
-    && typeof courseID === 'string', 
+    && typeof courseID === 'string'
+    && UUIDpattern.test(courseID), 
     'Invalid arguments for removeInterest.');
     return await getProfile(userID)
     .then(doc => {
@@ -171,7 +172,8 @@ const removeInterest = async (userID, courseID) => {
  */
 const profileHasInterest = async (userID, courseID) => {
     assert(typeof userID === 'string'
-    && typeof courseID === 'string', 
+    && typeof courseID === 'string'
+    && UUIDpattern.test(courseID), 
     'Invalid arguments for profileHasInterest.');
     let c = await focusa;
     return await c.profile.find({
@@ -208,8 +210,9 @@ const getInterestsOfProfile = async (userID) => {
  * @param {string} courseID The interest to find in the profiles.
  * @returns An array of profile objects that contain the said interest.
  */
-const getProfilesWithInterest = async (courseID) => {
-    assert(typeof courseID === 'string', 
+const getProfilesWithInterest = async (courseID, offset=0) => {
+    assert(typeof courseID === 'string'
+    && UUIDpattern.test(courseID), 
     'Invalid arguments for getProfilesWithInterest.');
     let c = await focusa;
     return await c.profile.find({
@@ -218,10 +221,7 @@ const getProfilesWithInterest = async (courseID) => {
                 $in: [courseID]
             }
         }
-    }).exec()
-    .then(docs => {
-        return docs; // return only the first instance that matches
-    })
+    }).skip(offset).limit(pageLimit).exec();
 }
 
 module.exports = {

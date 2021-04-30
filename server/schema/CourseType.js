@@ -31,7 +31,7 @@ const CourseType = new GraphQLObjectType({
     name:'Course',
     descrption: "This node stores details of all the possible courses.",
     fields: () => {
-        const { RoleType, PostType } = require('./types');
+        const { RoleType, PostType, ProfileType } = require('./types');
         return {
             uuid: {
                 type: GraphQLNonNull(GraphQLID)
@@ -59,9 +59,12 @@ const CourseType = new GraphQLObjectType({
             subscribers: {
                 type: GraphQLList(ProfileType),
                 description: "Users subscribed to the course.",
-                async resolve({ id }, args, ctx, info){
+                args:{
+                    offset: { type: GraphQLInt },
+                },
+                async resolve({ uuid }, { offset }, ctx, info){
                     return await profile.get('/getProfilesWithInterest', {
-                        params: { courseID: id },
+                        params: { courseID: uuid, offset, },
                         headers: { authorization: ctx.headers.authorization, realip: ctx.ip },
                     }).then(res => res.data);
                 }

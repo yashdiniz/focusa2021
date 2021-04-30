@@ -10,9 +10,8 @@ const { UUIDSize, maxModRolesforCourse,
 const RxDB = require('rxdb');
 const leveldown = require('leveldown');
 RxDB.addRxPlugin(require('pouchdb-adapter-leveldb'));
+RxDB.addRxPlugin(require('pouchdb-quick-search'))
 
-// assert(condition, message) simplifies the code structure, 
-// by immediately throwing if condition is not met.
 /**
  * Asserts a condition, and throws a message on violation.
  * @param {boolean} condition Condition to be asserted.
@@ -269,6 +268,40 @@ const user_rolesSchema = {
     required: ['user_roleID', 'user', 'role'],
 };
 
+const notificationSchema = {
+    name: 'notifications',
+    title: 'FOCUSA notifications schema',
+    version: 0,
+    description: "Contains the notifications for the posts",
+    type: 'object',
+    properties: {
+        uuid: {
+            type: 'string',
+            primary: true
+        },
+        time: {
+            type: 'number',
+            final: true
+        },
+        channel: {
+            type: 'string',
+            enum: ['new_post']
+        },
+        course: {
+            type: 'string',
+            ref: 'courses'
+        },
+        body: {
+            type: 'string'
+        },
+        link: {
+            type: 'string'
+        }
+    },
+    indexes: ['time','channel','course'],
+    required: ['time', 'channel', 'body', 'link']
+};
+
 const db = RxDB.createRxDatabase({
     name: path.join(projectRoot, 'db/focusa'),
     adapter: leveldown,
@@ -285,6 +318,7 @@ const focusa = db.then(database=> database.addCollections({
     posts: { schema: postsSchema },
     profile: { schema: profileSchema },
     user_roles: { schema: user_rolesSchema },
+    notifications: { schema: notificationSchema }
 })).catch(console.error);
 
 RxDB.addRxPlugin(require('pouchdb-adapter-http'));

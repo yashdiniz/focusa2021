@@ -58,10 +58,11 @@ const PostType = new GraphQLObjectType({
             type: PostType,
             description: "The parent post. Null by default. No edits allowed.",
             async resolve({ parent }, args, ctx, info) {
-                return await post.get('/getPostById', {
-                    params: { id: parent },
-                    headers: { authorization: ctx.headers.authorization, realip: ctx.ip }
-                }).then(res => res.data);
+                if(parent)
+                    return await post.get('/getPostById', {
+                        params: { id: parent },
+                        headers: { authorization: ctx.headers.authorization, realip: ctx.ip }
+                    }).then(res => res.data);
             }
         },
         attachmentURL: {
@@ -71,11 +72,12 @@ const PostType = new GraphQLObjectType({
         course: {
             type: CourseType,
             description: "The course under which the post belongs. Null by default. No edits allowed.",
-            async resolve({ uuid }, args, ctx, info) {
-                return await courses.get('/getCourseById', {
-                    params: { id: uuid },
-                    headers: { authorization: req.headers?.authorization }
-                }).then(res => res.data);
+            async resolve({ course }, args, ctx, info) {
+                if(course)
+                    return await courses.get('/getCourseById', {
+                        params: { id: course },
+                        headers: { authorization: ctx.headers?.authorization, realip: ctx.ip  }
+                    }).then(res => res.data);
             }
         },
         comments: {
