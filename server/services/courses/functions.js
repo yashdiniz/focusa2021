@@ -90,7 +90,7 @@ const getCoursesByName = async(name, offset=0) => {
     'Invalid arguments for getCoursesByName');
     let c = await focusa;
     // TF-IDF text search
-    return c.courses.pouch.search({
+    return await c.courses.pouch.search({
         query: name,
         fields: ['name', 'description'],
         include_docs: true, 
