@@ -31,6 +31,15 @@ headers: {authorization:`Basic ${loginDetails}`}
 })
 .then(res => token = res.data.token), (JWTsignOptions.expiresIn-10)*1000);
 
+/**
+ * Attempt to build a TF-IDF index for post text.
+ * Will be used in searchPosts
+ */
+ focusa.then(f => f.courses.pouch.search({
+    fields: ['text'],
+    build: true,
+})).catch(console.error);
+
 
 /**
  * Gets the post with matching UUID.
@@ -132,17 +141,17 @@ const editPost = async (uuid, text) => {
  * @returns top 10 posts 
  */
 const searchPosts = async (query, offset) => {
-    // TODO: Also, will implement tf-idf search soon.
     let f = await focusa;
 
-    return await f.posts.find()
-    .where('reported').eq(0)
-    .where('approved').eq(1)
-    .skip(offset).limit(postsLimit).exec()
-    .then(async docs => {
-        if(docs) return docs;
-        else throw noPostsFound;
-    });
+    // TF-IDF text search
+    return await f.posts.pouch.search({
+        query,
+        fields: ['text'],
+        include_docs: true, 
+        limit: postsLimit, skip: offset,
+    })
+    .then(async o => await f.posts.findByIds(o.rows.map(e => e.doc?._id))) // to convert to RxDocuments
+    .then(docs => Array.from(docs, ([key, value]) => value));
 }
 /**
  * Searches for all posts made by a particular author
