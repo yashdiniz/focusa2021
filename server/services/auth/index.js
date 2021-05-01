@@ -16,7 +16,7 @@ const { isRxDocument } = require('rxdb');
 process.title = 'FOCUSA authenticator service';
 
 app.use(passport.initialize());
-const db = require('level')(__dirname + '/db/sessions');
+const db = require('level')(__dirname + '/db');
 app.use(session({
     store: new LevelStore(db),
     secret,
