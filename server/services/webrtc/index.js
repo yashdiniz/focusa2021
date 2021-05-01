@@ -32,5 +32,5 @@ io.on('connection', (socket) => {
 })
 
 server.listen(webrtcPort, () => {
-    console.log('WebRTC server listening at ' + webrtcPort);
+    console.log(new Date(), 'WebRTC server listening at ' + webrtcPort);
 })

@@ -131,5 +131,5 @@ app.get('/deleteProfile', jwt.ensureLoggedIn, async (req, res) => {
 });
 
 app.listen(profilePort, () => {
-    console.warn(`Profile listening on port ${ profilePort }`);
+    console.warn(new Date(), `Profile listening on port ${ profilePort }`);
 });

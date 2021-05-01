@@ -326,12 +326,12 @@ const userHasRole = async (user, role) => {
 // create admin if does not already exist
 // TODO: make this process more secure!!
 createUser('admin', 'gyroscope')
-.catch(e => console.error('Attempted creating admin. ' + e.message));
+.catch(e => console.error(new Date(), 'Attempted creating admin. ' + e.message));
 // also give admin user admin role
 createRole('admin')
-.catch(e => console.error('Attempted creating admin. ' + e.message))
+.catch(e => console.error(new Date(), 'Attempted creating admin. ' + e.message))
 .finally(o => giveRole('admin', 'admin'))
-.catch(e => console.error('Attempted giving role to admin. Couldn\'t.'));
+.catch(e => console.error(new Date(), 'Attempted giving role to admin. Couldn\'t.'));
 
 module.exports = {
     createUser, deleteUser, validateUser, updateUser, userExists, getUserById,

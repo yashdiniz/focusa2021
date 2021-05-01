@@ -51,7 +51,7 @@ waitForAddrs(() => (addrs.length > 0 && token.length > 0))
     params: { addrs },
     headers: { authorization: token },
 }).catch(e => {
-    console.log('Failed to update PubSub peer ID.');
+    console.error(new Date(), 'Failed to update PubSub peer ID.');
     console.error(e);
 }))
 class PubSub {
@@ -103,7 +103,7 @@ class PubSub {
 
         // Share peerIds to auth server, so that it can be downloaded.
         if(isServer) {
-            console.log(`libp2p-pubsub listening at ${addrs}`);
+            console.log(new Date(), `libp2p-pubsub listening at ${addrs}`);
         } else {    // if not server, then ping to establish connection...
             await waitForAddrs(() => (token.length > 0))
             .then(async () => {
@@ -116,7 +116,7 @@ class PubSub {
         }
 
         node.connectionManager.on('peer:connect',
-            connection => console.log('Connected to %s', connection.remotePeer.toB58String()));
+            connection => console.log(new Date(), `Connected to`, connection.remotePeer.toB58String()));
 
         const stop = async () => {
             // stop libp2p node

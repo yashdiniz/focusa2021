@@ -93,5 +93,5 @@ app.get('/deleteCourse', jwt.ensureLoggedIn, async (req, res) => {
 
 
 app.listen(coursesPort, () => {
-    console.warn(`Courses listening on port ${coursesPort}`);
+    console.warn(new Date(), `Courses listening on port ${coursesPort}`);
 })

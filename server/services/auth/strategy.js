@@ -24,7 +24,7 @@ async (req, username, password, done) => {
         session.token = token;  // add the JWT to the session
         return done(null, session); // pass the session down through callback
     } catch(e) {
-        console.error(e);   // TODO: remove the console commands once done, switch to logger
+        console.error(new Date(), e);   // TODO: remove the console commands once done, switch to logger
         return done(null, false, { message: 'Incorrect username or password.'})
     }
 });
