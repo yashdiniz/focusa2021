@@ -16,7 +16,7 @@ const notification = new PubSub(server);
  */
 // the server is subscribed to save to database.
 notification.subscribe('postAdded', payload => {
-    console.log(Date.now(), 'notifications index:', payload.uuid, payload.time,
+    console.log(new Date(), 'notifications index:', payload.uuid, payload.time,
             payload.channel, payload.course,
             payload.body, payload.link);
     // addNotification(payload.uuid, payload.time,
