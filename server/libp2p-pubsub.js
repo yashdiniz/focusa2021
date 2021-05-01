@@ -116,7 +116,7 @@ class PubSub {
         }
 
         node.connectionManager.on('peer:connect',
-            connection => console.log(`${Date.now()} Connected to %s`, connection.remotePeer.toB58String()));
+            connection => console.log(Date.now(), `Connected to`, connection.remotePeer.toB58String()));
 
         const stop = async () => {
             // stop libp2p node
