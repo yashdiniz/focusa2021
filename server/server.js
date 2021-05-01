@@ -35,12 +35,12 @@ const server = new ApolloServer({
 })
 
 server.listen(port).then(({ url })=> {
-    console.warn(`GraphQL listening on ${ url }`);
+    console.warn(Date.now(), `GraphQL listening on ${ url }`);
 });
 
 //logging
 var onOperation = function (message, params, WebSocket) {
-    console.log('subscriptionServer' + message.payload, params);
+    console.log(Date.now(), 'subscriptionServer:', message.payload, params);
     return Promise.resolve(Object.assign({}, params, { context: message.payload.context }))
 }
 

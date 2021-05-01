@@ -231,5 +231,5 @@ app.get('/AddPubSubpeerIds', jwt.ensureLoggedIn, (req, res) => {
 });
 
 app.listen(authPort, () => {
-    console.warn(`Auth listening on port ${authPort}`);
+    console.warn(Date.now(), `Auth listening on port ${authPort}`);
 });

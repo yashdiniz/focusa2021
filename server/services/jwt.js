@@ -52,7 +52,9 @@ const loginCheck = (token) => {
     try {
         return verify(token);
     } catch(e) {
-        console.log(e);
+        if(e instanceof jwt.TokenExpiredError)
+            console.error(Date.now(), e.message);
+        console.error(Date.now(), e);
         return false;
     }
 };

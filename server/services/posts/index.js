@@ -126,5 +126,5 @@ app.get('/editPost', jwt.ensureLoggedIn, (req, res)=>{
 });
 
 app.listen(postPort, () => {
-    console.warn(`Posts listening on port ${postPort}`);
+    console.warn(Date.now(), `Posts listening on port ${postPort}`);
 });
