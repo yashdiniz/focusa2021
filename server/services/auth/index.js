@@ -1,6 +1,7 @@
 const passport = require('passport');
 const express = require('express');
-const express_session = require('express-session');
+const session = require('express-session');
+const LevelStore = require('express-session-level')(session);
 const bodyParser = require('body-parser').urlencoded({ extended: true });
 const cookieParser = require('cookie-parser');
 const app = express();
@@ -15,7 +16,9 @@ const { isRxDocument } = require('rxdb');
 process.title = 'FOCUSA authenticator service';
 
 app.use(passport.initialize());
-app.use(express_session({
+const db = require('level')(__dirname + '/db/sessions');
+app.use(session({
+    store: new LevelStore(db),
     secret,
     cookie: {
         httpOnly: true,
