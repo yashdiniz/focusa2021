@@ -53,7 +53,17 @@ const Home = ({ navigation, route, token }) => {
         <ScrollView contentContainerStyle={styles.Homeview}>
             <StatusBar backgroundColor="#ffffff" barStyle="dark-content" />
             <SearchBar />
-            {getLatest("*", 0)}
+            {/* {getLatest("*", 0)} */}
+            <Post/>
+            <Post/>
+            <Post/>
+            <Post/>
+            <Post/>
+            <Post/>
+            <Post/>
+            <Post/>
+            <Post/>
+            <Post/>
         </ScrollView>
     );
 }
