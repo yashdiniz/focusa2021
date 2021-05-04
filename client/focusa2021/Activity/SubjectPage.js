@@ -4,7 +4,7 @@ import styles from '../Styles/SubjectPageStyle';
 import SubjectPageHeader from '../Components/SujectPageHeader'; 
 import Post from '../Components/Post';
 
-import {ensureAuthenticated} from './ensureAuthenticated';
+import {ensureAuthenticated} from '../interface/ensureAuthenticated';
 
 const SubjectPage  = ({navigation, route, token})=>{
     ensureAuthenticated(navigation, token);

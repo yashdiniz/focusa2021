@@ -3,7 +3,7 @@ import { Button, Text, View, SafeAreaView, ActivityIndicator, StyleSheet } from 
 import { ApolloProvider, useQuery, gql } from '@apollo/client';
 import { Picker } from '@react-native-picker/picker';
 
-import { apolloClient } from './apollo';
+import { apolloClient } from './interface/apollo';
 
 // Imperial I-class Star Destroyer
 const defaultStarshipId = 'c3RhcnNoaXBzOjM=';

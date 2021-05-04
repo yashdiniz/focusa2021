@@ -5,7 +5,7 @@ import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 
 import BottomNavigator from './Components/BottomNavigator';
-import { apolloClient } from './apollo';
+import { apolloClient } from './interface/apollo';
 
 const App = (props) => {
     return (

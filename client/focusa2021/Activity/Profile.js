@@ -4,7 +4,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import styles from '../Styles/ProfileStyles';
 
-import {ensureAuthenticated} from './ensureAuthenticated';
+import {ensureAuthenticated} from '../interface/ensureAuthenticated';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const Profile = ({ navigation, route, token }) =>{
