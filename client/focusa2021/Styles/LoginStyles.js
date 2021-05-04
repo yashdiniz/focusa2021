@@ -32,5 +32,25 @@ export default StyleSheet.create({
 
     forgotpassword:{
         marginTop: 10,
-    }
+    },
+
+    forgotPasswordOverlayStyle:{
+        alignItems: 'center',
+        height: Dimensions.get('screen').height - 530,
+        width: Dimensions.get('screen').width - 70,
+        borderColor: 'black',
+        borderWidth: 1,
+    },
+
+    submitButton:{
+        marginTop:20,
+        alignItems: "center",
+        justifyContent:"center",
+        borderWidth:1,
+        borderColor:"black",
+        backgroundColor:"black",
+        width: 90,
+        height:30,
+        borderRadius: 15,
+    },
 })
