@@ -1,16 +1,23 @@
 import React, { useState} from 'react';
+import { View } from 'react-native';
 import { ScrollView,Text,StatusBar,Image, TextInput, Button, Alert, TouchableOpacity, ToastAndroid} from 'react-native';
+import { Overlay } from 'react-native-elements';
 import styles from '../Styles/LoginStyles';
 
-import { authenticate } from "./ensureAuthenticated";
+import { authenticate } from "../interface/ensureAuthenticated";
 
 const Login=({navigation, token, setLoggedIn}) =>{
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [forgotPassword, setVisdibleForgotPassword]= useState(false)
     let passwordTextInput;
 
+    const toggleForgotPassword =()=>{
+        setVisdibleForgotPassword(!forgotPassword);
+    }
+
     function presslogin() {
-        if(username == '' || password == ''){
+        if(username.trim().length == 0 || password == ''){
             ToastAndroid.showWithGravityAndOffset(
                 "Username and Password cannot be empty!",
                 ToastAndroid.LONG,
@@ -20,17 +27,13 @@ const Login=({navigation, token, setLoggedIn}) =>{
               );
         }
         else{
-            Alert.alert('Logging in', username + password);
+            //Alert.alert('Logging in', username + password);
             // TODO: disable manual back button
             // refer https://stackoverflow.com/a/43980393
-            authenticate(username, password, setLoggedIn)   // perform authentication
+            return authenticate(username, password, setLoggedIn)   // perform authentication
             .then(() => navigation.goBack())  // go back to activity on success
             .catch(console.error);  // TODO: toast on failure
         }
-    }
-
-    function forgotpassword(){
-        Alert.alert( 'Forgot your password');
     }
 
     return(
@@ -58,8 +61,19 @@ const Login=({navigation, token, setLoggedIn}) =>{
             <Button title="LOGIN" color="black" onPress={presslogin}/> 
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.forgotpassword} onPress={forgotpassword}>
-                <Text>Forgot Password?</Text>
+          <Overlay isVisible={forgotPassword} onBackdropPress={toggleForgotPassword}>
+              <View style={styles.forgotPasswordOverlayStyle}>
+                  <Text style={{padding:10, fontSize:13, fontWeight:'bold'}}>Please enter your registered Email. A password reset link will be sent to your registered Email.</Text>
+                  <TextInput style={styles.inputBox} placeholder='Email'/>
+
+            <TouchableOpacity style={styles.submitButton}>
+                <Text style={{color:'white'}}> Submit</Text>
+            </TouchableOpacity>
+              </View>
+          </Overlay>
+
+          <TouchableOpacity style={styles.forgotpassword} onPress={toggleForgotPassword}>
+                <Text style={{color:'black'}}>Forgot Password?</Text>
         </TouchableOpacity>
             </ScrollView>
     );
