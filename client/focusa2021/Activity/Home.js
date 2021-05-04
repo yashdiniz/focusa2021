@@ -1,21 +1,12 @@
 import React from 'react';
-import { StatusBar, ScrollView, ActivityIndicator } from 'react-native';
+import { StatusBar, ScrollView, ActivityIndicator, FlatList, } from 'react-native';
 import styles from '../Styles/HomeStyle'
 import Post from '../Components/Post';
 import SearchBar from '../Components/SearchBar';
-import { useQuery, gql } from '@apollo/client';
+import { useQuery} from '@apollo/client';
+import { getPosts } from '../interface/queries';
 
-const getPosts = gql`
-    query getPosts($q: String, $offset: Int) {
-        post(q:$q, offset:$offset){
-            uuid, time, text, attachmentURL,
-            author{ uuid, name },
-            course{ uuid, name },
-        }
-    }
-`;
-
-import { ensureAuthenticated } from './ensureAuthenticated';
+import { ensureAuthenticated } from '../interface/ensureAuthenticated';
 
 /**
  * 
@@ -23,24 +14,19 @@ import { ensureAuthenticated } from './ensureAuthenticated';
  * @param {number} offset 
  */
 const getLatest = (query, offset) => {
-    const { data, error, loading } = useQuery(getPosts, {
+    let { data, error, loading } = useQuery(getPosts, {
         variables: { q: query, offset: offset },
     });
-    console.log(data);
-    if (error) console.error(error);
-    let posts = data.map(o =>
-        <Post uuid={data.uuid} time={data.time}
-            text={data.text} author={data.author}
-            course={data.course} attachmentURL={data.attachmentURL}
-        />
-    );
 
+    if (error) console.error(error);
+    else if (!loading) {
+        console.log('getLatest', data);
+    }
+    
     return (
         loading ? (
             <ActivityIndicator color='#333' />
-        ) : (
-            posts
-        )
+        ) : ( <FlatList data={data?.post} renderItem={ item => <Post data={item} /> } /> )
     )
 }
 
@@ -53,17 +39,7 @@ const Home = ({ navigation, route, token }) => {
         <ScrollView contentContainerStyle={styles.Homeview}>
             <StatusBar backgroundColor="#ffffff" barStyle="dark-content" />
             <SearchBar />
-            {/* {getLatest("*", 0)} */}
-            <Post/>
-            <Post/>
-            <Post/>
-            <Post/>
-            <Post/>
-            <Post/>
-            <Post/>
-            <Post/>
-            <Post/>
-            <Post/>
+            {getLatest("hello", 0)}
         </ScrollView>
     );
 }

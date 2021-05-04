@@ -1,24 +1,34 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, } from 'react-native';
+import { View, Text, TouchableOpacity, Linking, } from 'react-native';
 import styles from '../Styles/HomeStyle';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-const Post = () =>{
+/**
+ * 
+ * @param {string} time Milliseconds epoch.
+ */
+const formatTime = (time) => {
+    const t = new Date(parseInt(time));
+    return t;
+}
+
+const Post = ({ data }) =>{
     return(
         <View style={styles.PostView}>
-            <Text style={styles.subjectName}>Big Data Analysis</Text>
+            <Text style={styles.subjectName}>{data.course?.name}</Text>
 
             <View style={{flexDirection: "row"}}>
-            <Text style={styles.userName}>Robin.Sharma</Text>
+            <Text style={styles.userName}>{data.author.name}</Text>
             <Text>  |  </Text>
-             <Text style={styles.time}>7:00pm</Text>
+             <Text style={styles.time}>{time}</Text>
             </View>
 
             <View style={{ borderBottomColor: 'grey',borderBottomWidth: 1, marginTop: 10}}/>
-            <Text style={styles.topictitle}>Regression Analysis</Text>
+            <Text style={styles.topictitle}>{data.text}</Text>
 
             <View style={{alignItems:'center', justifyContent:'center'}}>
-                    <TouchableOpacity style={{flexDirection:'row'}}>
+                {/* https://stackoverflow.com/a/30540502/13227113 */}
+                    <TouchableOpacity style={{flexDirection:'row'}} onPress={data.attachmentURL.length>0 ? Linking.openURL(data.attachmentURL) : null}>
                         <MaterialCommunityIcons name="file-document" size={30} style={{marginTop: 20, paddingLeft: 27}} />
                         <Text style={{marginTop:28}}>View Attachments</Text>
                     </TouchableOpacity>
