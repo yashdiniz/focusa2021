@@ -1,15 +1,13 @@
 import {useEffect } from 'react';
 import { create } from 'axios';
 import { Alert } from "react-native";
-import { setGraphQLToken } from '../apollo';
 import { gql } from '@apollo/client';
 
-const axios = create({
-    baseURL: 'http://focusa-auth.herokuapp.com',
-    timeout: 5000,
+const auth = create({
+    baseURL: 'http://192.168.0.101:1897',
 });
 
-import { apolloClient } from '../apollo';
+import { apolloClient, setGraphQLToken } from '../interface/apollo';
 
 /**
  * 
@@ -18,14 +16,14 @@ import { apolloClient } from '../apollo';
  * @param {string} setLoggedIn That React hook function to modify.
  */
 const authenticate = (username, password, setLoggedIn) => {
-    return axios.get('/login', {
+    return auth.get('/login', {
         params: { username, password }
     })
     .then(res => {
         setLoggedIn(res.data.token);    // set the token to the state
         setGraphQLToken(res.data.token);
 
-        apolloClient.query({ query: gql`{token}`})
+        return apolloClient.query({ query: gql`{token}`})
         .then(console.log).catch(console.error);
     });
 }
