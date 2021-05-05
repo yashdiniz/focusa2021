@@ -4,7 +4,7 @@ import { Alert } from "react-native";
 import { gql } from '@apollo/client';
 
 const auth = create({
-    baseURL: 'http://192.168.0.101:1897',
+    baseURL: 'http://192.168.0.107:1897',
 });
 
 import { apolloClient, setGraphQLToken } from '../interface/apollo';
@@ -29,14 +29,24 @@ const authenticate = (username, password, setLoggedIn) => {
 }
 
 function ensureAuthenticated(navigation, token) {
-    useEffect(() => {
-        // TODO: temporarily setting to bypass login
-        // REMOVE THIS LINE IN PRODUCTION
-        //token = "true";
-
-        console.log('Current login state: ',token.length>0);
-        if(!token) return navigation.navigate('Login');
-    });
+    return new Promise(resolve => {
+        useEffect(() => {
+            // TODO: temporarily setting to bypass login
+            // REMOVE THIS LINE IN PRODUCTION
+            //token = "true";
+    
+            console.log('Current login state: ',token.length>0);
+            resolve(token);
+            if(!token) 
+                // TODO: say login failure, and show an image as error message.
+                return navigation.navigate('Login');
+        });
+    })
 }
 
-export { authenticate, ensureAuthenticated };
+
+const wait = (timeout) => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+}
+  
+export { authenticate, ensureAuthenticated, wait };
