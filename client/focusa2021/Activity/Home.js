@@ -23,7 +23,6 @@ const Home = ({ navigation, route, token }) => {
         let { data, error, loading } = useQuery(getPosts, {
             variables: { q: query, offset: offset },
         });
-
         // if (error) console.error(error);
         if (!loading) {
             console.log('getLatest', data.post);
