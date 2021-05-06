@@ -13,46 +13,48 @@ const formatTime = (time) => {
 }
 
 const Post = ({ data }) =>{
-    return(
-        <View style={styles.PostView}>
-            <Text style={styles.subjectName}>{data.course?.name}</Text>
+    console.log('In post', data);
+    return <View><Text>Test post.</Text></View>
+    // return(
+    //     <View style={styles.PostView}>
+    //         <Text style={styles.subjectName}>{data.course?.name}</Text>
 
-            <View style={{flexDirection: "row"}}>
-            <Text style={styles.userName}>{data.author.name}</Text>
-            <Text>  |  </Text>
-             <Text style={styles.time}>{time}</Text>
-            </View>
+    //         <View style={{flexDirection: "row"}}>
+    //         <Text style={styles.userName}>{data.author?.name}</Text>
+    //         <Text>  |  </Text>
+    //          <Text style={styles.time}>{formatTime(data.time)}</Text>
+    //         </View>
 
-            <View style={{ borderBottomColor: 'grey',borderBottomWidth: 1, marginTop: 10}}/>
-            <Text style={styles.topictitle}>{data.text}</Text>
+    //         <View style={{ borderBottomColor: 'grey',borderBottomWidth: 1, marginTop: 10}}/>
+    //         <Text style={styles.topictitle}>{data.text}</Text>
 
-            <View style={{alignItems:'center', justifyContent:'center'}}>
-                {/* https://stackoverflow.com/a/30540502/13227113 */}
-                    <TouchableOpacity style={{flexDirection:'row'}} onPress={data.attachmentURL.length>0 ? Linking.openURL(data.attachmentURL) : null}>
-                        <MaterialCommunityIcons name="file-document" size={30} style={{marginTop: 20, paddingLeft: 27}} />
-                        <Text style={{marginTop:28}}>View Attachments</Text>
-                    </TouchableOpacity>
-            </View>
+    //         <View style={{alignItems:'center', justifyContent:'center'}}>
+    //             {/* https://stackoverflow.com/a/30540502/13227113 */}
+    //                 <TouchableOpacity style={{flexDirection:'row'}} onPress={data.attachmentURL?.length>0 ? Linking.openURL(data.attachmentURL) : null}>
+    //                     <MaterialCommunityIcons name="file-document" size={30} style={{marginTop: 20, paddingLeft: 27}} />
+    //                     <Text style={{marginTop:28}}>View Attachments</Text>
+    //                 </TouchableOpacity>
+    //         </View>
 
-            <View style={{ borderBottomColor: 'grey',borderBottomWidth: 1, marginTop: 15}}/>
+    //         <View style={{ borderBottomColor: 'grey',borderBottomWidth: 1, marginTop: 15}}/>
 
-            <View style={{flexDirection: 'row'}}>
-                <TouchableOpacity >
-                        <MaterialCommunityIcons name="comment-processing-outline" size={35} style={{marginTop: 10, paddingLeft: 27}} />
-                </TouchableOpacity>
+    //         <View style={{flexDirection: 'row'}}>
+    //             <TouchableOpacity >
+    //                     <MaterialCommunityIcons name="comment-processing-outline" size={35} style={{marginTop: 10, paddingLeft: 27}} />
+    //             </TouchableOpacity>
 
-                <TouchableOpacity>
-                <MaterialCommunityIcons name="share-outline" size={35} style={{marginTop: 10, paddingLeft: 27}} />
-                </TouchableOpacity>
+    //             <TouchableOpacity>
+    //             <MaterialCommunityIcons name="share-outline" size={35} style={{marginTop: 10, paddingLeft: 27}} />
+    //             </TouchableOpacity>
 
 
-                <TouchableOpacity style={{marginLeft:'auto', paddingRight: 15}}>
-                <MaterialCommunityIcons name="dots-horizontal" size={35} style={{marginTop: 10, paddingLeft: 27}} />
-                </TouchableOpacity>
-            </View>
+    //             <TouchableOpacity style={{marginLeft:'auto', paddingRight: 15}}>
+    //             <MaterialCommunityIcons name="dots-horizontal" size={35} style={{marginTop: 10, paddingLeft: 27}} />
+    //             </TouchableOpacity>
+    //         </View>
            
-        </View>
-    );
+    //     </View>
+    // );
 }
 
 export default Post

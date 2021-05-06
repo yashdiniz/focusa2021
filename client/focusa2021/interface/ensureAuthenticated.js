@@ -4,7 +4,7 @@ import {ToastAndroid } from "react-native";
 import { gql } from '@apollo/client';
 
 const auth = create({
-    baseURL: 'http://192.168.0.101:1897',
+    baseURL: 'http://192.168.0.107:1897',
 });
 
 import { apolloClient, setGraphQLToken } from '../interface/apollo';
@@ -48,4 +48,9 @@ function ensureAuthenticated(navigation, token) {
     });
 }
 
-export { authenticate, ensureAuthenticated };
+
+const wait = (timeout) => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+}
+  
+export { authenticate, ensureAuthenticated, wait };
