@@ -8,6 +8,8 @@ import Login from '../Activity/Login';
 import Profile from '../Activity/Profile';
 import Video from '../Activity/Video';
 import SubjectPage from '../Activity/SubjectPage';
+import Setting from '../Activity/Setting';
+import ErrorLogin from '../Components/ErrorLogin';
 // import CameraTest from '../Activity/cameraTest';
 
 const Tab = createBottomTabNavigator();
@@ -18,7 +20,7 @@ function BottomNavigator() {
     <Tab.Navigator
       initialRouteName="Home"
       tabBarOptions={{
-        activeTintColor: '#e91e63',
+        activeTintColor: 'red',
       }}
     >
       <Tab.Screen
@@ -40,6 +42,17 @@ function BottomNavigator() {
         }}
       >
         {props => <SubjectPage {...props} token={token}/>}
+      </Tab.Screen>
+
+      <Tab.Screen
+        name="Setting"
+        options={{
+          tabBarVisible: false,
+          tabBarLabel: 'Setting',
+          tabBarButton: () => null,
+        }}
+      >
+        {props => <Setting {...props} token={token}/>}
       </Tab.Screen>
 
       {/* <Tab.Screen

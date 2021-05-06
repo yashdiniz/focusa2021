@@ -1,6 +1,6 @@
 import {useEffect } from 'react';
 import { create } from 'axios';
-import { Alert } from "react-native";
+import {ToastAndroid } from "react-native";
 import { gql } from '@apollo/client';
 
 const auth = create({
@@ -32,10 +32,19 @@ function ensureAuthenticated(navigation, token) {
     useEffect(() => {
         // TODO: temporarily setting to bypass login
         // REMOVE THIS LINE IN PRODUCTION
-        //token = "true";
+        token = "true";
 
         console.log('Current login state: ',token.length>0);
-        if(!token) return navigation.navigate('Login');
+        if(!token) return ToastAndroid.showWithGravityAndOffset(
+            "User not Logged in. Please Login",
+            ToastAndroid.LONG,
+            ToastAndroid.BOTTOM,
+            25,
+            50
+          );
+        
+        
+        //navigation.navigate('Login');
     });
 }
 

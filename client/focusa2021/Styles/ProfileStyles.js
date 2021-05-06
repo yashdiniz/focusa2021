@@ -8,6 +8,7 @@ export default StyleSheet.create({
          height: Dimensions.get('screen').height,
         width: Dimensions.get('screen').width,
     },
+
     UserIcon:{
         marginTop: 10,
         padding:12,
@@ -35,5 +36,6 @@ export default StyleSheet.create({
 
     collegeNameText:{
         fontSize: 15,
-    }
+    },
+
 })
