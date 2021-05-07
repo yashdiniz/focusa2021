@@ -4,7 +4,7 @@ import SearchBar from '../Components/SearchBar';
 import styles from '../Styles/CourseStyles';
 import Course from '../Components/Course';
 
-import { ensureAuthenticated } from './ensureAuthenticated';
+import { ensureAuthenticated } from '../interface/ensureAuthenticated';
 
 const Courses = ({ navigation, route, token }) =>{
     ensureAuthenticated(navigation, token);

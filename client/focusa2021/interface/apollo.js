@@ -3,7 +3,7 @@ import { setContext } from '@apollo/link-context';
 
 // see: https://github.com/graphql/swapi-graphql
 // Used to be 'https://swapi-graphql.netlify.app/.netlify/functions/index'
-const GRAPHQL_API_URL = 'http://192.168.44.72:1896/graphql';
+const GRAPHQL_API_URL = 'http://192.168.0.107:1896/graphql';
 
 /*
 uncomment the code below in case you are using a GraphQL API that requires some form of
@@ -17,7 +17,7 @@ export const setGraphQLToken = (token) => {
 const asyncAuthLink = setContext(async () => {
   return {
     headers: {
-      Authorization: TOKEN,
+      authorization: TOKEN,
     },
   };
 });

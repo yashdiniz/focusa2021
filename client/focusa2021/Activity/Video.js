@@ -4,7 +4,7 @@ import styles from '../Styles/videostyles'
 import {Overlay} from 'react-native-elements';
 
 
-import {ensureAuthenticated} from './ensureAuthenticated';
+import {ensureAuthenticated} from '../interface/ensureAuthenticated';
 
 const Video = ({ navigation, route, token }) =>{
     ensureAuthenticated(navigation, token);
