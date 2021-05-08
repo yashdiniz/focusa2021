@@ -22,9 +22,9 @@ const authenticate = (username, password, setLoggedIn) => {
     .then(res => {
         setLoggedIn(res.data.token);    // set the token to the state
         setGraphQLToken(res.data.token);
-
-        return apolloClient.query({ query: gql`{token}`})
-        .then(console.log).catch(console.error);
+        return res.data.token;
+        // return apolloClient.query({ query: gql`{token}`})
+        // .then(console.log).catch(console.error);
     });
 }
 
