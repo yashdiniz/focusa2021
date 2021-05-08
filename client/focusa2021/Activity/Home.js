@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { StatusBar, ScrollView, ActivityIndicator, FlatList, RefreshControl } from 'react-native';
+import { StatusBar, ScrollView, ActivityIndicator, FlatList, RefreshControl, View, Text } from 'react-native';
 import styles from '../Styles/HomeStyle'
 import Post from '../Components/Post';
 import SearchBar from '../Components/SearchBar';
@@ -51,7 +51,7 @@ const Home = ({ navigation, route, token }) => {
                     />
                 }>
                 <StatusBar backgroundColor="#ffffff" barStyle="dark-content" />
-                <SearchBar />
+                <SearchBar/>
                 {getLatest("hello", 0)}
             </ScrollView>
         )
@@ -62,7 +62,13 @@ const Home = ({ navigation, route, token }) => {
     // TODO: loading only 10 posts at a time to reduce lag.
     // need to automatically load posts of higher offsets as user scrolls down.
     return (
-        HomeView()
+        <View refreshControl={
+            <RefreshControl 
+            refreshing={refreshing}
+            onRefresh={onRefresh}/>
+        }>
+             {/* {HomeView()} */}
+        </View>
     );
 }
 
