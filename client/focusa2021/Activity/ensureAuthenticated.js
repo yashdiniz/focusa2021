@@ -5,7 +5,7 @@ import { setGraphQLToken } from '../apollo';
 import { gql } from '@apollo/client';
 
 const axios = create({
-    baseURL: 'http://focusa-auth.herokuapp.com',
+    baseURL: 'http://localhost:1896',
     timeout: 5000,
 });
 
