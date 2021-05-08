@@ -45,6 +45,7 @@ const Login=({navigation, token, setLoggedIn}) =>{
                     returnKeyType='next' autoFocus={true} autoCapitalize='none' autoCorrect={false} 
                     onChangeText={(x) => setUsername(x)}
                     onSubmitEditing={() => { passwordTextInput.focus(); }}/>
+                    
                 <TextInput style={styles.inputBox} placeholder="Password" 
                     secureTextEntry={true} returnKeyType='done' 
                     onChangeText={(x) => setPassword(x)} 

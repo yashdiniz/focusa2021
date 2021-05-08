@@ -4,7 +4,7 @@ import {ToastAndroid } from "react-native";
 import { gql } from '@apollo/client';
 
 const auth = create({
-    baseURL: 'http://192.168.0.107:1897',
+    baseURL: 'http://192.168.0.101:1897',
 });
 
 import { apolloClient, setGraphQLToken } from '../interface/apollo';
@@ -32,7 +32,7 @@ function ensureAuthenticated(navigation, token) {
     useEffect(() => {
         // TODO: temporarily setting to bypass login
         // REMOVE THIS LINE IN PRODUCTION
-        token = "true";
+        //token = "true";
 
         console.log('Current login state: ',token.length>0);
         if(!token) return ToastAndroid.showWithGravityAndOffset(
