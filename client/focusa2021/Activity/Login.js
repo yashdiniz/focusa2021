@@ -3,6 +3,7 @@ import { View } from 'react-native';
 import { ScrollView,Text,StatusBar,Image, TextInput, Button, Alert, TouchableOpacity, ToastAndroid} from 'react-native';
 import { Overlay } from 'react-native-elements';
 import styles from '../Styles/LoginStyles';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { authenticate } from "../interface/ensureAuthenticated";
 
@@ -14,6 +15,10 @@ const Login=({navigation, token, setLoggedIn}) =>{
 
     const toggleForgotPassword =()=>{
         setVisdibleForgotPassword(!forgotPassword);
+    }
+    const [viewPassword, setVisiblePassword] = useState(true)
+    const toggleViewPassword =() =>{
+        setVisiblePassword(!viewPassword);
     }
 
     function presslogin() {
@@ -41,16 +46,22 @@ const Login=({navigation, token, setLoggedIn}) =>{
                 <StatusBar backgroundColor = "#ffffff" barStyle="dark-content"/> 
                 <Image style={styles.image} source={require('../assets/images/focusa2.png')}/>
                 <Image  style={styles.focusaText} source={require('../assets/images/focusalogosmall.png')} />
-                <TextInput style={styles.inputBox} placeholder="Username" require={true}
+                <TextInput style={styles.inputBox}  placeholder="Username" require={true}
                     returnKeyType='next' autoFocus={true} autoCapitalize='none' autoCorrect={false} 
                     onChangeText={(x) => setUsername(x)}
                     onSubmitEditing={() => { passwordTextInput.focus(); }}/>
-                    
-                <TextInput style={styles.inputBox} placeholder="Password" 
-                    secureTextEntry={true} returnKeyType='done' 
-                    onChangeText={(x) => setPassword(x)} 
-                    onSubmitEditing={presslogin} 
-                    ref={(input)=> { passwordTextInput = input; }}/>
+                
+                    <View style={styles.PasswordInputBox}>
+                        <TextInput style={{width: 180}} placeholder="Password" 
+                        secureTextEntry={viewPassword} returnKeyType='done' 
+                        onChangeText={(x) => setPassword(x)} 
+                        onSubmitEditing={presslogin} 
+                        ref={(input)=> { passwordTextInput = input; }}/>
+
+                        <TouchableOpacity onPress={toggleViewPassword}>
+                            <MaterialCommunityIcons name='eye' size={20} style={{ paddingLeft: 27}} />
+                        </TouchableOpacity>
+                    </View>
 
                 <TouchableOpacity 
                 style ={{

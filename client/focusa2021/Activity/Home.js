@@ -67,7 +67,7 @@ const Home = ({ navigation, route, token }) => {
             refreshing={refreshing}
             onRefresh={onRefresh}/>
         }>
-             {/* {HomeView()} */}
+             {HomeView()}
         </View>
     );
 }

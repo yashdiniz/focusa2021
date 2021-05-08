@@ -30,6 +30,17 @@ export default StyleSheet.create({
         borderRadius: 17,
     },
 
+    PasswordInputBox:{
+        flexDirection: 'row',
+        height: 40,
+        width: 250,
+        borderColor:'gray',
+        borderWidth: 2,
+        marginTop: 30,
+        padding: 10,
+        borderRadius: 17
+    },
+
     forgotpassword:{
         marginTop: 10,
     },
