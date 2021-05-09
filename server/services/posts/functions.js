@@ -5,7 +5,7 @@
  */
 
 const {focusa, assert, generateUUID} = require('../databases');
-const { authRealm, serviceAuthPass, JWTsignOptions, pageLimit, minPostBodyLength, UUIDpattern, maxPostBodyLength } = require('../../config');
+const { authRealm, serviceAuthPass, JWTsignOptions, pageLimit, minPostBodyLength, UUIDpattern, maxPostBodyLength, coursesRealm } = require('../../config');
 const { PubSub } = require('../../libp2p-pubsub');
 
 const noSuchPost = new Error('Post with such id does not exist');
@@ -19,6 +19,10 @@ const {create} = require('axios');
 let token = '';
 const auth = create({
     baseURL: `${authRealm}`,
+    timeout: 5000,
+});
+const courses = create({
+    baseURL: `${coursesRealm}`,
     timeout: 5000,
 });
 
@@ -102,6 +106,11 @@ const createPost = async (text, author, course, attachmentURL, parent) => {
     let uuid = generateUUID();
     let time = Date.now();
     let f = await focusa;
+
+    await courses.get('/getCourseById', { // check if the course ID exists
+        params: { id: course },
+        headers: { authorization: token }
+    }).then(res => res.data);
 
     auth.get('/getUserById', {
         params: { id: author },
