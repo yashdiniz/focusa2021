@@ -71,7 +71,7 @@ app.get('/', (req, res) => {
     } else res.status(401).json({ message: 'microservice not authenticated.' });
 });
 
-app.get('/login',
+app.use('/login',
     passport.authenticate('local',
         {
             failureRedirect: '/error',
@@ -102,6 +102,23 @@ app.get('/refresh', ensureAuthenticated, (req, res) => {
     res.json({
         token: req.user?.token,
         login: true,
+    });
+});
+
+app.get('/logout', ensureAuthenticated, (req, res) => {
+    /**
+     * Server-side logout only invalidates the refresh cookie.
+     * This means the user now cannot issue new JWTs.
+     * HOWEVER, the older JWTs issued are still valid since they
+     * are stored at the client side, and trusted by the other services!
+     * The services will thus accept the last JWT until it expires. 
+     */
+    console.log(new Date(), 'User logged out.', req.user?.name, req.ip);
+    req.logout();
+    req.session.destroy();
+    res.json({
+        login: false,
+        message: 'User has been logged out.',
     });
 });
 
