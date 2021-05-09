@@ -30,7 +30,7 @@ const ProfileType = new GraphQLObjectType({
     name: 'Profile',
     description: "This node holds additional information related to a User.",
     fields: () => {
-        const { CourseType, UserType } = require('./types');
+        const { CourseType, UserType, onError } = require('./types');
         return {
         userID: {
             type: GraphQLNonNull(GraphQLID),
@@ -42,7 +42,8 @@ const ProfileType = new GraphQLObjectType({
                 return await auth.get('/getUserById', {
                     params: { id: userID },
                     headers: { authorization: ctx.headers.authorization, realip: ctx.ip }
-                }).then(res => res.data);
+                }).then(res => res.data)
+                .catch(onError);
             }
         },
         fullName: {
@@ -60,7 +61,8 @@ const ProfileType = new GraphQLObjectType({
                 return await Promise.all(interests.map(async doc => await courses.get('/getCourseById', {
                     params: { id: doc },
                     headers: { authorization: ctx.headers.authorization, realip: ctx.ip }
-                }).then(res => res.data)));
+                }).then(res => res.data)
+                .catch(onError)));
             }
         }}
     }

@@ -20,7 +20,7 @@ const RoleType = new GraphQLObjectType({
     name: 'Role',
     description: "This node describes a Role for a list of users.",
     fields: () => {
-        const { UserType } = require('./types');
+        const { UserType, onError } = require('./types');
         return {
         uuid:{
             type: GraphQLNonNull(GraphQLID)
@@ -36,7 +36,8 @@ const RoleType = new GraphQLObjectType({
                 return await auth.get('/getUsersOfRole', {
                     params: { name },
                     headers: { authorization: ctx.headers.authorization, realip: ctx.ip },
-                }).then(res => res.data);
+                }).then(res => res.data)
+                .catch(onError);
             }
         }}
     }
