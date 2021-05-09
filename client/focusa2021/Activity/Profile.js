@@ -10,9 +10,9 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 const Profile = ({ navigation, token }) =>{
     ensureAuthenticated(navigation, token);
 
-    let { data, error, loading } = useQuery(getProfileFromUser, {
-
-    });
+    // let { data, error, loading } = useQuery(getProfileFromUser, {
+    //         // TODO
+    // });
 
     const [refreshing, setRefreshing] = useState(false);
 
