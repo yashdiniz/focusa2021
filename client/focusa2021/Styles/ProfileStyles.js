@@ -34,7 +34,7 @@ export default StyleSheet.create({
     },
 
 
-    collegeNameText:{
+    aboutText:{
         fontSize: 15,
     },
 

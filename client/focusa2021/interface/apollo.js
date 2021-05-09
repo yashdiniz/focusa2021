@@ -2,16 +2,15 @@ import { ApolloClient, HttpLink, InMemoryCache, from } from '@apollo/client';
 import { setContext } from '@apollo/link-context';
 import { onError } from "@apollo/client/link/error";
 import { create } from 'axios';
-import { URL, AuthPort } from '../config';
+import { graphQLRealm, authRealm } from '../config';
 
 const auth = create({
-  baseURL: URL + ':' + AuthPort,
+  baseURL: authRealm,
 });
 
 // see: https://github.com/graphql/swapi-graphql
 // Used to be 'https://swapi-graphql.netlify.app/.netlify/functions/index'
-const GRAPHQL_API_URL = 'http://192.168.0.101:1896';
-
+const GRAPHQL_API_URL = graphQLRealm;
 /*
 uncomment the code below in case you are using a GraphQL API that requires some form of
 authentication. asyncAuthLink will run every time your request is made and use the token
@@ -51,7 +50,7 @@ const errorLink = onError(async ({ graphQLErrors, networkError, operation, forwa
           // Retry the request, returning the new observable
           return forward(operation);
         }
-        default: console.error(`[GraphQL error]: ${err}`);
+        default: console.error(`[GraphQL error]: ${JSON.stringify(err)}`);
       }
     }
   }

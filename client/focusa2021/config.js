@@ -1,5 +1,4 @@
-const URL = 'http://focusa.duckdns.org';
-const GraphQLport = 1896;
-const AuthPort = 1897;
+const graphQLRealm = 'http://192.168.0.101:1896';
+const authRealm = 'http://192.168.0.101:1897';
 
-export default { URL, AuthPort, GraphQLport };
+export { graphQLRealm, authRealm };

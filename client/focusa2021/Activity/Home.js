@@ -19,56 +19,32 @@ const Home = ({ navigation, route, token }) => {
         wait(2000).then(() => setRefreshing(false));
     }, []);
 
-    const getLatest = (query, offset) => {
-        let { data, error, loading } = useQuery(getPosts, {
-            variables: { q: query, offset: offset },
-        });
-        // if (error) console.error(error);
-        if (!loading) {
-            console.log('getLatest', data.post);
-        }
-        
-        return (
-            loading ? (
-                <ActivityIndicator color='#333' />
-            ) : ( <FlatList data={data.post} renderItem={ ({ item }) => <Post data={item} /> } /> )
-        )
-    }
+    let { data, error, loading } = useQuery(getPosts, {
+        variables: { q: "hello", offset: 0 },
+    });
+
+    if(error) console.error(error);
 
     ensureAuthenticated(navigation, token);
-   const HomeView =()=>{
-    if(!token){
-        return<ErrorLogin navigation={navigation}/>
-    }
-    
-    else{
-        return(
-            <ScrollView contentContainerStyle={styles.Homeview}
-                refreshControl={
-                    <RefreshControl
-                    refreshing={refreshing}
-                    onRefresh={onRefresh}
-                    />
-                }>
-                <StatusBar backgroundColor="#ffffff" barStyle="dark-content" />
-                <SearchBar/>
-                {getLatest("hello", 0)}
-            </ScrollView>
-        )
-      
-    }
-}
-    
+
     // TODO: loading only 10 posts at a time to reduce lag.
     // need to automatically load posts of higher offsets as user scrolls down.
     return (
-        <View refreshControl={
-            <RefreshControl 
-            refreshing={refreshing}
-            onRefresh={onRefresh}/>
-        }>
-             {HomeView()}
-        </View>
+        <ScrollView contentContainerStyle={styles.Homeview}
+            refreshControl={
+                <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+                />
+            }>
+            <StatusBar backgroundColor="#ffffff" barStyle="dark-content" />
+            <SearchBar/>
+            {   token ? (
+                    loading ? (
+                        <ActivityIndicator color='#333' />
+                    ) : ( <FlatList data={data.post} renderItem={ ({ item }) => <Post data={item} /> } /> )
+                ) : (<ErrorLogin navigation={navigation}/>)}
+        </ScrollView>
     );
 }
 

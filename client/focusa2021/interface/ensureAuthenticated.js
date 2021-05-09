@@ -2,9 +2,10 @@ import {useEffect } from 'react';
 import { create } from 'axios';
 import {ToastAndroid } from "react-native";
 import { gql } from '@apollo/client';
+import { authRealm } from '../config';
 
 const auth = create({
-    baseURL: 'http://192.168.0.101:1897',
+    baseURL: authRealm,
 });
 
 import { apolloClient, setGraphQLToken } from '../interface/apollo';
@@ -27,6 +28,10 @@ const authenticate = (username, password, setLoggedIn) => {
         // .then(console.log).catch(console.error);
     });
 }
+
+const logout = () => [
+    // TODO: add logout logic here
+]
 
 function ensureAuthenticated(navigation, token) {
     useEffect(() => {
@@ -53,4 +58,4 @@ const wait = (timeout) => {
     return new Promise(resolve => setTimeout(resolve, timeout));
 }
   
-export { authenticate, ensureAuthenticated, wait };
+export { authenticate, ensureAuthenticated, wait, logout };

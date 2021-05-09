@@ -8,7 +8,7 @@ import Login from '../Activity/Login';
 import Profile from '../Activity/Profile';
 import Video from '../Activity/Video';
 import SubjectPage from '../Activity/SubjectPage';
-import Setting from '../Activity/Setting';
+import Settings from '../Activity/Settings';
 import ErrorLogin from '../Components/ErrorLogin';
 // import CameraTest from '../Activity/cameraTest';
 
@@ -45,14 +45,14 @@ function BottomNavigator() {
       </Tab.Screen>
 
       <Tab.Screen
-        name="Setting"
+        name="Settings"
         options={{
           tabBarVisible: false,
-          tabBarLabel: 'Setting',
+          tabBarLabel: 'Settings',
           tabBarButton: () => null,
         }}
       >
-        {props => <Setting {...props} token={token}/>}
+        {props => <Settings {...props} token={token}/>}
       </Tab.Screen>
 
       {/* <Tab.Screen

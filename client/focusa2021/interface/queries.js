@@ -10,4 +10,17 @@ const getPosts = gql`
     }
 `;
 
+const getProfileFromUser = gql`
+    query getProfileFromUser($userID:ID!) {
+        user(userID:$userID) {
+            name,
+            profile{
+                fullName,
+                about,
+                display_pic,
+            }
+        }
+    }
+`
+
 export { getPosts };

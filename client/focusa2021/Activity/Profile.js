@@ -10,6 +10,10 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 const Profile = ({ navigation, token }) =>{
     ensureAuthenticated(navigation, token);
 
+    let { data, error, loading } = useQuery(getProfileFromUser, {
+
+    });
+
     const [refreshing, setRefreshing] = useState(false);
 
     const onRefresh = useCallback(() => {
@@ -19,12 +23,11 @@ const Profile = ({ navigation, token }) =>{
 
 
 const ProfileView=()=>{
-
-    if(token){
-         return ( <View style={styles.container}>
+         return token ? 
+         ( <View style={styles.container}>
             <StatusBar backgroundColor = "#ffffff" barStyle="dark-content"/>
         
-            <TouchableOpacity style={{paddingRight: 25, width: Dimensions.get('screen').width, alignItems:'flex-end'}} onPress={()=>navigation.navigate('Setting')}>
+            <TouchableOpacity style={{paddingRight: 25, width: Dimensions.get('screen').width, alignItems:'flex-end'}} onPress={()=>navigation.navigate('Settings')}>
                     <MaterialCommunityIcons name="cog" size={35} style={{marginTop: 10,}} />
             </TouchableOpacity>
         
@@ -32,8 +35,7 @@ const ProfileView=()=>{
                 <MaterialCommunityIcons name="account" size={80} style={styles.UserIcon} />
                 <Text style={styles.nameText}>Alston Dias</Text>
                 <Text style={styles.usernameText}>@alstar_1402</Text>
-                <Text style={styles.classText}>B.E Computer</Text>
-                <Text style={styles.collegeNameText}>Don Bosco College of Engineering</Text>
+                <Text style={styles.aboutText}>About: Don Bosco College of Engineering</Text>
                 <View style={{ borderColor: 'black',borderBottomWidth: 1, marginTop: 200, width:Dimensions.get('screen').width}}/>
         
                 <View>
@@ -43,14 +45,9 @@ const ProfileView=()=>{
                     </TouchableOpacity>
                 </View>
             </View>
-        </View>)
-    }
-    else{
-        return <ErrorLogin navigation={navigation}/>
-    }
-
+        </View>) :
+        (<ErrorLogin navigation={navigation}/>);
 }
-
     return(
         <View refreshControl={
             <RefreshControl 
