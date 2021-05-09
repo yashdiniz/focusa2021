@@ -5,7 +5,7 @@
  */
 
 const {focusa, assert, generateUUID} = require('../databases');
-const { authRealm, serviceAuthPass, JWTsignOptions, pageLimit, minPostBodyLength, UUIDpattern } = require('../../config');
+const { authRealm, serviceAuthPass, JWTsignOptions, pageLimit, minPostBodyLength, UUIDpattern, maxPostBodyLength } = require('../../config');
 const { PubSub } = require('../../libp2p-pubsub');
 
 const noSuchPost = new Error('Post with such id does not exist');
@@ -90,13 +90,15 @@ const deletePost = async (uuid) => {
  * @param {string} parent the parent post of this post
  */
 const createPost = async (text, author, course, attachmentURL, parent) => {
-    assert(typeof text === 'string' && text.length > minPostBodyLength
+    assert(typeof text === 'string'
         && typeof author === 'string' 
         && typeof course === 'string' 
         && typeof attachmentURL === 'string' 
         && typeof parent === 'string', 
         "Invalid arguments for createPost.");
-    
+    assert(text.length >= minPostBodyLength, "Post content is too short.");
+    assert(text.length <= maxPostBodyLength, "Post content is too long.");
+
     let uuid = generateUUID();
     let time = Date.now();
     let f = await focusa;
@@ -122,9 +124,10 @@ const createPost = async (text, author, course, attachmentURL, parent) => {
 const editPost = async (uuid, text) => {
     assert(typeof uuid === 'string' 
         && typeof text === 'string' 
-        && text.length > minPostBodyLength
         && UUIDpattern.test(uuid),
         "Invalid arguments for editPost.");
+    assert(text.length >= minPostBodyLength, "Post content is too short.");
+    assert(text.length <= maxPostBodyLength, "Post content is too long.");
 
     let f = await focusa;
     

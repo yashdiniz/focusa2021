@@ -39,9 +39,10 @@ const userExistsError = new Error('Username already exists.'),
  * @returns {Promise} The user object just created, without the sensitive information.
  */
 const createUser = async (name, password) => {
-    assert(typeof name === 'string' && typeof password === 'string' 
-    && password.length >= minPasswordLength && name.length <= maxNameLength, 
+    assert(typeof name === 'string' && typeof password === 'string', 
         "Invalid arguments for createUser.");
+    assert(password.length >= minPasswordLength, "Password entered is too short.");
+    assert(name.length <= maxNameLength, "Username entered is too long.");
     assert(name == name.match(usernamePattern), 
         "User not created. name should match: " + usernamePattern);
     
@@ -153,10 +154,10 @@ const getUserById = async (id) => {
  * @returns {Promise} The User object just updated.
  */
 const updateUser = async (name, newpassword) => {
-    assert(typeof name === 'string' && typeof newpassword === 'string' 
-        && newpassword.length >= minPasswordLength
-        && UUIDpattern.test(name), 
+    assert(typeof name === 'string' && typeof newpassword === 'string'
+        && name == name.match(usernamePattern), 
         "Invalid arguments for updateUser.");
+    assert(newpassword.length >= minPasswordLength, "Password entered is too short.")
     let c = await focusa;
     // find the auth with matching name
     return await c.auth.findOne(name).exec()
@@ -182,8 +183,9 @@ const updateUser = async (name, newpassword) => {
  * @returns {Promise} The Role object just created.
  */
 const createRole = async (name) => {
-    assert(typeof name === 'string' && name.length <= maxNameLength, 
+    assert(typeof name === 'string', 
         "Invalid arguments for createRole.");
+    assert(name.length <= maxNameLength, "Rolename entered is too long.");
     assert(name == name.match(rolePattern), 
         "Role not added. name should match: " + rolePattern);
 
