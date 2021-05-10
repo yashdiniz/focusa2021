@@ -9,8 +9,9 @@ import { getPosts } from '../interface/queries';
 import { ensureAuthenticated, wait } from '../interface/ensureAuthenticated';
 
 import ErrorLogin from '../Components/ErrorLogin';
+import { getGraphQLToken } from '../interface/apollo';
 
-const Home = ({ navigation, route, token }) => {
+const Home = ({ navigation, route }) => {
 
     const [refreshing, setRefreshing] = useState(false);
 
@@ -25,7 +26,7 @@ const Home = ({ navigation, route, token }) => {
 
     if(error) console.error(error);
 
-    ensureAuthenticated(navigation, token);
+    ensureAuthenticated(navigation);
 
     // TODO: loading only 10 posts at a time to reduce lag.
     // need to automatically load posts of higher offsets as user scrolls down.
@@ -39,7 +40,7 @@ const Home = ({ navigation, route, token }) => {
             }>
             <StatusBar backgroundColor="#ffffff" barStyle="dark-content" />
             <SearchBar/>
-            {   token ? (
+            {   getGraphQLToken() ? (
                     loading ? (
                         <ActivityIndicator color='#333' />
                     ) : ( <FlatList data={data.post} renderItem={ ({ item }) => <Post data={item} /> } /> )

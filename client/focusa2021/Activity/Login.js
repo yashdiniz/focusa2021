@@ -7,7 +7,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { authenticate } from "../interface/ensureAuthenticated";
 
-const Login = ({ navigation, token, setLoggedIn }) => {
+const Login = ({ navigation }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [forgotPassword, setVisdibleForgotPassword] = useState(false)
@@ -33,9 +33,8 @@ const Login = ({ navigation, token, setLoggedIn }) => {
         }
         else {
             //Alert.alert('Logging in', username + password);
-            // TODO: disable manual back button
-            // refer https://stackoverflow.com/a/43980393
-            return authenticate(username, password, setLoggedIn)   // perform authentication
+            // NOTE: DO NOT disable manual back button (refer https://stackoverflow.com/a/43980393)
+            return authenticate(username, password)   // perform authentication
                 .then(() => navigation.goBack())  // go back to activity on success
                 .catch(console.error);  // TODO: toast on failure
         }

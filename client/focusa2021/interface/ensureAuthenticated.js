@@ -33,13 +33,13 @@ export const logout = () => {
         })
 }
 
-export function ensureAuthenticated(navigation, token) {
+export function ensureAuthenticated(navigation) {
     useEffect(() => {
         // TODO: temporarily setting to bypass login
         // REMOVE THIS LINE IN PRODUCTION
-        //token = "true";
-        console.log('Current login state: ', token.length > 0);
-        if (!token) return ToastAndroid.showWithGravityAndOffset(
+        //setGraphQLToken("true");
+        console.log('Current login state: ', getGraphQLToken().length > 0);
+        if (!getGraphQLToken()) return ToastAndroid.showWithGravityAndOffset(
             "User not Logged in. Please Login",
             ToastAndroid.LONG,
             ToastAndroid.BOTTOM,

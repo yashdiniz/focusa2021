@@ -6,8 +6,8 @@ import Post from '../Components/Post';
 
 import { ensureAuthenticated } from '../interface/ensureAuthenticated';
 
-const SubjectPage = ({ navigation, route, token }) => {
-    ensureAuthenticated(navigation, token);
+const SubjectPage = ({ navigation, route }) => {
+    ensureAuthenticated(navigation);
     return (
         <ScrollView contentContainerStyle={styles.SujectPageView}>
             <StatusBar backgroundColor="#ffffff" barStyle="dark-content" />

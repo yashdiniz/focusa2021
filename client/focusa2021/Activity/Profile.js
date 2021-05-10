@@ -6,9 +6,10 @@ import styles from '../Styles/ProfileStyles';
 import ErrorLogin from '../Components/ErrorLogin';
 import { ensureAuthenticated } from '../interface/ensureAuthenticated';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { getGraphQLToken } from '../interface/apollo';
 
-const Profile = ({ navigation, token }) => {
-    ensureAuthenticated(navigation, token);
+const Profile = ({ navigation }) => {
+    ensureAuthenticated(navigation);
 
     // let { data, error, loading } = useQuery(getProfileFromUser, {
     //         // TODO
@@ -23,7 +24,7 @@ const Profile = ({ navigation, token }) => {
 
 
     const ProfileView = () => {
-        return token ?
+        return getGraphQLToken() ?
             (<View style={styles.container}>
                 <StatusBar backgroundColor="#ffffff" barStyle="dark-content" />
 

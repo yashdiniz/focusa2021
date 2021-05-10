@@ -4,7 +4,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import styles from '../Styles/SettingStyle';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-const Settings = ({ navigation, token }) => {
+const Settings = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <StatusBar backgroundColor="#ffffff" barStyle="dark-content" />

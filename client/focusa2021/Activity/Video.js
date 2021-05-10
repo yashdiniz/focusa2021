@@ -7,8 +7,9 @@ import ErrorLogin from '../Components/ErrorLogin';
 
 
 import { ensureAuthenticated } from '../interface/ensureAuthenticated';
+import { getGraphQLToken } from '../interface/apollo';
 
-const Video = ({ navigation, route, token }) => {
+const Video = ({ navigation, route }) => {
 
     const [refreshing, setRefreshing] = useState(false);
 
@@ -17,7 +18,7 @@ const Video = ({ navigation, route, token }) => {
         wait(2000).then(() => setRefreshing(false));
     }, []);
 
-    ensureAuthenticated(navigation, token);
+    ensureAuthenticated(navigation);
 
     const [hostvisible, setVisibleHost] = useState(false);
     const [joinvisible, setVisibleJoin] = useState(false);
@@ -32,7 +33,7 @@ const Video = ({ navigation, route, token }) => {
 
     const VideoView = () => {
         return (
-            token ? (<View style={styles.container}>
+            getGraphQLToken() ? (<View style={styles.container}>
                 <StatusBar backgroundColor="#ffffff" barStyle="dark-content" />
                 <Image style={styles.image} source={require('../assets/images/focusa2.png')} />
                 <Image style={styles.focusaText} source={require('../assets/images/focusalogosmall.png')} />
