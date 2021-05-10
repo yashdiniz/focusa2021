@@ -1,0 +1,12 @@
+{
+  "name": "focusa2021",
+  "displayName": "focusa2021",
+  "expo": {
+    "name": "focusa2021",
+    "slug": "focusa2021",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
