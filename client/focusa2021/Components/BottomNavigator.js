@@ -9,7 +9,6 @@ import Profile from '../Activity/Profile';
 import Video from '../Activity/Video';
 import SubjectPage from '../Activity/SubjectPage';
 import Settings from '../Activity/Settings';
-// import CameraTest from '../Activity/cameraTest';
 
 const Tab = createBottomTabNavigator();
 
@@ -52,16 +51,6 @@ function BottomNavigator() {
       >
         {props => <Settings {...props} />}
       </Tab.Screen>
-
-      {/* <Tab.Screen
-        name="CameraTest"
-        options={{
-          tabBarLabel: 'CameraTest',
-          tabBarButton: () => null,
-        }}
-      >
-        {props => <CameraTest {...props} />}
-      </Tab.Screen> */}
 
       <Tab.Screen
         name="Home"
