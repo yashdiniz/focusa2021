@@ -1,13 +1,12 @@
 import React from 'react';
-import { ApolloProvider, useQuery, gql } from '@apollo/client';
-import { Picker } from '@react-native-picker/picker';
+import { ApolloProvider } from '@apollo/client';
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 
 import BottomNavigator from './Components/BottomNavigator';
 import { apolloClient } from './interface/apollo';
 
-const App = (props) => {
+const App = () => {
     return (
         <ApolloProvider client={apolloClient}>
             <NavigationContainer>

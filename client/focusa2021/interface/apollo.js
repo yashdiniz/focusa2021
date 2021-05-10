@@ -8,17 +8,14 @@ const auth = create({
   baseURL: authRealm,
 });
 
-// see: https://github.com/graphql/swapi-graphql
-// Used to be 'https://swapi-graphql.netlify.app/.netlify/functions/index'
 const GRAPHQL_API_URL = graphQLRealm;
-/*
-uncomment the code below in case you are using a GraphQL API that requires some form of
-authentication. asyncAuthLink will run every time your request is made and use the token
-you provide while making the request.
-*/
+
 let TOKEN = '';
+export const getGraphQLToken = () => {
+  return token;
+}
 export const setGraphQLToken = (token) => {
-  TOKEN = token;
+  return (TOKEN = token);
 }
 const asyncAuthLink = setContext(async () => {
   return {
@@ -36,25 +33,24 @@ const errorLink = onError(async ({ graphQLErrors, networkError, operation, forwa
   if (graphQLErrors) {
     for (let err of graphQLErrors) {
       switch (err.extensions.code) {
-        // Apollo Server sets code to UNAUTHENTICATED
-        // when an AuthenticationError is thrown in a resolver
-        case 'UNAUTHENTICATED': {
+        case 'UNAUTHENTICATED': { // if GraphQL server returns unauthenticated
           // Modify the operation context with a new token
           const oldHeaders = operation.getContext().headers;
           operation.setContext({
             headers: {
               ...oldHeaders,
-              authorization: await auth.get('/refresh').then(res=>res.data.token),
+              authorization: await auth.get('/refresh').then(res => res.data.token),
             },
           });
           // Retry the request, returning the new observable
           return forward(operation);
         }
-        default: console.error(`[GraphQL error]: ${JSON.stringify(err)}`);
+        case 'BAD_USER_INPUT':
+        default: console.error('[GraphQL error]:', err);
       }
     }
   }
-  if (networkError) console.log(`[Network error]: ${networkError}`);
+  if (networkError) console.log('[Network error]:', networkError);
 });
 
 export const apolloClient = new ApolloClient({

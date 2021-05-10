@@ -1,14 +1,13 @@
-import {useEffect } from 'react';
+import { useEffect } from 'react';
 import { create } from 'axios';
-import {ToastAndroid } from "react-native";
-import { gql } from '@apollo/client';
+import { ToastAndroid } from "react-native";
 import { authRealm } from '../config';
 
 const auth = create({
     baseURL: authRealm,
 });
 
-import { apolloClient, setGraphQLToken } from '../interface/apollo';
+import { getGraphQLToken, setGraphQLToken } from '../interface/apollo';
 
 /**
  * 
@@ -16,46 +15,42 @@ import { apolloClient, setGraphQLToken } from '../interface/apollo';
  * @param {string} password The password to login with.
  * @param {string} setLoggedIn That React hook function to modify.
  */
-const authenticate = (username, password, setLoggedIn) => {
+export const authenticate = (username, password) => {
     return auth.get('/login', {
         params: { username, password }
     })
-    .then(res => {
-        setLoggedIn(res.data.token);    // set the token to the state
-        setGraphQLToken(res.data.token);
-        return res.data.token;
-        // return apolloClient.query({ query: gql`{token}`})
-        // .then(console.log).catch(console.error);
-    });
+        .then(res => {
+            setGraphQLToken(res.data.token);
+            return getGraphQLToken();
+        });
 }
 
-const logout = () => [
-    // TODO: add logout logic here
-]
+export const logout = () => {
+    return auth.get('/logout')  // invalidate the server refresh cookie
+        .then(() => {
+            setGraphQLToken("");    // clear the GraphQL JWT
+            return true;
+        })
+}
 
-function ensureAuthenticated(navigation, token) {
+export function ensureAuthenticated(navigation, token) {
     useEffect(() => {
         // TODO: temporarily setting to bypass login
         // REMOVE THIS LINE IN PRODUCTION
         //token = "true";
-
-        console.log('Current login state: ',token.length>0);
-        if(!token) return ToastAndroid.showWithGravityAndOffset(
+        console.log('Current login state: ', token.length > 0);
+        if (!token) return ToastAndroid.showWithGravityAndOffset(
             "User not Logged in. Please Login",
             ToastAndroid.LONG,
             ToastAndroid.BOTTOM,
             25,
             50
-          );
-        
-        
+        );
         //navigation.navigate('Login');
     });
 }
 
 
-const wait = (timeout) => {
+export const wait = (timeout) => {
     return new Promise(resolve => setTimeout(resolve, timeout));
 }
-  
-export { authenticate, ensureAuthenticated, wait, logout };

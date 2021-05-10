@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 
-const getPosts = gql`
+export const getPosts = gql`
     query getPosts($q: String, $offset: Int) {
         post(q:$q, offset:$offset){
             uuid, time, text, attachmentURL,
@@ -10,7 +10,7 @@ const getPosts = gql`
     }
 `;
 
-const getProfileFromUser = gql`
+export const getProfileFromUser = gql`
     query getProfileFromUser($userID:ID!) {
         user(userID:$userID) {
             name,
@@ -21,6 +21,4 @@ const getProfileFromUser = gql`
             }
         }
     }
-`
-
-export { getPosts };
+`;

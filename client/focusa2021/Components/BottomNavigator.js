@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -9,13 +9,11 @@ import Profile from '../Activity/Profile';
 import Video from '../Activity/Video';
 import SubjectPage from '../Activity/SubjectPage';
 import Settings from '../Activity/Settings';
-import ErrorLogin from '../Components/ErrorLogin';
 // import CameraTest from '../Activity/cameraTest';
 
 const Tab = createBottomTabNavigator();
 
 function BottomNavigator() {
-  const [token, setLoggedIn] = useState('');
   return (
     <Tab.Navigator
       initialRouteName="Home"
@@ -31,7 +29,7 @@ function BottomNavigator() {
           tabBarButton: () => null,
         }}
       >
-        {props => <Login {...props} setLoggedIn={setLoggedIn} token={token}/>}
+        {props => <Login {...props} />}
       </Tab.Screen>
 
       <Tab.Screen
@@ -41,7 +39,7 @@ function BottomNavigator() {
           tabBarButton: () => null,
         }}
       >
-        {props => <SubjectPage {...props} token={token}/>}
+        {props => <SubjectPage {...props} />}
       </Tab.Screen>
 
       <Tab.Screen
@@ -52,7 +50,7 @@ function BottomNavigator() {
           tabBarButton: () => null,
         }}
       >
-        {props => <Settings {...props} token={token}/>}
+        {props => <Settings {...props} />}
       </Tab.Screen>
 
       {/* <Tab.Screen
@@ -62,7 +60,7 @@ function BottomNavigator() {
           tabBarButton: () => null,
         }}
       >
-        {props => <CameraTest {...props} token={token}/>}
+        {props => <CameraTest {...props} />}
       </Tab.Screen> */}
 
       <Tab.Screen
@@ -74,7 +72,7 @@ function BottomNavigator() {
           ),
         }}
       >
-        {props => <Home {...props} token={token}/>}
+        {props => <Home {...props} />}
       </Tab.Screen>
 
       <Tab.Screen
@@ -86,7 +84,7 @@ function BottomNavigator() {
           ),
         }}
       >
-        {props => <Courses {...props} token={token}/>}
+        {props => <Courses {...props} />}
       </Tab.Screen>
 
       <Tab.Screen
@@ -98,9 +96,9 @@ function BottomNavigator() {
           ),
         }}
       >
-        {props => <Video {...props} token={token}/>}
+        {props => <Video {...props} />}
       </Tab.Screen>
-      
+
       <Tab.Screen
         name="Profile"
         options={{
@@ -110,7 +108,7 @@ function BottomNavigator() {
           ),
         }}
       >
-        {props => <Profile {...props} token={token}/>}
+        {props => <Profile {...props} />}
       </Tab.Screen>
     </Tab.Navigator>
   );
