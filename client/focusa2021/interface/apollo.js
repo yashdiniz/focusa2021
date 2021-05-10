@@ -12,7 +12,7 @@ const GRAPHQL_API_URL = graphQLRealm;
 
 let TOKEN = '';
 export const getGraphQLToken = () => {
-  return token;
+  return TOKEN;
 }
 export const setGraphQLToken = (token) => {
   return (TOKEN = token);
