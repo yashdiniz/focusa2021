@@ -18,7 +18,7 @@ const GRAPHQL_API_URL = graphQLRealm;
  export const refresh = () => {
     return auth.get('/refresh')
     .then(res => graphQLToken(res.data.token))
-    .catch(console.error);
+    .catch(e=> console.error('refresh', e));
 }
 
 let TOKEN = '';

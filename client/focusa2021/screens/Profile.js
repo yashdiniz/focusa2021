@@ -8,8 +8,8 @@ export default function Profile({ navigation, route }) {
         username: "admin"   // TODO: Username currently hardcoded lol
     });
 
-    if (error) console.error(error);
-    console.log(data);
+    if (error) console.error('Profile', error);
+    if (data) console.log('Profile', data);
 
     if (loading) 
         return <ActivityIndicator />;
