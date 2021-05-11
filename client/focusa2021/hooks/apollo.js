@@ -11,23 +11,24 @@ const auth = create({
 
 const GRAPHQL_API_URL = graphQLRealm;
 
-const [TOKEN, setTOKEN] = useState('');
+/**
+ * Retrieves the GraphQL token value. Also allows to update the token value if necessary.
+ * @param {string} token The JWT to update the current value to.
+ * @return Current token value.
+ */
+export const graphQLToken = (token) => {
+    const [TOKEN, setToken] = useState('');
 
-export const getGraphQLToken = () => {
-    return TOKEN;
-}
-
-export const setGraphQLToken = (token) => {
-    useEffect(() => {
-        setTOKEN(token);
+    useEffect(()=>{
+        if (token) setToken(token);
     }, []);
+
     return TOKEN;
 }
-
 const asyncAuthLink = setContext(async () => {
     return {
         headers: {
-            authorization: TOKEN,
+            authorization: graphQLToken(),
         },
     };
 });
@@ -43,10 +44,12 @@ const errorLink = onError(async ({ graphQLErrors, networkError, operation, forwa
                 case 'UNAUTHENTICATED': { // if GraphQL server returns unauthenticated
                     // Modify the operation context with a new token
                     const oldHeaders = operation.getContext().headers;
+                    const token = graphQLToken(await auth.get('/refresh')
+                                            .then(res => res.data.token));
                     operation.setContext({
                         headers: {
                             ...oldHeaders,
-                            authorization: await auth.get('/refresh').then(res => res.data.token),
+                            authorization: token,
                         },
                     });
                     // Retry the request, returning the new observable
