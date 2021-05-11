@@ -8,15 +8,18 @@ export default function Profile({ navigation, route }) {
         username: "admin"   // TODO: Username currently hardcoded lol
     });
 
+    if (error) console.error(error);
+    console.log(data);
+
     if (loading) 
         return <ActivityIndicator />;
     else 
         return (
             <View style={styles}>
-                <Text>{data}</Text>
+                <Text>{JSON.stringify(data)}</Text>
                 <Text style={{
                     color:'red'
-                }}>{error}</Text>
+                }}>{'Did it work?'}</Text>
             </View>
         );
 }
