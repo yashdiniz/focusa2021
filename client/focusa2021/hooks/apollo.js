@@ -4,12 +4,22 @@ import { setContext } from '@apollo/link-context';
 import { onError } from "@apollo/client/link/error";
 import { create } from 'axios';
 import { graphQLRealm, authRealm } from '../config';
+import promiseToObservable from './promiseToObservable';
 
 const auth = create({
     baseURL: authRealm,
 });
 
 const GRAPHQL_API_URL = graphQLRealm;
+
+/**
+ * 
+ * @returns Promise with refreshed token.
+ */
+ export const refresh = () => {
+    return auth.get('/refresh')
+    .then(res => graphQLToken(res.data.token));
+}
 
 /**
  * Retrieves the GraphQL token value. Also allows to update the token value if necessary.
@@ -37,30 +47,34 @@ const httpLink = new HttpLink({
     uri: GRAPHQL_API_URL,
 });
 
-const errorLink = onError(async ({ graphQLErrors, networkError, operation, forward }) => {
+const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) => {
     if (graphQLErrors) {
         for (let err of graphQLErrors) {
             switch (err.extensions.code) {
                 case 'UNAUTHENTICATED': { // if GraphQL server returns unauthenticated
-                    // Modify the operation context with a new token
-                    const oldHeaders = operation.getContext().headers;
-                    const token = graphQLToken(await auth.get('/refresh')
-                                            .then(res => res.data.token));
-                    operation.setContext({
-                        headers: {
-                            ...oldHeaders,
-                            authorization: token,
-                        },
-                    });
+                    // Modify the operation context with a new token                    
+                    // const oldHeaders = operation.getContext().headers;
+
+                    // operation.setContext({
+                    //     headers: {
+                    //         ...oldHeaders,
+                    //         authorization: token,
+                    //     },
+                    // });
+                    // await refresh, then call its link middleware again
+                    return promiseToObservable(refresh())
                     // Retry the request, returning the new observable
-                    return forward(operation);
+                    .flatMap(() => forward(operation));
                 }
                 case 'BAD_USER_INPUT':
                 default: console.error('[GraphQL error]:', err);
             }
         }
     }
-    if (networkError) console.log('[Network error]:', networkError);
+    if (networkError) {
+        console.error('[Network error]:', networkError);
+        throw networkError;
+    }
 });
 
 export const apolloClient = new ApolloClient({
