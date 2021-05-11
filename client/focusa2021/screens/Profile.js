@@ -14,7 +14,9 @@ export default function Profile({ navigation, route }) {
         return (
             <View style={styles}>
                 <Text>{data}</Text>
-                <Text style={{color:'red'}}>{error}</Text>
+                <Text style={{
+                    color:'red'
+                }}>{error}</Text>
             </View>
         );
 }

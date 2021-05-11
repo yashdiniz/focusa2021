@@ -15,9 +15,7 @@ const auth = create({
 export const authenticate = (username, password) => {
     return auth.get('/login', {
         params: { username, password }
-    }).then(res => {
-        return graphQLToken(res.data.token);
-    });
+    }).then(res => graphQLToken(res.data.token));
 }
 
 /**
@@ -27,7 +25,5 @@ export const authenticate = (username, password) => {
  */
 export const logout = () => {
     return auth.get('/logout')
-    .then(() => {
-        return graphQLToken('logged out.');
-    })
+    .then(() => graphQLToken('logged out.'));
 }
