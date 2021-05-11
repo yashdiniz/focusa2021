@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import { ApolloClient, HttpLink, InMemoryCache, from } from '@apollo/client';
 import { setContext } from '@apollo/link-context';
 import { onError } from "@apollo/client/link/error";
@@ -18,21 +17,18 @@ const GRAPHQL_API_URL = graphQLRealm;
  */
  export const refresh = () => {
     return auth.get('/refresh')
-    .then(res => graphQLToken(res.data.token));
+    .then(res => graphQLToken(res.data.token))
+    .catch(console.error);
 }
 
+let TOKEN = '';
 /**
  * Retrieves the GraphQL token value. Also allows to update the token value if necessary.
  * @param {string} token The JWT to update the current value to.
  * @return Current token value.
  */
 export const graphQLToken = (token) => {
-    const [TOKEN, setToken] = useState('');
-
-    useEffect(()=>{
-        if (token) setToken(token);
-    }, []);
-
+    if (token) TOKEN = token;
     return TOKEN;
 }
 const asyncAuthLink = setContext(async () => {
@@ -47,7 +43,7 @@ const httpLink = new HttpLink({
     uri: GRAPHQL_API_URL,
 });
 
-const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) => {
+const errorLink = onError(({ graphQLErrors, otherErrors, operation, forward }) => {
     if (graphQLErrors) {
         for (let err of graphQLErrors) {
             switch (err.extensions.code) {
@@ -71,9 +67,9 @@ const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) 
             }
         }
     }
-    if (networkError) {
-        console.error('[Network error]:', networkError);
-        throw networkError;
+    if (otherErrors) {
+        console.error('[Other error]:', otherErrors);
+        throw otherErrors;
     }
 });
 
