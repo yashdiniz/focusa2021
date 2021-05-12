@@ -9,6 +9,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 import Profile from '../screens/Profile';
+import Login from '../screens/Login';
 
 const BottomTab = createBottomTabNavigator();
 
@@ -26,6 +27,13 @@ export default function BottomTabNavigator() {
                     tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
                 }}
             />
+            <BottomTab.Screen
+                name="Login"
+                component={LoginNavigator}
+                options={{
+                    tabBarButton: () => null,
+                }}
+            />
         </BottomTab.Navigator>
     );
 }
@@ -38,7 +46,6 @@ function TabBarIcon(props) {
 // Each tab has its own navigation stack, you can read more about this pattern here:
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
 const ProfileStack = createStackNavigator();
-
 function ProfileNavigator() {
     return (
         <ProfileStack.Navigator>
@@ -48,5 +55,17 @@ function ProfileNavigator() {
                 options={{ headerTitle: 'Profile Test' }}
             />
         </ProfileStack.Navigator>
+    );
+}
+
+const LoginStack = createStackNavigator();
+function LoginNavigator() {
+    return (
+        <LoginStack.Navigator>
+            <LoginStack.Screen
+                name="LoginScreen"
+                component={Login}
+            />
+        </LoginStack.Navigator>
     );
 }
