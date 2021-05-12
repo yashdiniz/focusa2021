@@ -1,18 +1,38 @@
 import { useQuery } from '@apollo/client';
-import React from 'react';
-import { ActivityIndicator, Text, View, StyleSheet } from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { ActivityIndicator, Text, View, StyleSheet, ScrollView, RefreshControl } from 'react-native';
+import { graphQLToken } from '../hooks/apollo';
 import { getProfileData } from '../queries';
 
 export default function Profile({ navigation, route }) {
-    const { data, error, loading } = useQuery(getProfileData, {
+    const [refreshing, setRefreshing] = useState(false);
+
+    const { data, error, loading, refetch } = useQuery(getProfileData, {
         variables: { username: "admin" }   // TODO: Username currently hardcoded lol
     });
 
-    if (error) {
-        navigation.navigate('Login');
-        console.error('Profile', JSON.stringify(error));
-    }
-    if (data) console.log('Profile', data);
+    /**
+     * Callback used to inform completion of refresh.
+     */
+    const onRefresh = useCallback(() => {
+        setRefreshing(true);
+        console.log('Refreshing');
+        // refresh will cause refetching of the query
+        // once refetched, it will cause a re-render.
+        refetch({
+            variables: { username: "admin" }
+        }).then(() => setRefreshing(false))
+        .catch(e => console.error('Profile Refresh', e));
+    });
+
+    useEffect(() => {
+        // if JWT is too short, it is usually because it is invalid.
+        if(graphQLToken().length < 20) navigation.navigate('Login');
+        if (error) {
+            console.error('Profile', JSON.stringify(error));
+        }
+        if (data) console.log('Profile', data);
+    }, ['refreshing']);
 
     if (loading) 
         return (
@@ -22,12 +42,19 @@ export default function Profile({ navigation, route }) {
         );
     else 
         return (
-            <View style={styles}>
+            <ScrollView style={styles}
+                refreshControl={
+                    <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                    />
+                }
+                >
                 <Text>{JSON.stringify(data)}</Text>
                 <Text style={{
                     color:'red'
                 }}>{'Did it work?'}</Text>
-            </View>
+            </ScrollView>
         );
 }
 
