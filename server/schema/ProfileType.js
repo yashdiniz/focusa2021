@@ -35,6 +35,9 @@ const ProfileType = new GraphQLObjectType({
         userID: {
             type: GraphQLNonNull(GraphQLID),
         },
+        about: {
+            type: GraphQLNonNull(GraphQLString),
+        },
         user: {
             type: GraphQLNonNull(UserType),
             description: "User that maps to this profile.",
