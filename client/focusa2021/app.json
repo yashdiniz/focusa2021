@@ -4,9 +4,14 @@
   "expo": {
     "name": "focusa2021",
     "slug": "focusa2021",
+    "orientation": "portrait",
+    "scheme": "myapp",
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
-    ]
+    ],
+    "updates": {
+      "fallbackToCacheTimeout": 5
+    }
   }
 }

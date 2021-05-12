@@ -48,9 +48,7 @@ const errorLink = onError(({ graphQLErrors, otherErrors, operation, forward }) =
         for (let err of graphQLErrors) {
             switch (err.extensions.code) {
                 case 'UNAUTHENTICATED': { // if GraphQL server returns unauthenticated
-                    // Modify the operation context with a new token                    
-                    // const oldHeaders = operation.getContext().headers;
-
+                    // Modify the operation context with a new token
                     // operation.setContext({
                     //     headers: {
                     //         ...oldHeaders,
@@ -60,7 +58,16 @@ const errorLink = onError(({ graphQLErrors, otherErrors, operation, forward }) =
                     // await refresh, then call its link middleware again
                     return promiseToObservable(refresh())
                     // Retry the request, returning the new observable
-                    .flatMap(() => forward(operation));
+                    .flatMap((token) => {
+                        const oldHeaders = operation.getContext().headers;
+                        operation.setContext({
+                            headers: {
+                                ...oldHeaders,
+                                authorization: token,
+                            }
+                        });
+                        return forward(operation);
+                    });
                 }
                 case 'BAD_USER_INPUT':
                 default: console.error('[GraphQL error]:', err);
