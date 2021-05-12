@@ -5,14 +5,21 @@ import { getProfileData } from '../queries';
 
 export default function Profile({ navigation, route }) {
     const { data, error, loading } = useQuery(getProfileData, {
-        username: "admin"   // TODO: Username currently hardcoded lol
+        variables: { username: "admin" }   // TODO: Username currently hardcoded lol
     });
 
-    if (error) console.error('Profile', error);
+    if (error) {
+        navigation.navigate('Login');
+        console.error('Profile', JSON.stringify(error));
+    }
     if (data) console.log('Profile', data);
 
     if (loading) 
-        return <ActivityIndicator />;
+        return (
+            <View style={styles}>
+                <ActivityIndicator color={'#333'} />
+            </View>
+        );
     else 
         return (
             <View style={styles}>
