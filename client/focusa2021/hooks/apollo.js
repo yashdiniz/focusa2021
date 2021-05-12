@@ -28,7 +28,10 @@ let TOKEN = '';
  * @return Current token value.
  */
 export const graphQLToken = (token) => {
-    if (token) TOKEN = token;
+    if (token) {
+        console.log('Token set.');
+        TOKEN = token;
+    }
     return TOKEN;
 }
 const asyncAuthLink = setContext(async () => {
@@ -49,23 +52,11 @@ const errorLink = onError(({ graphQLErrors, otherErrors, operation, forward }) =
             switch (err.extensions.code) {
                 case 'UNAUTHENTICATED': { // if GraphQL server returns unauthenticated
                     // Modify the operation context with a new token
-                    // operation.setContext({
-                    //     headers: {
-                    //         ...oldHeaders,
-                    //         authorization: token,
-                    //     },
-                    // });
                     // await refresh, then call its link middleware again
                     return promiseToObservable(refresh())
                     // Retry the request, returning the new observable
-                    .flatMap((token) => {
-                        const oldHeaders = operation.getContext().headers;
-                        operation.setContext({
-                            headers: {
-                                ...oldHeaders,
-                                authorization: token,
-                            }
-                        });
+                    .flatMap(() => {
+                        console.log('Apollo onError', graphQLToken());
                         return forward(operation);
                     });
                 }

@@ -1,4 +1,5 @@
 import { create } from 'axios';
+import { useEffect, useState } from 'react';
 import { authRealm } from '../config';
 import { graphQLToken } from './apollo';
 
@@ -10,16 +11,22 @@ const auth = create({
  * 
  * @param {string} username The username to login with.
  * @param {string} password The password to login with.
- * @param {string} setLoggedIn That React hook function to modify.
  */
 export const authenticate = (username, password) => {
-    return auth.get('/login', {
-        params: { username, password }
-    }).then(res => {
-        console.log('authenticate', res.data.token);
-        return graphQLToken(res.data.token);
-    })
-    .catch(e=> console.error('authenticate', e));
+    const [token, setToken] = useState('');
+
+    useEffect(() => {
+        auth.get('/login', {
+            params: { username, password }
+        }).then(res => {
+            console.log('authenticate', res.data.token);
+            setToken(res.data.token);
+            return graphQLToken(res.data.token);
+        })
+        .catch(e=> console.error('authenticate', e));
+    }, []);
+
+    return token;
 }
 
 /**

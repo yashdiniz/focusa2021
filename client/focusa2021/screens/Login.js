@@ -1,14 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ActivityIndicator, View, StyleSheet, Button } from 'react-native';
 import { authenticate } from '../hooks/authenticate';
 
 export default function Login({ navigation, route }) {
-    const [loading, setLoaded] = useState(false);
+    const loggedIn = authenticate('admin','gyroscope')  // TODO: REMOVE THIS LINE ASAP!!
 
-    authenticate('admin','gyroscope')  // REMOVE THIS LINE ASAP!!
-    .then(() => setLoaded(true));
-
-    if (loading)
+    if (loggedIn)
         return (
             <View style={styles}>
                 <Button 
