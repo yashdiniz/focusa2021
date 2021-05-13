@@ -2,11 +2,13 @@ import { ApolloClient, HttpLink, InMemoryCache, from } from '@apollo/client';
 import { setContext } from '@apollo/link-context';
 import { onError } from "@apollo/client/link/error";
 import { create } from 'axios';
-import { graphQLRealm, authRealm } from '../config';
+import { graphQLRealm, authRealm, SET_TOKEN } from '../config';
 import promiseToObservable from './promiseToObservable';
+import { store } from './store';
 
-const auth = create({
+export const auth = create({
     baseURL: authRealm,
+    withCredentials: true, // enable use of cookies outside web browser
 });
 
 const GRAPHQL_API_URL = graphQLRealm;
@@ -21,20 +23,17 @@ const GRAPHQL_API_URL = graphQLRealm;
     .catch(e=> console.error('refresh', e));
 }
 
-let TOKEN = '';
 /**
  * Retrieves the GraphQL token value. Also allows to update the token value if necessary.
  * @param {string} token The JWT to update the current value to.
  * @return Current token value.
  */
 export const graphQLToken = (token) => {
-    if (token) {
-        console.log('Token set.');
-        TOKEN = token;
-    }
-    return TOKEN;
+    console.log('graphQLToken', store.getState());
+    if (token) store.dispatch({ type: SET_TOKEN, token });
+    return store.getState()?.token;
 }
-const asyncAuthLink = setContext(async () => {
+const asyncAuthLink = setContext(() => {
     return {
         headers: {
             authorization: graphQLToken(),
@@ -56,7 +55,6 @@ const errorLink = onError(({ graphQLErrors, otherErrors, operation, forward }) =
                     return promiseToObservable(refresh())
                     // Retry the request, returning the new observable
                     .flatMap(() => {
-                        console.log('Apollo onError', graphQLToken());
                         return forward(operation);
                     });
                 }

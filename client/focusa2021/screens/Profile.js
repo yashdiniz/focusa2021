@@ -8,7 +8,7 @@ export default function Profile({ navigation, route }) {
     const [refreshing, setRefreshing] = useState(false);
 
     const { data, error, loading, refetch } = useQuery(getProfileData, {
-        variables: { username: "admin" }   // TODO: Username currently hardcoded lol
+        variables: { username: "admin" },   // TODO: Username currently hardcoded lol
     });
 
     /**
@@ -19,9 +19,7 @@ export default function Profile({ navigation, route }) {
         console.log('Refreshing');
         // refresh will cause refetching of the query
         // once refetched, it will cause a re-render.
-        refetch({
-            variables: { username: "admin" }
-        }).then(() => setRefreshing(false))
+        refetch().then(() => setRefreshing(false))
         .catch(e => console.error('Profile Refresh', e));
     });
 

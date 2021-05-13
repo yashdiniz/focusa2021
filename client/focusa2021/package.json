@@ -13,6 +13,8 @@
     "@react-navigation/bottom-tabs": "^5.11.10",
     "@react-navigation/native": "^5.9.4",
     "@react-navigation/stack": "^5.14.5",
+    "@reduxjs/toolkit": "^1.5.1",
+    "@types/react-redux": "^7.1.16",
     "apollo-link": "^1.2.14",
     "axios": "^0.21.1",
     "expo": "~41.0.1",
@@ -28,7 +30,8 @@
     "react-native-reanimated": "~2.1.0",
     "react-native-screens": "~3.0.0",
     "react-native-unimodules": "~0.13.3",
-    "react-native-web": "~0.13.12"
+    "react-native-web": "~0.13.12",
+    "react-redux": "^7.2.4"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0"

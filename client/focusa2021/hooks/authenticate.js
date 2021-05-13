@@ -1,11 +1,5 @@
-import { create } from 'axios';
 import { useEffect, useState } from 'react';
-import { authRealm } from '../config';
-import { graphQLToken } from './apollo';
-
-const auth = create({
-    baseURL: authRealm,
-});
+import { graphQLToken, auth } from './apollo';
 
 /**
  * 
