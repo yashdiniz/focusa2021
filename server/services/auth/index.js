@@ -68,7 +68,7 @@ app.get('/', (req, res) => {
                 name: user.name,
             })
         });
-    } else res.status(401).json({ message: 'microservice not authenticated.' });
+    } else res.status(401).json({ message: 'NOT autheNtICatEd.' });
 });
 
 app.use('/login',
