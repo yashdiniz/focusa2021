@@ -1,7 +1,7 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { ApolloProvider } from '@apollo/client';
-import { apolloClient } from './hooks/apollo';
+import { apolloClient, auth } from './hooks/apollo';
 import Navigation from './navigation';
 import { Provider } from 'react-redux';
 import useColorScheme from './hooks/useColorScheme';
@@ -9,6 +9,8 @@ import { store } from './hooks/store';
 
 export default function App() {
   const colorScheme = useColorScheme();
+
+  auth.get('/check').then(console.log).catch(console.error);
 
   return (
     <ApolloProvider client={apolloClient}>

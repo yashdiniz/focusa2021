@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { graphQLToken, auth } from './apollo';
+import { auth } from './apollo';
+import { store } from './store';
 
 /**
  * 
@@ -15,7 +16,8 @@ export const authenticate = (username, password) => {
         }).then(res => {
             console.log('authenticate', res.data.token);
             setToken(res.data.token);
-            return graphQLToken(res.data.token);
+            store.dispatch({type:SET_TOKEN, token:res.data.token});
+            return token;
         })
         .catch(e=> console.error('authenticate Error', e));
     }, []);
@@ -30,6 +32,6 @@ export const authenticate = (username, password) => {
  */
 export const logout = () => {
     return auth.get('/logout')
-    .then(() => graphQLToken('logged out.'))
+    .then(() => store.dispatch({type:SET_TOKEN, token:''}))
     .catch(e=> console.error('logout', e));
 }

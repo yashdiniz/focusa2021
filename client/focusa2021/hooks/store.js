@@ -19,6 +19,10 @@ function reducer(state, action) {
     return state;
 }
 
+export const getToken = () => {
+    return store.getState() ? store.getState().token : '';
+}
+
 const mapStateToProps = (state) => {
     if (!state) state = initState;
     const { token } = state;

@@ -4,7 +4,7 @@ import { onError } from "@apollo/client/link/error";
 import { create } from 'axios';
 import { graphQLRealm, authRealm, SET_TOKEN } from '../config';
 import promiseToObservable from './promiseToObservable';
-import { store } from './store';
+import { getToken, store } from './store';
 
 export const auth = create({
     baseURL: authRealm,
@@ -19,24 +19,15 @@ const GRAPHQL_API_URL = graphQLRealm;
  */
  export const refresh = () => {
     return auth.get('/refresh')
-    .then(res => graphQLToken(res.data.token))
+    .then(res => store.dispatch({type:SET_TOKEN, token:res.data.token}))
     .catch(e=> console.error('refresh', e));
 }
 
-/**
- * Retrieves the GraphQL token value. Also allows to update the token value if necessary.
- * @param {string} token The JWT to update the current value to.
- * @return Current token value.
- */
-export const graphQLToken = (token) => {
-    if (token) store.dispatch({ type: SET_TOKEN, token });
-    return store.getState()?.token;
-}
 const asyncAuthLink = setContext(() => {
-    console.log('asyncAuthLink', graphQLToken());
+    console.log('asyncAuthLink', getToken());
     return {
         headers: {
-            authorization: graphQLToken(),
+            authorization: getToken(),
         },
     };
 });
