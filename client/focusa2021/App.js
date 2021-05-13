@@ -1,4 +1,5 @@
 import React from 'react';
+import { AppRegistry } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { ApolloProvider } from '@apollo/client';
 import { apolloClient } from './hooks/apollo';
@@ -19,3 +20,5 @@ export default function App() {
     </ApolloProvider>
   );
 }
+
+AppRegistry.registerComponent('FOCUSA', () => App);

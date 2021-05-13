@@ -1,10 +1,10 @@
 import { useQuery } from '@apollo/client';
 import React, { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, Text, View, StyleSheet, ScrollView, RefreshControl } from 'react-native';
-import { graphQLToken } from '../hooks/apollo';
+import { connectProps } from '../hooks/store';
 import { getProfileData } from '../queries';
 
-export default function Profile({ navigation, route }) {
+function Profile({ navigation, route, token }) {
     const [refreshing, setRefreshing] = useState(false);
 
     const { data, error, loading, refetch } = useQuery(getProfileData, {
@@ -25,7 +25,7 @@ export default function Profile({ navigation, route }) {
 
     useEffect(() => {
         // if JWT is too short, it is usually because it is invalid.
-        if(graphQLToken().length < 20) navigation.navigate('Login');
+        if(!token || token.length < 20) navigation.navigate('Login');
         if (error) {
             console.error('Profile', JSON.stringify(error));
         }
@@ -63,3 +63,5 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
 });
+
+export default connectProps(Profile);

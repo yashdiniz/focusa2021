@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
+import { connect } from 'react-redux';
 import { SET_TOKEN } from '../config';
 
 export let store = configureStore({ reducer });
@@ -17,3 +18,12 @@ function reducer(state, action) {
     }
     return state;
 }
+
+const mapStateToProps = (state) => {
+    const { token } = state;
+    return { token };
+}
+
+export const connectProps = (component) => {
+    return connect(mapStateToProps)(component);
+};
