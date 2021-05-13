@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/client';
 import React, { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, Text, View, StyleSheet, ScrollView, RefreshControl } from 'react-native';
 import { connectProps } from '../hooks/store';
-import { getProfileData } from '../queries';
+import { getProfileData } from '../constants/queries';
 
 function Profile({ navigation, route, token }) {
     const [refreshing, setRefreshing] = useState(false);
@@ -20,7 +20,10 @@ function Profile({ navigation, route, token }) {
         // refresh will cause refetching of the query
         // once refetched, it will cause a re-render.
         refetch().then(() => setRefreshing(false))
-        .catch(e => console.error('Profile Refresh', e));
+        .catch(e => {
+            setRefreshing(false);
+            console.error('Profile Refresh', e);
+        });
     });
 
     useEffect(() => {
@@ -30,7 +33,7 @@ function Profile({ navigation, route, token }) {
             console.error('Profile', JSON.stringify(error));
         }
         if (data) console.log('Profile', data);
-    }, ['refreshing']);
+    });
 
     if (loading) 
         return (
