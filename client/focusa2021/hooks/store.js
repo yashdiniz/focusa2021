@@ -13,7 +13,7 @@ function reducer(state, action) {
     console.log('reducer', state, action);
     if(action.type === SET_TOKEN) {
         return {
-            token: action.value,
+            token: action.token,
         };
     }
     return state;
