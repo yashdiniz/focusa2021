@@ -17,7 +17,7 @@ export const authenticate = (username, password) => {
             setToken(res.data.token);
             return graphQLToken(res.data.token);
         })
-        .catch(e=> console.error('authenticate', e));
+        .catch(e=> console.error('authenticate Error', e));
     }, []);
 
     return token;

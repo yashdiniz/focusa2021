@@ -29,11 +29,11 @@ const GRAPHQL_API_URL = graphQLRealm;
  * @return Current token value.
  */
 export const graphQLToken = (token) => {
-    console.log('graphQLToken', store.getState());
     if (token) store.dispatch({ type: SET_TOKEN, token });
     return store.getState()?.token;
 }
 const asyncAuthLink = setContext(() => {
+    console.log('asyncAuthLink', graphQLToken());
     return {
         headers: {
             authorization: graphQLToken(),
@@ -71,5 +71,5 @@ const errorLink = onError(({ graphQLErrors, otherErrors, operation, forward }) =
 
 export const apolloClient = new ApolloClient({
     cache: new InMemoryCache(), // TODO: switch to another cache for offline use
-    link: from([errorLink, asyncAuthLink.concat(httpLink)]),
+    link: from([errorLink, asyncAuthLink, httpLink]),
 });

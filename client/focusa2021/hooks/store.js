@@ -10,8 +10,8 @@ const initState = {
 
 function reducer(state, action) {
     if (!state) state = initState;
-    console.log('reducer', state, action);
     if(action.type === SET_TOKEN) {
+        console.log(SET_TOKEN)
         return {
             token: action.token,
         };
@@ -21,7 +21,6 @@ function reducer(state, action) {
 
 const mapStateToProps = (state) => {
     if (!state) state = initState;
-    console.log('mapStateToProps', state);
     const { token } = state;
     return { token };
 }
