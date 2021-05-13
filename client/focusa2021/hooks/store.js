@@ -20,6 +20,8 @@ function reducer(state, action) {
 }
 
 const mapStateToProps = (state) => {
+    if (!state) state = initState;
+    console.log('mapStateToProps', state);
     const { token } = state;
     return { token };
 }
