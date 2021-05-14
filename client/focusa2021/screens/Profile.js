@@ -16,13 +16,12 @@ function Profile({ navigation, route, token }) {
      */
     const onRefresh = useCallback(() => {
         setRefreshing(true);
-        console.log('Refreshing');
         // refresh will cause refetching of the query
         // once refetched, it will cause a re-render.
         refetch().then(() => setRefreshing(false))
         .catch(e => {
             setRefreshing(false);
-            console.error('Profile Refresh', e);
+            console.error(new Date(), 'Profile Refresh', e);
         });
     });
 
@@ -30,9 +29,8 @@ function Profile({ navigation, route, token }) {
         // if JWT is too short, it is usually because it is invalid.
         if(!token || token.length < 20) navigation.navigate('Login');
         if (error) {
-            console.error('Profile', JSON.stringify(error));
+            console.error(new Date(), 'Profile', JSON.stringify(error));
         }
-        if (data) console.log('Profile', data);
     });
 
     if (loading) 

@@ -20,11 +20,10 @@ const GRAPHQL_API_URL = graphQLRealm;
  export const refresh = () => {
     return auth.get('/refresh')
     .then(res => store.dispatch({type:SET_TOKEN, token:res.data.token}))
-    .catch(e=> console.error('refresh', e));
+    .catch(e=> console.error(new Date(), 'refresh', e));
 }
 
 const asyncAuthLink = setContext(() => {
-    console.log('asyncAuthLink', getToken());
     return {
         headers: {
             authorization: `Bearer ${getToken()}`,
@@ -50,12 +49,12 @@ const errorLink = onError(({ graphQLErrors, otherErrors, operation, forward }) =
                     });
                 }
                 case 'BAD_USER_INPUT':
-                default: console.error('[GraphQL error]:', err);
+                default: console.error(new Date(), '[GraphQL error]:', err);
             }
         }
     }
     if (otherErrors) {
-        console.error('[Other error]:', otherErrors);
+        console.error(new Date(), '[Other error]:', otherErrors);
         throw otherErrors;
     }
 });

@@ -11,7 +11,7 @@ const initState = {
 function reducer(state, action) {
     if (!state) state = initState;
     if(action.type === SET_TOKEN) {
-        console.log(SET_TOKEN)
+        console.log(new Date(), SET_TOKEN)
         return {
             token: action.token,
         };

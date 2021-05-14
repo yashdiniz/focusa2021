@@ -15,12 +15,11 @@ export const authenticate = (username, password) => {
         auth.get('/login', {
             params: { username, password }
         }).then(res => {
-            console.log('authenticate', res.data.token);
             setToken(res.data.token);
             store.dispatch({type:SET_TOKEN, token:res.data.token});
             return token;
         })
-        .catch(e=> console.error('authenticate Error', e));
+        .catch(e=> console.error(new Date(), 'authenticate Error', e));
     }, []);
 
     return token;
@@ -34,5 +33,5 @@ export const authenticate = (username, password) => {
 export const logout = () => {
     return auth.get('/logout')
     .then(() => store.dispatch({type:SET_TOKEN, token:''}))
-    .catch(e=> console.error('logout', e));
+    .catch(e=> console.error(new Date(), 'logout', e));
 }
