@@ -17,11 +17,14 @@
     "@types/react-redux": "^7.1.16",
     "apollo-link": "^1.2.14",
     "axios": "^0.21.1",
+    "base-64": "^1.0.0",
     "expo": "~41.0.1",
     "expo-linking": "^2.2.3",
     "expo-splash-screen": "~0.10.2",
     "expo-status-bar": "~1.0.4",
     "expo-updates": "~0.5.4",
+    "pouchdb-adapter-http": "^7.2.2",
+    "pouchdb-adapter-react-native-sqlite": "^3.0.1",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "~0.63.4",
@@ -29,9 +32,12 @@
     "react-native-mmkv-storage": "^0.5.8",
     "react-native-reanimated": "~2.1.0",
     "react-native-screens": "~3.0.0",
+    "react-native-sqlite-2": "^3.3.0",
     "react-native-unimodules": "~0.13.3",
     "react-native-web": "~0.13.12",
-    "react-redux": "^7.2.4"
+    "react-redux": "^7.2.4",
+    "rxdb": "^9.19.0",
+    "rxjs": "^7.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
