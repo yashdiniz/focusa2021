@@ -47,7 +47,7 @@ const CourseType = new GraphQLObjectType({
                     return mods.map(async id => {
                         return await auth.get('/getRoleById', {
                             params: { id },
-                            headers: { authorization: ctx.headers?.authorization }
+                            headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
                         }).then(res => res.data)
                         .catch(onError);
                     })

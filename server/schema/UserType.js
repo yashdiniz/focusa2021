@@ -46,7 +46,7 @@ const UserType = new GraphQLObjectType({
             async resolve({ uuid }, args, ctx, info) {
                 return await profile.get('/getProfile', {
                     params: { id: uuid },
-                    headers: { authorization: ctx.headers.authorization }
+                    headers: { authorization: ctx.headers.authorization, realip: ctx.ip }
                 }).then(res => res.data)
                 .catch(onError);
             }
