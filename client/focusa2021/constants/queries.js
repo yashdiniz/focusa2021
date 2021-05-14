@@ -5,7 +5,7 @@ export const getProfileData = gql`
         user(name: $username) {
             name,
             profile{
-                fullName
+                fullName, about
             }
         }
     }
