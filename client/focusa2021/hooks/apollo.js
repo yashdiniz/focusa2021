@@ -27,7 +27,7 @@ const asyncAuthLink = setContext(() => {
     console.log('asyncAuthLink', getToken());
     return {
         headers: {
-            authorization: getToken(),
+            authorization: `Bearer ${getToken()}`,
         },
     };
 });

@@ -10,8 +10,6 @@ import { store } from './hooks/store';
 export default function App() {
   const colorScheme = useColorScheme();
 
-  auth.get('/check').then(console.log).catch(console.error);
-
   return (
     <ApolloProvider client={apolloClient}>
       <Provider store={store}>

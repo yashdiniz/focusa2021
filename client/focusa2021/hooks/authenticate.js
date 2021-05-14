@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { SET_TOKEN } from '../config';
 import { auth } from './apollo';
 import { store } from './store';
 
