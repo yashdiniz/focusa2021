@@ -86,7 +86,8 @@ const styles = StyleSheet.create({
     avatar: { 
         flex: 2, 
         backgroundColor:'#333', 
-        margin: 20
+        margin: 20,
+        alignSelf:"center"
     },
     profileText: {
         textAlign: 'center',
