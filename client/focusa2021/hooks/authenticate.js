@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { SET_TOKEN } from '../config';
+import { SET_TOKEN, SET_USERNAME } from '../config';
 import { auth } from './apollo';
 import { store } from './store';
 
@@ -17,6 +17,7 @@ export const authenticate = (username, password) => {
         }).then(res => {
             setToken(res.data.token);
             store.dispatch({type:SET_TOKEN, token:res.data.token});
+            store.dispatch({type:SET_USERNAME, username });
             return token;
         })
         .catch(e=> console.error(new Date(), 'authenticate Error', e));
