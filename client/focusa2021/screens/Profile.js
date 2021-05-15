@@ -1,14 +1,16 @@
 import { useQuery } from '@apollo/client';
 import React, { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, Text, View, StyleSheet, ScrollView, RefreshControl } from 'react-native';
+import { Avatar, Card, Button } from 'react-native-elements';
+
 import { connectProps } from '../hooks/store';
 import { getProfileData } from '../constants/queries';
 
-function Profile({ navigation, route, token }) {
+function Profile({ navigation, route, token, username }) {
     const [refreshing, setRefreshing] = useState(false);
 
     const { data, error, loading, refetch } = useQuery(getProfileData, {
-        variables: { username: "admin" },   // TODO: Username currently hardcoded lol
+        variables: { username },
     });
 
     /**
@@ -19,40 +21,58 @@ function Profile({ navigation, route, token }) {
         // refresh will cause refetching of the query
         // once refetched, it will cause a re-render.
         refetch().then(() => setRefreshing(false))
-        .catch(e => {
-            setRefreshing(false);
-            console.error(new Date(), 'Profile Refresh', e);
-        });
+            .catch(e => {
+                setRefreshing(false);
+                console.error(new Date(), 'Profile Refresh', e);
+            });
     });
 
     useEffect(() => {
         // if JWT is too short, it is usually because it is invalid.
-        if(!token || token.length < 20) navigation.navigate('Login');
+        if (!token || token.length < 20) navigation.navigate('Login');
         if (error) {
             console.error(new Date(), 'Profile', JSON.stringify(error));
         }
     });
 
-    if (loading) 
+    if (loading)
         return (
-            <View style={styles}>
+            <View style={styles.container}>
                 <ActivityIndicator color={'#333'} />
             </View>
         );
-    else 
+    else
         return (
-            <ScrollView style={styles}
+            <ScrollView containerStyle={styles.container}
                 refreshControl={
                     <RefreshControl
-                    refreshing={refreshing}
-                    onRefresh={onRefresh}
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
                     />
                 }
-                >
-                <Text>{JSON.stringify(data)}</Text>
-                <Text style={{
-                    color:'red'
-                }}>{'Did it work?'}</Text>
+            >
+                <Card>
+                    <Avatar
+                        rounded
+                        size="large"
+                        icon={{ name: 'user', type: 'font-awesome' }}
+                        onPress={() => console.log("Works!")}
+                        activeOpacity={0.7}
+                        containerStyle={styles.avatar}
+                    />
+                    <Card.Title>{data?.user.profile.fullName}</Card.Title>
+                    {/* <Text style={styles.profileText}>
+                        @{data?.user.name}
+                    </Text> */}
+                    <Card.Divider />
+                        <Text
+                            style={{
+                                ...styles.profileText,
+                                marginBottom: 20,
+                            }}
+                        >{data?.user.profile.about}
+                        </Text>
+                </Card>
             </ScrollView>
         );
 }
@@ -63,6 +83,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    avatar: { 
+        flex: 2, 
+        backgroundColor:'#333', 
+        margin: 20
+    },
+    profileText: {
+        textAlign: 'center',
+        color: '#789'
+    }
 });
 
 export default connectProps(Profile);
