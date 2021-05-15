@@ -10,6 +10,7 @@ import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 import Profile from '../screens/Profile';
 import Login from '../screens/Login';
+import Courses from '../screens/Courses';
 
 const BottomTab = createBottomTabNavigator();
 
@@ -23,6 +24,13 @@ export default function BottomTabNavigator() {
             <BottomTab.Screen
                 name="Profile"
                 component={ProfileNavigator}
+                options={{
+                    tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+                }}
+            />
+            <BottomTab.Screen
+                name="Courses"
+                component={CoursesNavigator}
                 options={{
                     tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
                 }}
@@ -52,11 +60,25 @@ function ProfileNavigator() {
             <ProfileStack.Screen
                 name="ProfileScreen"
                 component={Profile}
-                options={{ headerTitle: 'Profile Test' }}
+                options={{ headerTitle: 'Profile' }}
             />
         </ProfileStack.Navigator>
     );
 }
+
+const CoursesStack = createStackNavigator();
+function CoursesNavigator() {
+    return (
+        <CoursesStack.Navigator>
+            <CoursesStack.Screen
+                name="CoursesScreen"
+                component={Courses}
+                options={{ headerTitle: 'Subscribed Courses' }}
+            />
+        </CoursesStack.Navigator>
+    );
+}
+
 
 const LoginStack = createStackNavigator();
 function LoginNavigator() {

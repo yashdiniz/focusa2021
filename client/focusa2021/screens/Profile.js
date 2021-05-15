@@ -7,13 +7,15 @@ import { connectProps } from '../hooks/store';
 import { getProfileData } from '../constants/queries';
 
 function Profile({ navigation, route, token, username }) {
+    username = route.params?.username ?  // choose username parameters if provided
+        route.params?.username
+        : username;            // otherwise use the redux prop
+
     const [refreshing, setRefreshing] = useState(false);
 
     const { data, error, loading, refetch } = useQuery(getProfileData, {
         variables: {
-            username: route.params?.username ?  // choose username parameters if provided
-                route.params?.username
-                : username            // otherwise use the redux prop
+            username
         },
     });
 
@@ -63,18 +65,24 @@ function Profile({ navigation, route, token, username }) {
                         activeOpacity={0.7}
                         containerStyle={styles.avatar}
                     />
-                    <Card.Title>{data?.user.profile.fullName}</Card.Title>
-                    {/* <Text style={styles.profileText}>
-                        @{data?.user.name}
-                    </Text> */}
+                    <Card.Title>
+                        {data?.user.profile.fullName} (@{data.user.name})
+                    </Card.Title>
                     <Card.Divider />
+                    {/* <Text style={{ textAlign: 'center' }}>
+                        About
+                    </Text> */}
                     <Text
                         style={{
                             ...styles.profileText,
-                            marginBottom: 20,
+                            marginBottom: 40,
                         }}
                     >{data?.user.profile.about}
                     </Text>
+                    <Button 
+                        title={'Subscribed Courses'}
+                        onPress={() => navigation.navigate('Courses', { username })}
+                    />
                 </Card>
             </ScrollView>
         );
@@ -86,11 +94,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    avatar: { 
-        flex: 2, 
-        backgroundColor:'#333', 
+    avatar: {
+        flex: 2,
+        backgroundColor: '#333',
         margin: 20,
-        alignSelf:"center"
+        alignSelf: "center"
     },
     profileText: {
         textAlign: 'center',

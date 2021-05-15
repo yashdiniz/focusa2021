@@ -14,9 +14,14 @@
          screens: {
            Profile: {
              screens: {
-               ProfileScreen: 'one',
+               ProfileScreen: 'p',
              },
            },
+           Courses: {
+            screens: {
+              CoursesScreen: 'c',
+            },
+          },
          },
        },
        NotFound: '*',

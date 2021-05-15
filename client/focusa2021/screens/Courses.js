@@ -7,13 +7,18 @@ import { connectProps } from '../hooks/store';
 import { getCourses } from '../constants/queries';
 
 function Courses({ navigation, route, token, username }) {
+
+    console.log('Courses', route, navigation);
+
+    username = route.params?.username ?  // choose username parameters if provided
+        route.params?.username
+        : username;            // otherwise use the redux prop
+
     const [refreshing, setRefreshing] = useState(false);
 
     const { data, error, loading, refetch } = useQuery(getCourses, {
         variables: {
-            username: route.params?.username ?  // choose username parameters if provided
-            route.params?.username
-            : username            // otherwise use the redux prop
+            username
         },
     });
 
@@ -55,27 +60,8 @@ function Courses({ navigation, route, token, username }) {
                     />
                 }
             >
-                <Card>
-                    <Avatar
-                        rounded
-                        size="large"
-                        icon={{ name: 'user', type: 'font-awesome' }}
-                        activeOpacity={0.7}
-                        containerStyle={styles.avatar}
-                    />
-                    <Card.Title>{data?.user.profile.fullName}</Card.Title>
-                    {/* <Text style={styles.profileText}>
-                        @{data?.user.name}
-                    </Text> */}
-                    <Card.Divider />
-                    <Text
-                        style={{
-                            ...styles.profileText,
-                            marginBottom: 20,
-                        }}
-                    >{data?.user.profile.about}
-                    </Text>
-                </Card>
+            <Text>{JSON.stringify(data)}</Text>
+            <Text>{JSON.stringify(navigation)}</Text>
             </ScrollView>
         );
 }
