@@ -86,10 +86,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    avatar: {
-        flex: 2,
-        backgroundColor: '#333',
-        margin: 20
+    avatar: { 
+        flex: 2, 
+        backgroundColor:'#333', 
+        margin: 20,
+        alignSelf:"center"
     },
     profileText: {
         textAlign: 'center',

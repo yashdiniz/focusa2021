@@ -1,0 +1,231 @@
+# This node serves as an immutable entrypoint to the graph. It contains fields which we can use for traversing through the graph and obtaining information.
+type Query {
+  # Echoes the authorization token of the user.
+  token: String
+
+  # Gets the details of the User mentioned in arguments.
+  user(name: String, id: ID): User
+
+  # Gets the details of the Role mentioned in arguments.
+  role(name: String, id: ID): Role
+
+  # Gets the details of the Profile mentioned in arguments.
+  profile(id: ID!): Profile
+
+  # TODO
+  isSubscribed(userID: ID!, courseID: ID!): Boolean
+
+  # TODO
+  post(id: ID, q: String, offset: Int): [Post]
+
+  # TODO
+  course(name: String, id: ID): [Course]
+}
+
+# This node holds all the necessary user details.
+type User {
+  uuid: ID!
+
+  # A unique username.
+  name: String!
+
+  # Profile that maps to this User.
+  profile: Profile
+
+  # Posts written by this Person.
+  posts(offset: Int): [Post]!
+
+  # Roles that the User is assigned.
+  roles: [Role]!
+}
+
+# This node holds additional information related to a User.
+type Profile {
+  userID: ID!
+  about: String!
+
+  # User that maps to this profile.
+  user: User!
+
+  # The full name of the profile.
+  fullName: String!
+
+  # URL to the display picture of the profile.
+  display_pic: String!
+
+  # The list of courses the user has subscribed to.
+  interests: [Course]!
+}
+
+type Course {
+  uuid: ID!
+
+  # Name of the course.
+  name: String!
+
+  # Moderator roles for the course.
+  mods: [Role!]!
+
+  # Course Description.
+  description: String
+
+  # Users subscribed to the course.
+  subscribers(offset: Int): [Profile]
+
+  # TODO
+  posts(offset: Int): [Post]
+}
+
+# This node describes a Role for a list of users.
+type Role {
+  uuid: ID!
+
+  # The name of the role.
+  name: String!
+
+  # List of users that have the role.
+  users: [User]!
+}
+
+# This node holds all Post details, and references to their comments.
+type Post {
+  uuid: ID!
+
+  # The time of publication, as a Date object String.
+  time: String!
+
+  # The Post body, written in markdown.
+  text: String!
+
+  # The Post author details.
+  author: User!
+
+  # The parent post. Null by default. No edits allowed.
+  parent: Post
+
+  # The Post attachment URL. Null by default. No edits allowed.
+  attachmentURL: String
+
+  # The course under which the post belongs. Null by default. No edits allowed.
+  course: Course
+
+  # A list containing all comments made under the Post.
+  comments(offset: Int): [Post]!
+
+  # Flag signifying the post has been reported.
+  reported: Boolean
+
+  # Flag signifying the post has been approved.
+  approved: Boolean
+}
+
+# This node serves as a mutable entrypoint to the graph. It contains fields which we can use for traversing through the graph and performing write, update and delete operations.
+type Mutation {
+  # Create User with given credentials.
+  createUser(username: String!, password: String!): User
+
+  # Update User details to given credentials.
+  updateUser(username: String!, newPassword: String!): User
+
+  # Delete User of given credentials.
+  deleteUser(username: String!): User
+
+  # Create Role with given name.
+  createRole(name: String!): Role
+
+  # Delete Role of given name.
+  deleteRole(name: String!): Role
+
+  # Give Role to a User.
+  giveRole(username: String!, role: String!): Role
+
+  # Updates the Profile according to arguments.
+  updateProfile(
+    id: ID!
+    fullName: String!
+    about: String!
+    display_pic: String!
+  ): Profile
+
+  # Deletes the Profile according to the ID.
+  deleteProfile(id: ID!): Profile
+
+  # TODO
+  createPost(
+    # The text body of the post. Supports markdown.
+    text: String!
+
+    # The Course ID the post should be added under.
+    course: ID
+
+    # URL to attach to the post.
+    attachmentURL: String
+
+    # ID of the parent post. To be added only if the post currently being created is a comment.
+    parent: ID
+  ): Post
+
+  # TODO
+  editPost(
+    id: ID!
+
+    # The text body of the post. Supports markdown.
+    text: String!
+  ): Post
+
+  # TODO
+  deletePost(id: ID!): Post
+
+  # TODO
+  subscribeToCourse(
+    # The user's ID.
+    uuid: ID
+
+    # The courseID the user is subscribing to.
+    courseID: ID
+  ): Profile
+
+  # TODO
+  addCourse(name: String, description: String): Course
+
+  # TODO
+  unsubscribeFromCourse(
+    # The user's ID.
+    uuid: ID
+
+    # The courseID the user is unsubscribing from.
+    courseID: ID
+  ): Profile
+
+  # TODO
+  deleteCourse(id: ID): Course
+
+  # TODO
+  updateCourse(id: ID, name: String, description: String): Course
+}
+
+# todo
+type Subscription {
+  # todo
+  postAdded: Notification!
+}
+
+# todo
+type Notification {
+  uuid: ID!
+
+  # Timestamp of the notification.
+  time: String!
+
+  # The event which triggered the notification.
+  channel: String!
+
+  # The course details.
+  course: Course
+
+  # The notification body.
+  body: String!
+
+  # The URL to redirect to when the notification is clicked.
+  link: String!
+}
