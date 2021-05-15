@@ -10,3 +10,16 @@ export const getProfileData = gql`
         }
     }
 `;
+
+export const getCourses = gql`
+    query getProfileData($username: String!) {
+        user(name: $username) {
+            name,
+            profile{
+                interests{
+                    name, description
+                }
+            }
+        }
+    }
+`;

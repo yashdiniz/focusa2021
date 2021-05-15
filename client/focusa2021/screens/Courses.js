@@ -4,16 +4,16 @@ import { ActivityIndicator, Text, View, StyleSheet, ScrollView, RefreshControl }
 import { Avatar, Card, Button } from 'react-native-elements';
 
 import { connectProps } from '../hooks/store';
-import { getProfileData } from '../constants/queries';
+import { getCourses } from '../constants/queries';
 
-function Profile({ navigation, route, token, username }) {
+function Courses({ navigation, route, token, username }) {
     const [refreshing, setRefreshing] = useState(false);
 
-    const { data, error, loading, refetch } = useQuery(getProfileData, {
+    const { data, error, loading, refetch } = useQuery(getCourses, {
         variables: {
             username: route.params?.username ?  // choose username parameters if provided
-                route.params?.username
-                : username            // otherwise use the redux prop
+            route.params?.username
+            : username            // otherwise use the redux prop
         },
     });
 
@@ -27,7 +27,7 @@ function Profile({ navigation, route, token, username }) {
         refetch().then(() => setRefreshing(false))
             .catch(e => {
                 setRefreshing(false);
-                console.error(new Date(), 'Profile Refresh', e);
+                console.error(new Date(), 'Courses Refresh', e);
             });
     });
 
@@ -35,7 +35,7 @@ function Profile({ navigation, route, token, username }) {
         // if JWT is too short, it is usually because it is invalid.
         if (!token || token.length < 20) navigation.navigate('Login');
         if (error) {
-            console.error(new Date(), 'Profile', JSON.stringify(error));
+            console.error(new Date(), 'Courses', JSON.stringify(error));
         }
     });
 
@@ -97,4 +97,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default connectProps(Profile);
+export default connectProps(Courses);
