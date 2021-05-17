@@ -2,13 +2,14 @@ import { useQuery } from '@apollo/client';
 import React, { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, Text, View, StyleSheet, ScrollView, RefreshControl } from 'react-native';
 import { Avatar, Card, Button } from 'react-native-elements';
-
 import { connectProps } from '../hooks/store';
 import { getCourses } from '../constants/queries';
+import Course from '../components/Course';
+import { FlatList } from 'react-native-gesture-handler';
 
 function Courses({ navigation, route, token, username }) {
 
-    console.log('Courses', route, navigation);
+    console.log('Courses ROUTES', route, navigation);
 
     username = route.params?.username ?  // choose username parameters if provided
         route.params?.username
@@ -60,8 +61,16 @@ function Courses({ navigation, route, token, username }) {
                     />
                 }
             >
-            <Text>{JSON.stringify(data)}</Text>
-            <Text>{JSON.stringify(navigation)}</Text>
+                <FlatList 
+                    data={data.user.profile.interests}
+                    renderItem={
+                        ({ item }) => 
+                            <Course 
+                                name={item.name} 
+                                description={item.description} 
+                            />
+                    }
+                />
             </ScrollView>
         );
 }
