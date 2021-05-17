@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
 import React, { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, Text, View, StyleSheet, ScrollView, RefreshControl } from 'react-native';
-import { Avatar, Card, Button } from 'react-native-elements';
+import { Avatar, Card, Button, SearchBar } from 'react-native-elements';
 import { connectProps } from '../hooks/store';
 import { getCourses } from '../constants/queries';
 import Course from '../components/Course';
@@ -16,6 +16,7 @@ function Courses({ navigation, route, token, username }) {
         : username;            // otherwise use the redux prop
 
     const [refreshing, setRefreshing] = useState(false);
+    const [search, updateSearch] = useState('');
 
     const { data, error, loading, refetch } = useQuery(getCourses, {
         variables: {
@@ -61,6 +62,11 @@ function Courses({ navigation, route, token, username }) {
                     />
                 }
             >
+                <SearchBar 
+                    placeholder="Search here..." 
+                    onChangeText={updateSearch}
+                    value={search}
+                />
                 <FlatList 
                     data={data.user.profile.interests}
                     renderItem={

@@ -25,14 +25,14 @@ export default function BottomTabNavigator() {
                 name="Profile"
                 component={ProfileNavigator}
                 options={{
-                    tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+                    tabBarIcon: ({ color }) => <TabBarIcon name="person-outline" color={color} />,
                 }}
             />
             <BottomTab.Screen
                 name="Courses"
                 component={CoursesNavigator}
                 options={{
-                    tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+                    tabBarIcon: ({ color }) => <TabBarIcon name="book-outline" color={color} />,
                 }}
             />
             <BottomTab.Screen
