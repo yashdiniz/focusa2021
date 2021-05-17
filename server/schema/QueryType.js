@@ -14,6 +14,7 @@ const {
 } = require('graphql');
 const { create } = require('axios');
 const { authRealm, profileRealm, postRealm, coursesRealm } = require('../config');
+const { onError } = require('./types');
 
 const auth = create({
     baseURL: `${authRealm}`,
@@ -57,12 +58,14 @@ const QueryType = new GraphQLObjectType({
                     return await auth.get('/getUserById', {
                         params: { id },
                         headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
-                    }).then(res => res.data);
+                    }).then(res => res.data)
+                    .catch(onError);
                 else if(name) 
                     return await auth.get('/getUserByName', {
                         params: { name },
                         headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
-                    }).then(res => res.data);
+                    }).then(res => res.data)
+                    .catch(onError);
             }
         },
         role: {
@@ -77,12 +80,14 @@ const QueryType = new GraphQLObjectType({
                     return await auth.get('/getRoleById', {
                         params: { id },
                         headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
-                    }).then(res => res.data);
+                    }).then(res => res.data)
+                    .catch(onError);
                 else if(name) 
                     return await auth.get('/getRoleByName', {
                         params: { name },
                         headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
-                    }).then(res => res.data);
+                    }).then(res => res.data)
+                    .catch(onError);
             }
         },
         profile: {
@@ -95,7 +100,8 @@ const QueryType = new GraphQLObjectType({
                 return await profile.get('/getProfile', {
                     params: { id },
                     headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
-                }).then(res => res.data);
+                }).then(res => res.data)
+                .catch(onError);
             }
         },
         isSubscribed: {
@@ -110,7 +116,8 @@ const QueryType = new GraphQLObjectType({
                     await profile.get('/profileHasInterest', {
                         params: { userID, courseID },
                         headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
-                    }).then(res => res.data);   // will throw 404 if profile not have interest.
+                    }).then(res => res.data)
+                    .catch(onError);   // will throw 404 if profile not have interest.
                     return true;
                 } catch(e) {
                     if(e.response.status == 404) return false;
@@ -131,12 +138,14 @@ const QueryType = new GraphQLObjectType({
                     return [await post.get('/getPostById', {
                         params: { id },
                         headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
-                    }).then(res => res.data)];
+                    }).then(res => res.data)
+                    .catch(onError)];
                 else {
                     return await post.get('/searchPosts', {
                         params: { q, offset },
                         headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
-                    }).then(res => res.data);
+                    }).then(res => res.data)
+                    .catch(onError);
                 }
             }
         },
@@ -152,12 +161,14 @@ const QueryType = new GraphQLObjectType({
                     return [await courses.get('/getCourseById', {
                         params: { id },
                         headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
-                    }).then(res => res.data)];
+                    }).then(res => res.data)
+                    .catch(onError)];
                 else if(name)
                     return await courses.get('/getCoursesByName', {
                         params: { name, offset: 0 },
                         headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
-                    }).then(res => res.data);
+                    }).then(res => res.data)
+                    .catch(onError);
             }
         }
         // searchCourses(string search query)

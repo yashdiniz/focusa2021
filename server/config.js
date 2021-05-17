@@ -9,7 +9,7 @@ const production = false;
 // the realm stores the DNS/server name.
 const port = process.env['port'] || 1896;   // using FOCUSA legacy port for testing.
 const realm = "http://localhost:" + port;
-const serviceAuthPass = process.env['authPass']; // password to authenticate microservice webhooks
+const serviceAuthPass = process.env['authPass'] || 'development'; // password to authenticate microservice webhooks
 const authPort = port + 1;
 const authRealm = "http://localhost:" + authPort;
 const profilePort = port + 2;
@@ -71,18 +71,22 @@ const maxModRolesforCourse = 2;
 // profile-related
 const defaultProfilePic = 'dp.jpeg',
     defaultfullName = 'User Profile Name',
+    minMiscLength = 1,
+    maxMiscNameLength = 40,
+    maxMiscDescLength = 128,
     defaultAbout = 'Hey, I am a new User!';
 
 // posts related
 const pageLimit = 10,
-    minPostBodyLength = 5;
+    minPostBodyLength = 5,
+    maxPostBodyLength = 65536;
 
 module.exports = { 
     port, authPort, authRealm, serviceAuthPass, webrtcPort, profilePort, profileRealm,
     projectRoot, graphiql, secret, realm, remote, postRealm, coursesPort, coursesRealm,
     JWTsignOptions, JWTverifyOptions, JWTsecret, rolePattern, serviceAudience,
     pbkdfIters, pbkdfDigest, pbkdfLen, UUIDSize, currentPasswordScheme,
-    minPasswordLength, usernamePattern, maxModRolesforCourse, maxNameLength,
+    minPasswordLength, usernamePattern, maxModRolesforCourse, maxNameLength, maxMiscNameLength, maxMiscDescLength, minMiscLength,
     defaultProfilePic, defaultfullName, defaultAbout, pageLimit, postPort,
-    minPostBodyLength, UUIDpattern, libp2pRealm, keystorePath,
+    minPostBodyLength, UUIDpattern, libp2pRealm, keystorePath, maxPostBodyLength,
 };

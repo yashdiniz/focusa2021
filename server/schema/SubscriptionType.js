@@ -11,6 +11,7 @@ const { verify } = require('../services/jwt');
 const pubsub = new PubSub();
 const NotificationType = require('./NotificationType');
 const { profileRealm, authRealm } = require('../config');
+const { onError } = require('./types');
 
 const p2p = require('../libp2p-pubsub');
 const notification = new p2p.PubSub();
@@ -48,7 +49,8 @@ const SubscriptionType = new GraphQLObjectType({
                     }).then(res => {
                         let interests = res.data?.interests;
                         return interests.includes(payload.postAdded.course);
-                    });
+                    })
+                    .catch(onError);
                 },
             )
         }

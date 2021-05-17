@@ -5,7 +5,7 @@
  */
 
 const {focusa, assert, generateUUID} = require('../databases');
-const { authRealm, serviceAuthPass, JWTsignOptions, pageLimit, minPostBodyLength, UUIDpattern } = require('../../config');
+const { authRealm, serviceAuthPass, JWTsignOptions, pageLimit, minPostBodyLength, UUIDpattern, maxPostBodyLength, coursesRealm } = require('../../config');
 const { PubSub } = require('../../libp2p-pubsub');
 
 const noSuchPost = new Error('Post with such id does not exist');
@@ -19,6 +19,10 @@ const {create} = require('axios');
 let token = '';
 const auth = create({
     baseURL: `${authRealm}`,
+    timeout: 5000,
+});
+const courses = create({
+    baseURL: `${coursesRealm}`,
     timeout: 5000,
 });
 
@@ -90,16 +94,23 @@ const deletePost = async (uuid) => {
  * @param {string} parent the parent post of this post
  */
 const createPost = async (text, author, course, attachmentURL, parent) => {
-    assert(typeof text === 'string' && text.length > minPostBodyLength
+    assert(typeof text === 'string'
         && typeof author === 'string' 
         && typeof course === 'string' 
         && typeof attachmentURL === 'string' 
         && typeof parent === 'string', 
         "Invalid arguments for createPost.");
-    
+    assert(text.length >= minPostBodyLength, "Post content is too short.");
+    assert(text.length <= maxPostBodyLength, "Post content is too long.");
+
     let uuid = generateUUID();
     let time = Date.now();
     let f = await focusa;
+
+    await courses.get('/getCourseById', { // check if the course ID exists
+        params: { id: course },
+        headers: { authorization: token }
+    }).then(res => res.data);
 
     auth.get('/getUserById', {
         params: { id: author },
@@ -122,9 +133,10 @@ const createPost = async (text, author, course, attachmentURL, parent) => {
 const editPost = async (uuid, text) => {
     assert(typeof uuid === 'string' 
         && typeof text === 'string' 
-        && text.length > minPostBodyLength
         && UUIDpattern.test(uuid),
         "Invalid arguments for editPost.");
+    assert(text.length >= minPostBodyLength, "Post content is too short.");
+    assert(text.length <= maxPostBodyLength, "Post content is too long.");
 
     let f = await focusa;
     
