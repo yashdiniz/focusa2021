@@ -11,6 +11,7 @@ import useColorScheme from '../hooks/useColorScheme';
 import Profile from '../screens/Profile';
 import Login from '../screens/Login';
 import Courses from '../screens/Courses';
+import CourseDetails from '../screens/CourseDetails';
 
 const BottomTab = createBottomTabNavigator();
 
@@ -33,6 +34,13 @@ export default function BottomTabNavigator() {
                 component={CoursesNavigator}
                 options={{
                     tabBarIcon: ({ color }) => <TabBarIcon name="book-outline" color={color} />,
+                }}
+            />
+            <BottomTab.Screen
+                name="CourseDetails"
+                component={CourseDetailsNavigator}
+                options={{
+                    tabBarIcon: () => null,
                 }}
             />
             <BottomTab.Screen
@@ -76,6 +84,19 @@ function CoursesNavigator() {
                 options={{ headerTitle: 'Subscribed Courses' }}
             />
         </CoursesStack.Navigator>
+    );
+}
+
+const CourseDetailsStack = createStackNavigator();
+function CourseDetailsNavigator() {
+    return (
+        <CourseDetailsStack.Navigator>
+            <CourseDetailsStack.Screen
+                name="CourseDetailsScreen"
+                component={CourseDetails}
+                options={{ headerTitle: 'Course Details' }}
+            />
+        </CourseDetailsStack.Navigator>
     );
 }
 
