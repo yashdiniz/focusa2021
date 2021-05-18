@@ -6,16 +6,14 @@ function Course({ name, description }) {
     return (
         <Card>
             <Text 
-                h1
+                h4
                 style={styles.text}
             >
                 {name}
             </Text>
+            <Card.Divider />
             <Text
-                style={{
-                    ...styles.text,
-                    marginBottom: 20,
-                }}
+                style={styles.text}
             >
                 {description}
             </Text>
@@ -25,7 +23,7 @@ function Course({ name, description }) {
 
 const styles = StyleSheet.create({
     text: {
-        marginLeft: 20,
+        marginBottom: 20,
     }
 });
 
