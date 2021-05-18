@@ -5,7 +5,7 @@ import { Avatar, Card, Button, SearchBar } from 'react-native-elements';
 import { connectProps } from '../hooks/store';
 import { getCourses } from '../constants/queries';
 import Course from '../components/Course';
-import { FlatList } from 'react-native-gesture-handler';
+import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 
 function Courses({ navigation, route, token, username }) {
 
@@ -71,10 +71,14 @@ function Courses({ navigation, route, token, username }) {
                     data={data.user.profile.interests}
                     renderItem={
                         ({ item }) => 
-                            <Course 
-                                name={item.name} 
-                                description={item.description} 
-                            />
+                            <TouchableOpacity
+                                onPress={() => navigation.navigate('CourseDetails', {courseID: item.uuid})}
+                            >
+                                <Course 
+                                    name={item.name} 
+                                    description={item.description}
+                                />
+                            </TouchableOpacity>
                     }
                 />
             </ScrollView>
