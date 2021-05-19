@@ -40,7 +40,7 @@ export default function BottomTabNavigator() {
                 name="CourseDetails"
                 component={CourseDetailsNavigator}
                 options={{
-                    tabBarIcon: () => null,
+                    tabBarButton: () => null,
                 }}
             />
             <BottomTab.Screen
