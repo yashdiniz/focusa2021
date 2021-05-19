@@ -11,8 +11,6 @@ import ErrorComponent from '../components/ErrorComponent';
 
 function CourseDetails({ navigation, route, token }) {
     // TODO: allow users to subscribe to courses from here!
-    console.log('CourseDetails ROUTES', route, navigation);
-
     const [refreshing, setRefreshing] = useState(false);
 
     const { data, error, loading, refetch } = useQuery(getCourseDetails, {
@@ -31,7 +29,7 @@ function CourseDetails({ navigation, route, token }) {
         refetch().then(() => setRefreshing(false))
             .catch(e => {
                 setRefreshing(false);
-                console.error(new Date(), 'Courses Refresh', e);
+                console.error(new Date(), 'CourseDetails Refresh', e);
             });
     });
 
@@ -39,7 +37,7 @@ function CourseDetails({ navigation, route, token }) {
         // if JWT is too short, it is usually because it is invalid.
         if (!token || token.length < 20) navigation.navigate('Login');
         if (error) {
-            console.error(new Date(), 'Courses', JSON.stringify(error));
+            console.error(new Date(), 'CourseDetails', JSON.stringify(error));
         }
     });
 
@@ -53,7 +51,7 @@ function CourseDetails({ navigation, route, token }) {
         return (<ErrorComponent error={error}/>);
     else
         return (
-            <ScrollView containerStyle={styles.container}
+            <ScrollView containerStyle={styles/*.container*/}
                 refreshControl={
                     <RefreshControl
                         refreshing={refreshing}

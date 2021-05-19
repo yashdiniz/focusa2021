@@ -10,9 +10,7 @@ import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { CourseDetails } from '../constants/screens';
 
 function Courses({ navigation, route, token, username }) {
-
-    console.log('Courses ROUTES', route, navigation);
-
+    // TODO: Allow users to search for courses from here!
     username = route.params?.username ?  // choose username parameters if provided
         route.params?.username
         : username;            // otherwise use the redux prop
@@ -67,7 +65,7 @@ function Courses({ navigation, route, token, username }) {
                 }
             >
                 <SearchBar 
-                    placeholder="Search here..." 
+                    placeholder="Search here..."
                     onChangeText={updateSearch}
                     value={search}
                 />

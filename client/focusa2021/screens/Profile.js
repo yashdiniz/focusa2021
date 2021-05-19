@@ -9,6 +9,7 @@ import ErrorComponent from '../components/ErrorComponent';
 import { Courses } from '../constants/screens';
 
 function Profile({ navigation, route, token, username }) {
+    // TODO: Add a settings component which allows the user to edit various preferences.
     username = route.params?.username ?  // choose username parameters if provided
         route.params?.username
         : username;            // otherwise use the redux prop
