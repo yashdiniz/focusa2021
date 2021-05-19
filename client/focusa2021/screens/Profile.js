@@ -5,6 +5,8 @@ import { Avatar, Card, Button, Text } from 'react-native-elements';
 
 import { connectProps } from '../hooks/store';
 import { getProfileData } from '../constants/queries';
+import ErrorComponent from '../components/ErrorComponent';
+import { Courses } from '../constants/screens';
 
 function Profile({ navigation, route, token, username }) {
     username = route.params?.username ?  // choose username parameters if provided
@@ -47,6 +49,8 @@ function Profile({ navigation, route, token, username }) {
                 <ActivityIndicator color={'#333'} />
             </View>
         );
+    else if (error)
+        return (<ErrorComponent error={error} />);
     else
         return (
             <ScrollView containerStyle={styles.container}
@@ -81,7 +85,11 @@ function Profile({ navigation, route, token, username }) {
                     </Text>
                     <Button 
                         title={'Subscribed Courses'}
-                        onPress={() => navigation.navigate('Courses', { username })}
+                        onPress={() => navigation.navigate('Courses', { 
+                                ...Courses,
+                                params: { username } 
+                            })
+                        }
                     />
                 </Card>
             </ScrollView>

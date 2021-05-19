@@ -5,7 +5,9 @@ import { Avatar, Card, Button, SearchBar } from 'react-native-elements';
 import { connectProps } from '../hooks/store';
 import { getCourses } from '../constants/queries';
 import Course from '../components/Course';
+import ErrorComponent from '../components/ErrorComponent';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
+import { CourseDetails } from '../constants/screens';
 
 function Courses({ navigation, route, token, username }) {
 
@@ -52,6 +54,8 @@ function Courses({ navigation, route, token, username }) {
                 <ActivityIndicator color={'#333'} />
             </View>
         );
+    else if (error)
+        return (<ErrorComponent error={error} />);
     else
         return (
             <ScrollView containerStyle={styles.container}
@@ -72,7 +76,11 @@ function Courses({ navigation, route, token, username }) {
                     renderItem={
                         ({ item }) => 
                             <TouchableOpacity
-                                onPress={() => navigation.navigate('CourseDetails', {courseID: item.uuid})}
+                                onPress={() => navigation.navigate('CourseDetails', { 
+                                        ...CourseDetails,
+                                        params: { courseID: item.uuid }
+                                    })
+                                }
                             >
                                 <Course 
                                     name={item.name} 

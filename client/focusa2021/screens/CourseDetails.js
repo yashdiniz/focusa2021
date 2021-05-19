@@ -7,6 +7,7 @@ import { getCourseDetails } from '../constants/queries';
 import Course from '../components/Course';
 import Post from '../components/Post';
 import { FlatList } from 'react-native-gesture-handler';
+import ErrorComponent from '../components/ErrorComponent';
 
 function CourseDetails({ navigation, route, token }) {
     // TODO: allow users to subscribe to courses from here!
@@ -48,6 +49,8 @@ function CourseDetails({ navigation, route, token }) {
                 <ActivityIndicator color={'#333'} />
             </View>
         );
+    else if (error)
+        return (<ErrorComponent error={error}/>);
     else
         return (
             <ScrollView containerStyle={styles.container}
