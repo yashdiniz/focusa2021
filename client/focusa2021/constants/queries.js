@@ -17,7 +17,7 @@ export const getCourses = gql`
         user(name: $username) {
             uuid,
             profile{
-                uuid,
+                userID,
                 interests{
                     uuid, name, description
                 }
