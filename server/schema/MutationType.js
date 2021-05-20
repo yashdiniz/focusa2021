@@ -4,7 +4,7 @@
  * and performing write, update and delete operations.
  */
 const { GraphQLObjectType, GraphQLString, GraphQLNonNull, GraphQLID } = require('graphql');
-const { RoleType, UserType, ProfileType, PostType, CourseType } = require('./types');
+const { RoleType, UserType, ProfileType, PostType, CourseType, onError } = require('./types');
 const { create } = require('axios');
 const { authRealm, profileRealm, postRealm, coursesRealm } = require('../config');
 
@@ -40,7 +40,8 @@ const MutationType = new GraphQLObjectType({
                 return await auth.get('/createUser', {
                     params: { username, password },
                     headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
-                }).then(res => res.data);
+                }).then(res => res.data)
+                .catch(onError);
             }
         },
         updateUser: {
@@ -54,7 +55,8 @@ const MutationType = new GraphQLObjectType({
                 return await auth.get('/updateUser', {
                     params: { username, password: newPassword },
                     headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
-                }).then(res => res.data);
+                }).then(res => res.data)
+                .catch(onError);
             }
         },
         deleteUser: {
@@ -67,7 +69,8 @@ const MutationType = new GraphQLObjectType({
                 return await auth.get('/deleteUser', {
                     params: { username },
                     headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
-                }).then(res => res.data);
+                }).then(res => res.data)
+                .catch(onError);
             }
         },
         createRole: {
@@ -81,6 +84,7 @@ const MutationType = new GraphQLObjectType({
                     params: { name },
                     headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
                 })
+                .catch(onError);
             }
         },
         deleteRole: {
@@ -94,6 +98,7 @@ const MutationType = new GraphQLObjectType({
                     params: { name },
                     headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
                 })
+                .catch(onError);
             }
         },
         giveRole: {
@@ -107,7 +112,8 @@ const MutationType = new GraphQLObjectType({
                 return await auth.get('/giveRole', {
                     params: { username, role },
                     headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
-                }).then(res => res.data.role);
+                }).then(res => res.data.role)
+                .catch(onError);
             }
         },
         updateProfile: {
@@ -124,7 +130,8 @@ const MutationType = new GraphQLObjectType({
                 return await profile.get('/updateProfile', {
                     params: { id, fullName, about, display_pic, },
                     headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
-                }).then(res => res.data);
+                }).then(res => res.data)
+                .catch(onError);
             }
         },
         deleteProfile: {
@@ -137,7 +144,8 @@ const MutationType = new GraphQLObjectType({
                 return await profile.get('/deleteProfile', {
                     params: { id },
                     headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
-                }).then(res => res.data);
+                }).then(res => res.data)
+                .catch(onError);
             }
         },
         createPost: {
@@ -157,7 +165,8 @@ const MutationType = new GraphQLObjectType({
                 return await post.get('/createPost', {
                     params: { text, course: course?course:"", attachmentURL: attachmentURL?attachmentURL:"", parent: parent?parent:"" },
                     headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
-                }).then(res => res.data);
+                }).then(res => res.data)
+                .catch(onError);
             }
         },
         editPost: {
@@ -172,7 +181,8 @@ const MutationType = new GraphQLObjectType({
                 return await post.get('/editPost', {
                     params: { id, text },
                     headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
-                }).then(res => res.data);
+                }).then(res => res.data)
+                .catch(onError);
             }
         },
         deletePost: {
@@ -185,7 +195,8 @@ const MutationType = new GraphQLObjectType({
                 return await post.get('/deletePost', {
                     params: { id },
                     headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
-                }).then(res => res.data);
+                }).then(res => res.data)
+                .catch(onError);
             }
         },
         subscribeToCourse: {
@@ -205,7 +216,8 @@ const MutationType = new GraphQLObjectType({
                 return await profile.get('/addInterest', {
                     params: { uuid, courseID },
                     headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
-                }).then(res => res.data);
+                }).then(res => res.data)
+                .catch(onError);
             }
         },
         addCourse: {
@@ -219,7 +231,8 @@ const MutationType = new GraphQLObjectType({
                 return await courses.get('/addCourse', {
                     params: { name, description },
                     headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
-                }).then(res => res.data);
+                }).then(res => res.data)
+                .catch(onError);
             }
         },
         unsubscribeFromCourse: {
@@ -239,7 +252,8 @@ const MutationType = new GraphQLObjectType({
                 return await profile.get('/removeInterest', {
                     params: { uuid, courseID },
                     headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
-                }).then(res => res.data);
+                }).then(res => res.data)
+                .catch(onError);
             }
         },
         deleteCourse: {
@@ -252,7 +266,8 @@ const MutationType = new GraphQLObjectType({
                 return await courses.get('/deleteCourse', {
                     params: { id },
                     headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
-                }).then(res => res.data);
+                }).then(res => res.data)
+                .catch(onError);
             }
         },
         updateCourse: {
@@ -267,7 +282,8 @@ const MutationType = new GraphQLObjectType({
                 return await courses.get('/updateCourse', {
                     params: { id, name, description },
                     headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
-                }).then(res => res.data);
+                }).then(res => res.data)
+                .catch(onError);
             }
         },
         // adding mutations will be subject to frontend requirements for now.

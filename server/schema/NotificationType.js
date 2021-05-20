@@ -22,7 +22,7 @@ const NotificationType = new GraphQLObjectType({
     name : "Notification",
     description : "todo",
     fields: () => {
-        const { CourseType } = require('./types');
+        const { CourseType, onError } = require('./types');
         return  {
             uuid: {
                 type: GraphQLNonNull(GraphQLID),
@@ -47,7 +47,8 @@ const NotificationType = new GraphQLObjectType({
                         return await courses.get('/getCourseById', {
                             params: { id: course },
                             headers: { authorization: token, realip: ctx.ip }
-                        }).then(res => res.data);
+                        }).then(res => res.data)
+                        .catch(onError);
                     }
                 }
             },

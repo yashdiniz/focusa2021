@@ -31,7 +31,7 @@ const PostType = new GraphQLObjectType({
     name: 'Post',
     description: "This node holds all Post details, and references to their comments.",
     fields: () => {
-        const { UserType, CourseType } = require('./types');
+        const { UserType, CourseType, onError } = require('./types');
         return {
         uuid: {
             type: GraphQLNonNull(GraphQLID),
@@ -51,7 +51,8 @@ const PostType = new GraphQLObjectType({
                 return await auth.get('/getUserById', {
                     params: { id: author },
                     headers: { authorization: ctx.headers.authorization, realip: ctx.ip }
-                }).then(res => res.data);
+                }).then(res => res.data)
+                .catch(onError);
             }
         },
         parent: {
@@ -62,7 +63,8 @@ const PostType = new GraphQLObjectType({
                     return await post.get('/getPostById', {
                         params: { id: parent },
                         headers: { authorization: ctx.headers.authorization, realip: ctx.ip }
-                    }).then(res => res.data);
+                    }).then(res => res.data)
+                    .catch(onError);
             }
         },
         attachmentURL: {
@@ -77,7 +79,8 @@ const PostType = new GraphQLObjectType({
                     return await courses.get('/getCourseById', {
                         params: { id: course },
                         headers: { authorization: ctx.headers?.authorization, realip: ctx.ip  }
-                    }).then(res => res.data);
+                    }).then(res => res.data)
+                    .catch(onError);
             }
         },
         comments: {
@@ -90,7 +93,8 @@ const PostType = new GraphQLObjectType({
                 return await post.get('/getPostsByParent', {
                     params: { id: uuid, offset },
                     headers: { authorization: ctx.headers.authorization, realip: ctx.ip }
-                }).then(res => res.data);
+                }).then(res => res.data)
+                .catch(onError);
             }
         },
         reported: {

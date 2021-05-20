@@ -5,7 +5,7 @@
  */
 
 const { focusa, assert } = require('../databases');
-const { defaultfullName, defaultAbout, authRealm, serviceAuthPass, JWTsignOptions, defaultProfilePic, UUIDpattern, pageLimit } = require('../../config');
+const { defaultfullName, defaultAbout, authRealm, serviceAuthPass, JWTsignOptions, defaultProfilePic, UUIDpattern, pageLimit, minMiscLength, maxMiscNameLength, maxMiscDescLength } = require('../../config');
 
 const { create } = require('axios');
 let token = '';
@@ -84,6 +84,11 @@ const updateProfile = async (userID, fullName, about, display_pic)=> {
     typeof about === 'string' &&
     (!display_pic ||  typeof display_pic === 'string'),
     'Invalid arguments for createProfile.');
+    assert(fullName.length <= maxMiscNameLength, "Full name is too long.");
+    assert(about.length <= maxMiscDescLength, "Full name is too long.");
+    assert(fullName.length >= minMiscLength 
+        && about.length >= minMiscLength, 
+        "Full name or about is too short.");
 
     // find a profile with matching userID
     let profile = await getProfile(userID);

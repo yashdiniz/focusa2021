@@ -9,7 +9,7 @@
  * author: @imamsab
  */
 const { focusa, assert, generateUUID } = require('../databases');
-const { authRealm, serviceAuthPass, JWTsignOptions, UUIDpattern, pageLimit } = require('../../config');
+const { authRealm, serviceAuthPass, JWTsignOptions, UUIDpattern, pageLimit, maxMiscNameLength, maxMiscDescLength, minMiscLength } = require('../../config');
 
 const courseExistsError = new Error('Course already exists.'),
       courseNonExistant = new Error('Course does not exist.');
@@ -44,7 +44,13 @@ focusa.then(f => f.courses.pouch.search({
  * @param {string} description Description of the course (not a key).
  */
 const addCourse = async (name, description) => {
-    assert(typeof name === 'string' && typeof description === 'string', 'Invalid arguments for addCourse.');
+    assert(typeof name === 'string' && typeof description === 'string', 
+        'Invalid arguments for addCourse.');
+    assert(name.length <= maxMiscNameLength, 'Course name is too long.');
+    assert(description.length <= maxMiscDescLength, 'Course description is too long.');
+    assert(name.length >= minMiscLength 
+        && description.length >= minMiscLength, 
+        'Course name or description is too short.');
 
     let uuid = generateUUID();
     let f = await focusa;
@@ -88,6 +94,7 @@ const getCourseById = async (id) => {
 const getCoursesByName = async(name, offset=0) => {
     assert(typeof name === 'string', 
     'Invalid arguments for getCoursesByName');
+    
     let c = await focusa;
     // TF-IDF text search
     return await c.courses.pouch.search({
@@ -113,6 +120,11 @@ const updateCourse = async(id, name, description) => {
         && typeof description === 'string'
         && UUIDpattern.test(id), 
         'Invalid arguments for updateCourse');
+    assert(name.length <= maxMiscNameLength, 'Course name is too long.');
+    assert(description.length <= maxMiscDescLength, 'Course description is too long.');
+    assert(name.length >= minMiscLength 
+        && description.length >= minMiscLength, 
+        'Course name or description is too short.');
     let c = await focusa;
 
     return await c.courses.findOne(id).exec()

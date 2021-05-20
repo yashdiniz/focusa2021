@@ -31,7 +31,7 @@ const UserType = new GraphQLObjectType({
     name: 'User',
     description: "This node holds all the necessary user details.",
     fields: () => {
-        const { ProfileType, PostType, RoleType } = require('./types');
+        const { ProfileType, PostType, RoleType, onError } = require('./types');
         return {
         uuid: { 
             type: GraphQLNonNull(GraphQLID),
@@ -46,8 +46,9 @@ const UserType = new GraphQLObjectType({
             async resolve({ uuid }, args, ctx, info) {
                 return await profile.get('/getProfile', {
                     params: { id: uuid },
-                    headers: { authorization: ctx.headers.authorization }
-                }).then(res => res.data);
+                    headers: { authorization: ctx.headers.authorization, realip: ctx.ip }
+                }).then(res => res.data)
+                .catch(onError);
             }
         },
         posts: {
@@ -60,7 +61,8 @@ const UserType = new GraphQLObjectType({
                 return await post.get('/getPostsByAuthor', {
                     params: { id: uuid, offset },
                     headers: { authorization: ctx.headers.authorization, realip: ctx.ip }
-                }).then(res => res.data);
+                }).then(res => res.data)
+                .catch(onError);
             }
         },
         roles: {
@@ -70,7 +72,8 @@ const UserType = new GraphQLObjectType({
                 return await auth.get('/getRolesOfUser', {
                     params: { name },
                     headers: { authorization: ctx.headers.authorization, realip: ctx.ip },
-                }).then(res => res.data);
+                }).then(res => res.data)
+                .catch(onError);
             }
         }}
     }

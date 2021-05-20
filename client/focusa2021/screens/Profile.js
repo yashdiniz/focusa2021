@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
 import React, { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, Text, View, StyleSheet, ScrollView, RefreshControl } from 'react-native';
-import { Avatar, Card, Button } from 'react-native-elements';
+import { ActivityIndicator, View, StyleSheet, ScrollView, RefreshControl } from 'react-native';
+import { Avatar, Card, Button, Text } from 'react-native-elements';
 
 import { connectProps } from '../hooks/store';
 import { getProfileData } from '../constants/queries';

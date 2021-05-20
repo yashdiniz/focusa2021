@@ -31,7 +31,7 @@ const CourseType = new GraphQLObjectType({
     name:'Course',
     descrption: "This node stores details of all the possible courses.",
     fields: () => {
-        const { RoleType, PostType, ProfileType } = require('./types');
+        const { RoleType, PostType, ProfileType, onError } = require('./types');
         return {
             uuid: {
                 type: GraphQLNonNull(GraphQLID)
@@ -47,8 +47,9 @@ const CourseType = new GraphQLObjectType({
                     return mods.map(async id => {
                         return await auth.get('/getRoleById', {
                             params: { id },
-                            headers: { authorization: ctx.headers?.authorization }
-                        }).then(res => res.data);
+                            headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
+                        }).then(res => res.data)
+                        .catch(onError);
                     })
                 }
             },
@@ -66,7 +67,8 @@ const CourseType = new GraphQLObjectType({
                     return await profile.get('/getProfilesWithInterest', {
                         params: { courseID: uuid, offset, },
                         headers: { authorization: ctx.headers.authorization, realip: ctx.ip },
-                    }).then(res => res.data);
+                    }).then(res => res.data)
+                    .catch(onError);
                 }
             },
             posts: {
@@ -79,7 +81,8 @@ const CourseType = new GraphQLObjectType({
                     return await post.get('/getPostsByCourse', {
                         params: { id: uuid, offset },
                         headers: { authorization: ctx.headers.authorization, realip: ctx.ip }
-                    }).then(res => res.data);
+                    }).then(res => res.data)
+                    .catch(onError);
                 }
             }
         }

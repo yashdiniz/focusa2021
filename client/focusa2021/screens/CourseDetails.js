@@ -3,24 +3,20 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, Text, View, StyleSheet, ScrollView, RefreshControl } from 'react-native';
 import { Avatar, Card, Button, SearchBar } from 'react-native-elements';
 import { connectProps } from '../hooks/store';
-import { getCourses } from '../constants/queries';
+import { getCourseDetails } from '../constants/queries';
 import Course from '../components/Course';
-import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
+import Post from '../components/Post';
+import { FlatList } from 'react-native-gesture-handler';
 
-function Courses({ navigation, route, token, username }) {
-
-    console.log('Courses ROUTES', route, navigation);
-
-    username = route.params?.username ?  // choose username parameters if provided
-        route.params?.username
-        : username;            // otherwise use the redux prop
+function CourseDetails({ navigation, route, token }) {
+    // TODO: allow users to subscribe to courses from here!
+    console.log('CourseDetails ROUTES', route, navigation);
 
     const [refreshing, setRefreshing] = useState(false);
-    const [search, updateSearch] = useState('');
 
-    const { data, error, loading, refetch } = useQuery(getCourses, {
+    const { data, error, loading, refetch } = useQuery(getCourseDetails, {
         variables: {
-            username
+            courseID: route.params.courseID,
         },
     });
 
@@ -62,23 +58,21 @@ function Courses({ navigation, route, token, username }) {
                     />
                 }
             >
-                <SearchBar 
-                    placeholder="Search here..." 
-                    onChangeText={updateSearch}
-                    value={search}
+                <Course 
+                    name={data.course.name} 
+                    description={data.course.description} 
                 />
                 <FlatList 
-                    data={data.user.profile.interests}
+                    data={data.course.posts}
                     renderItem={
                         ({ item }) => 
-                            <TouchableOpacity
-                                onPress={() => navigation.navigate('CourseDetails', {courseID: item.uuid})}
-                            >
-                                <Course 
-                                    name={item.name} 
-                                    description={item.description}
-                                />
-                            </TouchableOpacity>
+                            <Post 
+                                author={item.author.name} 
+                                course={item.course.name}
+                                text={item.text}
+                                time={item.time}
+                                attachmentURL={item.attachmentURL}
+                            />
                     }
                 />
             </ScrollView>
@@ -102,4 +96,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default connectProps(Courses);
+export default connectProps(CourseDetails);
