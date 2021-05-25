@@ -70,7 +70,7 @@ function Courses({ navigation, route, token, username }) {
                     value={search}
                 />
                 <FlatList 
-                    data={data.user.profile.interests}
+                    data={data?.user.profile.interests}
                     renderItem={
                         ({ item }) => 
                             <TouchableOpacity

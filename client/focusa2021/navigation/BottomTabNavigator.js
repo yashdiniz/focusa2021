@@ -27,6 +27,7 @@ export default function BottomTabNavigator() {
                 component={ProfileNavigator}
                 options={{
                     tabBarIcon: ({ color }) => <TabBarIcon name="person-outline" color={color} />,
+
                 }}
             />
             <BottomTab.Screen
@@ -68,7 +69,7 @@ function ProfileNavigator() {
             <ProfileStack.Screen
                 name="ProfileScreen"
                 component={Profile}
-                options={{ headerTitle: 'Profile' }}
+                options={{headerStatusBarHeight:5, headerTitle:null }}
             />
         </ProfileStack.Navigator>
     );
@@ -81,7 +82,7 @@ function CoursesNavigator() {
             <CoursesStack.Screen
                 name="CoursesScreen"
                 component={Courses}
-                options={{ headerTitle: 'Subscribed Courses' }}
+                options={{ headerStatusBarHeight:5, headerTitle:null }}
             />
         </CoursesStack.Navigator>
     );
@@ -94,7 +95,7 @@ function CourseDetailsNavigator() {
             <CourseDetailsStack.Screen
                 name="CourseDetailsScreen"
                 component={CourseDetails}
-                options={{ headerTitle: 'Course Details' }}
+                options={{ headerStatusBarHeight:5, headerTitle:null }}
             />
         </CourseDetailsStack.Navigator>
     );
