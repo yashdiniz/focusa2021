@@ -1,16 +1,16 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
-import { Card, Text } from 'react-native-elements';
+import { Alert, StyleSheet, View } from 'react-native';
+import { Card, Text, Button } from 'react-native-elements';
 
 function Course({ name, description }) {
     return (
-        <Card>
-            <Text 
-                h4
-                style={styles.text}
-            >
-                {name}
-            </Text>
+        <Card containerStyle={{borderColor:'black', borderRadius:20, backgroundColor:'white'}}>
+                <Text 
+                    h4
+                    style={styles.text}
+                >
+                    {name}
+                </Text>
             <Card.Divider />
             <Text
                 style={styles.text}
