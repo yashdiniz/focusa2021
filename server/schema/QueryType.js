@@ -106,7 +106,7 @@ const QueryType = new GraphQLObjectType({
         },
         isSubscribed: {
             type: GraphQLBoolean,
-            description: "TODO",
+            description: "Check if a User is subscribed to a Course.",
             args: {
                 userID: { type: GraphQLNonNull(GraphQLID) },
                 courseID: { type: GraphQLNonNull(GraphQLID) },
@@ -126,44 +126,56 @@ const QueryType = new GraphQLObjectType({
             }
         },
         post: {
-            type: GraphQLList(PostType),
-            description: "TODO",
+            type: PostType,
+            description: "Get the Post with a matching ID.",
             args: {
-                id: { type: GraphQLID },
+                id: { type: GraphQLNonNull(GraphQLID) },
+            },
+            async resolve(_, { id }, ctx) {
+                return await post.get('/getPostById', {
+                    params: { id },
+                    headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
+                }).then(res => res.data)
+                .catch(onError);
+            }
+        },
+        posts: {
+            type: GraphQLList(PostType),
+            description: "Get a list of Posts with a matching search query.",
+            args: {
                 q: { type: GraphQLString },
                 offset: { type: GraphQLInt }
             },
-            async resolve(_, { id, q, offset }, ctx) {
-                if(id)
-                    return [await post.get('/getPostById', {
-                        params: { id },
-                        headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
-                    }).then(res => res.data)
-                    .catch(onError)];
-                else {
-                    return await post.get('/searchPosts', {
-                        params: { q, offset },
-                        headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
-                    }).then(res => res.data)
-                    .catch(onError);
-                }
+            async resolve(_, { q, offset }, ctx) {
+                return await post.get('/searchPosts', {
+                    params: { q, offset },
+                    headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
+                }).then(res => res.data)
+                .catch(onError);
             }
         },
         course: {
+            type: CourseType,
+            description: "Get the Course with a matching ID.",
+            args: {
+                id: { type: GraphQLNonNull(GraphQLID) },
+            },
+            async resolve(_, { id }, ctx) {
+                return await courses.get('/getCourseById', {
+                    params: { id },
+                    headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
+                }).then(res => res.data)
+                .catch(onError);
+            }
+        },
+        courses: {
             type: GraphQLList(CourseType),
-            description: "TODO",
+            description: "Get a list of Courses with matching names.",
             args: {
                 name: { type: GraphQLString },
-                id: { type: GraphQLID },
             },
-            async resolve(_, { id, name }, ctx) {
-                if(id) 
-                    return [await courses.get('/getCourseById', {
-                        params: { id },
-                        headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
-                    }).then(res => res.data)
-                    .catch(onError)];
-                else if(name)
+            async resolve(_, { name }, ctx) {
+                if(name)
                     return await courses.get('/getCoursesByName', {
                         params: { name, offset: 0 },
                         headers: { authorization: ctx.headers?.authorization, realip: ctx.ip }
@@ -171,7 +183,6 @@ const QueryType = new GraphQLObjectType({
                     .catch(onError);
             }
         }
-        // searchCourses(string search query)
     }}
 })
 
