@@ -56,34 +56,39 @@ function Courses({ navigation, route, token, username }) {
         return (<ErrorComponent error={error} />);
     else
         return (
-            <FlatList
-                refreshing={refreshing}
-                onRefresh={onRefresh}
-                ListHeaderComponent={
-                    <SearchBar
-                        placeholder="Search here..."
-                        onChangeText={updateSearch}
-                        value={search}
+            <ScrollView containerStyle={styles.container}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
                     />
                 }
-                data={data?.user.profile.interests}
-                renderItem={
-                    ({ item }) =>
-                        <TouchableOpacity
-                            onPress={() => navigation.navigate('CourseDetails', {
-                                ...CourseDetails,
-                                params: { courseID: item.uuid }
-                            })
-                            }
-                            style={{ alignItems: 'center' }}
-                        >
-                            <Course
-                                name={item.name}
-                                description={item.description}
-                            />
-                        </TouchableOpacity>
-                }
-            />
+            >
+                <SearchBar 
+                    placeholder="Search here..."
+                    onChangeText={updateSearch}
+                    value={search}
+                />
+                <FlatList 
+                    data={data?.user.profile.interests}
+                    renderItem={
+                        ({ item }) => 
+                            <TouchableOpacity
+                                onPress={() => navigation.navigate('CourseDetails', { 
+                                        ...CourseDetails,
+                                        params: { courseID: item.uuid }
+                                    })
+                                }
+                               style={{alignItems:'center'}} 
+                            >
+                                <Course 
+                                    name={item.name} 
+                                    description={item.description}
+                                />
+                            </TouchableOpacity>
+                    }
+                />
+            </ScrollView>
         );
 }
 

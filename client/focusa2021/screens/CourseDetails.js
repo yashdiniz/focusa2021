@@ -48,30 +48,35 @@ function CourseDetails({ navigation, route, token }) {
             </View>
         );
     else if (error)
-        return (<ErrorComponent error={error} />);
+        return (<ErrorComponent error={error}/>);
     else
         return (
-            <FlatList
-                refreshing={refreshing}
-                onRefresh={onRefresh}
-                ListHeaderComponent={
-                    <Course
-                        name={data.course.name}
-                        description={data.course.description}
+            <ScrollView containerStyle={styles/*.container*/}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
                     />
                 }
-                data={data.course.posts}
-                renderItem={
-                    ({ item }) =>
-                        <Post
-                            author={item.author.name}
-                            course={item.course.name}
-                            text={item.text}
-                            time={item.time}
-                            attachmentURL={item.attachmentURL}
-                        />
-                }
-            />
+            >
+                <Course 
+                    name={data.course.name} 
+                    description={data.course.description} 
+                />
+                <FlatList 
+                    data={data.course.posts}
+                    renderItem={
+                        ({ item }) => 
+                            <Post 
+                                author={item.author.name} 
+                                course={item.course.name}
+                                text={item.text}
+                                time={item.time}
+                                attachmentURL={item.attachmentURL}
+                            />
+                    }
+                />
+            </ScrollView>
         );
 }
 
