@@ -65,6 +65,9 @@ function CourseDetails({ navigation, route, token }) {
                 />
                 <FlatList 
                     data={data.course.posts}
+                    keyExtractor={
+                        item => item.uuid
+                    }
                     renderItem={
                         ({ item }) => 
                             <Post 

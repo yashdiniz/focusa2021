@@ -76,6 +76,9 @@ function Courses({ navigation, route, token, username }) {
                 />
                 <FlatList 
                     data={data?.user.profile.interests}
+                    keyExtractor={
+                        item => item.uuid
+                    }
                     renderItem={
                         ({ item }) => 
                             <TouchableOpacity
