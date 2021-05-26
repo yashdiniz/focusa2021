@@ -40,7 +40,7 @@ function CourseDetails({ navigation, route, token }) {
             console.error(new Date(), 'CourseDetails', JSON.stringify(error));
         }
     });
-
+   
     if (loading)
         return (
             <View style={styles.container}>
@@ -60,11 +60,11 @@ function CourseDetails({ navigation, route, token }) {
                 }
             >
                 <Course 
-                    name={data.course.name} 
-                    description={data.course.description} 
+                    name={data.course[0].name} 
+                    description={data.course[0].description} 
                 />
                 <FlatList 
-                    data={data.course.posts}
+                    data={data.course[0].posts}
                     keyExtractor={
                         item => item.uuid
                     }
