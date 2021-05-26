@@ -56,13 +56,17 @@ function Courses({ navigation, route, token, username }) {
         return (<ErrorComponent error={error} />);
     else
         return (
-            <ScrollView containerStyle={styles.container}
-                refreshControl={
-                    <RefreshControl
-                        refreshing={refreshing}
-                        onRefresh={onRefresh}
+            <FlatList
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+                ListHeaderComponent={
+                    <SearchBar
+                        placeholder="Search here..."
+                        onChangeText={updateSearch}
+                        value={search}
                     />
                 }
+<<<<<<< HEAD
             >
                 <SearchBar 
                     placeholder="Search here..."
@@ -94,6 +98,26 @@ function Courses({ navigation, route, token, username }) {
                     }
                 />
             </ScrollView>
+=======
+                data={data?.user.profile.interests}
+                renderItem={
+                    ({ item }) =>
+                        <TouchableOpacity
+                            onPress={() => navigation.navigate('CourseDetails', {
+                                ...CourseDetails,
+                                params: { courseID: item.uuid }
+                            })
+                            }
+                            style={{ alignItems: 'center' }}
+                        >
+                            <Course
+                                name={item.name}
+                                description={item.description}
+                            />
+                        </TouchableOpacity>
+                }
+            />
+>>>>>>> 2d47e6b8c21cd6655497b962c839b55579c1dc30
         );
 }
 
