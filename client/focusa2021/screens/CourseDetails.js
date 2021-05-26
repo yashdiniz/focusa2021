@@ -60,11 +60,11 @@ function CourseDetails({ navigation, route, token }) {
                 }
             >
                 <Course 
-                    name={data.course[0].name} 
-                    description={data.course[0].description} 
+                    name={data.course.name} 
+                    description={data.course.description} 
                 />
                 <FlatList 
-                    data={data.course[0].posts}
+                    data={data.course.posts}
                     keyExtractor={
                         item => item.uuid
                     }

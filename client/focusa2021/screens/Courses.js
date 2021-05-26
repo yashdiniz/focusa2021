@@ -87,7 +87,6 @@ function Courses({ navigation, route, token, username }) {
                                         params: { courseID: item.uuid }
                                     })
                                 }
-                               style={{alignItems:'center'}} 
                             >
                                 <Course 
                                     name={item.name} 

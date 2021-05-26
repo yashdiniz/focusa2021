@@ -1,10 +1,10 @@
 import React from 'react';
-import { Alert, StyleSheet, View,Dimensions, TouchableOpacity } from 'react-native';
+import { Alert, StyleSheet, View, Dimensions, TouchableOpacity } from 'react-native';
 import { Card, Text, Button } from 'react-native-elements';
 
 function Course({ name, description }) {
     return (
-        // <Card containerStyle={{borderColor:'black', borderRadius:20, backgroundColor:'white'}}>
+        // <Card>
         //         <Text 
         //             h4
         //             style={styles.text}
@@ -18,16 +18,15 @@ function Course({ name, description }) {
         //         {description}
         //     </Text>
         // </Card>
-        
-            <View style={styles.singleCourseView}>
-                <Text style={styles.SubjectTitle}>
-                    {name}
-                </Text>
-                <Text style={styles.SubjectDescription}>
-                    {description}
-                </Text>
-            </View>
-        
+
+        <View style={styles.singleCourseView}>
+            <Text style={styles.SubjectTitle}>
+                {name}
+            </Text>
+            <Text style={styles.SubjectDescription}>
+                {description}
+            </Text>
+        </View>
     );
 }
 
@@ -35,23 +34,23 @@ const styles = StyleSheet.create({
     text: {
         marginBottom: 20,
     },
-    singleCourseView:{
+    singleCourseView: {
         borderColor: 'grey',
         borderWidth: 1,
-        width: Dimensions.get('screen').width -25,
+        width: Dimensions.get('screen').width - 25,
         height: 100,
-        marginTop: 10,
+        margin: 10,
         backgroundColor: '#ffffff',
         borderRadius: 16,
 
     },
-    SubjectTitle:{
+    SubjectTitle: {
         marginTop: 10,
         paddingLeft: 10,
         fontSize: 18,
         fontWeight: 'bold',
     },
-    SubjectDescription:{
+    SubjectDescription: {
         paddingLeft: 20,
         marginTop: 10,
         color: 'grey'
