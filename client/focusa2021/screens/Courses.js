@@ -68,6 +68,11 @@ function Courses({ navigation, route, token, username }) {
                     placeholder="Search here..."
                     onChangeText={updateSearch}
                     value={search}
+                    lightTheme
+                    round
+                    cancelIcon
+                    clearIcon
+                    inputContainerStyle={{backgroundColor:'white'}}
                 />
                 <FlatList 
                     data={data?.user.profile.interests}
