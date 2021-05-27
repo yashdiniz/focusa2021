@@ -8,10 +8,10 @@ const formatTime = (time) => {
     try {
         const date = new Date(parseInt(time));
     
-        console.log('Date in Post', date.toUTCString(), date.toISOString());
-        console.log(`Custom Date string: ${date.getFullYear()}-${date.getMonth()}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}`)
+        // console.log('Date in Post', date.toUTCString(), date.toISOString());
+        // console.log(`Custom Date string: ${date.getFullYear()}-${date.getMonth()}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}`)
         
-        return date.toUTCString();
+        return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;// date.toUTCString();
     } catch(e) {
         return 'Invalid Time';
     }
