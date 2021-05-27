@@ -27,7 +27,6 @@ export default function BottomTabNavigator() {
                 component={ProfileNavigator}
                 options={{
                     tabBarIcon: ({ color }) => <TabBarIcon name="person-outline" color={color} />,
-
                 }}
             />
             <BottomTab.Screen
