@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
 import React, { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, Text, View, StyleSheet, ScrollView, RefreshControl } from 'react-native';
+import { ActivityIndicator, Text, View, StyleSheet, ScrollView, RefreshControl, Dimensions, TouchableOpacity } from 'react-native';
 import { Avatar, Card, Button, SearchBar } from 'react-native-elements';
 import { connectProps } from '../hooks/store';
 import { getCourseDetails } from '../constants/queries';
@@ -66,10 +66,36 @@ function CourseDetails({ navigation, route, token }) {
                         item => item.uuid
                     }
                     ListHeaderComponent={
-                        <Course
-                            name={data.course.name}
-                            description={data.course.description}
-                        />
+                        // <Course
+                        //     name={data.course.name}
+                        //     description={data.course.description}
+                        // />
+                        <View style={styles.SubjectPageHeaderView}>
+                            <Text style={styles.SubjectTitle}>
+                                {data.course.name}
+                            </Text>
+
+                            <View style={{ paddingRight: 20 }}>
+                                <Text style={styles.SubjectDescription}>
+                                    {data.course.description}
+                                </Text>
+
+                                <TouchableOpacity style={{
+                                    backgroundColor: 'white',
+                                    width: 100, alignItems: 'center',
+                                    height: 30,
+                                    justifyContent: 'center',
+                                    borderColor: 'black',
+                                    borderWidth: 1,
+                                    marginLeft: 'auto',
+                                    borderRadius: 10
+                                }}>
+                                    <Text>
+                                        Subscribe
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
                     }
                     ListEmptyComponent={
                         <InfoMessage
@@ -107,6 +133,25 @@ const styles = StyleSheet.create({
     profileText: {
         textAlign: 'center',
         color: '#789'
+    },
+    SujectPageView: {
+        alignContent: 'center',
+        justifyContent: 'center',
+    },
+    SubjectPageHeaderView: {
+        width: Dimensions.get('screen').width,
+        height: 150,
+        backgroundColor: '#cccccc',
+    },
+    SubjectTitle: {
+        marginTop: 10,
+        marginLeft: 10,
+        fontSize: 30
+    },
+    SubjectDescription: {
+        marginTop: 10,
+        marginLeft: 20,
+        fontSize: 15
     }
 });
 
