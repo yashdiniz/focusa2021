@@ -16,8 +16,8 @@ export const authenticate = (username, password) => {
             params: { username, password }
         }).then(res => {
             setToken(res.data.token);
-            store.dispatch({type:SET_TOKEN, token:res.data.token});
-            store.dispatch({type:SET_USERNAME, username });
+            store.dispatch({type:SET_TOKEN, token: res.data.token });
+            store.dispatch({type:SET_USERNAME, username: res.data.name });
             store.dispatch({type:SET_USERID, userID: res.data.uuid });
             return token;
         })
