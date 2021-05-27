@@ -8,6 +8,7 @@ import Course from '../components/Course';
 import Post from '../components/Post';
 import { FlatList } from 'react-native-gesture-handler';
 import ErrorComponent from '../components/ErrorComponent';
+import InfoMessage from '../components/InfoMessage';
 
 function CourseDetails({ navigation, route, token }) {
     // TODO: allow users to subscribe to courses from here!
@@ -40,7 +41,7 @@ function CourseDetails({ navigation, route, token }) {
             console.error(new Date(), 'CourseDetails', JSON.stringify(error));
         }
     });
-   
+
     if (loading)
         return (
             <View style={styles.container}>
@@ -48,7 +49,7 @@ function CourseDetails({ navigation, route, token }) {
             </View>
         );
     else if (error)
-        return (<ErrorComponent error={error}/>);
+        return (<ErrorComponent error={error} />);
     else
         return (
             <ScrollView containerStyle={styles/*.container*/}
@@ -59,19 +60,28 @@ function CourseDetails({ navigation, route, token }) {
                     />
                 }
             >
-                <Course 
-                    name={data.course.name} 
-                    description={data.course.description} 
-                />
-                <FlatList 
+                <FlatList
                     data={data.course.posts}
                     keyExtractor={
                         item => item.uuid
                     }
+                    ListHeaderComponent={
+                        <Course
+                            name={data.course.name}
+                            description={data.course.description}
+                        />
+                    }
+                    ListEmptyComponent={
+                        <InfoMessage
+                            title={'No Posts published'}
+                            message={"You're up to date!"}
+                        />
+                    }
                     renderItem={
-                        ({ item }) => 
-                            <Post 
-                                author={item.author.name} 
+                        ({ item }) =>
+                            <Post
+                                key={item.uuid}
+                                author={item.author.name}
                                 course={item.course.name}
                                 text={item.text}
                                 time={item.time}

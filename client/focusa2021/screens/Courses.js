@@ -8,6 +8,7 @@ import Course from '../components/Course';
 import ErrorComponent from '../components/ErrorComponent';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { CourseDetails } from '../constants/screens';
+import InfoMessage from '../components/InfoMessage';
 
 function Courses({ navigation, route, token, username }) {
     // TODO: Allow users to search for courses from here!
@@ -64,32 +65,41 @@ function Courses({ navigation, route, token, username }) {
                     />
                 }
             >
-                <SearchBar 
-                    placeholder="Search here..."
-                    onChangeText={updateSearch}
-                    value={search}
-                    lightTheme
-                    round
-                    cancelIcon
-                    clearIcon
-                    inputContainerStyle={{backgroundColor:'white'}}
-                />
-                <FlatList 
+                <FlatList
                     data={data?.user.profile.interests}
                     keyExtractor={
                         item => item.uuid
                     }
+                    ListHeaderComponent={
+                        <SearchBar
+                            placeholder="Search here..."
+                            onChangeText={updateSearch}
+                            value={search}
+                            lightTheme
+                            round
+                            cancelIcon
+                            clearIcon
+                            inputContainerStyle={{ backgroundColor: 'white' }}
+                        />
+                    }
+                    ListEmptyComponent={
+                        <InfoMessage
+                            title={'No Subscribed Courses'}
+                            message={'Use the search bar to subscribe to new courses!'}
+                        />
+                    }
                     renderItem={
-                        ({ item }) => 
+                        ({ item }) =>
                             <TouchableOpacity
-                                onPress={() => navigation.navigate('CourseDetails', { 
-                                        ...CourseDetails,
-                                        params: { courseID: item.uuid }
-                                    })
+                                key={item.uuid}
+                                onPress={() => navigation.navigate('CourseDetails', {
+                                    ...CourseDetails,
+                                    params: { courseID: item.uuid }
+                                })
                                 }
                             >
-                                <Course 
-                                    name={item.name} 
+                                <Course
+                                    name={item.name}
                                     description={item.description}
                                 />
                             </TouchableOpacity>
