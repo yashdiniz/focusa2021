@@ -68,7 +68,9 @@ function ProfileNavigator() {
             <ProfileStack.Screen
                 name="ProfileScreen"
                 component={Profile}
-                options={{headerStatusBarHeight:5, headerTitle:null }}
+                options={{ headerTitle:'Profile',
+                    // TODO: Add a settings button in header to take user to settings page.
+                }}
             />
         </ProfileStack.Navigator>
     );
@@ -81,7 +83,7 @@ function CoursesNavigator() {
             <CoursesStack.Screen
                 name="CoursesScreen"
                 component={Courses}
-                options={{ headerStatusBarHeight:5, headerTitle:null }}
+                options={{ headerStatusBarHeight:1, headerTitle:null }}
             />
         </CoursesStack.Navigator>
     );
@@ -94,7 +96,7 @@ function CourseDetailsNavigator() {
             <CourseDetailsStack.Screen
                 name="CourseDetailsScreen"
                 component={CourseDetails}
-                options={{ headerStatusBarHeight:5, headerTitle:null }}
+                options={{ headerStatusBarHeight:1, headerTitle:null }}
             />
         </CourseDetailsStack.Navigator>
     );

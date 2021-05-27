@@ -1,12 +1,18 @@
 import React from 'react';
-import { StyleSheet, View,Text, Dimensions, TouchableOpacity } from 'react-native';
-import { Card } from 'react-native-elements';
+import { StyleSheet, View, Dimensions, TouchableOpacity } from 'react-native';
+import { Card, Text } from 'react-native-elements';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Moment from 'moment';
 
-function Post({ author, course, time, text, attachmentURL }) {
+function Post({ parent, author, course, time, text, attachmentURL }) {
     // TODO: make provisions for parent and comments!
 
+    // Reference: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
+    const date = new Date(time);
+    console.log('Date in Post', date.toUTCString(), date.toISOString());
+    console.log(`Custom Date string: ${date.getFullYear()}-${date.getMonth()}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}`)
+    
+    
     const formatTime = (time) => {
         const t = new Date(parseFloat(time));
         return t;
@@ -22,6 +28,12 @@ function Post({ author, course, time, text, attachmentURL }) {
         // </Card>
 
         <View style={styles.PostView}>
+            <Text style={{
+                fontStyle: 'italic',
+                color: 'lightgray'
+            }}>
+                {parent ? 'Comment' : ''}
+            </Text>
             <Text style={styles.subjectName}>{course}</Text>
 
             <View style={{flexDirection: "row"}}>

@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
 import React, { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, Text, View, StyleSheet, ScrollView, RefreshControl,Dimensions,TouchableOpacity } from 'react-native';
+import { ActivityIndicator, Text, View, StyleSheet, ScrollView, RefreshControl, Dimensions, TouchableOpacity } from 'react-native';
 import { Avatar, Card, Button, SearchBar } from 'react-native-elements';
 import { connectProps } from '../hooks/store';
 import { getCourseDetails } from '../constants/queries';
@@ -8,6 +8,7 @@ import Course from '../components/Course';
 import Post from '../components/Post';
 import { FlatList } from 'react-native-gesture-handler';
 import ErrorComponent from '../components/ErrorComponent';
+import InfoMessage from '../components/InfoMessage';
 
 function CourseDetails({ navigation, route, token }) {
     // TODO: allow users to subscribe to courses from here!
@@ -40,7 +41,7 @@ function CourseDetails({ navigation, route, token }) {
             console.error(new Date(), 'CourseDetails', JSON.stringify(error));
         }
     });
-   
+
     if (loading)
         return (
             <View style={styles.container}>
@@ -48,7 +49,7 @@ function CourseDetails({ navigation, route, token }) {
             </View>
         );
     else if (error)
-        return (<ErrorComponent error={error}/>);
+        return (<ErrorComponent error={error} />);
     else
         return (
             <ScrollView containerStyle={styles/*.container*/}
@@ -59,48 +60,54 @@ function CourseDetails({ navigation, route, token }) {
                     />
                 }
             >
-                {/* <Course 
-                    name={data.course.name} 
-                    description={data.course.description} 
-                /> */}
-
-            <View style={styles.SubjectPageHeaderView}>
-                <Text style={styles.SubjectTitle}>
-                   {data.course.name}
-                </Text>
-
-                <View style={{ paddingRight: 20 }}>
-                    <Text style={styles.SubjectDescription}>
-                        {data.course.description}
-                    </Text>
-
-                    <TouchableOpacity style={{
-                        backgroundColor: 'white',
-                        width: 100, alignItems: 'center',
-                        height: 30,
-                        justifyContent: 'center',
-                        borderColor: 'black',
-                        borderWidth: 1,
-                        marginLeft: 'auto',
-                        borderRadius: 10
-                    }}>
-                        <Text>
-                            Subscribe
-                            </Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-
-                
-                <FlatList 
+                <FlatList
                     data={data.course.posts}
                     keyExtractor={
                         item => item.uuid
                     }
+                    ListHeaderComponent={
+                        // <Course
+                        //     name={data.course.name}
+                        //     description={data.course.description}
+                        // />
+                        <View style={styles.SubjectPageHeaderView}>
+                            <Text style={styles.SubjectTitle}>
+                                {data.course.name}
+                            </Text>
+
+                            <View style={{ paddingRight: 20 }}>
+                                <Text style={styles.SubjectDescription}>
+                                    {data.course.description}
+                                </Text>
+
+                                <TouchableOpacity style={{
+                                    backgroundColor: 'white',
+                                    width: 100, alignItems: 'center',
+                                    height: 30,
+                                    justifyContent: 'center',
+                                    borderColor: 'black',
+                                    borderWidth: 1,
+                                    marginLeft: 'auto',
+                                    borderRadius: 10
+                                }}>
+                                    <Text>
+                                        Subscribe
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    }
+                    ListEmptyComponent={
+                        <InfoMessage
+                            title={'No Posts published'}
+                            message={"You're up to date!"}
+                        />
+                    }
                     renderItem={
-                        ({ item }) => 
-                            <Post 
-                                author={item.author.name} 
+                        ({ item }) =>
+                            <Post
+                                key={item.uuid}
+                                author={item.author.name}
                                 course={item.course.name}
                                 text={item.text}
                                 time={item.time}
@@ -127,21 +134,21 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: '#789'
     },
-    SujectPageView:{
-        alignContent:'center',
+    SujectPageView: {
+        alignContent: 'center',
         justifyContent: 'center',
     },
-    SubjectPageHeaderView:{
+    SubjectPageHeaderView: {
         width: Dimensions.get('screen').width,
         height: 150,
         backgroundColor: '#cccccc',
     },
-    SubjectTitle:{
+    SubjectTitle: {
         marginTop: 10,
         marginLeft: 10,
         fontSize: 30
     },
-    SubjectDescription:{
+    SubjectDescription: {
         marginTop: 10,
         marginLeft: 20,
         fontSize: 15
