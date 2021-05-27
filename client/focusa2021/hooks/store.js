@@ -1,12 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { connect } from 'react-redux';
-import { SET_TOKEN, SET_USERNAME } from '../config';
+import { SET_TOKEN, SET_USERID, SET_USERNAME } from '../config';
 
 export let store = configureStore({ reducer });
 
 const initState = {
     token: '',
-    username: '@@'
+    username: '@@',
+    userID: '',
 };
 
 function reducer(state, action) {
@@ -20,6 +21,10 @@ function reducer(state, action) {
         case SET_USERNAME: return {
             ...state,
             username: action.username,
+        };
+        case SET_USERID: return {
+            ...state,
+            userID: action.userID,
         };
         default: return state;
     }
