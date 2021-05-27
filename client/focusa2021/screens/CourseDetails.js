@@ -10,12 +10,13 @@ import { FlatList } from 'react-native-gesture-handler';
 import ErrorComponent from '../components/ErrorComponent';
 import InfoMessage from '../components/InfoMessage';
 
-function CourseDetails({ navigation, route, token }) {
+function CourseDetails({ navigation, route, token, userID }) {
     // TODO: allow users to subscribe to courses from here!
     const [refreshing, setRefreshing] = useState(false);
 
     const { data, error, loading, refetch } = useQuery(getCourseDetails, {
         variables: {
+            userID,
             courseID: route.params.courseID,
         },
     });
@@ -91,7 +92,11 @@ function CourseDetails({ navigation, route, token }) {
                                     borderRadius: 10
                                 }}>
                                     <Text>
-                                        Subscribe
+                                        {
+                                            data.isSubscribed ?
+                                                'Unsubscribe' :
+                                                'Subscribe'
+                                        }
                                     </Text>
                                 </TouchableOpacity>
                             </View>

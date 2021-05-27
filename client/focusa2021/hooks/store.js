@@ -36,8 +36,7 @@ export const getToken = () => {
 
 const mapStateToProps = (state) => {
     if (!state) state = initState;
-    const { token, username } = state;
-    return { token, username };
+    return state;
 }
 
 export const connectProps = (component) => {

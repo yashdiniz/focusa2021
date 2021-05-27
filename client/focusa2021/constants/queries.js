@@ -27,8 +27,8 @@ export const getCourses = gql`
 `;
 
 export const getCourseDetails = gql`
-    query getCourseDetails($userID:ID!, $courseID: ID!) {
-        isSubscribed(userID:$userID, courseID:$courseID),
+    query getCourseDetails($userID: ID!, $courseID: ID!) {
+        isSubscribed(userID: $userID, courseID: $courseID),
         course(id: $courseID) {
             uuid, name, description,
             posts {
