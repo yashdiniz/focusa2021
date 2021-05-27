@@ -24,7 +24,6 @@
     "expo-splash-screen": "~0.10.2",
     "expo-status-bar": "~1.0.4",
     "expo-updates": "~0.5.4",
-    "moment": "^2.29.1",
     "pouchdb-adapter-http": "^7.2.2",
     "pouchdb-adapter-react-native-sqlite": "^3.0.1",
     "react": "16.13.1",

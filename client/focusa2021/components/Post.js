@@ -2,23 +2,23 @@ import React from 'react';
 import { StyleSheet, View, Dimensions, TouchableOpacity } from 'react-native';
 import { Card, Text } from 'react-native-elements';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import Moment from 'moment';
+
+const formatTime = (time) => {
+    // Reference: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
+    try {
+        const date = new Date(parseInt(time));
+    
+        console.log('Date in Post', date.toUTCString(), date.toISOString());
+        console.log(`Custom Date string: ${date.getFullYear()}-${date.getMonth()}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}`)
+        
+        return date.toUTCString();
+    } catch(e) {
+        return 'Invalid Time';
+    }
+}
 
 function Post({ parent, author, course, time, text, attachmentURL }) {
     // TODO: make provisions for parent and comments!
-
-    // Reference: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
-    const date = new Date(time);
-    console.log('Date in Post', date.toUTCString(), date.toISOString());
-    console.log(`Custom Date string: ${date.getFullYear()}-${date.getMonth()}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}`)
-    
-    
-    const formatTime = (time) => {
-        const t = new Date(parseFloat(time));
-        return t;
-    }
-
-    Moment.locale('en');
 
     return (
         // <Card>
@@ -39,7 +39,7 @@ function Post({ parent, author, course, time, text, attachmentURL }) {
             <View style={{flexDirection: "row"}}>
             <Text style={styles.userName}>{author}</Text>
             <Text>  |  </Text>
-             <Text style={styles.time}>{Moment(time).format('d MMM')}</Text>
+             <Text style={styles.time}>{formatTime(time)}</Text>
             </View>
 
             <View style={{ borderBottomColor: 'grey',borderBottomWidth: 1, marginTop: 10}}/>
