@@ -79,6 +79,8 @@ app.use('/login',
     (req, res) => {
         res.json({
             token: req.user?.token,
+            uuid: req.user?.uuid,
+            name: req.user?.name,
             login: true
         });
     }
