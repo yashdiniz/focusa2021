@@ -1,10 +1,18 @@
 import React from 'react';
-import { StyleSheet, View,Text } from 'react-native';
+import { StyleSheet, View,Text, Dimensions, TouchableOpacity } from 'react-native';
 import { Card } from 'react-native-elements';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import Moment from 'moment';
 
 function Post({ author, course, time, text, attachmentURL }) {
     // TODO: make provisions for parent and comments!
+
+    const formatTime = (time) => {
+        const t = new Date(parseFloat(time));
+        return t;
+    }
+
+    Moment.locale('en');
 
     return (
         // <Card>
@@ -19,7 +27,7 @@ function Post({ author, course, time, text, attachmentURL }) {
             <View style={{flexDirection: "row"}}>
             <Text style={styles.userName}>{author}</Text>
             <Text>  |  </Text>
-             <Text style={styles.time}>{formatTime(time)}</Text>
+             <Text style={styles.time}>{Moment(time).format('d MMM')}</Text>
             </View>
 
             <View style={{ borderBottomColor: 'grey',borderBottomWidth: 1, marginTop: 10}}/>
@@ -55,7 +63,7 @@ function Post({ author, course, time, text, attachmentURL }) {
 }
 const styles = StyleSheet.create({
     PostView:{
-        width: Dimensions.get('screen').width - 15,
+        width: Dimensions.get('screen').width - 20,
         height: 250,
         borderColor: 'grey',
         borderWidth: 2,
