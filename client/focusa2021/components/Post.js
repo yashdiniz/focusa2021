@@ -42,7 +42,7 @@ function Post({ parent, author, course, time, text, attachmentURL }) {
                 <Text style={styles.time}>{formatTime(time)}</Text>
             </View>
 
-           
+
             <Text style={styles.topictitle}>{text}</Text>
 
             <View style={{ alignItems: 'center', justifyContent: 'center' }}>
@@ -53,12 +53,15 @@ function Post({ parent, author, course, time, text, attachmentURL }) {
                 </TouchableOpacity>
             </View>
 
-            
 
-            <View style={{ flexDirection: 'row', marginTop:20 }}>
-                <TouchableOpacity >
-                    <MaterialCommunityIcons name="comment-processing-outline" size={30} style={{ marginTop:'auto', paddingLeft: 27 }} />
-                </TouchableOpacity>
+
+            <View style={{ flexDirection: 'row', marginTop: 20 }}>
+                {parent ?
+                    <></>
+                    : <TouchableOpacity >
+                        <MaterialCommunityIcons name="comment-processing-outline" size={30} style={{ marginTop: 'auto', paddingLeft: 27 }} />
+                    </TouchableOpacity>
+                }
 
                 <TouchableOpacity>
                     <MaterialCommunityIcons name="share-outline" size={30} style={{ marginTop: 'auto', paddingLeft: 27 }} />
@@ -76,7 +79,7 @@ function Post({ parent, author, course, time, text, attachmentURL }) {
 const styles = StyleSheet.create({
     PostView: {
         width: Dimensions.get('screen').width,
-        height:'auto',
+        height: 'auto',
         borderColor: 'lightgrey',
         borderTopWidth: 2,
         marginTop: 10,
@@ -86,7 +89,7 @@ const styles = StyleSheet.create({
         marginTop: "auto",
         paddingLeft: 10,
         fontSize: 15,
-        fontWeight:'bold'
+        fontWeight: 'bold'
     },
     userName: {
         paddingLeft: 10,
@@ -102,4 +105,5 @@ const styles = StyleSheet.create({
         fontSize: 15,
     },
 })
-export default Post;
+
+export default React.memo(Post);

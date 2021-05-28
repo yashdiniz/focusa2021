@@ -25,4 +25,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default InfoMessage;
+export default React.memo(InfoMessage);

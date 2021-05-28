@@ -66,4 +66,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Course;
+export default React.memo(Course);
