@@ -4,19 +4,19 @@
  * navigators.
  */
 
-export const Profile = {
+export const ProfileNavigate = {
     screen: 'ProfileScreen',
     initial: false,
 };
-export const Courses = {
+export const CoursesNavigate = {
     screen: 'CoursesScreen',
     initial: false,
 };
-export const CourseDetails = {
+export const CourseDetailsNavigate = {
     screen: 'CourseDetailsScreen',
     initial: false,
 };
-export const Login = {
+export const LoginNavigate = {
     screen: 'LoginScreen',
     initial: false,
 }

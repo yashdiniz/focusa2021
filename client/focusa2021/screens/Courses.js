@@ -7,7 +7,7 @@ import { getCourses } from '../constants/queries';
 import Course from '../components/Course';
 import ErrorComponent from '../components/ErrorComponent';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
-import { CourseDetails } from '../constants/screens';
+import { CourseDetailsNavigate } from '../constants/screens';
 import InfoMessage from '../components/InfoMessage';
 
 function Courses({ navigation, route, token, username }) {
@@ -57,55 +57,53 @@ function Courses({ navigation, route, token, username }) {
         return (<ErrorComponent error={error} />);
     else
         return (
-            <ScrollView containerStyle={styles.container}
+            <FlatList
+                containerStyle={styles.container}
                 refreshControl={
                     <RefreshControl
                         refreshing={refreshing}
                         onRefresh={onRefresh}
                     />
                 }
-            >
-                <FlatList
-                    data={data?.user.profile.interests}
-                    keyExtractor={
-                        item => item.uuid
-                    }
-                    ListHeaderComponent={
-                        <SearchBar
-                            placeholder="Search here..."
-                            onChangeText={updateSearch}
-                            value={search}
-                            lightTheme
-                            round
-                            cancelIcon
-                            clearIcon
-                            inputContainerStyle={{ backgroundColor: 'white' }}
-                        />
-                    }
-                    ListEmptyComponent={
-                        <InfoMessage
-                            title={'No Subscribed Courses'}
-                            message={'Use the search bar to subscribe to new courses!'}
-                        />
-                    }
-                    renderItem={
-                        ({ item }) =>
-                            <TouchableOpacity
-                                key={item.uuid}
-                                onPress={() => navigation.navigate('CourseDetails', {
-                                    ...CourseDetails,
-                                    params: { courseID: item.uuid }
-                                })
-                                }
-                            >
-                                <Course
-                                    name={item.name}
-                                    description={item.description}
-                                />
-                            </TouchableOpacity>
-                    }
-                />
-            </ScrollView>
+                data={data?.user.profile.interests}
+                keyExtractor={
+                    item => item.uuid
+                }
+                ListHeaderComponent={
+                    <SearchBar
+                        placeholder="Search here..."
+                        onChangeText={updateSearch}
+                        value={search}
+                        lightTheme
+                        round
+                        cancelIcon
+                        clearIcon
+                        inputContainerStyle={{ backgroundColor: 'white' }}
+                    />
+                }
+                ListEmptyComponent={
+                    <InfoMessage
+                        title={'No Subscribed Courses'}
+                        message={'Use the search bar to subscribe to new courses!'}
+                    />
+                }
+                renderItem={
+                    ({ item }) =>
+                        <TouchableOpacity
+                            key={item.uuid}
+                            onPress={() => navigation.navigate('CourseDetails', {
+                                ...CourseDetailsNavigate,
+                                params: { courseID: item.uuid }
+                            })
+                            }
+                        >
+                            <Course
+                                name={item.name}
+                                description={item.description}
+                            />
+                        </TouchableOpacity>
+                }
+            />
         );
 }
 
