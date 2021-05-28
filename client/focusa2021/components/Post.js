@@ -11,7 +11,7 @@ const formatTime = (time) => {
         // console.log('Date in Post', date.toUTCString(), date.toISOString());
         // console.log(`Custom Date string: ${date.getFullYear()}-${date.getMonth()}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}`)
         
-        return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;// date.toUTCString();
+        return date.toUTCString();
     } catch(e) {
         return 'Invalid Time';
     }

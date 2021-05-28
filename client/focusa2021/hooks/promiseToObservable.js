@@ -13,5 +13,5 @@ export default promise =>
       },
       err => subscriber.error(err)
     );
-    return subscriber; // this line can removed, as per next comment
+    return subscriber; // this line can removed
   });

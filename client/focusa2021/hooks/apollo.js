@@ -5,6 +5,7 @@ import { create } from 'axios';
 import { graphQLRealm, authRealm, SET_TOKEN } from '../config';
 import promiseToObservable from './promiseToObservable';
 import { getToken, store } from './store';
+import typePolicies from '../constants/typePolicies';
 
 export const auth = create({
     baseURL: authRealm,
@@ -60,6 +61,6 @@ const errorLink = onError(({ graphQLErrors, otherErrors, operation, forward }) =
 });
 
 export const apolloClient = new ApolloClient({
-    cache: new InMemoryCache(), // TODO: switch to another cache for offline use
+    cache: new InMemoryCache({ typePolicies }), // TODO: switch to another cache for offline use
     link: from([errorLink, asyncAuthLink, httpLink]),
 });
