@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
 import React, { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, Text, View, StyleSheet, ScrollView, RefreshControl } from 'react-native';
-import { Avatar, Card, Button, SearchBar } from 'react-native-elements';
+import { Avatar, Card, Button, SearchBar,ListItem, Icon } from 'react-native-elements';
 import { connectProps } from '../hooks/store';
 import { getCourses } from '../constants/queries';
 import Course from '../components/Course';
@@ -9,6 +9,8 @@ import ErrorComponent from '../components/ErrorComponent';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { CourseDetails } from '../constants/screens';
 import InfoMessage from '../components/InfoMessage';
+
+import { logout } from '../hooks/authenticate';
 
 function Settings({ navigation, route, token, username }) {
     // TODO: Allow users to search for courses from here!
@@ -39,6 +41,7 @@ function Settings({ navigation, route, token, username }) {
             });
     });
 
+
     useEffect(() => {
         // if JWT is too short, it is usually because it is invalid.
         if (!token || token.length < 20) navigation.navigate('Login');
@@ -57,7 +60,16 @@ function Settings({ navigation, route, token, username }) {
         return (<ErrorComponent error={error} />);
     else
         return (
-            <Text>This is the settings page</Text>
+            //<Text>This is the settings page</Text>
+            <View>
+            <ListItem bottomDivider onPress={logout}>
+                <Icon name='logout'/>
+                <ListItem.Content>
+                    <ListItem.Title>Logout</ListItem.Title>
+                  </ListItem.Content>
+                  <ListItem.Chevron />
+            </ListItem>
+          </View>
         );
 }
 

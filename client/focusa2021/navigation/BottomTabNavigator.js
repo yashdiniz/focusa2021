@@ -116,13 +116,16 @@ function CourseDetailsNavigator() {
 }
 
 const SettingsStack = createStackNavigator();
-function SettingsNavigator() {
+function SettingsNavigator({navigation}) {
     return (
         <SettingsStack.Navigator>
             <SettingsStack.Screen
                 name="SettingsScreen"
                 component={Settings}
-                options={{  headerTitle:'Settings' }}
+                options={{  headerTitle:'Settings',
+                headerLeft: ()=>( <TouchableOpacity style={{paddingLeft:20}} onPress={()=>navigation.goBack()}>
+                <TabBarIcon name="arrow-back"/>
+            </TouchableOpacity>) }}
             />
         </SettingsStack.Navigator>
     );
