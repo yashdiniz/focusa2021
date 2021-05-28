@@ -13,10 +13,11 @@ function CourseDetails({ navigation, route, token, userID }) {
     // TODO: allow users to subscribe to courses from here!
     const [refreshing, setRefreshing] = useState(false);
 
-    const { data, error, loading, refetch } = useQuery(getCourseDetails, {
+    const { data, error, loading, refetch, fetchMore } = useQuery(getCourseDetails, {
         variables: {
             userID,
             courseID: route.params.courseID,
+            offset: 0,
         },
     });
 
@@ -119,6 +120,23 @@ function CourseDetails({ navigation, route, token, userID }) {
                             attachmentURL={item.attachmentURL}
                         />
                 }
+                ListFooterComponent={
+                    <View style={styles.container}>
+                        <TouchableOpacity
+                            onPress={
+                                () => fetchMore({
+                                    variables: {
+                                        offset: data.course.posts?.length
+                                    }
+                                })
+                            }
+                        >
+                            <Text>
+                                Yay! You are up to date!
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                }
             />
         );
 }
@@ -128,6 +146,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
+        marginBottom:30
     },
     avatar: {
         flex: 2,
