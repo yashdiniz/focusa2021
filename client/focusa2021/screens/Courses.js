@@ -71,14 +71,15 @@ function Courses({ navigation, route, token, username }) {
                 }
                 ListHeaderComponent={
                     <SearchBar
-                        placeholder="Search here..."
+                        placeholder="Search"
                         onChangeText={updateSearch}
                         value={search}
                         lightTheme
                         round
                         cancelIcon
                         clearIcon
-                        inputContainerStyle={{ backgroundColor: 'white' }}
+                        inputContainerStyle={{ backgroundColor: 'white',height:20,marginTop:3 }}
+                        containerStyle={{borderBottomColor:'lightgrey',borderBottomWidth:1,backgroundColor:null,height:57}}
                     />
                 }
                 ListEmptyComponent={
@@ -90,7 +91,6 @@ function Courses({ navigation, route, token, username }) {
                 renderItem={
                     ({ item }) =>
                         <TouchableOpacity
-                        style={{paddingRight:40}}
                             key={item.uuid}
                             onPress={() => navigation.navigate('CourseDetails', {
                                 ...CourseDetailsNavigate,

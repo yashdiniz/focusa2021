@@ -53,6 +53,7 @@ function CourseDetails({ navigation, route, token, userID }) {
     else
         return (
             <FlatList
+                style={{backgroundColor:'white'}}
                 containerStyle={styles/*.container*/}
                 refreshControl={
                     <RefreshControl

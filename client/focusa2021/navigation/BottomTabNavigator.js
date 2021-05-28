@@ -96,7 +96,7 @@ function CoursesNavigator() {
             <CoursesStack.Screen
                 name="CoursesScreen"
                 component={Courses}
-                options={{ headerStatusBarHeight:1, headerTitle:null }}
+                options={{  headerTitle:"Courses" }}
             />
         </CoursesStack.Navigator>
     );

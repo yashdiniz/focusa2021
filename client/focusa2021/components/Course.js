@@ -1,6 +1,7 @@
 import React from 'react';
 import { Alert, StyleSheet, View, Dimensions, TouchableOpacity } from 'react-native';
 import { Card, Text, Button } from 'react-native-elements';
+import { MaterialCommunityIcons } from '@expo/vector-icons'
 
 function Course({ name, description }) {
     return (
@@ -20,12 +21,19 @@ function Course({ name, description }) {
         // </Card>
 
         <View style={styles.singleCourseView}>
-            <Text style={styles.SubjectTitle}>
-                {name}
-            </Text>
-            <Text style={styles.SubjectDescription}>
-                {description}
-            </Text>
+            <View style={{ flexDirection: 'row' }}>
+                <View>
+                    <Text style={styles.SubjectTitle}>
+                        {name}
+                    </Text>
+                    <Text style={styles.SubjectDescription}>
+                        {description}
+                    </Text>
+                </View>
+                <MaterialCommunityIcons name="chevron-right" size={30} color="red"
+                    style={{ marginTop: 20, paddingLeft: 27, marginLeft: 'auto', alignSelf: 'flex-end', paddingRight:20 }} />
+            </View>
+
         </View>
 
 
@@ -38,11 +46,12 @@ const styles = StyleSheet.create({
     },
     singleCourseView: {
         borderColor: 'grey',
-        borderWidth: 1,
-        width: Dimensions.get('screen').width,
-        height: 100,
-        margin: 10,
+        width: Dimensions.get('screen').width-15,
+        height: 90,
+        marginTop:17,
         backgroundColor: '#ffffff',
+        borderTopRightRadius:10,
+        borderBottomRightRadius:10,
     },
     SubjectTitle: {
         marginTop: 10,
