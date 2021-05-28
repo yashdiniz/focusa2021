@@ -27,6 +27,8 @@ function Course({ name, description }) {
                 {description}
             </Text>
         </View>
+
+
     );
 }
 
@@ -37,12 +39,10 @@ const styles = StyleSheet.create({
     singleCourseView: {
         borderColor: 'grey',
         borderWidth: 1,
-        width: Dimensions.get('screen').width - 25,
+        width: Dimensions.get('screen').width,
         height: 100,
         margin: 10,
         backgroundColor: '#ffffff',
-        borderRadius: 16,
-
     },
     SubjectTitle: {
         marginTop: 10,

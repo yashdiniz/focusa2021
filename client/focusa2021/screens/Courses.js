@@ -90,6 +90,7 @@ function Courses({ navigation, route, token, username }) {
                 renderItem={
                     ({ item }) =>
                         <TouchableOpacity
+                        style={{paddingRight:40}}
                             key={item.uuid}
                             onPress={() => navigation.navigate('CourseDetails', {
                                 ...CourseDetailsNavigate,
