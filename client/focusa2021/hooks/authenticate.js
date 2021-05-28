@@ -34,6 +34,10 @@ export const authenticate = (username, password) => {
  */
 export const logout = () => {
     return auth.get('/logout')
-    .then(() => store.dispatch({type:SET_TOKEN, token:''}))
+    .then(() => {
+        store.dispatch({type:SET_TOKEN, token:''});
+        store.dispatch({ type:SET_USERID, userID: '' });
+        store.dispatch({ type:SET_USERNAME, username: '@@' });
+    })
     .catch(e=> console.error(new Date(), 'logout', e));
 }
