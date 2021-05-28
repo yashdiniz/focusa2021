@@ -6,7 +6,7 @@ import { Avatar, Card, Button, Text } from 'react-native-elements';
 import { connectProps } from '../hooks/store';
 import { getProfileData } from '../constants/queries';
 import ErrorComponent from '../components/ErrorComponent';
-import { Courses } from '../constants/screens';
+import { CoursesNavigate } from '../constants/screens';
 
 function Profile({ navigation, route, token, username }) {
     // TODO: Add a settings component which allows the user to edit various preferences.
@@ -87,7 +87,7 @@ function Profile({ navigation, route, token, username }) {
                     <Button 
                         title={'Subscribed Courses'}
                         onPress={() => navigation.navigate('Courses', { 
-                                ...Courses,
+                                ...CoursesNavigate,
                                 params: { username } 
                             })
                         }

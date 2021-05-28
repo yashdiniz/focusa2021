@@ -33,6 +33,9 @@ export const getCourseDetails = gql`
             uuid, name, description,
             posts {
                 uuid, text, attachmentURL, time,
+                parent {
+                    uuid
+                },
                 author {
                     uuid, name
                 },
