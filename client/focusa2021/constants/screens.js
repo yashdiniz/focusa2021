@@ -12,6 +12,10 @@ export const Courses = {
     screen: 'CoursesScreen',
     initial: false,
 };
+export const SettingsNavigate = {
+    screen: 'SettingsScreen',
+    initial: false,
+};
 export const CourseDetails = {
     screen: 'CourseDetailsScreen',
     initial: false,
