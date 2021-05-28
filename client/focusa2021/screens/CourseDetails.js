@@ -109,7 +109,7 @@ function CourseDetails({ navigation, route, token, userID }) {
                 renderItem={
                     ({ item }) =>
                         <Post
-                            parent={item.parent.uuid}
+                            parent={item.parent?.uuid}
                             key={item.uuid}
                             author={item.author.name}
                             course={item.course.name}
