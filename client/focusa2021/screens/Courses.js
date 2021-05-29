@@ -92,7 +92,12 @@ function Courses({ navigation, route, token, username }) {
                             borderTopRightRadius:10,
                             marginBottom:5,
                             marginTop: 10,
+                            alignItems:'center',
                         }}>
+                            <Text style={{
+                                fontWeight:"bold",
+                                fontSize:18,
+                            }}>Subscribed Courses</Text>
 
                         </View>
                     </View>
