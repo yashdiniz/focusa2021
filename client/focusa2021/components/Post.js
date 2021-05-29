@@ -36,7 +36,7 @@ const formatTime = (time) => {
         if (minutes < 10) {
             minutes = '0' + minutes.toString();
         }
-        fullTime = hour.toString() + ':' + minutes.toString() + ':' + ' ' + TimeType.toString();
+        fullTime = hour.toString() + ':' + minutes.toString()  + ' ' + TimeType.toString();
 
         // console.log('Date in Post', date.toUTCString(), date.toISOString());
         // console.log(`Custom Date string: ${date.getFullYear()}-${date.getMonth()}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}`)
