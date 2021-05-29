@@ -120,7 +120,7 @@ const QueryType = new GraphQLObjectType({
                     .catch(onError);   // will throw 404 if profile not have interest.
                     return true;
                 } catch(e) {
-                    if(e.response.status == 404) return false;
+                    if(e.response?.status == 404) return false;
                     else throw e;
                 }
             }
