@@ -47,22 +47,25 @@ const styles = StyleSheet.create({
     singleCourseView: {
         borderColor: 'grey',
         width: Dimensions.get('screen').width-15,
-        height: 90,
+        height: "auto",
         marginTop:17,
         backgroundColor: '#ffffff',
         borderTopRightRadius:10,
         borderBottomRightRadius:10,
     },
     SubjectTitle: {
-        marginTop: 10,
+        marginTop: 5,
         paddingLeft: 10,
         fontSize: 18,
         fontWeight: 'bold',
     },
     SubjectDescription: {
         paddingLeft: 20,
-        marginTop: 10,
-        color: 'grey'
+        marginTop: 5,
+        marginBottom:10,
+        color: 'grey',
+        width:320,
+        height:'auto'
     }
 });
 
