@@ -1,7 +1,6 @@
 import { useQuery } from '@apollo/client';
 import React, { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, Text, View, StyleSheet, ScrollView, RefreshControl, Dimensions, TouchableOpacity } from 'react-native';
-import { Avatar, Card, Button, SearchBar } from 'react-native-elements';
+import { ActivityIndicator, Text, View, StyleSheet, RefreshControl, Dimensions, TouchableOpacity} from 'react-native';
 import { connectProps } from '../hooks/store';
 import { getCourseDetails } from '../constants/queries';
 import Post from '../components/Post';
@@ -76,30 +75,31 @@ function CourseDetails({ navigation, route, token, userID }) {
                             {data.course.name}
                         </Text>
 
-                        <View style={{ paddingRight: 20 }}>
-                            <Text style={styles.SubjectDescription}>
-                                {data.course.description}
-                            </Text>
 
-                            <TouchableOpacity style={{
-                                backgroundColor: 'white',
-                                width: 100, alignItems: 'center',
-                                height: 30,
-                                justifyContent: 'center',
-                                borderColor: 'black',
-                                borderWidth: 1,
-                                marginLeft: 'auto',
-                                borderRadius: 10
-                            }}>
-                                <Text>
-                                    {
-                                        data.isSubscribed ?
-                                            'Unsubscribe' :
-                                            'Subscribe'
-                                    }
-                                </Text>
-                            </TouchableOpacity>
-                        </View>
+                        <Text style={styles.SubjectDescription}>
+                            {data.course.description}
+                        </Text>
+
+                        <TouchableOpacity style={{
+                            backgroundColor: 'white',
+                            width: 200,
+                            alignItems: 'center',
+                            height: 30,
+                            justifyContent: 'center',
+                            borderColor: 'black',
+                            borderWidth: 1,
+                            borderRadius: 10,
+                            marginTop: 15,
+                        }}>
+                            <Text>
+                                {
+                                    data.isSubscribed ?
+                                        'unsubscribe' :
+                                        'subscribe'
+                                }
+                            </Text>
+                        </TouchableOpacity>
+
                     </View>
                 }
                 ListEmptyComponent={
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        marginBottom:30
+        marginBottom: 30
     },
     SujectPageView: {
         alignContent: 'center',
@@ -157,16 +157,16 @@ const styles = StyleSheet.create({
     SubjectPageHeaderView: {
         width: Dimensions.get('screen').width,
         height: 150,
-        backgroundColor: '#cccccc',
+        backgroundColor: '#C0C0C0',
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     SubjectTitle: {
         marginTop: 10,
-        marginLeft: 10,
         fontSize: 30
     },
     SubjectDescription: {
-        marginTop: 10,
-        marginLeft: 20,
+        marginTop: 5,
         fontSize: 15
     }
 });
