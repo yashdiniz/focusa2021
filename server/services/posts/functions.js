@@ -160,6 +160,7 @@ const searchPosts = async (query, offset) => {
         query,
         fields: ['text'],
         include_docs: true, 
+        mm: '50%',
         limit: pageLimit, skip: offset,
     })
     .then(async o => await f.posts.findByIds(o.rows.map(e => e.doc?._id))) // to convert to RxDocuments
@@ -178,6 +179,7 @@ const getPostsByAuthor = async (authorID, offset) => {
     return await f.posts.find().where('author').eq(authorID)
     .where('reported').eq(0)
     .where('approved').eq(1)
+    .sort({ time: 'desc' })
     .skip(offset).limit(pageLimit).exec()
     .then(async docs => {
         if(docs) return docs;
@@ -198,6 +200,7 @@ const getPostsByCourse = async (courseID, offset) => {
     return await f.posts.find().where('course').eq(courseID)
     .where('reported').eq(0)
     .where('approved').eq(1)
+    .sort({ time: 'desc' })
     .skip(offset).limit(pageLimit).exec()
     .then(async docs => {
         if(docs) return docs;
@@ -218,6 +221,7 @@ const getPostsByParent = async (parentID, offset) => {
     return await f.posts.find().where('parent').eq(parentID)
     .where('reported').eq(0)
     .where('approved').eq(1)
+    .sort({ time: 'desc' })
     .skip(offset).limit(pageLimit).exec()
     .then(async docs => {
         if(docs) return docs;
