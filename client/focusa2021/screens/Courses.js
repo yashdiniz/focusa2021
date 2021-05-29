@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
 import React, { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, Text, View, StyleSheet, ScrollView, RefreshControl } from 'react-native';
+import { ActivityIndicator, Text, View, StyleSheet, ScrollView, RefreshControl,Dimensions } from 'react-native';
 import { Avatar, Card, Button, SearchBar } from 'react-native-elements';
 import { connectProps } from '../hooks/store';
 import { getCourses } from '../constants/queries';
@@ -70,17 +70,33 @@ function Courses({ navigation, route, token, username }) {
                     item => item.uuid
                 }
                 ListHeaderComponent={
-                    <SearchBar
-                        placeholder="Search"
-                        onChangeText={updateSearch}
-                        value={search}
-                        lightTheme
-                        round
-                        cancelIcon
-                        clearIcon
-                        inputContainerStyle={{ backgroundColor: 'white',height:20,marginTop:3 }}
-                        containerStyle={{borderBottomColor:'lightgrey',borderBottomWidth:1,backgroundColor:null,height:57}}
-                    />
+                    <View>
+                        <SearchBar
+                            placeholder="search"
+                            onChangeText={updateSearch}
+                            value={search}
+                            lightTheme
+                            round
+                            cancelIcon
+                            clearIcon
+                            inputContainerStyle={{ backgroundColor: 'white', height: 20, marginTop: 3 }}
+                            containerStyle={{ backgroundColor: null, height: 60, marginBottom: 8, justifyContent: 'center' }}
+                        />
+                        <View style={{
+                            borderRightColor:"red",
+                            borderRightWidth:3,
+                            borderTopColor:"red",
+                            borderTopWidth:3,
+                            width: Dimensions.get('screen').width - 15,
+                            height: 20,
+                            borderTopRightRadius:10,
+                            marginBottom:5,
+                            marginTop: 10,
+                        }}>
+
+                        </View>
+                    </View>
+
                 }
                 ListEmptyComponent={
                     <InfoMessage

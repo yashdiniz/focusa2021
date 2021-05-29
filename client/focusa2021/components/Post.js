@@ -66,7 +66,7 @@ function Post({ parent, author, course, time, text, attachmentURL }) {
             }}>
                 {parent ? 'Comment' : ''}
             </Text>
-            <Text style={styles.subjectName}>{course}</Text>
+            {/* <Text style={styles.subjectName}>{course}</Text> */}
 
             <View style={{ flexDirection: "row" }}>
                 <Text style={styles.userName}>{author}</Text>
@@ -80,7 +80,7 @@ function Post({ parent, author, course, time, text, attachmentURL }) {
             <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                 {/* https://stackoverflow.com/a/30540502/13227113 */}
                 <TouchableOpacity style={{ flexDirection: 'row' }} onPress={attachmentURL.length > 0 ? Linking.openURL(attachmentURL) : null}>
-                    <MaterialCommunityIcons name="file-document" size={30} style={{ marginTop: 20, paddingLeft: 27 }} />
+                    <MaterialCommunityIcons name="file-document" size={20} style={{ marginTop: 25, paddingLeft: 27, }} />
                     <Text style={{ marginTop: 28 }}>View Attachments</Text>
                 </TouchableOpacity>
             </View>
@@ -90,18 +90,18 @@ function Post({ parent, author, course, time, text, attachmentURL }) {
             <View style={{ flexDirection: 'row', marginTop: 20 }}>
                 {parent ?
                     <></>
-                    : <TouchableOpacity >
-                        <MaterialCommunityIcons name="comment-processing-outline" size={30} style={{ marginTop: 'auto', paddingLeft: 27 }} />
+                    : <TouchableOpacity style={{marginBottom:10}}>
+                        <MaterialCommunityIcons name="comment-outline" wi size={25} style={{ marginTop: 'auto', paddingLeft: 27 }} />
                     </TouchableOpacity>
                 }
 
-                <TouchableOpacity>
-                    <MaterialCommunityIcons name="share-outline" size={30} style={{ marginTop: 'auto', paddingLeft: 27 }} />
+                <TouchableOpacity style={{marginBottom:10}}>
+                    <MaterialCommunityIcons name="arrow-right" size={25} style={{ marginTop: 'auto', paddingLeft: 27,}} />
                 </TouchableOpacity>
 
 
-                <TouchableOpacity style={{ marginLeft: 'auto', paddingRight: 15 }}>
-                    <MaterialCommunityIcons name="download-outline" size={30} style={{ marginTop: 'auto', paddingLeft: 27 }} />
+                <TouchableOpacity style={{ marginLeft: 'auto', paddingRight: 15,marginBottom:10 }}>
+                    <MaterialCommunityIcons name="download" size={25} style={{ marginTop: 'auto', paddingLeft: 27 }} />
                 </TouchableOpacity>
             </View>
 
@@ -113,18 +113,17 @@ const styles = StyleSheet.create({
         width: Dimensions.get('screen').width,
         height: 'auto',
         borderColor: 'lightgrey',
-        borderTopWidth: 2,
-        marginTop: 10,
+        borderTopWidth: 1,
         backgroundColor: '#ffffff'
     },
     subjectName: {
         marginTop: "auto",
-        paddingLeft: 10,
+        paddingLeft: 15,
         fontSize: 15,
         fontWeight: 'bold'
     },
     userName: {
-        paddingLeft: 10,
+        paddingLeft: 15,
         color: 'red'
     },
     time: {
@@ -133,8 +132,9 @@ const styles = StyleSheet.create({
     },
     topictitle: {
         marginTop: 20,
-        paddingLeft: 10,
+        paddingLeft: 15,
         fontSize: 15,
+        color:'black'
     },
 })
 

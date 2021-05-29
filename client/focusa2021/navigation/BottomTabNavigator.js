@@ -106,20 +106,23 @@ function CoursesNavigator() {
             <CoursesStack.Screen
                 name="CoursesScreen"
                 component={Courses}
-                options={{ headerTitle: "Courses" }}
+                options={{ headerTitle: "Courses"}}
             />
         </CoursesStack.Navigator>
     );
 }
 
 const CourseDetailsStack = createStackNavigator();
-function CourseDetailsNavigator() {
+function CourseDetailsNavigator({navigation}) {
     return (
         <CourseDetailsStack.Navigator>
             <CourseDetailsStack.Screen
                 name="CourseDetailsScreen"
                 component={CourseDetails}
-                options={{ headerStatusBarHeight: 1, headerTitle: null }}
+                options={{ headerTitle:"Course Details",
+                headerLeft: () => (<TouchableOpacity style={{ paddingLeft: 20 }} onPress={() => navigation.goBack()}>
+                <TabBarIcon name="arrow-back" color="red"/>
+            </TouchableOpacity>) }}
             />
         </CourseDetailsStack.Navigator>
     );
