@@ -36,13 +36,9 @@ const formatTime = (time) => {
         if (minutes < 10) {
             minutes = '0' + minutes.toString();
         }
-        fullTime = hour.toString() + ':' + minutes.toString()  + ' ' + TimeType.toString();
+        fullTime = hour.toString() + ':' + minutes.toString() + ' ' + TimeType.toString();
 
-        // console.log('Date in Post', date.toUTCString(), date.toISOString());
-        // console.log(`Custom Date string: ${date.getFullYear()}-${date.getMonth()}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}`)
-
-        //return date.toISOString();
-        return (<Text style={{ color: 'grey' }}>{date.getFullYear()}/{date.getMonth()}/{date.getDate()} {fullTime}</Text>)
+        return (<Text style={{ color: 'grey' }}>{date.getFullYear()}-{date.getMonth()}-{date.getDate()} {fullTime}</Text>)
 
     } catch (e) {
         return 'Invalid Time';
@@ -53,12 +49,6 @@ function Post({ parent, author, course, time, text, attachmentURL }) {
     // TODO: make provisions for parent and comments!
 
     return (
-        // <Card>
-        //     <Text>
-        //         {JSON.stringify(props)}
-        //     </Text>
-        // </Card>
-
         <View style={styles.PostView}>
             <Text style={{
                 fontStyle: 'italic',
@@ -87,7 +77,7 @@ function Post({ parent, author, course, time, text, attachmentURL }) {
 
 
 
-            <View style={{ flexDirection: 'row', marginTop: 20 }}>
+            <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 10 }}>
                 {parent ?
                     <></>
                     : <TouchableOpacity style={{marginBottom:10}}>
@@ -114,6 +104,8 @@ const styles = StyleSheet.create({
         height: 'auto',
         borderColor: 'lightgrey',
         borderTopWidth: 1,
+        borderBottomWidth: 1,
+        marginTop: 5,
         backgroundColor: '#ffffff'
     },
     subjectName: {
