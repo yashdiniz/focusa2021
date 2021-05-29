@@ -20,6 +20,10 @@ export const CourseDetailsNavigate = {
     screen: 'CourseDetailsScreen',
     initial: false,
 };
+export const VideoConferencingNavigate = {
+    screen: 'VideoConferencingScreen',
+    initial: false,
+};
 export const LoginNavigate = {
     screen: 'LoginScreen',
     initial: false,

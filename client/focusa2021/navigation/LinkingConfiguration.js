@@ -22,6 +22,11 @@ export default {
               CoursesScreen: 'c',
             },
           },
+          VideoConferencing: {
+            screens: {
+              VideoConferencing: 'vc',
+            },
+          },
           Settings: {
             screens: {
               SettingsScreen: 's',

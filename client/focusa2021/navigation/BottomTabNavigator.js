@@ -1,7 +1,7 @@
 /**
  * https://reactnavigation.org/docs/bottom-tab-navigator
  */
-import React, {  } from 'react';
+import React, { } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -13,6 +13,7 @@ import Login from '../screens/Login';
 import Courses from '../screens/Courses';
 import CourseDetails from '../screens/CourseDetails';
 import Settings from '../screens/Settings';
+import VideoConferencing from '../screens/VideoConferencing';
 import { TouchableOpacity } from 'react-native';
 
 
@@ -39,6 +40,14 @@ export default function BottomTabNavigator() {
                     tabBarIcon: ({ color }) => <TabBarIcon name="book-outline" color={color} />,
                 }}
             />
+
+            <BottomTab.Screen
+                name="Video Conferencing"
+                component={VideoConferencingNavigator}
+                options={{
+                    tabBarIcon: ({ color }) => <TabBarIcon name="videocam-outline" color={color} />,
+                }}
+            />
             <BottomTab.Screen
                 name="CourseDetails"
                 component={CourseDetailsNavigator}
@@ -46,7 +55,7 @@ export default function BottomTabNavigator() {
                     tabBarButton: () => null,
                 }}
             />
-              <BottomTab.Screen
+            <BottomTab.Screen
                 name="Settings"
                 component={SettingsNavigator}
                 options={{
@@ -78,10 +87,11 @@ function ProfileNavigator({ navigation }) {
             <ProfileStack.Screen
                 name="ProfileScreen"
                 component={Profile}
-                options={{ headerTitle:'Profile',
+                options={{
+                    headerTitle: 'Profile',
                     // TODO: Add a settings button in header to take user to settings page.
-                    headerRight: ()=>( <TouchableOpacity style={{paddingRight:20}} onPress={()=>navigation.navigate('Settings')}>
-                        <TabBarIcon name="settings"/>
+                    headerRight: () => (<TouchableOpacity style={{ paddingRight: 20 }} onPress={() => navigation.navigate('Settings')}>
+                        <TabBarIcon name="settings" />
                     </TouchableOpacity>)
                 }}
             />
@@ -96,7 +106,7 @@ function CoursesNavigator() {
             <CoursesStack.Screen
                 name="CoursesScreen"
                 component={Courses}
-                options={{  headerTitle:"Courses" }}
+                options={{ headerTitle: "Courses" }}
             />
         </CoursesStack.Navigator>
     );
@@ -109,23 +119,38 @@ function CourseDetailsNavigator() {
             <CourseDetailsStack.Screen
                 name="CourseDetailsScreen"
                 component={CourseDetails}
-                options={{ headerStatusBarHeight:1, headerTitle:null }}
+                options={{ headerStatusBarHeight: 1, headerTitle: null }}
             />
         </CourseDetailsStack.Navigator>
     );
 }
 
+const VideoConferencingStack = createStackNavigator();
+function VideoConferencingNavigator() {
+    return (
+        <VideoConferencingStack.Navigator>
+            <VideoConferencingStack.Screen
+                name="CourseDetailsScreen"
+                component={VideoConferencing}
+                options={{ headerTitle: "Video Conferencing" }}
+            />
+        </VideoConferencingStack.Navigator>
+    );
+}
+
 const SettingsStack = createStackNavigator();
-function SettingsNavigator({navigation}) {
+function SettingsNavigator({ navigation }) {
     return (
         <SettingsStack.Navigator>
             <SettingsStack.Screen
                 name="SettingsScreen"
                 component={Settings}
-                options={{  headerTitle:'Settings',
-                headerLeft: ()=>( <TouchableOpacity style={{paddingLeft:20}} onPress={()=>navigation.goBack()}>
-                <TabBarIcon name="arrow-back"/>
-            </TouchableOpacity>) }}
+                options={{
+                    headerTitle: 'Settings',
+                    headerLeft: () => (<TouchableOpacity style={{ paddingLeft: 20 }} onPress={() => navigation.goBack()}>
+                        <TabBarIcon name="arrow-back" />
+                    </TouchableOpacity>)
+                }}
             />
         </SettingsStack.Navigator>
     );
