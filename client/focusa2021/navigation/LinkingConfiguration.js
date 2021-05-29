@@ -22,6 +22,11 @@ export default {
               CoursesScreen: 'c',
             },
           },
+          Settings: {
+            screens: {
+              SettingsScreen: 's',
+            },
+          },
           CourseDetails: {
             screens: {
               CourseDetailsScreen: 'cd',

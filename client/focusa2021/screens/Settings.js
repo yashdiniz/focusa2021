@@ -1,16 +1,18 @@
 import { useQuery } from '@apollo/client';
 import React, { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, Text, View, StyleSheet, ScrollView, RefreshControl } from 'react-native';
-import { Avatar, Card, Button, SearchBar } from 'react-native-elements';
+import { Avatar, Card, Button, SearchBar,ListItem, Icon } from 'react-native-elements';
 import { connectProps } from '../hooks/store';
 import { getCourses } from '../constants/queries';
 import Course from '../components/Course';
 import ErrorComponent from '../components/ErrorComponent';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
-import { CourseDetailsNavigate } from '../constants/screens';
+import { CourseDetails } from '../constants/screens';
 import InfoMessage from '../components/InfoMessage';
 
-function Courses({ navigation, route, token, username }) {
+import { logout } from '../hooks/authenticate';
+
+function Settings({ navigation, route, token, username }) {
     // TODO: Allow users to search for courses from here!
     username = route.params?.username ?  // choose username parameters if provided
         route.params?.username
@@ -39,6 +41,7 @@ function Courses({ navigation, route, token, username }) {
             });
     });
 
+
     useEffect(() => {
         // if JWT is too short, it is usually because it is invalid.
         if (!token || token.length < 20) navigation.navigate('Login');
@@ -57,54 +60,16 @@ function Courses({ navigation, route, token, username }) {
         return (<ErrorComponent error={error} />);
     else
         return (
-            <FlatList
-                containerStyle={styles.container}
-                refreshControl={
-                    <RefreshControl
-                        refreshing={refreshing}
-                        onRefresh={onRefresh}
-                    />
-                }
-                data={data?.user.profile.interests}
-                keyExtractor={
-                    item => item.uuid
-                }
-                ListHeaderComponent={
-                    <SearchBar
-                        placeholder="Search"
-                        onChangeText={updateSearch}
-                        value={search}
-                        lightTheme
-                        round
-                        cancelIcon
-                        clearIcon
-                        inputContainerStyle={{ backgroundColor: 'white',height:20,marginTop:3 }}
-                        containerStyle={{borderBottomColor:'lightgrey',borderBottomWidth:1,backgroundColor:null,height:57}}
-                    />
-                }
-                ListEmptyComponent={
-                    <InfoMessage
-                        title={'No Subscribed Courses'}
-                        message={'Use the search bar to subscribe to new courses!'}
-                    />
-                }
-                renderItem={
-                    ({ item }) =>
-                        <TouchableOpacity
-                            key={item.uuid}
-                            onPress={() => navigation.navigate('CourseDetails', {
-                                ...CourseDetailsNavigate,
-                                params: { courseID: item.uuid }
-                            })
-                            }
-                        >
-                            <Course
-                                name={item.name}
-                                description={item.description}
-                            />
-                        </TouchableOpacity>
-                }
-            />
+            //<Text>This is the settings page</Text>
+            <View>
+            <ListItem bottomDivider onPress={logout}>
+                <Icon name='logout'/>
+                <ListItem.Content>
+                    <ListItem.Title>Logout</ListItem.Title>
+                  </ListItem.Content>
+                  <ListItem.Chevron />
+            </ListItem>
+          </View>
         );
 }
 
@@ -125,4 +90,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default connectProps(Courses);
+export default connectProps(Settings);

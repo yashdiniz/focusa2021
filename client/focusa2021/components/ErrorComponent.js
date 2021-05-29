@@ -27,4 +27,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ErrorComponent;
+export default React.memo(ErrorComponent);

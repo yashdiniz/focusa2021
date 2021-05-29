@@ -12,14 +12,20 @@ type Query {
   # Gets the details of the Profile mentioned in arguments.
   profile(id: ID!): Profile
 
-  # TODO
+  # Check if a User is subscribed to a Course.
   isSubscribed(userID: ID!, courseID: ID!): Boolean
 
-  # TODO
-  post(id: ID, q: String, offset: Int): [Post]
+  # Get the Post with a matching ID.
+  post(id: ID!): Post
 
-  # TODO
-  course(name: String, id: ID): [Course]
+  # Get a list of Posts with a matching search query.
+  posts(q: String, offset: Int): [Post]
+
+  # Get the Course with a matching ID.
+  course(id: ID!): Course
+
+  # Get a list of Courses with matching names.
+  courses(name: String): [Course]
 }
 
 # This node holds all the necessary user details.

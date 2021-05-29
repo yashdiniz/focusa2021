@@ -12,6 +12,9 @@ import Profile from '../screens/Profile';
 import Login from '../screens/Login';
 import Courses from '../screens/Courses';
 import CourseDetails from '../screens/CourseDetails';
+import Settings from '../screens/Settings';
+import { TouchableOpacity } from 'react-native';
+
 
 const BottomTab = createBottomTabNavigator();
 
@@ -43,6 +46,13 @@ export default function BottomTabNavigator() {
                     tabBarButton: () => null,
                 }}
             />
+              <BottomTab.Screen
+                name="Settings"
+                component={SettingsNavigator}
+                options={{
+                    tabBarButton: () => null,
+                }}
+            />
             <BottomTab.Screen
                 name="Login"
                 component={LoginNavigator}
@@ -62,7 +72,7 @@ function TabBarIcon(props) {
 // Each tab has its own navigation stack, you can read more about this pattern here:
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
 const ProfileStack = createStackNavigator();
-function ProfileNavigator() {
+function ProfileNavigator({ navigation }) {
     return (
         <ProfileStack.Navigator>
             <ProfileStack.Screen
@@ -70,6 +80,9 @@ function ProfileNavigator() {
                 component={Profile}
                 options={{ headerTitle:'Profile',
                     // TODO: Add a settings button in header to take user to settings page.
+                    headerRight: ()=>( <TouchableOpacity style={{paddingRight:20}} onPress={()=>navigation.navigate('Settings')}>
+                        <TabBarIcon name="settings"/>
+                    </TouchableOpacity>)
                 }}
             />
         </ProfileStack.Navigator>
@@ -83,7 +96,7 @@ function CoursesNavigator() {
             <CoursesStack.Screen
                 name="CoursesScreen"
                 component={Courses}
-                options={{ headerStatusBarHeight:1, headerTitle:null }}
+                options={{  headerTitle:"Courses" }}
             />
         </CoursesStack.Navigator>
     );
@@ -99,6 +112,22 @@ function CourseDetailsNavigator() {
                 options={{ headerStatusBarHeight:1, headerTitle:null }}
             />
         </CourseDetailsStack.Navigator>
+    );
+}
+
+const SettingsStack = createStackNavigator();
+function SettingsNavigator({navigation}) {
+    return (
+        <SettingsStack.Navigator>
+            <SettingsStack.Screen
+                name="SettingsScreen"
+                component={Settings}
+                options={{  headerTitle:'Settings',
+                headerLeft: ()=>( <TouchableOpacity style={{paddingLeft:20}} onPress={()=>navigation.goBack()}>
+                <TabBarIcon name="arrow-back"/>
+            </TouchableOpacity>) }}
+            />
+        </SettingsStack.Navigator>
     );
 }
 

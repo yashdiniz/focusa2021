@@ -4,7 +4,6 @@ import { ActivityIndicator, Text, View, StyleSheet, ScrollView, RefreshControl, 
 import { Avatar, Card, Button, SearchBar } from 'react-native-elements';
 import { connectProps } from '../hooks/store';
 import { getCourseDetails } from '../constants/queries';
-import Course from '../components/Course';
 import Post from '../components/Post';
 import { FlatList } from 'react-native-gesture-handler';
 import ErrorComponent from '../components/ErrorComponent';
@@ -14,10 +13,11 @@ function CourseDetails({ navigation, route, token, userID }) {
     // TODO: allow users to subscribe to courses from here!
     const [refreshing, setRefreshing] = useState(false);
 
-    const { data, error, loading, refetch } = useQuery(getCourseDetails, {
+    const { data, error, loading, refetch, fetchMore } = useQuery(getCourseDetails, {
         variables: {
             userID,
             courseID: route.params.courseID,
+            offset: 0,
         },
     });
 
@@ -53,74 +53,91 @@ function CourseDetails({ navigation, route, token, userID }) {
         return (<ErrorComponent error={error} />);
     else
         return (
-            <ScrollView containerStyle={styles/*.container*/}
+            <FlatList
+                style={{backgroundColor:'white'}}
+                containerStyle={styles/*.container*/}
                 refreshControl={
                     <RefreshControl
                         refreshing={refreshing}
                         onRefresh={onRefresh}
                     />
                 }
-            >
-                <FlatList
-                    data={data.course.posts}
-                    keyExtractor={
-                        item => item.uuid
-                    }
-                    ListHeaderComponent={
-                        // <Course
-                        //     name={data.course.name}
-                        //     description={data.course.description}
-                        // />
-                        <View style={styles.SubjectPageHeaderView}>
-                            <Text style={styles.SubjectTitle}>
-                                {data.course.name}
+                data={data.course.posts}
+                keyExtractor={
+                    item => item.uuid
+                }
+                ListHeaderComponent={
+                    // <Course
+                    //     name={data.course.name}
+                    //     description={data.course.description}
+                    // />
+                    <View style={styles.SubjectPageHeaderView}>
+                        <Text style={styles.SubjectTitle}>
+                            {data.course.name}
+                        </Text>
+
+                        <View style={{ paddingRight: 20 }}>
+                            <Text style={styles.SubjectDescription}>
+                                {data.course.description}
                             </Text>
 
-                            <View style={{ paddingRight: 20 }}>
-                                <Text style={styles.SubjectDescription}>
-                                    {data.course.description}
+                            <TouchableOpacity style={{
+                                backgroundColor: 'white',
+                                width: 100, alignItems: 'center',
+                                height: 30,
+                                justifyContent: 'center',
+                                borderColor: 'black',
+                                borderWidth: 1,
+                                marginLeft: 'auto',
+                                borderRadius: 10
+                            }}>
+                                <Text>
+                                    {
+                                        data.isSubscribed ?
+                                            'Unsubscribe' :
+                                            'Subscribe'
+                                    }
                                 </Text>
-
-                                <TouchableOpacity style={{
-                                    backgroundColor: 'white',
-                                    width: 100, alignItems: 'center',
-                                    height: 30,
-                                    justifyContent: 'center',
-                                    borderColor: 'black',
-                                    borderWidth: 1,
-                                    marginLeft: 'auto',
-                                    borderRadius: 10
-                                }}>
-                                    <Text>
-                                        {
-                                            data.isSubscribed ?
-                                                'Unsubscribe' :
-                                                'Subscribe'
-                                        }
-                                    </Text>
-                                </TouchableOpacity>
-                            </View>
+                            </TouchableOpacity>
                         </View>
-                    }
-                    ListEmptyComponent={
-                        <InfoMessage
-                            title={'No Posts published'}
-                            message={"You're up to date!"}
+                    </View>
+                }
+                ListEmptyComponent={
+                    <InfoMessage
+                        title={'No Posts published'}
+                        message={"You're up to date!"}
+                    />
+                }
+                renderItem={
+                    ({ item }) =>
+                        <Post
+                            parent={item.parent?.uuid}
+                            key={item.uuid}
+                            author={item.author.name}
+                            course={item.course.name}
+                            text={item.text}
+                            time={item.time}
+                            attachmentURL={item.attachmentURL}
                         />
-                    }
-                    renderItem={
-                        ({ item }) =>
-                            <Post
-                                key={item.uuid}
-                                author={item.author.name}
-                                course={item.course.name}
-                                text={item.text}
-                                time={item.time}
-                                attachmentURL={item.attachmentURL}
-                            />
-                    }
-                />
-            </ScrollView>
+                }
+                ListFooterComponent={
+                    <View style={styles.container}>
+                        <TouchableOpacity
+                            onPress={
+                                () => fetchMore({
+                                    variables: {
+                                        offset: data.course.posts?.length
+                                    }
+                                })
+                            }
+                        >
+                            <Text>
+                                Yay! You are up to date!
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                }
+            />
         );
 }
 
@@ -129,6 +146,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
+        marginBottom:30
     },
     avatar: {
         flex: 2,

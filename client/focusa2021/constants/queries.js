@@ -5,8 +5,8 @@ export const getProfileData = gql`
         user(name: $username) {
             uuid,
             name,
-            profile{
-                fullName, about
+            profile {
+                userID, fullName, about
             }
         }
     }
@@ -16,9 +16,9 @@ export const getCourses = gql`
     query getCourses($username: String!) {
         user(name: $username) {
             uuid,
-            profile{
+            profile {
                 userID,
-                interests{
+                interests {
                     uuid, name, description
                 }
             }
@@ -27,12 +27,15 @@ export const getCourses = gql`
 `;
 
 export const getCourseDetails = gql`
-    query getCourseDetails($userID: ID!, $courseID: ID!) {
+    query getCourseDetails($userID: ID!, $courseID: ID!, $offset: Int) {
         isSubscribed(userID: $userID, courseID: $courseID),
         course(id: $courseID) {
             uuid, name, description,
-            posts {
+            posts(offset: $offset) {
                 uuid, text, attachmentURL, time,
+                parent {
+                    uuid
+                },
                 author {
                     uuid, name
                 },
