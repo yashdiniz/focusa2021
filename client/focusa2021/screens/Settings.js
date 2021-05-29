@@ -65,7 +65,7 @@ function Settings({ navigation, route, token, username }) {
                 <ListItem.Content>
                     <ListItem.Title>Logout</ListItem.Title>
                   </ListItem.Content>
-                  <ListItem.Chevron />
+                  <ListItem.Chevron color={"red"}/>
             </ListItem>
           </View>
         );

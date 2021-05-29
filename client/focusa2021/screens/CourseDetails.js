@@ -90,6 +90,7 @@ function CourseDetails({ navigation, route, token, userID }) {
                             borderWidth: 1,
                             borderRadius: 10,
                             marginTop: 15,
+                            marginBottom:10,
                         }}>
                             <Text>
                                 {
@@ -159,7 +160,8 @@ const styles = StyleSheet.create({
         height: 150,
         backgroundColor: '#C0C0C0',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        height:"auto",
     },
     SubjectTitle: {
         marginTop: 10,
@@ -167,7 +169,8 @@ const styles = StyleSheet.create({
     },
     SubjectDescription: {
         marginTop: 5,
-        fontSize: 15
+        fontSize: 15,
+        marginLeft:10,
     }
 });
 

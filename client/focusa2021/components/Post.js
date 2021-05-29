@@ -56,7 +56,7 @@ function Post({ parent, author, course, time, text, attachmentURL }) {
             }}>
                 {parent ? 'Comment' : ''}
             </Text>
-            {/* <Text style={styles.subjectName}>{course}</Text> */}
+            <Text style={styles.subjectName}>{course}</Text>
 
             <View style={{ flexDirection: "row" }}>
                 <Text style={styles.userName}>{author}</Text>
