@@ -100,6 +100,10 @@ const createPost = async (text, author, course, attachmentURL, parent) => {
         && typeof attachmentURL === 'string' 
         && typeof parent === 'string', 
         "Invalid arguments for createPost.");
+    assert(!(parent.length > 0 && course.length > 0), 
+        "Comments cannot have a course.");
+    assert(parent.length == 0 || await getPostById(parent).catch(e => false),
+        "Parent post does not exist.");
     assert(text.length >= minPostBodyLength, "Post content is too short.");
     assert(text.length <= maxPostBodyLength, "Post content is too long.");
 
@@ -107,10 +111,11 @@ const createPost = async (text, author, course, attachmentURL, parent) => {
     let time = Date.now();
     let f = await focusa;
 
-    await courses.get('/getCourseById', { // check if the course ID exists
-        params: { id: course },
-        headers: { authorization: token }
-    }).then(res => res.data);
+    if (course.length > 0)
+        await courses.get('/getCourseById', { // check if the course ID exists
+            params: { id: course },
+            headers: { authorization: token }
+        }).then(res => res.data);
 
     auth.get('/getUserById', {
         params: { id: author },
