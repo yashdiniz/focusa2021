@@ -54,7 +54,7 @@ function CourseDetails({ navigation, route, token, userID }) {
     else
         return (
             <FlatList
-                style={{backgroundColor:'white'}}
+                // style={{backgroundColor:'white'}}
                 containerStyle={styles/*.container*/}
                 refreshControl={
                     <RefreshControl
@@ -121,6 +121,7 @@ function CourseDetails({ navigation, route, token, userID }) {
                         />
                 }
                 ListFooterComponent={
+                    data.course.posts?.length > 0 ?
                     <View style={styles.container}>
                         <TouchableOpacity
                             onPress={
@@ -136,6 +137,7 @@ function CourseDetails({ navigation, route, token, userID }) {
                             </Text>
                         </TouchableOpacity>
                     </View>
+                    : <></>
                 }
             />
         );
@@ -147,15 +149,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginBottom:30
-    },
-    avatar: {
-        flex: 2,
-        backgroundColor: '#333',
-        margin: 20
-    },
-    profileText: {
-        textAlign: 'center',
-        color: '#789'
     },
     SujectPageView: {
         alignContent: 'center',

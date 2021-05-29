@@ -1,11 +1,13 @@
 import { useQuery } from '@apollo/client';
 import React, { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, View, StyleSheet, ScrollView, RefreshControl } from 'react-native';
+import { ActivityIndicator, View, StyleSheet, TouchableOpacity, RefreshControl, FlatList } from 'react-native';
 import { Avatar, Card, Button, Text } from 'react-native-elements';
 
 import { connectProps } from '../hooks/store';
 import { getProfileData } from '../constants/queries';
 import ErrorComponent from '../components/ErrorComponent';
+import InfoMessage from '../components/InfoMessage';
+import Post from '../components/Post';
 import { CoursesNavigate } from '../constants/screens';
 
 function Profile({ navigation, route, token, username }) {
@@ -54,46 +56,86 @@ function Profile({ navigation, route, token, username }) {
         return (<ErrorComponent error={error} />);
     else
         return (
-            <ScrollView containerStyle={styles.container}
+            <FlatList
+                containerStyle={styles.container}
                 refreshControl={
                     <RefreshControl
                         refreshing={refreshing}
                         onRefresh={onRefresh}
                     />
                 }
-            >
-                <Card>
-                    <Avatar
-                        rounded
-                        size="large"
-                        icon={{ name: 'user', type: 'font-awesome' }}
-                        activeOpacity={0.7}
-                        containerStyle={styles.avatar}
-                    />
-                    <Card.Title>
-                        {data?.user.profile.fullName} (@{data.user.name})
-                    </Card.Title>
-                    <Card.Divider />
-                    {/* <Text style={{ textAlign: 'center' }}>
-                        About
-                    </Text> */}
-                    <Text
-                        style={{
-                            ...styles.profileText,
-                            marginBottom: 40,
-                        }}
-                    >{data?.user.profile.about}
-                    </Text>
-                    <Button 
-                        title={'Subscribed Courses'}
-                        onPress={() => navigation.navigate('Courses', { 
+                data={data.user.posts}
+                keyExtractor={
+                    item => item.uuid
+                }
+                ListHeaderComponent={
+                    <Card containerStyle={{ margin: 0, marginBottom: 20}}>
+                        <Avatar
+                            rounded
+                            size="large"
+                            icon={{ name: 'user', type: 'font-awesome' }}
+                            activeOpacity={0.7}
+                            containerStyle={styles.avatar}
+                        />
+                        <Card.Title>
+                            {data?.user.profile.fullName} (@{data.user.name})
+                        </Card.Title>
+                        <Card.Divider />
+                        <Text
+                            style={{
+                                ...styles.profileText,
+                                marginBottom: 40,
+                            }}
+                        >{data?.user.profile.about}
+                        </Text>
+                        <Button
+                            title={'Subscribed Courses'}
+                            onPress={() => navigation.navigate('Courses', {
                                 ...CoursesNavigate,
-                                params: { username } 
+                                params: { username }
                             })
-                        }
+                            }
+                        />
+                    </Card>
+                }
+                ListEmptyComponent={
+                    <InfoMessage
+                        title={'No Posts or comments published'}
+                        message={"You can create posts or comments! It will help you, believe us!"}
                     />
-                </Card>
-            </ScrollView>
+                }
+                renderItem={
+                    ({ item }) =>
+                        <Post
+                            parent={item.parent?.uuid}
+                            key={item.uuid}
+                            author={item.author.name}
+                            course={item.course.name}
+                            text={item.text}
+                            time={item.time}
+                            attachmentURL={item.attachmentURL}
+                        />
+                }
+                ListFooterComponent={
+                    data.user.posts?.length > 0 ?
+                        <View style={styles.container}>
+                            <TouchableOpacity
+                                onPress={
+                                    () => fetchMore({
+                                        variables: {
+                                            offset: data.user.posts?.length
+                                        }
+                                    })
+                                }
+                            >
+                                <Text>
+                                    No new posts or comments.
+                            </Text>
+                            </TouchableOpacity>
+                        </View>
+                        : <></>
+                }
+            />
         );
 }
 
@@ -102,6 +144,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
+        marginBottom: 30,
     },
     avatar: {
         flex: 2,
