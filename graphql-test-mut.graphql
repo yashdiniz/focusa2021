@@ -1,0 +1,28 @@
+mutation createCoursesAndUser {
+  moc: addCourse(name:"MOC", description:"Mobile Computing Course 2021."){
+    uuid
+  },
+  bda: addCourse(name:"Big Data Analytics", description:"Course name is self explanatory. Do subscribe for latest updates!"){
+    uuid
+  },
+  rnd: addCourse(name:"Some very long and random Course name to test system", description:"To be deleted after development!"){
+    uuid
+  }
+  guest: createUser(username:"guest", password:"guest123"){
+    uuid
+  }
+}
+mutation createPosts($user:ID!, $course1:ID!, $course2:ID!) {
+  course1: subscribeToCourse(uuid:$user, courseID:$course1){
+    userID
+  },
+  course2: subscribeToCourse(uuid:$user, courseID:$course2){
+    userID
+  },
+  post1: createPost(text:"Hello World!",course:$course1){
+    uuid
+  },
+  post2: createPost(text:"An intentionally long post to test the system. Hopefully this one shows better results now.", course:$course2){
+    uuid
+  }
+}
