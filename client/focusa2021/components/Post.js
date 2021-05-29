@@ -80,17 +80,17 @@ function Post({ parent, author, course, time, text, attachmentURL }) {
             <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 10 }}>
                 {parent ?
                     <></>
-                    : <TouchableOpacity style={{marginBottom:10}}>
+                    : <TouchableOpacity style={{ marginBottom: 10 }}>
                         <MaterialCommunityIcons name="comment-outline" wi size={25} style={{ marginTop: 'auto', paddingLeft: 27 }} />
                     </TouchableOpacity>
                 }
 
-                <TouchableOpacity style={{marginBottom:10}}>
-                    <MaterialCommunityIcons name="arrow-right" size={25} style={{ marginTop: 'auto', paddingLeft: 27,}} />
+                <TouchableOpacity style={{ marginBottom: 10 }}>
+                    <MaterialCommunityIcons name="arrow-right" size={25} style={{ marginTop: 'auto', paddingLeft: 27, }} />
                 </TouchableOpacity>
 
 
-                <TouchableOpacity style={{ marginLeft: 'auto', paddingRight: 15,marginBottom:10 }}>
+                <TouchableOpacity style={{ marginLeft: 'auto', paddingRight: 15, marginBottom: 10 }}>
                     <MaterialCommunityIcons name="download" size={25} style={{ marginTop: 'auto', paddingLeft: 27 }} />
                 </TouchableOpacity>
             </View>
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
         marginTop: 20,
         paddingLeft: 15,
         fontSize: 15,
-        color:'black'
+        color: 'black'
     },
 })
 

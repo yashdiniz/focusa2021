@@ -22,7 +22,7 @@ export default function NotFoundScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        textAlign:'center',
+        textAlign: 'center',
         alignItems: 'center',
         justifyContent: 'center',
     },

@@ -5,7 +5,7 @@ import HTTPPouch from 'pouchdb-adapter-http';
 import SQLite from 'react-native-sqlite-2';
 import SQLiteAdapterFactory from 'pouchdb-adapter-react-native-sqlite';
 
-import {} from './polyfills';   // executing polyfills to base64 functions
+import { } from './polyfills';   // executing polyfills to base64 functions
 
 // add the adapters required by RxDB to use SQLite.
 addRxPlugin(SQLiteAdapterFactory(SQLite));
@@ -25,7 +25,7 @@ const postsSchema = {
             type: 'string',
         },
         course: {
-            type: 'string', 
+            type: 'string',
             final: true,
         },
         author: {
@@ -48,10 +48,10 @@ export const focusa = createRxDatabase({
     name: 'focusa',
     adapter: 'react-native-sqlite' // the name of the adapter
 })
-.then(database=> database.addCollections({
-    posts: { schema: postsSchema },
-}))
-.catch(e => console.error(new Date(), 'Client Database Error', e));
+    .then(database => database.addCollections({
+        posts: { schema: postsSchema },
+    }))
+    .catch(e => console.error(new Date(), 'Client Database Error', e));
 
 /**
  * Passes a document fetched from the database as props to a component.
@@ -65,7 +65,7 @@ export const documentToState = (documents) => {
     // converting document data to a State to pass down.
     useEffect(() => {
         for (let document in (await Promise.all(documents)))
-            setData([ ...data, document.toJSON() ]);
+            setData([...data, document.toJSON()]);
     });
 
     return data;

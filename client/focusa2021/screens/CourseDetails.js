@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
 import React, { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, Text, View, StyleSheet, RefreshControl, Dimensions, TouchableOpacity} from 'react-native';
+import { ActivityIndicator, Text, View, StyleSheet, RefreshControl, Dimensions, TouchableOpacity } from 'react-native';
 import { connectProps } from '../hooks/store';
 import { getCourseDetails } from '../constants/queries';
 import Post from '../components/Post';
@@ -90,7 +90,7 @@ function CourseDetails({ navigation, route, token, userID }) {
                             borderWidth: 1,
                             borderRadius: 10,
                             marginTop: 15,
-                            marginBottom:10,
+                            marginBottom: 10,
                         }}>
                             <Text>
                                 {
@@ -123,22 +123,22 @@ function CourseDetails({ navigation, route, token, userID }) {
                 }
                 ListFooterComponent={
                     data.course.posts?.length > 0 ?
-                    <View style={styles.container}>
-                        <TouchableOpacity
-                            onPress={
-                                () => fetchMore({
-                                    variables: {
-                                        offset: data.course.posts?.length
-                                    }
-                                })
-                            }
-                        >
-                            <Text>
-                                Yay! You are up to date!
+                        <View style={styles.container}>
+                            <TouchableOpacity
+                                onPress={
+                                    () => fetchMore({
+                                        variables: {
+                                            offset: data.course.posts?.length
+                                        }
+                                    })
+                                }
+                            >
+                                <Text>
+                                    Yay! You are up to date!
                             </Text>
-                        </TouchableOpacity>
-                    </View>
-                    : <></>
+                            </TouchableOpacity>
+                        </View>
+                        : <></>
                 }
             />
         );
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#C0C0C0',
         alignItems: 'center',
         justifyContent: 'center',
-        height:"auto",
+        height: "auto",
     },
     SubjectTitle: {
         marginTop: 10,
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
     SubjectDescription: {
         marginTop: 5,
         fontSize: 15,
-        marginLeft:10,
+        marginLeft: 10,
     }
 });
 

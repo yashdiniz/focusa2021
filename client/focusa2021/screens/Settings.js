@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
 import React, { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, Text, View, StyleSheet, ScrollView, RefreshControl } from 'react-native';
-import { Avatar, Card, Button, SearchBar,ListItem, Icon } from 'react-native-elements';
+import { Avatar, Card, Button, SearchBar, ListItem, Icon } from 'react-native-elements';
 import { connectProps } from '../hooks/store';
 import { getCourses } from '../constants/queries';
 import Course from '../components/Course';
@@ -60,14 +60,14 @@ function Settings({ navigation, route, token, username }) {
         return (
             //<Text>This is the settings page</Text>
             <View>
-            <ListItem bottomDivider onPress={logout}>
-                <Icon name='logout'/>
-                <ListItem.Content>
-                    <ListItem.Title>Logout</ListItem.Title>
-                  </ListItem.Content>
-                  <ListItem.Chevron color={"red"}/>
-            </ListItem>
-          </View>
+                <ListItem bottomDivider onPress={logout}>
+                    <Icon name='logout' />
+                    <ListItem.Content>
+                        <ListItem.Title>Logout</ListItem.Title>
+                    </ListItem.Content>
+                    <ListItem.Chevron color={"red"} />
+                </ListItem>
+            </View>
         );
 }
 

@@ -69,7 +69,7 @@ function Profile({ navigation, route, token, username }) {
                     item => item.uuid
                 }
                 ListHeaderComponent={
-                    <Card containerStyle={{ margin: 0, marginBottom: 20}}>
+                    <Card containerStyle={{ margin: 0, marginBottom: 20 }}>
                         <Avatar
                             rounded
                             size="large"
