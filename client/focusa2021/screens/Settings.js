@@ -43,8 +43,6 @@ function Settings({ navigation, route, token, username }) {
 
 
     useEffect(() => {
-        // if JWT is too short, it is usually because it is invalid.
-        if (!token || token.length < 20) navigation.navigate('Login');
         if (error) {
             console.error(new Date(), 'Courses', JSON.stringify(error));
         }

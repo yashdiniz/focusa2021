@@ -3,6 +3,14 @@ import { View, StyleSheet } from 'react-native';
 import { Text } from 'react-native-elements';
 
 function ErrorComponent({ error }) {
+    let message = JSON.stringify(error);
+    if (error.message) message = error.message;
+    if (error.networkError) {
+        message = 'Unable to access the network. Please check your network connection.';
+    }
+    // if (error.graphQLErrors?.length > 0) {        
+    // }
+
     return (
         <View style={styles.container}>
             <Text
@@ -13,7 +21,7 @@ function ErrorComponent({ error }) {
             <Text style={{
                 color: 'red'
             }}>
-                {JSON.stringify(error)}
+                {message}
             </Text>
         </View>
     );

@@ -12,11 +12,11 @@ mutation createCoursesAndUser {
     uuid
   }
 }
-mutation createPosts($user:ID!, $course1:ID!, $course2:ID!) {
-  course1: subscribeToCourse(uuid:$user, courseID:$course1){
+mutation createPosts($course1:ID!, $course2:ID!) {
+  course1: subscribeToCourse(courseID:$course1){
     userID
   },
-  course2: subscribeToCourse(uuid:$user, courseID:$course2){
+  course2: subscribeToCourse(courseID:$course2){
     userID
   },
   post1: createPost(text:"Hello World!",course:$course1){
