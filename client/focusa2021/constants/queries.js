@@ -31,8 +31,25 @@ export const getCourses = gql`
 
 export const searchCourses = gql`
     query searchCourses($query: String!) {
-        courses(name: $query) {
+        results: courses(name: $query) {
             uuid, name, description
+        }
+    }
+`;
+
+export const searchPosts = gql`
+    query searchPosts($query: String!, $offset: Int) {
+        results: posts(q: $query, offset: $offset) {
+            uuid, text, attachmentURL, time,
+            parent {
+                uuid
+            },
+            author {
+                uuid, name
+            },
+            course {
+                uuid, name
+            }
         }
     }
 `;
