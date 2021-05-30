@@ -2,20 +2,21 @@ import { useQuery } from '@apollo/client';
 import React, { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, Text, View, StyleSheet, RefreshControl, Dimensions, TouchableOpacity } from 'react-native';
 import { connectProps } from '../hooks/store';
-import { getCourseDetails } from '../constants/queries';
+import { personalPosts } from '../constants/queries';
 import Post from '../components/Post';
 import { FlatList } from 'react-native-gesture-handler';
 import ErrorComponent from '../components/ErrorComponent';
 import InfoMessage from '../components/InfoMessage';
 
-function CourseDetails({ navigation, route, token, userID }) {
-    // TODO: allow users to subscribe to courses from here!
+function PersonalPost({ navigation, route, token, username }) {
+    username = route.params?.username ?
+        route.params.username : username;
+
     const [refreshing, setRefreshing] = useState(false);
 
-    const { data, error, loading, refetch, fetchMore } = useQuery(getCourseDetails, {
+    const { data, error, loading, refetch, fetchMore } = useQuery(personalPosts, {
         variables: {
-            userID,
-            courseID: route.params.courseID,
+            username,
             offset: 0,
         },
     });
@@ -30,7 +31,7 @@ function CourseDetails({ navigation, route, token, userID }) {
         refetch().then(() => setRefreshing(false))
             .catch(e => {
                 setRefreshing(false);
-                console.error(new Date(), 'CourseDetails Refresh', e);
+                console.error(new Date(), 'PersonalPost Refresh', e);
             });
     });
 
@@ -38,7 +39,7 @@ function CourseDetails({ navigation, route, token, userID }) {
         // if JWT is too short, it is usually because it is invalid.
         if (!token || token.length < 20) navigation.navigate('Login');
         if (error) {
-            console.error(new Date(), 'CourseDetails', JSON.stringify(error));
+            console.error(new Date(), 'PersonalPosts', JSON.stringify(error));
         }
     });
 
@@ -48,101 +49,101 @@ function CourseDetails({ navigation, route, token, userID }) {
                 <ActivityIndicator color={'#333'} />
             </View>
         );
-    else if (error)
+    if (error)
         return (<ErrorComponent error={error} />);
-    else
-        return (
-            <FlatList
-                // style={{backgroundColor:'white'}}
-                containerStyle={styles/*.container*/}
-                refreshControl={
-                    <RefreshControl
-                        refreshing={refreshing}
-                        onRefresh={onRefresh}
+
+    return (
+        <FlatList
+            // style={{backgroundColor:'white'}}
+            containerStyle={styles/*.container*/}
+            refreshControl={
+                <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                />
+            }
+            data={data.user?.posts}
+            keyExtractor={
+                item => item.uuid
+            }
+            ListHeaderComponent={
+                // <Course
+                //     name={data.course.name}
+                //     description={data.course.description}
+                // />
+                // <View style={styles.SubjectPageHeaderView}>
+                //     <Text style={styles.SubjectTitle}>
+                //         {data.course.name}
+                //     </Text>
+
+
+                //     <Text style={styles.SubjectDescription}>
+                //         {data.course.description}
+                //     </Text>
+
+                //     <TouchableOpacity style={{
+                //         backgroundColor: 'white',
+                //         width: 200,
+                //         alignItems: 'center',
+                //         height: 30,
+                //         justifyContent: 'center',
+                //         borderColor: 'black',
+                //         borderWidth: 1,
+                //         borderRadius: 10,
+                //         marginTop: 15,
+                //         marginBottom: 10,
+                //     }}>
+                //         <Text>
+                //             {
+                //                 data.isSubscribed ?
+                //                     'unsubscribe' :
+                //                     'subscribe'
+                //             }
+                //         </Text>
+                //     </TouchableOpacity>
+
+                // </View>
+                <Text>This is the personal Post page</Text>
+            }
+            ListEmptyComponent={
+                <InfoMessage
+                    title={'No Posts or comments published'}
+                    message={"Publish some posts or comments and they'll show up here!"}
+                />
+            }
+            renderItem={
+                ({ item }) =>
+                    <Post
+                        parent={item.parent?.uuid}
+                        key={item.uuid}
+                        author={item.author.name}
+                        course={item.course.name}
+                        text={item.text}
+                        time={item.time}
+                        attachmentURL={item.attachmentURL}
                     />
-                }
-                data={data.course.posts}
-                keyExtractor={
-                    item => item.uuid
-                }
-                ListHeaderComponent={
-                    // <Course
-                    //     name={data.course.name}
-                    //     description={data.course.description}
-                    // />
-                    // <View style={styles.SubjectPageHeaderView}>
-                    //     <Text style={styles.SubjectTitle}>
-                    //         {data.course.name}
-                    //     </Text>
-
-
-                    //     <Text style={styles.SubjectDescription}>
-                    //         {data.course.description}
-                    //     </Text>
-
-                    //     <TouchableOpacity style={{
-                    //         backgroundColor: 'white',
-                    //         width: 200,
-                    //         alignItems: 'center',
-                    //         height: 30,
-                    //         justifyContent: 'center',
-                    //         borderColor: 'black',
-                    //         borderWidth: 1,
-                    //         borderRadius: 10,
-                    //         marginTop: 15,
-                    //         marginBottom: 10,
-                    //     }}>
-                    //         <Text>
-                    //             {
-                    //                 data.isSubscribed ?
-                    //                     'unsubscribe' :
-                    //                     'subscribe'
-                    //             }
-                    //         </Text>
-                    //     </TouchableOpacity>
-
-                    // </View>
-                    <Text>This is the personal Post page</Text>
-                }
-                ListEmptyComponent={
-                    <InfoMessage
-                        title={'No Posts published'}
-                        message={"You're up to date!"}
-                    />
-                }
-                renderItem={
-                    ({ item }) =>
-                        <Post
-                            parent={item.parent?.uuid}
-                            key={item.uuid}
-                            author={item.author.name}
-                            course={item.course.name}
-                            text={item.text}
-                            time={item.time}
-                            attachmentURL={item.attachmentURL}
-                        />
-                }
-                ListFooterComponent={
-                    data.course.posts?.length > 0 ?
-                        <View style={styles.container}>
-                            <TouchableOpacity
-                                onPress={
-                                    () => fetchMore({
-                                        variables: {
-                                            offset: data.course.posts?.length
-                                        }
-                                    })
-                                }
-                            >
-                                <Text>
-                                    Yay! You are up to date!
+            }
+            ListFooterComponent={
+                data.user.posts?.length > 0 ?
+                    <View style={styles.container}>
+                        <TouchableOpacity
+                            onPress={
+                                () => fetchMore({
+                                    variables: {
+                                        offset: data.user.posts?.length
+                                    }
+                                })
+                            }
+                        >
+                            <Text>
+                                No new posts or comments
                             </Text>
-                            </TouchableOpacity>
-                        </View>
-                        : <></>
-                }
-            />
-        );
+                        </TouchableOpacity>
+                    </View>
+                    : <></>
+            }
+        />
+    );
 }
 
 const styles = StyleSheet.create({
@@ -175,4 +176,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default connectProps(CourseDetails);
+export default connectProps(PersonalPost);

@@ -89,7 +89,6 @@ function Profile({ navigation, route, token, username }) {
                             }}
                         >{data?.user.profile.about}
                         </Text>
-                        {/* TODO: Update this button to point to the new screen... Remember to pass as params! */}
                         <Button
                                 title={'View Posts and Comments'}
                                 onPress={() => navigation.navigate('PersonalPost', {

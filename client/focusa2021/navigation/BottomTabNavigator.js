@@ -128,7 +128,7 @@ function PersonalPostNavigator() {
             <PersonalPostStack.Screen
                 name="PersonalPostScreen"
                 component={PersonalPost}
-                options={{ headerTitle: "Personal Post" }}
+                options={{ headerTitle: "Personal Posts" }}
             />
         </PersonalPostStack.Navigator>
     );

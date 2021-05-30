@@ -37,6 +37,26 @@ export const searchCourses = gql`
     }
 `;
 
+export const personalPosts = gql`
+    query personalPosts($username: String!, $offset: Int) {
+        user(name: $username) {
+            uuid,
+            posts(offset: $offset) {
+                uuid, text, attachmentURL, time,
+                parent {
+                    uuid
+                },
+                author {
+                    uuid, name
+                },
+                course {
+                    uuid, name
+                }
+            }
+        }
+    }
+`;
+
 export const getCourseDetails = gql`
     query getCourseDetails($userID: ID!, $courseID: ID!, $offset: Int) {
         isSubscribed(userID: $userID, courseID: $courseID),
