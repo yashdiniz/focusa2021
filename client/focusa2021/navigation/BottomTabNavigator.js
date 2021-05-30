@@ -122,13 +122,18 @@ function SearchNavigator() {
 }
 
 const PersonalPostStack = createStackNavigator();
-function PersonalPostNavigator() {
+function PersonalPostNavigator({navigation}) {
     return (
         <PersonalPostStack.Navigator>
             <PersonalPostStack.Screen
                 name="PersonalPostScreen"
                 component={PersonalPost}
-                options={{ headerTitle: "Personal Posts" }}
+                options={{
+                    headerTitle: "Personal Posts",
+                    headerLeft: () => (<TouchableOpacity style={{ paddingLeft: 20 }} onPress={() => navigation.goBack()}>
+                        <TabBarIcon name="arrow-back" color="red" />
+                    </TouchableOpacity>)
+                }}
             />
         </PersonalPostStack.Navigator>
     );
