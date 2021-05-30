@@ -66,45 +66,7 @@ function PersonalPost({ navigation, route, token, username }) {
             keyExtractor={
                 item => item.uuid
             }
-            ListHeaderComponent={
-                // <Course
-                //     name={data.course.name}
-                //     description={data.course.description}
-                // />
-                // <View style={styles.SubjectPageHeaderView}>
-                //     <Text style={styles.SubjectTitle}>
-                //         {data.course.name}
-                //     </Text>
 
-
-                //     <Text style={styles.SubjectDescription}>
-                //         {data.course.description}
-                //     </Text>
-
-                //     <TouchableOpacity style={{
-                //         backgroundColor: 'white',
-                //         width: 200,
-                //         alignItems: 'center',
-                //         height: 30,
-                //         justifyContent: 'center',
-                //         borderColor: 'black',
-                //         borderWidth: 1,
-                //         borderRadius: 10,
-                //         marginTop: 15,
-                //         marginBottom: 10,
-                //     }}>
-                //         <Text>
-                //             {
-                //                 data.isSubscribed ?
-                //                     'unsubscribe' :
-                //                     'subscribe'
-                //             }
-                //         </Text>
-                //     </TouchableOpacity>
-
-                // </View>
-                <Text>This is the personal Post page</Text>
-            }
             ListEmptyComponent={
                 <InfoMessage
                     title={'No Posts or comments published'}
