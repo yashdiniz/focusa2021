@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
 import React, { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, View, StyleSheet, TouchableOpacity, RefreshControl, FlatList } from 'react-native';
+import { ActivityIndicator, View, StyleSheet, TouchableOpacity, RefreshControl, FlatList,Dimensions } from 'react-native';
 import { Avatar, Card, Button, Text } from 'react-native-elements';
 
 import { connectProps } from '../hooks/store';
@@ -9,7 +9,6 @@ import ErrorComponent from '../components/ErrorComponent';
 import InfoMessage from '../components/InfoMessage';
 import Post from '../components/Post';
 import { CoursesNavigate } from '../constants/screens';
-import { Dimensions } from 'react-native';
 
 function Profile({ navigation, route, token, username }) {
     // TODO: Add a settings component which allows the user to edit various preferences.
