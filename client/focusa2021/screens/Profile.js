@@ -1,14 +1,14 @@
 import { useQuery } from '@apollo/client';
 import React, { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, View, StyleSheet, TouchableOpacity, RefreshControl, FlatList,Dimensions } from 'react-native';
+import { ActivityIndicator, View, StyleSheet, TouchableOpacity, RefreshControl, FlatList, Dimensions } from 'react-native';
 import { Avatar, Card, Button, Text } from 'react-native-elements';
 
 import { connectProps } from '../hooks/store';
 import { getProfileData } from '../constants/queries';
 import ErrorComponent from '../components/ErrorComponent';
 import InfoMessage from '../components/InfoMessage';
-import Post from '../components/Post';
-import { CoursesNavigate } from '../constants/screens';
+import { CoursesNavigate, CourseDetailsNavigate } from '../constants/screens';
+import Course from '../components/Course';
 
 function Profile({ navigation, route, token, username }) {
     // TODO: Add a settings component which allows the user to edit various preferences.
@@ -64,7 +64,7 @@ function Profile({ navigation, route, token, username }) {
                         onRefresh={onRefresh}
                     />
                 }
-                data={data.user.posts}
+                data={data.user.profile.interests}
                 keyExtractor={
                     item => item.uuid
                 }
@@ -89,6 +89,7 @@ function Profile({ navigation, route, token, username }) {
                                 }}
                             >{data?.user.profile.about}
                             </Text>
+                            {/* TODO: Update this button to point to the new screen... Remember to pass as params! */}
                             <Button
                                 title={'Subscribed Courses'}
                                 onPress={() => navigation.navigate('Courses', {
@@ -109,46 +110,31 @@ function Profile({ navigation, route, token, username }) {
                             justifyContent: 'center'
 
                         }}>
-                            <Text style={{ fontSize: 18, fontWeight: 'bold' }}>POSTS</Text>
+                            <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Subscribed Courses</Text>
                         </View>
                     </View>
                 }
                 ListEmptyComponent={
                     <InfoMessage
-                        title={'No Posts or comments published'}
-                        message={"You can create posts or comments! It will help you, believe us!"}
+                        title={'No Subscribed Courses'}
+                        message={'Subscribe to courses and get the latest updates!'}
                     />
                 }
                 renderItem={
                     ({ item }) =>
-                        <Post
-                            parent={item.parent?.uuid}
+                        <TouchableOpacity
                             key={item.uuid}
-                            author={item.author.name}
-                            course={item.course.name}
-                            text={item.text}
-                            time={item.time}
-                            attachmentURL={item.attachmentURL}
-                        />
-                }
-                ListFooterComponent={
-                    data.user.posts?.length > 0 ?
-                        <View style={styles.container}>
-                            <TouchableOpacity
-                                onPress={
-                                    () => fetchMore({
-                                        variables: {
-                                            offset: data.user.posts?.length
-                                        }
-                                    })
-                                }
-                            >
-                                <Text>
-                                    No new posts or comments.
-                            </Text>
-                            </TouchableOpacity>
-                        </View>
-                        : <></>
+                            onPress={() => navigation.navigate('CourseDetails', {
+                                ...CourseDetailsNavigate,
+                                params: { courseID: item.uuid }
+                            })
+                            }
+                        >
+                            <Course
+                                name={item.name}
+                                description={item.description}
+                            />
+                        </TouchableOpacity>
                 }
             />
         );

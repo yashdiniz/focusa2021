@@ -1,25 +1,16 @@
 import { gql } from '@apollo/client';
 
 export const getProfileData = gql`
-    query getProfileData($username: String!, $offset: Int) {
+    query getProfileData($username: String!) {
         user(name: $username) {
             uuid,
             name,
             profile {
-                userID, fullName, about
-            },
-            posts(offset: $offset) {
-                uuid, text, attachmentURL, time,
-                parent {
-                    uuid
-                },
-                author {
-                    uuid, name
-                },
-                course {
-                    uuid, name
+                userID, fullName, about,
+                interests {
+                    uuid, name, description
                 }
-            }
+            },
         }
     }
 `;
