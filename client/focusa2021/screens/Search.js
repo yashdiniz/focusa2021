@@ -1,19 +1,18 @@
 import { useLazyQuery } from '@apollo/client';
 import React, { useCallback, useEffect, useState } from 'react';
-import {  View, StyleSheet, RefreshControl } from 'react-native';
-import {SearchBar, Tab } from 'react-native-elements';
+import { View, StyleSheet, RefreshControl } from 'react-native';
+import { SearchBar, Tab } from 'react-native-elements';
 import { connectProps } from '../hooks/store';
-import { searchCourses } from '../constants/queries';
+import { searchCourses, searchPosts } from '../constants/queries';
 import Course from '../components/Course';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { CourseDetailsNavigate } from '../constants/screens';
 import InfoMessage from '../components/InfoMessage';
+import Post from '../components/Post';
 
 function Search({ navigation, route, token, username }) {
-    const [refreshing, setRefreshing] = useState(false);
-    const [search, updateSearch] = useState('');
-
-    const [execQuery, { error, data }] = useLazyQuery(searchCourses);
+    const [refreshing, setRefreshing] = useState(false);    // state updates when screen is refreshing
+    const [tab, changeTab] = useState(0);   // state updates when user changes tabs on screen
 
     /**
      * Callback used to inform completion of refresh.
@@ -23,36 +22,89 @@ function Search({ navigation, route, token, username }) {
         setTimeout(() => setRefreshing(false), 500);
     });
 
-    const execSearch = useCallback((query) => {
-        updateSearch(query);
-        execQuery({ variables: { query } });
-    })
-
     useEffect(() => {
         // if JWT is too short, it is usually because it is invalid.
         if (!token || token.length < 20) navigation.navigate('Login');
-        if (error) {
-            console.error(new Date(), 'Search', JSON.stringify(error));
-        }
     });
 
     return (
-        <FlatList
-            containerStyle={styles.container}
+        <SearchResults
             refreshControl={
                 <RefreshControl
                     refreshing={refreshing}
                     onRefresh={onRefresh}
                 />
             }
-            data={data?.courses ? data.courses : []}
+            changeTab={changeTab}
+            tab={tab}
+            GQLQuery={
+                tab == 0 ? searchCourses :
+                    tab == 1 ? searchPosts : null
+            }
+            renderItem={
+                ({ item }) =>
+                    tab == 0 ?
+                        (
+                            <TouchableOpacity
+                                key={item.uuid}
+                                onPress={() => navigation.navigate('CourseDetails', {
+                                    ...CourseDetailsNavigate,
+                                    params: { courseID: item.uuid }
+                                })
+                                }
+                            >
+                                <Course
+                                    name={item.name}
+                                    description={item.description}
+                                />
+                            </TouchableOpacity>
+                        ) :
+                        tab == 1 ?
+                            (
+                                <Post
+                                    parent={item.parent?.uuid}
+                                    key={item.uuid}
+                                    author={item.author.name}
+                                    course={item.course.name}
+                                    text={item.text}
+                                    time={item.time}
+                                    attachmentURL={item.attachmentURL}
+                                />
+                            )
+                            : null
+            }
+        />
+    );
+}
+
+function SearchResults({ refreshControl, GQLQuery, renderItem, tab, changeTab }) {
+    const [search, updateSearch] = useState('');    // state updates when user types in search query
+
+    const [execQuery, { error, data }] = useLazyQuery(GQLQuery);
+
+    const execSearch = useCallback((query) => {
+        updateSearch(query);
+        execQuery({ variables: { query } });
+    });
+
+    useEffect(() => {
+        if (error) {
+            console.error(new Date(), 'Search', JSON.stringify(error));
+        }
+    });
+    
+    return (
+        <FlatList
+            containerStyle={styles.container}
+            refreshControl={refreshControl}
+            data={data?.results ? data.results : []}
             keyExtractor={
                 item => item.uuid
             }
             ListHeaderComponent={
                 <View>
                     <SearchBar
-                        placeholder="Search for courses"
+                        placeholder="Search"
                         onChangeText={execSearch}
                         value={search}
                         lightTheme
@@ -62,37 +114,23 @@ function Search({ navigation, route, token, username }) {
                         inputContainerStyle={{ backgroundColor: 'white', height: 20, marginTop: 3 }}
                         containerStyle={{ backgroundColor: null, height: 60, marginBottom: 8, justifyContent: 'center' }}
                     />
-
-                    <Tab>
-                        <Tab.Item title="Post" />
-                        <Tab.Item title="Users" />
+                    <Tab
+                        onChange={changeTab}
+                        value={tab}
+                    >
                         <Tab.Item title="Courses" />
+                        <Tab.Item title="Posts" />
                     </Tab>
                 </View>
 
             }
             ListEmptyComponent={
                 <InfoMessage
-                    title={'No Matching Courses'}
-                    message={'Use the search bar and search for courses!'}
+                    title={'No Search Results'}
+                    message={'Try using different keywords for better results.'}
                 />
             }
-            renderItem={
-                ({ item }) =>
-                    <TouchableOpacity
-                        key={item.uuid}
-                        onPress={() => navigation.navigate('CourseDetails', {
-                            ...CourseDetailsNavigate,
-                            params: { courseID: item.uuid }
-                        })
-                        }
-                    >
-                        <Course
-                            name={item.name}
-                            description={item.description}
-                        />
-                    </TouchableOpacity>
-            }
+            renderItem={renderItem}
         />
     );
 }

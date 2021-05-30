@@ -51,7 +51,7 @@ export default function BottomTabNavigator() {
             />
 
             <BottomTab.Screen
-                name="VideoConferencing"
+                name="Video Conferencing"
                 component={VideoConferencingNavigator}
                 options={{
                     tabBarIcon: ({ color }) => <TabBarIcon name="videocam-outline" color={color} />,
