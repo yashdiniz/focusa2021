@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Dimensions, TouchableOpacity } from 'react-native';
 import { Card, Text } from 'react-native-elements';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { PostDetailsNavigate } from '../constants/screens';
 
 const formatTime = (time) => {
     var TimeType, hour, minutes, fullTime;
@@ -45,42 +46,62 @@ const formatTime = (time) => {
     }
 }
 
-function Post({ parent, author, course, time, text, attachmentURL }) {
+function Post({ parent, author, course, time, text, attachmentURL, navigation, uuid }) {
     // TODO: make provisions for parent and comments!
 
     return (
         <View style={styles.PostView}>
-            <Text style={{
-                fontStyle: 'italic',
-                color: 'lightgray'
-            }}>
-                {parent ? 'Comment' : ''}
-            </Text>
+            <TouchableOpacity
+                onPress={() => navigation.navigate('PostDetails', {
+                    ...PostDetailsNavigate,
+                    params: { postID: parent }
+                })}
+            >
+                <View>
+                    <Text style={{
+                        fontStyle: 'italic',
+                        color: 'lightgray'
+                    }}>
+                        {parent ? 'Comment' : ''}
+                    </Text>
+                </View>
+            </TouchableOpacity>
             <Text style={styles.subjectName}>{course}</Text>
 
             <View style={{ flexDirection: "row" }}>
-                <Text style={styles.userName}>{author}</Text>
+                <Text style={styles.userName}
+                // onPress={() => navigation.navigate('Profile', {
+                //     ...ProfileNavigate,
+                //     params: { username: author }
+                // })}
+                >{author}</Text>
                 <Text>  |  </Text>
                 <Text style={styles.time}>{formatTime(time)}</Text>
             </View>
 
-
             <Text style={styles.text}>{text}</Text>
 
-            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                {/* https://stackoverflow.com/a/30540502/13227113 */}
-                <TouchableOpacity style={{ flexDirection: 'row' }} onPress={attachmentURL.length > 0 ? Linking.openURL(attachmentURL) : null}>
-                    <MaterialCommunityIcons name="file-document" size={20} style={{ marginTop: 25, paddingLeft: 27, }} />
-                    <Text style={{ marginTop: 28 }}>View Attachments</Text>
-                </TouchableOpacity>
-            </View>
-
-
+            {
+                attachmentURL.length > 0 ?
+                    <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                        {/* https://stackoverflow.com/a/30540502/13227113 */}
+                        <TouchableOpacity style={{ flexDirection: 'row' }} onPress={Linking.openURL(attachmentURL)}>
+                            <MaterialCommunityIcons name="file-document" size={20} style={{ marginTop: 25, paddingLeft: 27, }} />
+                            <Text style={{ marginTop: 28 }}>View Attachments</Text>
+                        </TouchableOpacity>
+                    </View>
+                    : <></>
+            }
 
             <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 10 }}>
                 {parent ?
                     <></>
-                    : <TouchableOpacity style={{ marginBottom: 10 }}>
+                    : <TouchableOpacity style={{ marginBottom: 10 }}
+                        onPress={() => navigation.navigate('PostDetails', {
+                            ...PostDetailsNavigate,
+                            params: { postID: uuid }
+                        })}
+                    >
                         <MaterialCommunityIcons name="comment-outline" wi size={25} style={{ marginTop: 'auto', paddingLeft: 27 }} />
                     </TouchableOpacity>
                 }
@@ -95,7 +116,7 @@ function Post({ parent, author, course, time, text, attachmentURL }) {
                 </TouchableOpacity>
             </View>
 
-        </View>
+        </View >
     );
 }
 const styles = StyleSheet.create({
@@ -127,8 +148,8 @@ const styles = StyleSheet.create({
         paddingLeft: 15,
         fontSize: 15,
         color: 'black',
-        width: Dimensions.get('screen').width-8,
-        height:"auto",
+        width: Dimensions.get('screen').width - 8,
+        height: "auto",
     },
 })
 
