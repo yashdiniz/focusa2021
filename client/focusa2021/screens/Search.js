@@ -1,7 +1,7 @@
 import { useLazyQuery } from '@apollo/client';
 import React, { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, Text, View, StyleSheet, ScrollView, RefreshControl, Dimensions } from 'react-native';
-import { Avatar, Card, Button, SearchBar } from 'react-native-elements';
+import { Avatar, Card, Button, SearchBar, Tab } from 'react-native-elements';
 import { connectProps } from '../hooks/store';
 import { searchCourses } from '../constants/queries';
 import Course from '../components/Course';
@@ -63,23 +63,12 @@ function Search({ navigation, route, token, username }) {
                         inputContainerStyle={{ backgroundColor: 'white', height: 20, marginTop: 3 }}
                         containerStyle={{ backgroundColor: null, height: 60, marginBottom: 8, justifyContent: 'center' }}
                     />
-                    <View style={{
-                        borderRightColor: "red",
-                        borderRightWidth: 3,
-                        borderTopColor: "red",
-                        borderTopWidth: 3,
-                        width: Dimensions.get('screen').width - 15,
-                        height: 20,
-                        borderTopRightRadius: 10,
-                        marginBottom: 5,
-                        marginTop: 10,
-                        alignItems: 'center',
-                    }}>
-                        <Text style={{
-                            fontWeight: "bold",
-                            fontSize: 18,
-                        }}>Subscribed Courses</Text>
-                    </View>
+
+                    <Tab>
+                        <Tab.Item title="Post" />
+                        <Tab.Item title="Users" />
+                        <Tab.Item title="Courses" />
+                    </Tab>
                 </View>
 
             }
