@@ -38,6 +38,14 @@ export const getCourses = gql`
     }
 `;
 
+export const searchCourses = gql`
+    query searchCourses($search: String!) {
+        courses(name: $search) {
+            uuid, name, description
+        }
+    }
+`;
+
 export const getCourseDetails = gql`
     query getCourseDetails($userID: ID!, $courseID: ID!, $offset: Int) {
         isSubscribed(userID: $userID, courseID: $courseID),
