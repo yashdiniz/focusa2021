@@ -52,92 +52,92 @@ function Profile({ navigation, route, token, username }) {
                 <ActivityIndicator color={'#333'} />
             </View>
         );
-    else if (error)
+    if (error)
         return (<ErrorComponent error={error} />);
-    else
-        return (
-            <FlatList
-                containerStyle={styles.container}
-                refreshControl={
-                    <RefreshControl
-                        refreshing={refreshing}
-                        onRefresh={onRefresh}
-                    />
-                }
-                data={data.user.profile.interests}
-                keyExtractor={
-                    item => item.uuid
-                }
-                ListHeaderComponent={
-                    <View>
-                        <Card containerStyle={{ margin: 0, marginBottom: 20 }}>
-                            <Avatar
-                                rounded
-                                size="large"
-                                icon={{ name: 'user', type: 'font-awesome' }}
-                                activeOpacity={0.7}
-                                containerStyle={styles.avatar}
-                            />
-                            <Card.Title>
-                                {data?.user.profile.fullName} (@{data.user.name})
-                        </Card.Title>
-                            <Card.Divider />
-                            <Text
-                                style={{
-                                    ...styles.profileText,
-                                    marginBottom: 40,
-                                }}
-                            >{data?.user.profile.about}
-                            </Text>
-                            {/* TODO: Update this button to point to the new screen... Remember to pass as params! */}
-                            <Button
-                                title={'Subscribed Courses'}
-                                onPress={() => navigation.navigate('Courses', {
-                                    ...CoursesNavigate,
-                                    params: { username }
-                                })
-                                }
-                            />
-                        </Card>
-                        <View style={{
-                            width: Dimensions.get('screen').width,
-                            height: 50,
-                            borderTopWidth: 2,
-                            borderBottomWidth: 2,
-                            borderTopColor: 'red',
-                            borderBottomColor: 'red',
-                            alignItems: 'center',
-                            justifyContent: 'center'
 
-                        }}>
-                            <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Subscribed Courses</Text>
-                        </View>
-                    </View>
-                }
-                ListEmptyComponent={
-                    <InfoMessage
-                        title={'No Subscribed Courses'}
-                        message={'Subscribe to courses and get the latest updates!'}
-                    />
-                }
-                renderItem={
-                    ({ item }) =>
-                        <TouchableOpacity
-                            key={item.uuid}
-                            onPress={() => navigation.navigate('CourseDetails', {
-                                ...CourseDetailsNavigate,
-                                params: { courseID: item.uuid }
+    return (
+        <FlatList
+            containerStyle={styles.container}
+            refreshControl={
+                <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                />
+            }
+            data={data.user.profile.interests}
+            keyExtractor={
+                item => item.uuid
+            }
+            ListHeaderComponent={
+                <View>
+                    <Card containerStyle={{ margin: 0, marginBottom: 20 }}>
+                        <Avatar
+                            rounded
+                            size="large"
+                            icon={{ name: 'user', type: 'font-awesome' }}
+                            activeOpacity={0.7}
+                            containerStyle={styles.avatar}
+                        />
+                        <Card.Title>
+                            {data?.user.profile.fullName} (@{data.user.name})
+                        </Card.Title>
+                        <Card.Divider />
+                        <Text
+                            style={{
+                                ...styles.profileText,
+                                marginBottom: 40,
+                            }}
+                        >{data?.user.profile.about}
+                        </Text>
+                        {/* TODO: Update this button to point to the new screen... Remember to pass as params! */}
+                        <Button
+                            title={'Subscribed Courses'}
+                            onPress={() => navigation.navigate('Courses', {
+                                ...CoursesNavigate,
+                                params: { username }
                             })
                             }
-                        >
-                            <Course
-                                name={item.name}
-                                description={item.description}
-                            />
-                        </TouchableOpacity>
-                }
-            />
-        );
+                        />
+                    </Card>
+                    <View style={{
+                        width: Dimensions.get('screen').width,
+                        height: 50,
+                        borderTopWidth: 2,
+                        borderBottomWidth: 2,
+                        borderTopColor: 'red',
+                        borderBottomColor: 'red',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+
+                    }}>
+                        <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Subscribed Courses</Text>
+                    </View>
+                </View>
+            }
+            ListEmptyComponent={
+                <InfoMessage
+                    title={'No Subscribed Courses'}
+                    message={'Subscribe to courses and get the latest updates!'}
+                />
+            }
+            renderItem={
+                ({ item }) =>
+                    <TouchableOpacity
+                        key={item.uuid}
+                        onPress={() => navigation.navigate('CourseDetails', {
+                            ...CourseDetailsNavigate,
+                            params: { courseID: item.uuid }
+                        })
+                        }
+                    >
+                        <Course
+                            name={item.name}
+                            description={item.description}
+                        />
+                    </TouchableOpacity>
+            }
+        />
+    );
 }
 
 const styles = StyleSheet.create({
