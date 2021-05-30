@@ -163,7 +163,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#C0C0C0',
         alignItems: 'center',
         justifyContent: 'center',
-        height: "auto",
     },
     SubjectTitle: {
         marginTop: 10,
