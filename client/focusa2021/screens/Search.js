@@ -1,11 +1,10 @@
 import { useLazyQuery } from '@apollo/client';
 import React, { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, Text, View, StyleSheet, ScrollView, RefreshControl, Dimensions } from 'react-native';
-import { Avatar, Card, Button, SearchBar, Tab } from 'react-native-elements';
+import {  View, StyleSheet, RefreshControl } from 'react-native';
+import {SearchBar, Tab } from 'react-native-elements';
 import { connectProps } from '../hooks/store';
 import { searchCourses } from '../constants/queries';
 import Course from '../components/Course';
-import ErrorComponent from '../components/ErrorComponent';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { CourseDetailsNavigate } from '../constants/screens';
 import InfoMessage from '../components/InfoMessage';
