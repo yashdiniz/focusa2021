@@ -142,7 +142,7 @@ function PersonalPostNavigator({navigation}) {
                 component={PersonalPost}
                 options={{
                     headerTitle: "Personal Posts",
-                    headerLeft: () => (<TouchableOpacity style={{ paddingLeft: 20 }} onPress={() => navigation.goBack()}>
+                    headerLeft: () => (<TouchableOpacity style={{ paddingStart: 20 }} onPress={() => navigation.goBack()}>
                         <TabBarIcon name="arrow-back" color="red" />
                     </TouchableOpacity>)
                 }}
@@ -160,7 +160,7 @@ function PostDetailsNavigator({navigation}) {
                 component={PostDetails}
                 options={{
                     headerTitle: "Comments",
-                    headerLeft: () => (<TouchableOpacity style={{ paddingLeft: 20 }} onPress={() => navigation.goBack()}>
+                    headerLeft: () => (<TouchableOpacity style={{ paddingStart: 20 }} onPress={() => navigation.goBack()}>
                         <TabBarIcon name="arrow-back" color="red" />
                     </TouchableOpacity>)
                 }}
@@ -178,7 +178,7 @@ function CourseDetailsNavigator({ navigation }) {
                 component={CourseDetails}
                 options={{
                     headerTitle: "Course Details",
-                    headerLeft: () => (<TouchableOpacity style={{ paddingLeft: 20 }} onPress={() => navigation.goBack()}>
+                    headerLeft: () => (<TouchableOpacity style={{ paddingStart: 20 }} onPress={() => navigation.goBack()}>
                         <TabBarIcon name="arrow-back" color="red" />
                     </TouchableOpacity>)
                 }}
@@ -194,7 +194,7 @@ function VideoConferencingNavigator() {
             <VideoConferencingStack.Screen
                 name="VideoConferencingScreen"
                 component={VideoConferencing}
-                options={{ headerTitle: "Classrooms" }}
+                options={{ headerTitle: "Meetings" }}
             />
         </VideoConferencingStack.Navigator>
     );
@@ -209,7 +209,7 @@ function SettingsNavigator({ navigation }) {
                 component={Settings}
                 options={{
                     headerTitle: 'Settings',
-                    headerLeft: () => (<TouchableOpacity style={{ paddingLeft: 20 }} onPress={() => navigation.goBack()}>
+                    headerLeft: () => (<TouchableOpacity style={{ paddingStart: 20 }} onPress={() => navigation.goBack()}>
                         <TabBarIcon name="arrow-back" color={"red"} />
                     </TouchableOpacity>)
                 }}

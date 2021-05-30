@@ -51,7 +51,9 @@ function Post({ parent, author, course, time, text, attachmentURL, navigation, u
 
     return (
         <View style={styles.PostView}>
-            <TouchableOpacity
+            {
+                parent ?
+                <TouchableOpacity
                 onPress={() => navigation.navigate('PostDetails', {
                     ...PostDetailsNavigate,
                     params: { postID: parent }
@@ -59,15 +61,21 @@ function Post({ parent, author, course, time, text, attachmentURL, navigation, u
             >
                 <View>
                     <Text style={{
+                        ...styles.userName,
+                        paddingTop: 10,
                         fontStyle: 'italic',
-                        color: 'lightgray'
+                        color: 'gray'
                     }}>
-                        {parent ? 'Comment' : ''}
+                        Comment
                     </Text>
                 </View>
             </TouchableOpacity>
-            <Text style={styles.subjectName}>{course}</Text>
-
+            : null
+            }
+            {
+                course ? <Text style={styles.subjectName}>{course}</Text>
+                : null
+            }
             <View style={{ flexDirection: "row" }}>
                 <Text style={styles.userName}
                 // onPress={() => navigation.navigate('Profile', {
@@ -86,7 +94,7 @@ function Post({ parent, author, course, time, text, attachmentURL, navigation, u
                     <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                         {/* https://stackoverflow.com/a/30540502/13227113 */}
                         <TouchableOpacity style={{ flexDirection: 'row' }} onPress={Linking.openURL(attachmentURL)}>
-                            <MaterialCommunityIcons name="file-document" size={20} style={{ marginTop: 25, paddingLeft: 27, }} />
+                            <MaterialCommunityIcons name="file-document" size={20} style={{ marginTop: 25, paddingStart: 27, }} />
                             <Text style={{ marginTop: 28 }}>View Attachments</Text>
                         </TouchableOpacity>
                     </View>
@@ -102,17 +110,17 @@ function Post({ parent, author, course, time, text, attachmentURL, navigation, u
                             params: { postID: uuid }
                         })}
                     >
-                        <MaterialCommunityIcons name="comment-outline" wi size={25} style={{ marginTop: 'auto', paddingLeft: 27 }} />
+                        <MaterialCommunityIcons name="comment-outline" wi size={25} style={{ marginTop: 'auto', paddingStart: 27 }} />
                     </TouchableOpacity>
                 }
 
                 <TouchableOpacity style={{ marginBottom: 10 }}>
-                    <MaterialCommunityIcons name="arrow-right" size={25} style={{ marginTop: 'auto', paddingLeft: 27, }} />
+                    <MaterialCommunityIcons name="arrow-right" size={25} style={{ marginTop: 'auto', paddingStart: 27, }} />
                 </TouchableOpacity>
 
 
                 <TouchableOpacity style={{ marginLeft: 'auto', paddingRight: 15, marginBottom: 10 }}>
-                    <MaterialCommunityIcons name="download" size={25} style={{ marginTop: 'auto', paddingLeft: 27 }} />
+                    <MaterialCommunityIcons name="download" size={25} style={{ marginTop: 'auto', paddingStart: 27 }} />
                 </TouchableOpacity>
             </View>
 
@@ -131,12 +139,13 @@ const styles = StyleSheet.create({
     },
     subjectName: {
         marginTop: "auto",
-        paddingLeft: 15,
+        paddingStart: 15,
+        paddingTop: 10,
         fontSize: 15,
         fontWeight: 'bold'
     },
     userName: {
-        paddingLeft: 15,
+        paddingStart: 15,
         color: 'red'
     },
     time: {
@@ -145,7 +154,7 @@ const styles = StyleSheet.create({
     },
     text: {
         marginTop: 20,
-        paddingLeft: 15,
+        paddingStart: 15,
         fontSize: 15,
         color: 'black',
         width: Dimensions.get('screen').width - 8,

@@ -31,7 +31,7 @@ function Course({ name, description }) {
                     </Text>
                 </View>
                 <MaterialCommunityIcons name="chevron-right" size={30} color="red"
-                    style={{ marginTop: 20, paddingLeft: 27, marginLeft: 'auto', paddingRight: 20, alignSelf: "auto" }} />
+                    style={{ marginTop: 20, paddingStart: 27, marginStart: 'auto', paddingEnd: 20, alignSelf: "auto" }} />
             </View>
 
         </View>
@@ -55,12 +55,12 @@ const styles = StyleSheet.create({
     },
     SubjectTitle: {
         marginTop: 5,
-        paddingLeft: 20,
+        paddingStart: 20,
         fontSize: 18,
         fontWeight: 'bold',
     },
     SubjectDescription: {
-        paddingLeft: 20,
+        paddingStart: 20,
         marginTop: 5,
         marginBottom: 10,
         color: 'grey',
