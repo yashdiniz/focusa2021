@@ -71,7 +71,7 @@ function PostDetails({ navigation, route, token }) {
                     key={data.post.uuid}
                     uuid={data.post.uuid}
                     author={data.post.author.name}
-                    course={data.post.course.name}
+                    course={data.post.course?.name}
                     text={data.post.text}
                     time={data.post.time}
                     attachmentURL={data.post.attachmentURL}
@@ -91,7 +91,7 @@ function PostDetails({ navigation, route, token }) {
                         key={item.uuid}
                         uuid={item.uuid}
                         author={item.author.name}
-                        course={item.course.name}
+                        course={item.course?.name}
                         text={item.text}
                         time={item.time}
                         attachmentURL={item.attachmentURL}

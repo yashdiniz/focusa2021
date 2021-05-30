@@ -80,7 +80,7 @@ function PersonalPost({ navigation, route, token, username }) {
                         key={item.uuid}
                         uuid={item.uuid}
                         author={item.author.name}
-                        course={item.course.name}
+                        course={item.course?.name}
                         text={item.text}
                         time={item.time}
                         attachmentURL={item.attachmentURL}
