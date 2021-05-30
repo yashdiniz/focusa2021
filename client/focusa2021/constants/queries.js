@@ -30,8 +30,8 @@ export const getCourses = gql`
 `;
 
 export const searchCourses = gql`
-    query searchCourses($search: String!) {
-        courses(name: $search) {
+    query searchCourses($query: String!) {
+        courses(name: $query) {
             uuid, name, description
         }
     }
