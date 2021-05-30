@@ -65,7 +65,7 @@ function Post({ parent, author, course, time, text, attachmentURL }) {
             </View>
 
 
-            <Text style={styles.topictitle}>{text}</Text>
+            <Text style={styles.text}>{text}</Text>
 
             <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                 {/* https://stackoverflow.com/a/30540502/13227113 */}
@@ -122,11 +122,13 @@ const styles = StyleSheet.create({
         color: 'grey',
         textAlign: 'left',
     },
-    topictitle: {
+    text: {
         marginTop: 20,
         paddingLeft: 15,
         fontSize: 15,
-        color: 'black'
+        color: 'black',
+        width: Dimensions.get('screen').width-8,
+        height:"auto",
     },
 })
 

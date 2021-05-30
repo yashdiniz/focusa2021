@@ -153,7 +153,7 @@ function SettingsNavigator({ navigation }) {
                 options={{
                     headerTitle: 'Settings',
                     headerLeft: () => (<TouchableOpacity style={{ paddingLeft: 20 }} onPress={() => navigation.goBack()}>
-                        <TabBarIcon name="arrow-back" />
+                        <TabBarIcon name="arrow-back" color={"red"}/>
                     </TouchableOpacity>)
                 }}
             />
