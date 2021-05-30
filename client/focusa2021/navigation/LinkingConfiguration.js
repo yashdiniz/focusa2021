@@ -27,6 +27,11 @@ export default {
               PersonalPostScreen: 'pp',
             },
           },
+          PostDetails: {
+            screens: {
+              PostDetailsScreen: 'pd',
+            },
+          },
           VideoConferencing: {
             screens: {
               VideoConferencing: 'vc',

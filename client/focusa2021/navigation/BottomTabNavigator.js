@@ -16,17 +16,27 @@ import Settings from '../screens/Settings';
 import PersonalPost from '../screens/PersonalPost';
 import VideoConferencing from '../screens/VideoConferencing';
 import { TouchableOpacity } from 'react-native';
+import PostDetails from '../screens/PostDetails';
+import { connectProps } from '../hooks/store';
 
 
 const BottomTab = createBottomTabNavigator();
 
-export default function BottomTabNavigator() {
+function BottomTabNavigator({ token }) {
     const colorScheme = useColorScheme();
 
     return (
         <BottomTab.Navigator
             initialRouteName="Profile"
             tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}>
+            <BottomTab.Screen
+                name="Login"
+                component={LoginNavigator}
+                options={{
+                    tabBarIcon: ({ color }) => <TabBarIcon name="videocam-outline" color={color} />,
+                    tabBarButton: () => null,
+                }}
+            />
             <BottomTab.Screen
                 name="Profile"
                 component={ProfileNavigator}
@@ -49,9 +59,16 @@ export default function BottomTabNavigator() {
                     tabBarButton: () => null,
                 }}
             />
+            <BottomTab.Screen
+                name="PostDetails"
+                component={PostDetailsNavigator}
+                options={{
+                    tabBarButton: () => null,
+                }}
+            />
 
             <BottomTab.Screen
-                name="Video Conferencing"
+                name="Meetings"
                 component={VideoConferencingNavigator}
                 options={{
                     tabBarIcon: ({ color }) => <TabBarIcon name="videocam-outline" color={color} />,
@@ -71,16 +88,11 @@ export default function BottomTabNavigator() {
                     tabBarButton: () => null,
                 }}
             />
-            <BottomTab.Screen
-                name="Login"
-                component={LoginNavigator}
-                options={{
-                    tabBarButton: () => null,
-                }}
-            />
         </BottomTab.Navigator>
     );
 }
+
+export default connectProps(BottomTabNavigator);
 
 // https://icons.expo.fyi/
 function TabBarIcon(props) {
@@ -139,6 +151,24 @@ function PersonalPostNavigator({navigation}) {
     );
 }
 
+const PostDetailsStack = createStackNavigator();
+function PostDetailsNavigator({navigation}) {
+    return (
+        <PostDetailsStack.Navigator>
+            <PostDetailsStack.Screen
+                name="PostDetailsScreen"
+                component={PostDetails}
+                options={{
+                    headerTitle: "Comments",
+                    headerLeft: () => (<TouchableOpacity style={{ paddingLeft: 20 }} onPress={() => navigation.goBack()}>
+                        <TabBarIcon name="arrow-back" color="red" />
+                    </TouchableOpacity>)
+                }}
+            />
+        </PostDetailsStack.Navigator>
+    );
+}
+
 const CourseDetailsStack = createStackNavigator();
 function CourseDetailsNavigator({ navigation }) {
     return (
@@ -187,7 +217,6 @@ function SettingsNavigator({ navigation }) {
         </SettingsStack.Navigator>
     );
 }
-
 
 const LoginStack = createStackNavigator();
 function LoginNavigator() {
