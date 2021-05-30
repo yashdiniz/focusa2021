@@ -106,15 +106,16 @@ function Profile({ navigation, route, token, username }) {
                             width: Dimensions.get('screen').width - 15,
                             height: 20,
                             borderTopRightRadius: 10,
-                            marginBottom: 5,
+                            marginBottom: 20,
                             marginTop: 10,
+                            paddingTop: 10,
+                            paddingBottom: 10,
                             alignItems: 'center',
                         }}>
                             <Text style={{
                                 fontWeight: "bold",
                                 fontSize: 18,
                             }}>Subscribed Courses</Text>
-
                         </View>
                 </View>
             }

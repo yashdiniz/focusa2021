@@ -95,8 +95,8 @@ function CourseDetails({ navigation, route, token, userID }) {
                             <Text>
                                 {
                                     data.isSubscribed ?
-                                        'unsubscribe' :
-                                        'subscribe'
+                                        'Subscribed' :
+                                        'Subscribe'
                                 }
                             </Text>
                         </TouchableOpacity>
