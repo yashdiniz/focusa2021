@@ -10,7 +10,7 @@ import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 import Profile from '../screens/Profile';
 import Login from '../screens/Login';
-import Courses from '../screens/Courses';
+import Search from '../screens/Search';
 import CourseDetails from '../screens/CourseDetails';
 import Settings from '../screens/Settings';
 import VideoConferencing from '../screens/VideoConferencing';
@@ -34,10 +34,10 @@ export default function BottomTabNavigator() {
                 }}
             />
             <BottomTab.Screen
-                name="Courses"
-                component={CoursesNavigator}
+                name="Search"
+                component={SearchNavigator}
                 options={{
-                    tabBarIcon: ({ color }) => <TabBarIcon name="book-outline" color={color} />,
+                    tabBarIcon: ({ color }) => <TabBarIcon name="search" color={color} />,
                 }}
             />
 
@@ -99,16 +99,16 @@ function ProfileNavigator({ navigation }) {
     );
 }
 
-const CoursesStack = createStackNavigator();
-function CoursesNavigator() {
+const SearchStack = createStackNavigator();
+function SearchNavigator() {
     return (
-        <CoursesStack.Navigator>
-            <CoursesStack.Screen
-                name="CoursesScreen"
-                component={Courses}
-                options={{ headerTitle: "Courses" }}
+        <SearchStack.Navigator>
+            <SearchStack.Screen
+                name="SearchScreen"
+                component={Search}
+                options={{ headerTitle: "Search" }}
             />
-        </CoursesStack.Navigator>
+        </SearchStack.Navigator>
     );
 }
 

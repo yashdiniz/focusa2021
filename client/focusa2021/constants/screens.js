@@ -8,8 +8,8 @@ export const ProfileNavigate = {
     screen: 'ProfileScreen',
     initial: false,
 };
-export const CoursesNavigate = {
-    screen: 'CoursesScreen',
+export const SearchNavigate = {
+    screen: 'SearchScreen',
     initial: false,
 };
 export const SettingsNavigate = {

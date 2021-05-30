@@ -17,9 +17,9 @@ export default {
               ProfileScreen: 'p',
             },
           },
-          Courses: {
+          Search: {
             screens: {
-              CoursesScreen: 'c',
+              SearchScreen: 's',
             },
           },
           VideoConferencing: {
