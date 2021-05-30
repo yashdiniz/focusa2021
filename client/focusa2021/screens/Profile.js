@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
 import React, { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, View, StyleSheet, TouchableOpacity, RefreshControl, FlatList } from 'react-native';
+import { ActivityIndicator, View, StyleSheet, TouchableOpacity, RefreshControl, FlatList,Dimensions } from 'react-native';
 import { Avatar, Card, Button, Text } from 'react-native-elements';
 
 import { connectProps } from '../hooks/store';
@@ -69,34 +69,49 @@ function Profile({ navigation, route, token, username }) {
                     item => item.uuid
                 }
                 ListHeaderComponent={
-                    <Card containerStyle={{ margin: 0, marginBottom: 20}}>
-                        <Avatar
-                            rounded
-                            size="large"
-                            icon={{ name: 'user', type: 'font-awesome' }}
-                            activeOpacity={0.7}
-                            containerStyle={styles.avatar}
-                        />
-                        <Card.Title>
-                            {data?.user.profile.fullName} (@{data.user.name})
+                    <View>
+                        <Card containerStyle={{ margin: 0, marginBottom: 20 }}>
+                            <Avatar
+                                rounded
+                                size="large"
+                                icon={{ name: 'user', type: 'font-awesome' }}
+                                activeOpacity={0.7}
+                                containerStyle={styles.avatar}
+                            />
+                            <Card.Title>
+                                {data?.user.profile.fullName} (@{data.user.name})
                         </Card.Title>
-                        <Card.Divider />
-                        <Text
-                            style={{
-                                ...styles.profileText,
-                                marginBottom: 40,
-                            }}
-                        >{data?.user.profile.about}
-                        </Text>
-                        <Button
-                            title={'Subscribed Courses'}
-                            onPress={() => navigation.navigate('Courses', {
-                                ...CoursesNavigate,
-                                params: { username }
-                            })
-                            }
-                        />
-                    </Card>
+                            <Card.Divider />
+                            <Text
+                                style={{
+                                    ...styles.profileText,
+                                    marginBottom: 40,
+                                }}
+                            >{data?.user.profile.about}
+                            </Text>
+                            <Button
+                                title={'Subscribed Courses'}
+                                onPress={() => navigation.navigate('Courses', {
+                                    ...CoursesNavigate,
+                                    params: { username }
+                                })
+                                }
+                            />
+                        </Card>
+                        <View style={{
+                            width: Dimensions.get('screen').width,
+                            height: 50,
+                            borderTopWidth: 2,
+                            borderBottomWidth: 2,
+                            borderTopColor: 'red',
+                            borderBottomColor: 'red',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+
+                        }}>
+                            <Text style={{ fontSize: 18, fontWeight: 'bold' }}>POSTS</Text>
+                        </View>
+                    </View>
                 }
                 ListEmptyComponent={
                     <InfoMessage

@@ -7,11 +7,11 @@ import { RxDocument } from 'rxdb';
  * 
  */
 export async function savePosts(batch) {
-    for(let post in batch) {
+    for (let post in batch) {
         const { uuid, text, course, author, time, attachmentURL } = post;
         const c = await focusa;
         return await c.posts.insert({
-            uuid, parent, text, 
+            uuid, parent, text,
             course: course.name, author: author.name,
             time, attachmentURL
         });
@@ -26,8 +26,8 @@ export async function savePosts(batch) {
 export async function getAllPosts(offset) {
     let c = await focusa;
     return await c.posts.find().exec()
-    .limit(documentLimit).skip(offset)
-    .then(doc => {
-        if(doc) return doc;
-    });
+        .limit(documentLimit).skip(offset)
+        .then(doc => {
+            if (doc) return doc;
+        });
 }

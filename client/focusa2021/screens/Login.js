@@ -3,12 +3,12 @@ import { ActivityIndicator, View, StyleSheet, Button } from 'react-native';
 import { authenticate } from '../hooks/authenticate';
 
 export default function Login({ navigation, route }) {
-    const loggedIn = authenticate('admin','gyroscope')  // TODO: REMOVE THIS LINE ASAP!!
+    const loggedIn = authenticate('admin', 'gyroscope')  // TODO: REMOVE THIS LINE ASAP!!
 
     if (loggedIn)
         return (
             <View style={styles}>
-                <Button 
+                <Button
                     title={'Logged In. Press to continue.'}
                     onPress={() => navigation.goBack()}
                 />
@@ -19,7 +19,7 @@ export default function Login({ navigation, route }) {
             <View style={styles}>
                 <ActivityIndicator color={'#333'} />
             </View>
-        ); 
+        );
 }
 
 const styles = StyleSheet.create({

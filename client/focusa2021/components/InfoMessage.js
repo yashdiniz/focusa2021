@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Card, Text } from 'react-native-elements';
 
-function InfoMessage({title, message}) {
+function InfoMessage({ title, message }) {
     return (
         <View style={styles.container}>
             <Text

@@ -21,7 +21,7 @@ function Course({ name, description }) {
         // </Card>
 
         <View style={styles.singleCourseView}>
-            <View style={{ flexDirection: 'row',}}>
+            <View style={{ flexDirection: 'row', }}>
                 <View>
                     <Text style={styles.SubjectTitle}>
                         {name}
@@ -31,7 +31,7 @@ function Course({ name, description }) {
                     </Text>
                 </View>
                 <MaterialCommunityIcons name="chevron-right" size={30} color="red"
-                    style={{ marginTop: 20, paddingLeft: 27, marginLeft: 'auto', paddingRight:20,alignSelf:"auto" }} />
+                    style={{ marginTop: 20, paddingLeft: 27, marginLeft: 'auto', paddingRight: 20, alignSelf: "auto" }} />
             </View>
 
         </View>
@@ -46,12 +46,12 @@ const styles = StyleSheet.create({
     },
     singleCourseView: {
         borderColor: 'grey',
-        width: Dimensions.get('screen').width-15,
+        width: Dimensions.get('screen').width - 15,
         height: "auto",
-        marginTop:10,
+        marginTop: 10,
         backgroundColor: '#ffffff',
-        borderTopRightRadius:10,
-        borderBottomRightRadius:10,
+        borderTopRightRadius: 10,
+        borderBottomRightRadius: 10,
     },
     SubjectTitle: {
         marginTop: 5,
@@ -62,10 +62,10 @@ const styles = StyleSheet.create({
     SubjectDescription: {
         paddingLeft: 20,
         marginTop: 5,
-        marginBottom:10,
+        marginBottom: 10,
         color: 'grey',
-        width:320,
-        height:'auto'
+        width: 320,
+        height: 'auto'
     }
 });
 

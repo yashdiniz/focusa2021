@@ -13,7 +13,7 @@ const initState = {
 function reducer(state, action) {
     if (!state) state = initState;
     console.log(new Date(), action.type);
-    switch(action.type) {
+    switch (action.type) {
         case SET_TOKEN: return {
             ...state,
             token: action.token,
