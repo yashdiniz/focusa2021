@@ -9,8 +9,8 @@ import ErrorComponent from '../components/ErrorComponent';
 import InfoMessage from '../components/InfoMessage';
 
 function PersonalPost({ navigation, route, token, username }) {
-    username = route.params?.username ?
-        route.params.username : username;
+    username = route.params?.username ? // the screen will show posts based on username of profile.
+        route.params.username : username;   // default is taken from redux store
 
     const [refreshing, setRefreshing] = useState(false);
 
@@ -78,11 +78,13 @@ function PersonalPost({ navigation, route, token, username }) {
                     <Post
                         parent={item.parent?.uuid}
                         key={item.uuid}
+                        uuid={item.uuid}
                         author={item.author.name}
                         course={item.course.name}
                         text={item.text}
                         time={item.time}
                         attachmentURL={item.attachmentURL}
+                        navigation={navigation}
                     />
             }
             ListFooterComponent={

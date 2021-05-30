@@ -114,11 +114,13 @@ function CourseDetails({ navigation, route, token, userID }) {
                         <Post
                             parent={item.parent?.uuid}
                             key={item.uuid}
+                            uuid={item.uuid}
                             author={item.author.name}
                             course={item.course.name}
                             text={item.text}
                             time={item.time}
                             attachmentURL={item.attachmentURL}
+                            navigation={navigation}
                         />
                 }
                 ListFooterComponent={
