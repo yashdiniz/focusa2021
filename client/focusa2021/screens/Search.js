@@ -14,7 +14,7 @@ function Search({ navigation, route, token, username }) {
     const [refreshing, setRefreshing] = useState(false);
     const [search, updateSearch] = useState('');
 
-    const [execQuery, { loading, error, data }] = useLazyQuery(searchCourses);
+    const [execQuery, { error, data }] = useLazyQuery(searchCourses);
 
     /**
      * Callback used to inform completion of refresh.
@@ -26,7 +26,7 @@ function Search({ navigation, route, token, username }) {
 
     const execSearch = useCallback((query) => {
         updateSearch(query);
-        execQuery({ variables: { query }});
+        execQuery({ variables: { query } });
     })
 
     useEffect(() => {
@@ -37,15 +37,6 @@ function Search({ navigation, route, token, username }) {
         }
     });
 
-    if (loading)
-        return (
-            <View style={styles.container}>
-                <ActivityIndicator color={'#333'} />
-            </View>
-        );
-    if (error)
-        return (<ErrorComponent error={error} />);
-
     return (
         <FlatList
             containerStyle={styles.container}
@@ -55,7 +46,7 @@ function Search({ navigation, route, token, username }) {
                     onRefresh={onRefresh}
                 />
             }
-            data={data?.courses ? data.courses : [] }
+            data={data?.courses ? data.courses : []}
             keyExtractor={
                 item => item.uuid
             }
