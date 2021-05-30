@@ -13,6 +13,7 @@ import Login from '../screens/Login';
 import Search from '../screens/Search';
 import CourseDetails from '../screens/CourseDetails';
 import Settings from '../screens/Settings';
+import PersonalPost from '../screens/PersonalPost';
 import VideoConferencing from '../screens/VideoConferencing';
 import { TouchableOpacity } from 'react-native';
 
@@ -38,6 +39,14 @@ export default function BottomTabNavigator() {
                 component={SearchNavigator}
                 options={{
                     tabBarIcon: ({ color }) => <TabBarIcon name="search" color={color} />,
+                }}
+            />
+
+            <BottomTab.Screen
+                name="PersonalPost"
+                component={PersonalPostNavigator}
+                options={{
+                    tabBarButton: () => null,
                 }}
             />
 
@@ -112,6 +121,19 @@ function SearchNavigator() {
     );
 }
 
+const PersonalPostStack = createStackNavigator();
+function PersonalPostNavigator() {
+    return (
+        <PersonalPostStack.Navigator>
+            <PersonalPostStack.Screen
+                name="PersonalPostScreen"
+                component={PersonalPost}
+                options={{ headerTitle: "Personal Post" }}
+            />
+        </PersonalPostStack.Navigator>
+    );
+}
+
 const CourseDetailsStack = createStackNavigator();
 function CourseDetailsNavigator({ navigation }) {
     return (
@@ -153,7 +175,7 @@ function SettingsNavigator({ navigation }) {
                 options={{
                     headerTitle: 'Settings',
                     headerLeft: () => (<TouchableOpacity style={{ paddingLeft: 20 }} onPress={() => navigation.goBack()}>
-                        <TabBarIcon name="arrow-back" color={"red"}/>
+                        <TabBarIcon name="arrow-back" color={"red"} />
                     </TouchableOpacity>)
                 }}
             />

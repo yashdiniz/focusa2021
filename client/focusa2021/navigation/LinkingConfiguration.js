@@ -22,6 +22,11 @@ export default {
               SearchScreen: 's',
             },
           },
+          PersonalPost: {
+            screens: {
+              PersonalPostScreen: 'pp',
+            },
+          },
           VideoConferencing: {
             screens: {
               VideoConferencing: 'vc',

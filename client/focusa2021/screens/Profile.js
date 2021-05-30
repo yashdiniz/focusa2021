@@ -7,7 +7,7 @@ import { connectProps } from '../hooks/store';
 import { getProfileData } from '../constants/queries';
 import ErrorComponent from '../components/ErrorComponent';
 import InfoMessage from '../components/InfoMessage';
-import { CoursesNavigate, CourseDetailsNavigate } from '../constants/screens';
+import { PersonalPostNavigate, CourseDetailsNavigate } from '../constants/screens';
 import Course from '../components/Course';
 
 function Profile({ navigation, route, token, username }) {
@@ -91,26 +91,31 @@ function Profile({ navigation, route, token, username }) {
                             </Text>
                             {/* TODO: Update this button to point to the new screen... Remember to pass as params! */}
                             <Button
-                                title={'Subscribed Courses'}
-                                onPress={() => navigation.navigate('Courses', {
-                                    ...CoursesNavigate,
+                                title={'View Posts and Comments'}
+                                onPress={() => navigation.navigate('PersonalPost', {
+                                    ...PersonalPostNavigate,
                                     params: { username }
                                 })
                                 }
                             />
                         </Card>
                         <View style={{
-                            width: Dimensions.get('screen').width,
-                            height: 50,
-                            borderTopWidth: 2,
-                            borderBottomWidth: 2,
-                            borderTopColor: 'red',
-                            borderBottomColor: 'red',
+                            borderRightColor: "red",
+                            borderRightWidth: 3,
+                            borderTopColor: "red",
+                            borderTopWidth: 3,
+                            width: Dimensions.get('screen').width - 15,
+                            height: 20,
+                            borderTopRightRadius: 10,
+                            marginBottom: 5,
+                            marginTop: 10,
                             alignItems: 'center',
-                            justifyContent: 'center'
-
                         }}>
-                            <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Subscribed Courses</Text>
+                            <Text style={{
+                                fontWeight: "bold",
+                                fontSize: 18,
+                            }}>Subscribed Courses</Text>
+
                         </View>
                     </View>
                 }

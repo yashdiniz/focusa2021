@@ -12,6 +12,10 @@ export const SearchNavigate = {
     screen: 'SearchScreen',
     initial: false,
 };
+export const PersonalPostNavigate = {
+    screen: 'PersonalPostScreen',
+    initial: false,
+};
 export const SettingsNavigate = {
     screen: 'SettingsScreen',
     initial: false,
