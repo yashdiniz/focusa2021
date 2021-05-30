@@ -16,6 +16,10 @@ export const PersonalPostNavigate = {
     screen: 'PersonalPostScreen',
     initial: false,
 };
+export const PostDetailsNavigate = {
+    screen: 'PostDetailsScreen',
+    initial: false,
+};
 export const SettingsNavigate = {
     screen: 'SettingsScreen',
     initial: false,
