@@ -117,9 +117,10 @@ function SearchResults({ refreshControl, GQLQuery, renderItem, tab, changeTab })
                     <Tab
                         onChange={changeTab}
                         value={tab}
+                        indicatorStyle={{backgroundColor:"red"}}
                     >
-                        <Tab.Item title="Courses" />
-                        <Tab.Item title="Posts" />
+                        <Tab.Item title="Courses" containerStyle={{backgroundColor:null}} titleStyle={{color:'black'}}/>
+                        <Tab.Item title="Posts"  containerStyle={{backgroundColor:null}} titleStyle={{color:'black'}}/>
                     </Tab>
                 </View>
 
@@ -149,7 +150,7 @@ const styles = StyleSheet.create({
     profileText: {
         textAlign: 'center',
         color: '#789'
-    }
+    },
 });
 
 export default connectProps(Search);
