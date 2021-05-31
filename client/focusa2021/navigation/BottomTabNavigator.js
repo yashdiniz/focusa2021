@@ -64,6 +64,7 @@ function BottomTabNavigator({ token }) {
                 component={PostDetailsNavigator}
                 options={{
                     tabBarButton: () => null,
+                    tabBarVisible: false
                 }}
             />
 

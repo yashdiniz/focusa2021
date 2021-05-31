@@ -1,6 +1,7 @@
 import { useQuery } from '@apollo/client';
 import React, { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, Text, View, StyleSheet, RefreshControl, Dimensions, TouchableOpacity } from 'react-native';
+import { Avatar } from 'react-native-elements'
 import { connectProps } from '../hooks/store';
 import Post from '../components/Post';
 import { FlatList } from 'react-native-gesture-handler';
@@ -52,72 +53,95 @@ function PostDetails({ navigation, route, token }) {
         return (<ErrorComponent error={error} />);
 
     return (
-        <FlatList
-            // style={{backgroundColor:'white'}}
-            containerStyle={styles/*.container*/}
-            refreshControl={
-                <RefreshControl
-                    refreshing={refreshing}
-                    onRefresh={onRefresh}
-                />
-            }
-            data={data.post?.comments}
-            keyExtractor={
-                item => item.uuid
-            }
-            ListHeaderComponent={
-                <Post
-                    parent={data.post.parent?.uuid}
-                    key={data.post.uuid}
-                    uuid={data.post.uuid}
-                    author={data.post.author.name}
-                    course={data.post.course?.name}
-                    text={data.post.text}
-                    time={data.post.time}
-                    attachmentURL={data.post.attachmentURL}
-                    navigation={navigation}
-                />
-            }
-            ListEmptyComponent={
-                <InfoMessage
-                    title={'Could not find comments'}
-                    message={"Publish some comments and they'll show up here!"}
-                />
-            }
-            renderItem={
-                ({ item }) =>
+        <View style={{height:Dimensions.get('screen').height-90 ,justifyContent:'space-between'}}>
+            <FlatList
+                // style={{backgroundColor:'white'}}
+                containerStyle={styles/*.container*/}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                    />
+                }
+                data={data.post?.comments}
+                keyExtractor={
+                    item => item.uuid
+                }
+                ListHeaderComponent={
                     <Post
-                        parent={item.parent?.uuid}
-                        key={item.uuid}
-                        uuid={item.uuid}
-                        author={item.author.name}
-                        course={item.course?.name}
-                        text={item.text}
-                        time={item.time}
-                        attachmentURL={item.attachmentURL}
+                        parent={data.post.parent?.uuid}
+                        key={data.post.uuid}
+                        uuid={data.post.uuid}
+                        author={data.post.author.name}
+                        course={data.post.course?.name}
+                        text={data.post.text}
+                        time={data.post.time}
+                        attachmentURL={data.post.attachmentURL}
                         navigation={navigation}
                     />
-            }
-            ListFooterComponent={
-                data.post?.comments.length > 0 ?
-                    <View style={styles.container}>
-                        <TouchableOpacity
-                            onPress={
-                                () => fetchMore({
-                                    variables: {
-                                        offset: data.post?.comments.length
-                                    }
-                                })
-                            }
-                        >
-                            <Text>
-                                No new comments
+                }
+                ListEmptyComponent={
+                    <InfoMessage
+                        title={'Could not find comments'}
+                        message={"Publish some comments and they'll show up here!"}
+                    />
+                }
+                renderItem={
+                    ({ item }) =>
+                        <Post
+                            parent={item.parent?.uuid}
+                            key={item.uuid}
+                            uuid={item.uuid}
+                            author={item.author.name}
+                            course={item.course?.name}
+                            text={item.text}
+                            time={item.time}
+                            attachmentURL={item.attachmentURL}
+                            navigation={navigation}
+                        />
+                }
+                ListFooterComponent={
+                    data.post?.comments.length > 0 ?
+                        <View style={styles.container}>
+                            <TouchableOpacity
+                                onPress={
+                                    () => fetchMore({
+                                        variables: {
+                                            offset: data.post?.comments.length
+                                        }
+                                    })
+                                }
+                            >
+                                <Text>
+                                    No new comments
                             </Text>
-                        </TouchableOpacity>
-                    </View>
-                    : <></>
-            }
-        />
+                            </TouchableOpacity>
+                        </View>
+                        : <></>
+                }
+            />
+            <TouchableOpacity style={{
+                width: Dimensions.get('screen').width - 20,
+                margin: 10,
+                height: 40,
+                backgroundColor: 'white',
+                paddingLeft: 10,
+                paddingRight: 10,
+                flexDirection: 'row',
+                alignItems: 'center',
+            }}>
+                <Avatar
+                    size="small"
+                    rounded
+                    icon={{name: 'user', type: 'font-awesome'}}
+                    onPress={() => console.log("Works!")}
+                    activeOpacity={0.7}
+                    containerStyle={{backgroundColor:'grey', marginRight:10}}
+                />
+
+                <Text style={{ color: 'grey' }}>Share comments....</Text>
+            </TouchableOpacity>
+        </View>
     );
 }
 
@@ -147,7 +171,8 @@ const styles = StyleSheet.create({
         marginTop: 5,
         fontSize: 15,
         marginLeft: 10,
-    }
+    },
+
 });
 
 export default connectProps(PostDetails);
