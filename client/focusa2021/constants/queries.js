@@ -15,20 +15,6 @@ export const getProfileData = gql`
     }
 `;
 
-export const getCourses = gql`
-    query getCourses($username: String!) {
-        user(name: $username) {
-            uuid,
-            profile {
-                userID,
-                interests {
-                    uuid, name, description
-                }
-            }
-        }
-    }
-`;
-
 export const searchCourses = gql`
     query searchCourses($query: String!) {
         results: courses(name: $query) {
