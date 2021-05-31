@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
 import React, { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, Text, View, StyleSheet, RefreshControl, Dimensions, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, Text, View, StyleSheet, RefreshControl, Dimensions, TouchableOpacity, SafeAreaView  } from 'react-native';
 import { Avatar } from 'react-native-elements'
 import { connectProps } from '../hooks/store';
 import Post from '../components/Post';
@@ -53,9 +53,7 @@ function PostDetails({ navigation, route, token }) {
         return (<ErrorComponent error={error} />);
 
     return (
-        <View 
-            style={{height:Dimensions.get('screen').height-90, justifyContent:'space-between'}}
-        >
+        <SafeAreaView style={{height:Dimensions.get('screen').height-90 ,justifyContent:'space-between'}}>
             <FlatList
                 // style={{backgroundColor:'white'}}
                 containerStyle={styles/*.container*/}
@@ -141,7 +139,7 @@ function PostDetails({ navigation, route, token }) {
                 />
                 <Text style={{ color: 'grey' }}>Post a comment</Text>
             </TouchableOpacity>
-        </View>
+        </SafeAreaView>
     );
 }
 
