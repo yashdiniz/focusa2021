@@ -80,18 +80,23 @@ function CourseDetails({ navigation, route, token, userID }) {
                             {data.course.description}
                         </Text>
 
-                        <TouchableOpacity style={{
-                            backgroundColor: 'white',
-                            width: 200,
-                            alignItems: 'center',
-                            height: 30,
-                            justifyContent: 'center',
-                            borderColor: 'black',
-                            borderWidth: 1,
-                            borderRadius: 10,
-                            marginTop: 15,
-                            marginBottom: 10,
-                        }}>
+                        <TouchableOpacity
+                            style={{
+                                backgroundColor: 'white',
+                                width: 200,
+                                alignItems: 'center',
+                                height: 30,
+                                justifyContent: 'center',
+                                borderColor: 'black',
+                                borderWidth: 1,
+                                borderRadius: 10,
+                                marginTop: 15,
+                                marginBottom: 10,
+                            }}
+                            // onPress={
+                            // making way for mutations!
+                            // }
+                        >
                             <Text>
                                 {
                                     data.isSubscribed ?

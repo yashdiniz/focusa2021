@@ -5,7 +5,7 @@
     "name": "focusa2021",
     "slug": "focusa2021",
     "orientation": "portrait",
-    "scheme": "myapp",
+    "scheme": "focusa",
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"

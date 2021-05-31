@@ -134,12 +134,10 @@ function PostDetails({ navigation, route, token }) {
                     size="small"
                     rounded
                     icon={{name: 'user', type: 'font-awesome'}}
-                    onPress={() => console.log("Works!")}
                     activeOpacity={0.7}
                     containerStyle={{backgroundColor:'grey', marginRight:10}}
                 />
-
-                <Text style={{ color: 'grey' }}>Share comments....</Text>
+                <Text style={{ color: 'grey' }}>Post a comment</Text>
             </TouchableOpacity>
         </SafeAreaView>
     );
