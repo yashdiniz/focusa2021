@@ -53,7 +53,9 @@ function PostDetails({ navigation, route, token }) {
         return (<ErrorComponent error={error} />);
 
     return (
-        <View style={{height:Dimensions.get('screen').height-90 ,justifyContent:'space-between'}}>
+        <View 
+            style={{height:Dimensions.get('screen').height-90, justifyContent:'space-between'}}
+        >
             <FlatList
                 // style={{backgroundColor:'white'}}
                 containerStyle={styles/*.container*/}
@@ -134,12 +136,10 @@ function PostDetails({ navigation, route, token }) {
                     size="small"
                     rounded
                     icon={{name: 'user', type: 'font-awesome'}}
-                    onPress={() => console.log("Works!")}
                     activeOpacity={0.7}
                     containerStyle={{backgroundColor:'grey', marginRight:10}}
                 />
-
-                <Text style={{ color: 'grey' }}>Share comments....</Text>
+                <Text style={{ color: 'grey' }}>Post a comment</Text>
             </TouchableOpacity>
         </View>
     );
