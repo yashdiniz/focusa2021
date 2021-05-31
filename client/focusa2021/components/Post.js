@@ -3,6 +3,7 @@ import { StyleSheet, View, Dimensions, TouchableOpacity } from 'react-native';
 import { Card, Text } from 'react-native-elements';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { PostDetailsNavigate } from '../constants/screens';
+import { connectProps } from '../hooks/store';
 
 const formatTime = (time) => {
     var TimeType, hour, minutes, fullTime;
@@ -46,7 +47,7 @@ const formatTime = (time) => {
     }
 }
 
-function Post({ parent, author, course, time, text, attachmentURL, navigation, uuid }) {
+function Post({ parent, author, course, time, text, attachmentURL, navigation, uuid, username }) {
     // TODO: make provisions for parent and comments!
 
     return (
@@ -162,4 +163,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default React.memo(Post);
+export default connectProps(React.memo(Post));

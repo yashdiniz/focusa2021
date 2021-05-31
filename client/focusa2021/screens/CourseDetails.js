@@ -1,4 +1,4 @@
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import React, { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, Text, View, StyleSheet, RefreshControl, Dimensions, TouchableOpacity } from 'react-native';
 import { connectProps } from '../hooks/store';
@@ -19,6 +19,9 @@ function CourseDetails({ navigation, route, token, userID }) {
             offset: 0,
         },
     });
+
+    // const [ subscribeToCourse ] = useMutation();
+    // const [ unsubscribeFromCourse ] = useMutation(); // TODO!
 
     /**
      * Callback used to inform completion of refresh.
