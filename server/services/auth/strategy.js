@@ -25,7 +25,7 @@ async (req, username, password, done) => {
         console.log(new Date(), 'User logged in.', user.name, req.ip);
         return done(null, session); // pass the session down through callback
     } catch(e) {
-        console.error(new Date(), e);   // TODO: remove the console commands once done, switch to logger
+        console.error(new Date(), e);
         return done(null, false, { message: 'Incorrect username or password.'})
     }
 });

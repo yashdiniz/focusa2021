@@ -146,7 +146,7 @@ const getUserById = async (id) => {
     });
 }
 
-// TODO(long term): maybe add functionality to update the user name?
+// COULD: maybe add functionality to update the user name?
 /**
  * Update the User password.
  * @param {string} name User name.

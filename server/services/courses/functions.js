@@ -55,12 +55,12 @@ const addCourse = async (name, description) => {
     let uuid = generateUUID();
     let f = await focusa;
 
+    // TODO: Create a role with name matching Course being added.
     let admin = await auth.get('/getRoleByName', {
-        params: { name: 'admin' },
+        params: { name: 'admin' },  // currently only admin role is moderator
         headers: { authorization: token }
     }).then(res => res.data.uuid);
 
-    // TODO: Create a role with name matching Course being added.
     // TODO: Allow the role created to become moderator.
     return await f.courses.insert({
         uuid,name, description,

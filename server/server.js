@@ -4,9 +4,7 @@ const schema = require('./schema/schema');
 
 process.title = "FOCUSA";
 
-// TODO: store the timestamp as part of logs!! (i.e. timestamp at every change)
-// TODO: also store the IP address in the logs of the for listing.
-// TODO: also store the user-agent and other possibly fingerprintable information.
+// TODO: Store the user-agent and other possibly fingerprintable information in logs.
 
 const server = new ApolloServer({
     schema, // ES6, key:value pair coupling
