@@ -73,7 +73,7 @@ const CourseType = new GraphQLObjectType({
             },
             posts: {
                 type: GraphQLList(PostType),
-                description: "TODO",
+                description: "Posts published in this Course.",
                 args: {
                     offset: { type: GraphQLInt }
                 },
