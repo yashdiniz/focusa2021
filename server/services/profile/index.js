@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const { profilePort, JWTsignOptions, serviceAuthPass, serviceAudience, authRealm } = require('../../config');
-const { getProfile, updateProfile, deleteProfile, addInterest, profileHasInterest, getInterestsOfProfile, getProfilesWithInterest } = require('./functions');
+const { getProfile, updateProfile, deleteProfile, addInterest, removeInterest, profileHasInterest, getInterestsOfProfile, getProfilesWithInterest } = require('./functions');
 const jwt = require('../jwt');
 
 const { create } = require('axios');
