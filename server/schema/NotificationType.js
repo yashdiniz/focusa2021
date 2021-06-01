@@ -20,7 +20,7 @@ const courses = create({
 
 const NotificationType = new GraphQLObjectType({
     name : "Notification",
-    description : "todo",
+    description : "This node describes the schema of a Notification.",
     fields: () => {
         const { CourseType, onError } = require('./types');
         return  {

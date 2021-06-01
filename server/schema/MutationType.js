@@ -150,7 +150,7 @@ const MutationType = new GraphQLObjectType({
         },
         createPost: {
             type: PostType,
-            description: "TODO",
+            description: "Creates a Post(for a course) or comment(for a parent Post) depending on the arguments given.",
             args: {
                 text: { type: GraphQLNonNull(GraphQLString),
                     description: "The text body of the post. Supports markdown." },
@@ -171,7 +171,7 @@ const MutationType = new GraphQLObjectType({
         },
         editPost: {
             type: PostType,
-            description: "TODO",
+            description: "Edits a Post with a matching ID, based on the text given.",
             args: {
                 id: { type: GraphQLNonNull(GraphQLID) },
                 text: { type: GraphQLNonNull(GraphQLString),
@@ -187,7 +187,7 @@ const MutationType = new GraphQLObjectType({
         },
         deletePost: {
             type: PostType,
-            description: "TODO",
+            description: "Deletes a Post with a matching ID.",
             args: {
                 id: { type: GraphQLNonNull(GraphQLID) },
             },
@@ -218,7 +218,7 @@ const MutationType = new GraphQLObjectType({
         },
         addCourse: {
             type: CourseType,
-            description: "TODO",
+            description: "Adds a Course with the name and description given in the arguments.",
             args: {
                 name: { type: GraphQLString },
                 description: { type: GraphQLString },
@@ -250,7 +250,7 @@ const MutationType = new GraphQLObjectType({
         },
         deleteCourse: {
             type: CourseType,
-            description: "TODO",
+            description: "Deletes a Course with matching ID.",
             args: {
                 id: { type: GraphQLID },
             },
@@ -264,7 +264,7 @@ const MutationType = new GraphQLObjectType({
         },
         updateCourse: {
             type: CourseType,
-            description: "TODO",
+            description: "Updates a Course with a matching ID to the given name and description.",
             args: {
                 id: { type: GraphQLID },
                 name: { type: GraphQLString },

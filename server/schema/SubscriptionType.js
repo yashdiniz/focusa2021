@@ -27,11 +27,11 @@ const profile = create({
 
 const SubscriptionType = new GraphQLObjectType({
     name: "Subscription",
-    description: "todo",
+    description: "This node serves as a graph entrypoint for receving near realtime notifications.",
     fields: {
         postAdded: {
             type: GraphQLNonNull(NotificationType),
-            description: "todo",
+            description: "Triggers whenever a new post is published.",
             subscribe: withFilter(
                 () => {
                     return pubsub.asyncIterator(['postAdded'])
@@ -59,6 +59,7 @@ const SubscriptionType = new GraphQLObjectType({
 
 notification.subscribe('postAdded', payload => {
     // TODO: still performing a forwarding, not the expected way to pubsub.
+    // Need to find/build a compatible apollo pubsub system with libp2p.
     pubsub.publish('postAdded', {
         postAdded: { uuid: payload.uuid, time: payload.time,
         channel: payload.channel, course: payload.course,

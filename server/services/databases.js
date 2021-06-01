@@ -206,7 +206,7 @@ const postsSchema = {
         },
     },
     required: ['text', 'time'],
-    indexes: ['parent', 'course', 'author', 'reported', 'approved', 'time'], // TODO: find a way to incorporate tf-idf text indexing
+    indexes: ['parent', 'course', 'author', 'reported', 'approved', 'time'],
 };
 const profileSchema = {
     name: 'profile',

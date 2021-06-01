@@ -4,9 +4,10 @@ const session = require('express-session');
 const LevelStore = require('express-session-level')(session);
 const bodyParser = require('body-parser').urlencoded({ extended: true });
 const cookieParser = require('cookie-parser');
+const path = require('path');
 const app = express();
 
-const { authPort, secret, JWTsignOptions, serviceAuthPass, serviceAudience } = require('../../config');
+const { authPort, secret, JWTsignOptions, serviceAuthPass, serviceAudience, projectRoot } = require('../../config');
 const { localStrategy, refreshToken } = require('./strategy.js');
 const { ensureAuthenticated } = require('./ensureAuthenticated');
 const { getUserById, userExists, getRoleById, roleExists, getRolesOfUser, getUsersOfRole, createUser, giveRole, userHasRole, updateUser, deleteUser, createRole, deleteRole } = require('./functions');
@@ -16,7 +17,7 @@ const { isRxDocument } = require('rxdb');
 process.title = 'FOCUSA authenticator service';
 
 app.use(passport.initialize());
-const db = require('level')(__dirname + '/db');
+const db = require('level')(path.join(projectRoot, 'db/'));
 app.use(session({
     store: new LevelStore(db),
     secret,
