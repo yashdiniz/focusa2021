@@ -40,6 +40,22 @@ export const searchPosts = gql`
     }
 `;
 
+export const subscribeToCourse = gql`
+    mutation subscribeToCourse($courseID: ID!) {
+        subscribeToCourse(courseID: $courseID) {
+            userID
+        }
+    }
+`;
+
+export const unsubscribeFromCourse = gql`
+    mutation unsubscribeFromCourse($courseID: ID!) {
+        unsubscribeFromCourse(courseID: $courseID) {
+            userID
+        }
+    }
+`;
+
 export const getPostComments = gql`
     query getPostComments($postID: ID!, $offset: Int) {
         post(id: $postID) {

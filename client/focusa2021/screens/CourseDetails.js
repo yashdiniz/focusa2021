@@ -2,26 +2,28 @@ import { useMutation, useQuery } from '@apollo/client';
 import React, { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, Text, View, StyleSheet, RefreshControl, Dimensions, TouchableOpacity } from 'react-native';
 import { connectProps } from '../hooks/store';
-import { getCourseDetails } from '../constants/queries';
+import { getCourseDetails, subscribeToCourse, unsubscribeFromCourse } from '../constants/queries';
 import Post from '../components/Post';
 import { FlatList } from 'react-native-gesture-handler';
 import ErrorComponent from '../components/ErrorComponent';
 import InfoMessage from '../components/InfoMessage';
 
 function CourseDetails({ navigation, route, token, userID }) {
+    const courseID = route.params?.courseID;
+
     // TODO: allow users to subscribe to courses from here!
     const [refreshing, setRefreshing] = useState(false);
 
     const { data, error, loading, refetch, fetchMore } = useQuery(getCourseDetails, {
         variables: {
             userID,
-            courseID: route.params.courseID,
+            courseID,
             offset: 0,
         },
     });
 
-    // const [ subscribeToCourse ] = useMutation();
-    // const [ unsubscribeFromCourse ] = useMutation(); // TODO!
+    const [subscribe] = useMutation(subscribeToCourse);
+    const [unsubscribe] = useMutation(unsubscribeFromCourse);
 
     /**
      * Callback used to inform completion of refresh.
@@ -96,9 +98,15 @@ function CourseDetails({ navigation, route, token, userID }) {
                                 marginTop: 15,
                                 marginBottom: 10,
                             }}
-                            // onPress={
-                            // making way for mutations!
-                            // }
+                            onPress={
+                                () => data.isSubscribed ?
+                                    unsubscribe({
+                                        variables: { courseID }
+                                    }) :
+                                    subscribe({
+                                        variables: { courseID }
+                                    })
+                            }
                         >
                             <Text>
                                 {
