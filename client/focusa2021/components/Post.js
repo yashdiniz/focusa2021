@@ -53,29 +53,44 @@ function Post({ parent, author, course, time, text, attachmentURL, navigation, u
     return (
         <View style={styles.PostView}>
             {
-                parent ?
-                <TouchableOpacity
-                onPress={() => navigation.navigate('PostDetails', {
-                    ...PostDetailsNavigate,
-                    params: { postID: parent }
-                })}
-            >
-                <View>
-                    <Text style={{
-                        ...styles.userName,
-                        paddingTop: 10,
-                        fontStyle: 'italic',
-                        color: 'gray'
-                    }}>
-                        Comment
+                parent ? <View style={{ flexDirection: 'row' }}>
+                    <TouchableOpacity
+                        onPress={() => navigation.navigate('PostDetails', {
+                            ...PostDetailsNavigate,
+                            params: { postID: parent }
+                        })}
+                    >
+                        <View>
+                            <Text style={{
+                                ...styles.userName,
+                                paddingTop: 10,
+                                fontStyle: 'italic',
+                                color: 'gray'
+                            }}>
+                                Comment
                     </Text>
-                </View>
-            </TouchableOpacity>
-            : null
+                        </View>
+                    </TouchableOpacity>
+
+                    {
+                        (username === author) ? (<TouchableOpacity style={{ marginLeft: 'auto', paddingRight: 15, marginTop: 10 }}>
+                            <MaterialCommunityIcons name="dots-vertical" size={25} style={{ marginTop: 'auto', paddingStart: 27 }} />
+                        </TouchableOpacity>) : null
+                    }
+
+
+                </View> : null
             }
             {
-                course ? <Text style={styles.subjectName}>{course}</Text>
-                : null
+                course ? <View style={{ flexDirection: 'row' }}>
+                    <Text style={styles.subjectName}>{course}</Text>
+                    {
+                        (username === author) ? (<TouchableOpacity style={{ marginLeft: 'auto', paddingRight: 15, marginTop: 'auto' }}>
+                            <MaterialCommunityIcons name="dots-vertical" size={25} style={{ marginTop: 'auto', paddingStart: 27 }} />
+                        </TouchableOpacity>) : null
+                    }
+                </View>
+                    : null
             }
             <View style={{ flexDirection: "row" }}>
                 <Text style={styles.userName}
