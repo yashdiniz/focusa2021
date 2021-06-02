@@ -110,9 +110,9 @@ export const getCourseDetails = gql`
         isSubscribed(userID: $userID, courseID: $courseID),
         course(id: $courseID) {
             uuid, name, description,
-            mods {
-                uuid, name
-            },
+            # mods {
+            #     uuid, name
+            # },
             posts(offset: $offset) {
                 uuid, text, attachmentURL, time,
                 parent {
@@ -130,7 +130,13 @@ export const getCourseDetails = gql`
 `;
 
 export const getUserRole =gql`
-    query getUserRole($username: String!){
+    query getUserRole($courseID: ID!, $username: String!){
+        course(id: $courseID) {
+            uuid,
+            mods {
+                uuid, name
+            }
+        },
         user(name: $username){
             uuid,
             roles{

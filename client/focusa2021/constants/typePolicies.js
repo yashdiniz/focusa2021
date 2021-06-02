@@ -80,12 +80,12 @@ export default {
         keyFields: ['uuid'],
         fields: {
             // name: {},
-            mods: {
-                keyArgs: false,
-                merge(existing, incoming) {
-                    return [...existing, ...incoming];
-                }
-            },
+            // mods: {
+            //     keyArgs: false,
+            //     merge(existing, incoming) {
+            //         return [...existing, ...incoming];
+            //     }
+            // },
             // description: {},
             subscribers: {
                 keyArgs: false,

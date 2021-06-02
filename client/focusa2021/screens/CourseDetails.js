@@ -2,7 +2,7 @@ import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
 import React, { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, Text, View, StyleSheet, RefreshControl, Dimensions, TouchableOpacity } from 'react-native';
 import { connectProps } from '../hooks/store';
-import { getCourseDetails, getUserRole, subscribeToCourse, unsubscribeFromCourse } from '../constants/queries';
+import { getCourseDetails, getCourseMods, getUserRole, subscribeToCourse, unsubscribeFromCourse } from '../constants/queries';
 import Post from '../components/Post';
 import { FlatList } from 'react-native-gesture-handler';
 import ErrorComponent from '../components/ErrorComponent';
@@ -24,11 +24,15 @@ function CourseDetails({ navigation, route, token, userID,username}) {
         },
     });
 
-    const { data : dataRoles  } = useQuery(getUserRole,{
+    const { data : dataRoles } = useQuery(getUserRole,{
         variables:{
             username,
+            courseID
         }
     });
+
+    //ref:https://stackoverflow.com/questions/1885557/simplest-code-for-array-intersection-in-javascript
+    const filterArray = dataRoles.course.mods.filter(value => dataRoles.user.roles.map(i=>i.name).includes(value.name));
 
     const [subscribe] = useMutation(subscribeToCourse);
     const [unsubscribe] = useMutation(unsubscribeFromCourse);
@@ -168,13 +172,10 @@ function CourseDetails({ navigation, route, token, userID,username}) {
                             : <></>
                     }
                 />
-                {/* {
-                    console.log(JSON.stringify(data.course))
-                }
                 {
-                    console.log(dataRoles.user?.roles)
-                } */}
-                <FAB placement="right" color="red" size="large" icon={{name:'create', color:"white"}}style={{position:'absolute', bottom:0}}/>
+                    (filterArray.length>0)? <FAB placement="right" color="red" size="large" icon={{name:'create', color:"white"}}style={{position:'absolute', bottom:0}}/>
+                    :null
+                }
             </View>
         );
 }
