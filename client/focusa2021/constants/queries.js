@@ -125,3 +125,20 @@ export const getCourseDetails = gql`
         }
     }
 `;
+
+export const getUserRole =gql`
+    query getUserRole($courseID: ID!, $username: String!){
+        course(id: $courseID) {
+            uuid,
+            mods {
+                uuid, name
+            }
+        },
+        user(name: $username){
+            uuid,
+            roles{
+                uuid,name
+            }
+        }
+    }
+`;

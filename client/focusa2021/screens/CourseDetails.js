@@ -1,14 +1,16 @@
-import { gql, useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import React, { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, Text, View, StyleSheet, RefreshControl, Dimensions, TouchableOpacity } from 'react-native';
 import { connectProps } from '../hooks/store';
-import { getCourseDetails, subscribeToCourse, unsubscribeFromCourse } from '../constants/queries';
+import { getCourseDetails, getUserRole, subscribeToCourse, unsubscribeFromCourse } from '../constants/queries';
 import Post from '../components/Post';
 import { FlatList } from 'react-native-gesture-handler';
 import ErrorComponent from '../components/ErrorComponent';
 import InfoMessage from '../components/InfoMessage';
+import { FAB } from 'react-native-elements';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-function CourseDetails({ navigation, route, token, userID }) {
+function CourseDetails({ navigation, route, token, userID, username }) {
     const courseID = route.params?.courseID;
 
     // TODO: allow users to subscribe to courses from here!
@@ -20,6 +22,13 @@ function CourseDetails({ navigation, route, token, userID }) {
             courseID,
             offset: 0,
         },
+    });
+
+    const { data: dataRoles } = useQuery(getUserRole, {
+        variables: {
+            username,
+            courseID
+        }
     });
 
     const [subscribe] = useMutation(subscribeToCourse, {
@@ -36,6 +45,14 @@ function CourseDetails({ navigation, route, token, userID }) {
             onRefresh();
         },
     });
+
+    // Reference: https://stackoverflow.com/questions/1885557/simplest-code-for-array-intersection-in-javascript
+    const filteredArray = dataRoles.course.mods
+        .filter(value => 
+            dataRoles.user.roles
+            .map(i=>i.name)
+            .includes(value.name)
+        );
 
     /**
      * Callback used to inform completion of refresh.
@@ -69,108 +86,114 @@ function CourseDetails({ navigation, route, token, userID }) {
         return (<ErrorComponent error={error} />);
     else
         return (
-            <FlatList
-                // style={{backgroundColor:'white'}}
-                containerStyle={styles/*.container*/}
-                refreshControl={
-                    <RefreshControl
-                        refreshing={refreshing}
-                        onRefresh={onRefresh}
-                    />
-                }
-                data={data.course.posts}
-                keyExtractor={
-                    item => item.uuid
-                }
-                ListHeaderComponent={
-                    // <Course
-                    //     name={data.course.name}
-                    //     description={data.course.description}
-                    // />
-                    <View style={styles.SubjectPageHeaderView}>
-                        <Text style={styles.SubjectTitle}>
-                            {data.course.name}
-                        </Text>
-
-
-                        <Text style={styles.SubjectDescription}>
-                            {data.course.description}
-                        </Text>
-
-                        <TouchableOpacity
-                            style={{
-                                backgroundColor: 'white',
-                                width: 200,
-                                alignItems: 'center',
-                                height: 30,
-                                justifyContent: 'center',
-                                borderColor: 'black',
-                                borderWidth: 1,
-                                borderRadius: 10,
-                                marginTop: 15,
-                                marginBottom: 10,
-                            }}
-                            onPress={
-                                () => data.isSubscribed ?
-                                    unsubscribe({
-                                        variables: { courseID }
-                                    }) :
-                                    subscribe({
-                                        variables: { courseID }
-                                    })
-                            }
-                        >
-                            <Text>
-                                {
-                                    data.isSubscribed ?
-                                        'Subscribed' :
-                                        'Subscribe'
-                                }
-                            </Text>
-                        </TouchableOpacity>
-
-                    </View>
-                }
-                ListEmptyComponent={
-                    <InfoMessage
-                        title={'No Posts published'}
-                        message={"You're up to date!"}
-                    />
-                }
-                renderItem={
-                    ({ item }) =>
-                        <Post
-                            parent={item.parent?.uuid}
-                            key={item.uuid}
-                            uuid={item.uuid}
-                            author={item.author.name}
-                            course={item.course.name}
-                            text={item.text}
-                            time={item.time}
-                            attachmentURL={item.attachmentURL}
-                            navigation={navigation}
+            <View style={{ height: Dimensions.get('screen').height - 130 }}>
+                <FlatList
+                    // style={{backgroundColor:'white'}}
+                    containerStyle={styles/*.container*/}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={refreshing}
+                            onRefresh={onRefresh}
                         />
-                }
-                ListFooterComponent={
-                    data.course.posts?.length > 0 ?
-                        <View style={styles.container}>
+                    }
+                    data={data.course.posts}
+                    keyExtractor={
+                        item => item.uuid
+                    }
+                    ListHeaderComponent={
+                        // <Course
+                        //     name={data.course.name}
+                        //     description={data.course.description}
+                        // />
+                        <View style={styles.SubjectPageHeaderView}>
+                            <Text style={styles.SubjectTitle}>
+                                {data.course.name}
+                            </Text>
+
+
+                            <Text style={styles.SubjectDescription}>
+                                {data.course.description}
+                            </Text>
+
                             <TouchableOpacity
+                                style={{
+                                    backgroundColor: 'white',
+                                    width: 200,
+                                    alignItems: 'center',
+                                    height: 30,
+                                    justifyContent: 'center',
+                                    borderColor: 'black',
+                                    borderWidth: 1,
+                                    borderRadius: 10,
+                                    marginTop: 15,
+                                    marginBottom: 10,
+                                }}
                                 onPress={
-                                    () => fetchMore({
-                                        variables: {
-                                            offset: data.course.posts?.length
-                                        }
-                                    })
+                                    () => data.isSubscribed ?
+                                        unsubscribe({
+                                            variables: { courseID }
+                                        }) :
+                                        subscribe({
+                                            variables: { courseID }
+                                        })
                                 }
                             >
                                 <Text>
-                                    Yay! You are up to date!
-                            </Text>
+                                    {
+                                        data.isSubscribed ?
+                                            'Subscribed' :
+                                            'Subscribe'
+                                    }
+                                </Text>
                             </TouchableOpacity>
+
                         </View>
-                        : <></>
+                    }
+                    ListEmptyComponent={
+                        <InfoMessage
+                            title={'No Posts published'}
+                            message={"You're up to date!"}
+                        />
+                    }
+                    renderItem={
+                        ({ item }) =>
+                            <Post
+                                parent={item.parent?.uuid}
+                                key={item.uuid}
+                                uuid={item.uuid}
+                                author={item.author.name}
+                                course={item.course.name}
+                                text={item.text}
+                                time={item.time}
+                                attachmentURL={item.attachmentURL}
+                                navigation={navigation}
+                            />
+                    }
+                    ListFooterComponent={
+                        data.course.posts?.length > 0 ?
+                            <View style={styles.container}>
+                                <TouchableOpacity
+                                    onPress={
+                                        () => fetchMore({
+                                            variables: {
+                                                offset: data.course.posts?.length
+                                            }
+                                        })
+                                    }
+                                >
+                                    <Text>
+                                        Yay! You are up to date!
+                            </Text>
+                                </TouchableOpacity>
+                            </View>
+                            : <></>
+                    }
+                />
+                {
+                    (filteredArray.length > 0) ? <FAB placement="right" color="red" size="large" icon={{ name: 'create', color: "white" }} style={{ position: 'absolute', bottom: 0 }} />
+                        : null
                 }
-            />
+            </View>
         );
 }
 
