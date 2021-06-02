@@ -55,8 +55,7 @@ function PostDetails({ navigation, route, token }) {
     return (
         <SafeAreaView style={{height:Dimensions.get('screen').height-90 ,justifyContent:'space-between'}}>
             <FlatList
-                // style={{backgroundColor:'white'}}
-                containerStyle={styles/*.container*/}
+                containerStyle={styles.container}
                 refreshControl={
                     <RefreshControl
                         refreshing={refreshing}
@@ -121,21 +120,25 @@ function PostDetails({ navigation, route, token }) {
                 }
             />
             <TouchableOpacity style={{
-                width: Dimensions.get('screen').width - 20,
-                margin: 10,
+                // width: Dimensions.get('screen').width - 20,
+                margin: 20,
                 height: 40,
                 backgroundColor: 'white',
-                paddingLeft: 10,
-                paddingRight: 10,
+                paddingStart: 10,
+                paddingEnd: 10,
                 flexDirection: 'row',
                 alignItems: 'center',
+                position: 'absolute', 
+                bottom: 10
             }}>
                 <Avatar
                     size="small"
                     rounded
                     icon={{name: 'user', type: 'font-awesome'}}
                     activeOpacity={0.7}
-                    containerStyle={{backgroundColor:'grey', marginRight:10}}
+                    containerStyle={{
+                        backgroundColor:'grey', marginEnd:10,
+                    }}
                 />
                 <Text style={{ color: 'grey' }}>Post a comment</Text>
             </TouchableOpacity>

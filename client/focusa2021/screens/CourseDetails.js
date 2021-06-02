@@ -12,8 +12,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 function CourseDetails({ navigation, route, token, userID, username }) {
     const courseID = route.params?.courseID;
-
-    // TODO: allow users to subscribe to courses from here!
+    
     const [refreshing, setRefreshing] = useState(false);
 
     const { data, error, loading, refetch, fetchMore } = useQuery(getCourseDetails, {
@@ -23,6 +22,10 @@ function CourseDetails({ navigation, route, token, userID, username }) {
             offset: 0,
         },
     });
+
+    useEffect(() => refetch({
+        offset: 0
+    }), [refreshing]);
 
     const { data: dataRoles } = useQuery(getUserRole, {
         variables: {
@@ -190,7 +193,14 @@ function CourseDetails({ navigation, route, token, userID, username }) {
                     }
                 />
                 {
-                    (filteredArray.length > 0) ? <FAB placement="right" color="red" size="large" icon={{ name: 'create', color: "white" }} style={{ position: 'absolute', bottom: 0 }} />
+                    (filteredArray.length > 0) ? 
+                        <FAB 
+                            placement="right" 
+                            color="red" 
+                            size="large" 
+                            icon={{ name: 'create', color: "white" }} 
+                            style={{ position: 'absolute', bottom: 0 }} 
+                        />
                         : null
                 }
             </View>
