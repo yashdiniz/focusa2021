@@ -9,9 +9,10 @@ import ErrorComponent from '../components/ErrorComponent';
 import InfoMessage from '../components/InfoMessage';
 import { FAB } from 'react-native-elements';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { PublishPostNavigate } from '../constants/screens';
 
-function CourseDetails({ navigation, route, token, userID,username}) {
-    const courseID = route.params?.courseID;  
+function CourseDetails({ navigation, route, token, userID, username }) {
+    const courseID = route.params?.courseID;
 
     // TODO: allow users to subscribe to courses from here!
     const [refreshing, setRefreshing] = useState(false);
@@ -24,15 +25,15 @@ function CourseDetails({ navigation, route, token, userID,username}) {
         },
     });
 
-    const { data : dataRoles } = useQuery(getUserRole,{
-        variables:{
+    const { data: dataRoles } = useQuery(getUserRole, {
+        variables: {
             username,
             courseID
         }
     });
 
     //ref:https://stackoverflow.com/questions/1885557/simplest-code-for-array-intersection-in-javascript
-    const filterArray = dataRoles.course.mods.filter(value => dataRoles.user.roles.map(i=>i.name).includes(value.name));
+    const filterArray = dataRoles.course.mods.filter(value => dataRoles.user.roles.map(i => i.name).includes(value.name));
 
     const [subscribe] = useMutation(subscribeToCourse);
     const [unsubscribe] = useMutation(unsubscribeFromCourse);
@@ -69,7 +70,7 @@ function CourseDetails({ navigation, route, token, userID,username}) {
         return (<ErrorComponent error={error} />);
     else
         return (
-            <View style={{height:Dimensions.get('screen').height - 130}}>
+            <View style={{ height: Dimensions.get('screen').height - 130 }}>
                 <FlatList
                     // style={{backgroundColor:'white'}}
                     containerStyle={styles/*.container*/}
@@ -173,8 +174,17 @@ function CourseDetails({ navigation, route, token, userID,username}) {
                     }
                 />
                 {
-                    (filterArray.length>0)? <FAB placement="right" color="red" size="large" icon={{name:'create', color:"white"}}style={{position:'absolute', bottom:0}}/>
-                    :null
+                    (filterArray.length > 0) ? <FAB placement="right"
+                        color="red"
+                        size="large"
+                        icon={{ name: 'create', color: "white" }}
+                        style={{ position: 'absolute', bottom: 0 }} 
+                        onPress={
+                            ()=>navigation.navigate('PublishPost',{
+                                ...PublishPostNavigate, params:{courseID}
+                            })
+                        } />
+                        : null
                 }
             </View>
         );

@@ -145,3 +145,8 @@ export const getUserRole =gql`
         }
     }
 `;
+
+export const CreatePost = gql`
+mutation CreatePost($courseID: ID!,$text: String!, $attachmentURL: String!){
+    uuid,
+}`
