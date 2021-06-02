@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@apollo/client';
+import { gql, useMutation, useQuery } from '@apollo/client';
 import React, { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, Text, View, StyleSheet, RefreshControl, Dimensions, TouchableOpacity } from 'react-native';
 import { connectProps } from '../hooks/store';
@@ -22,8 +22,20 @@ function CourseDetails({ navigation, route, token, userID }) {
         },
     });
 
-    const [subscribe] = useMutation(subscribeToCourse);
-    const [unsubscribe] = useMutation(unsubscribeFromCourse);
+    const [subscribe] = useMutation(subscribeToCourse, {
+        refetchQueries: getCourseDetails,
+        awaitRefetchQueries: true,
+        onCompleted() {
+            onRefresh();
+        },
+    });
+    const [unsubscribe] = useMutation(unsubscribeFromCourse, {
+        refetchQueries: getCourseDetails,
+        awaitRefetchQueries: true,
+        onCompleted() {
+            onRefresh();
+        },
+    });
 
     /**
      * Callback used to inform completion of refresh.
