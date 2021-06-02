@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Dimensions, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Dimensions, TouchableOpacity, Linking } from 'react-native';
 import { Card, Text } from 'react-native-elements';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { PostDetailsNavigate } from '../constants/screens';

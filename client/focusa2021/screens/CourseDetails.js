@@ -1,19 +1,30 @@
 import { useMutation, useQuery } from '@apollo/client';
 import React, { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, Text, View, StyleSheet, RefreshControl, Dimensions, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, Text, View, StyleSheet, RefreshControl, Dimensions, TouchableOpacity, ScrollView } from 'react-native';
 import { connectProps } from '../hooks/store';
-import { getCourseDetails, getUserRole, subscribeToCourse, unsubscribeFromCourse } from '../constants/queries';
+import { getCourseDetails, getUserRole, subscribeToCourse, unsubscribeFromCourse, createPost } from '../constants/queries';
 import Post from '../components/Post';
 import { FlatList } from 'react-native-gesture-handler';
 import ErrorComponent from '../components/ErrorComponent';
 import InfoMessage from '../components/InfoMessage';
-import { FAB } from 'react-native-elements';
+import { FAB, Overlay, Input, Button } from 'react-native-elements';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { PublishPostNavigate } from '../constants/screens';
+
+
 
 function CourseDetails({ navigation, route, token, userID, username }) {
     const courseID = route.params?.courseID;
     
     const [refreshing, setRefreshing] = useState(false);
+
+    //Toggle overlay
+    const [publishPostVisible, setVisiblePublishPost] = useState(false);
+    const toggleOverlayPublishPost = () => {
+        setVisiblePublishPost(!publishPostVisible)
+    }
+
+    const [text, setText] = useState('');
 
     const { data, error, loading, refetch, fetchMore } = useQuery(getCourseDetails, {
         variables: {
@@ -34,6 +45,8 @@ function CourseDetails({ navigation, route, token, userID, username }) {
         }
     });
 
+    // //ref:https://stackoverflow.com/questions/1885557/simplest-code-for-array-intersection-in-javascript
+    // const filterArray = dataRoles.course.mods.filter(value => dataRoles.user.roles.map(i => i.name).includes(value.name));
     const [subscribe] = useMutation(subscribeToCourse, {
         refetchQueries: getCourseDetails,
         awaitRefetchQueries: true,
@@ -49,12 +62,30 @@ function CourseDetails({ navigation, route, token, userID, username }) {
         },
     });
 
+    const [createPostfun] = useMutation(createPost, {
+        refetchQueries: getCourseDetails,
+        awaitRefetchQueries: true,
+        onCompleted(){
+            onRefresh();
+        }
+    })
+
+    const onPublish = React.useCallback(() => {
+        createPostfun({
+            variables: {
+                text,
+                courseID,
+            }
+        })
+        toggleOverlayPublishPost();
+    });
+
     // Reference: https://stackoverflow.com/questions/1885557/simplest-code-for-array-intersection-in-javascript
-    const filteredArray = dataRoles.course.mods
-        .filter(value => 
+    const filteredArray = dataRoles?.course.mods
+        .filter(value =>
             dataRoles.user.roles
-            .map(i=>i.name)
-            .includes(value.name)
+                .map(i => i.name)
+                .includes(value.name)
         );
 
     /**
@@ -192,15 +223,59 @@ function CourseDetails({ navigation, route, token, userID, username }) {
                             : <></>
                     }
                 />
-                {
-                    (filteredArray.length > 0) ? 
-                        <FAB 
-                            placement="right" 
-                            color="red" 
-                            size="large" 
-                            icon={{ name: 'create', color: "white" }} 
-                            style={{ position: 'absolute', bottom: 0 }} 
+                <Overlay isVisible={publishPostVisible}>
+                    <ScrollView contentContainerStyle={{
+                        width: Dimensions.get('window').width,
+                        height: Dimensions.get('window').height,
+                        alignItems: 'center'
+                    }}>
+                        <Text style={{fontSize:20, fontWeight:'bold',marginRight:'auto'}}>Publish Post</Text>
+                        <Input
+                            placeholder='enter text here...'
+                            label="Post Description"
+                            leftIcon={
+                                <MaterialCommunityIcons name="pencil" size={24} />
+                            }
+                            containerStyle={{ width: Dimensions.get('screen').width , marginTop: 10 }}
+                            labelStyle={{ color: 'red' }}
+                            onChangeText={(x) => setText(x)}
                         />
+                        {
+                            console.log(text)
+                        }
+
+                        <View style={{flexDirection:'row',}}>
+                            <Button
+                                title="Publish"
+                                buttonStyle={{ width: 120, marginRight:15}}
+                                onPress={onPublish}
+
+                            />
+
+                            <Button
+                                title="Cancel"
+                                buttonStyle={{ width: 120, backgroundColor:'red' }}
+                                onPress={toggleOverlayPublishPost}
+                            />
+                        </View>
+
+                       
+
+                    </ScrollView>
+                </Overlay>
+                {
+                    (filteredArray?.length > 0) ? <FAB 
+                        placement="right"
+                        color="red"
+                        size="large"
+                        icon={{ name: 'create', color: "white" }}
+                        style={{ position: 'absolute', bottom: 0 }}
+                        onPress={
+                            toggleOverlayPublishPost
+                            // () => navigation.navigate('PublishPost', {
+                            //     ...PublishPostNavigate, params: { courseID }
+                            // })
+                        } />
                         : null
                 }
             </View>

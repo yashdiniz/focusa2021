@@ -53,7 +53,7 @@ function PostDetails({ navigation, route, token }) {
         return (<ErrorComponent error={error} />);
 
     return (
-        <SafeAreaView style={{height:Dimensions.get('screen').height-90 ,justifyContent:'space-between'}}>
+        <SafeAreaView style={{height:Dimensions.get('window').height-50 ,justifyContent:'space-between'}}>
             <FlatList
                 containerStyle={styles.container}
                 refreshControl={
@@ -137,7 +137,7 @@ function PostDetails({ navigation, route, token }) {
                     icon={{name: 'user', type: 'font-awesome'}}
                     activeOpacity={0.7}
                     containerStyle={{
-                        backgroundColor:'grey', marginEnd:10,
+                        backgroundColor:'grey', marginStart: 10, marginEnd:10,
                     }}
                 />
                 <Text style={{ color: 'grey' }}>Post a comment</Text>

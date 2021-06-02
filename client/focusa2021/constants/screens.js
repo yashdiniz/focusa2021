@@ -20,6 +20,10 @@ export const PostDetailsNavigate = {
     screen: 'PostDetailsScreen',
     initial: false,
 };
+export const PublishPostNavigate = {
+    screen: 'PublishPostScreen',
+    initial: false,
+};
 export const SettingsNavigate = {
     screen: 'SettingsScreen',
     initial: false,

@@ -27,6 +27,11 @@ export default {
               PersonalPostScreen: 'pp',
             },
           },
+          PublishPost: {
+            screens: {
+             PublishPostScreen: 'ppst',
+            },
+          },
           PostDetails: {
             screens: {
               PostDetailsScreen: 'pd',

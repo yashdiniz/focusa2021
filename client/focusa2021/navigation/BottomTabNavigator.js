@@ -13,6 +13,7 @@ import Login from '../screens/Login';
 import Search from '../screens/Search';
 import CourseDetails from '../screens/CourseDetails';
 import Settings from '../screens/Settings';
+import PublishPost from '../screens/PublishPost';
 import PersonalPost from '../screens/PersonalPost';
 import VideoConferencing from '../screens/VideoConferencing';
 import { TouchableOpacity } from 'react-native';
@@ -55,6 +56,14 @@ function BottomTabNavigator({ token }) {
             <BottomTab.Screen
                 name="PersonalPost"
                 component={PersonalPostNavigator}
+                options={{
+                    tabBarButton: () => null,
+                }}
+            />
+
+            <BottomTab.Screen
+                name="PublishPost"
+                component={PublishPostNavigator}
                 options={{
                     tabBarButton: () => null,
                 }}
@@ -135,7 +144,7 @@ function SearchNavigator() {
 }
 
 const PersonalPostStack = createStackNavigator();
-function PersonalPostNavigator({navigation}) {
+function PersonalPostNavigator({ navigation }) {
     return (
         <PersonalPostStack.Navigator>
             <PersonalPostStack.Screen
@@ -153,7 +162,7 @@ function PersonalPostNavigator({navigation}) {
 }
 
 const PostDetailsStack = createStackNavigator();
-function PostDetailsNavigator({navigation}) {
+function PostDetailsNavigator({ navigation }) {
     return (
         <PostDetailsStack.Navigator>
             <PostDetailsStack.Screen
@@ -185,6 +194,24 @@ function CourseDetailsNavigator({ navigation }) {
                 }}
             />
         </CourseDetailsStack.Navigator>
+    );
+}
+
+const PublishPostStack = createStackNavigator();
+function PublishPostNavigator({ navigation }) {
+    return (
+        <PublishPostStack.Navigator>
+            <PublishPostStack.Screen
+                name="PublishPostScreen"
+                component={PublishPost}
+                options={{
+                    headerTitle: "Publish Post",
+                    headerLeft: () => (<TouchableOpacity style={{ paddingStart: 20 }} onPress={() => navigation.goBack()}>
+                        <TabBarIcon name="arrow-back" color="red" />
+                    </TouchableOpacity>)
+                }}
+            />
+        </PublishPostStack.Navigator>
     );
 }
 
