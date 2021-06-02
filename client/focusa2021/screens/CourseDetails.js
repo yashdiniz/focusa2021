@@ -1,8 +1,8 @@
-import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import React, { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, Text, View, StyleSheet, RefreshControl, Dimensions, TouchableOpacity } from 'react-native';
 import { connectProps } from '../hooks/store';
-import { getCourseDetails, getCourseMods, getUserRole, subscribeToCourse, unsubscribeFromCourse } from '../constants/queries';
+import { getCourseDetails, getUserRole, subscribeToCourse, unsubscribeFromCourse } from '../constants/queries';
 import Post from '../components/Post';
 import { FlatList } from 'react-native-gesture-handler';
 import ErrorComponent from '../components/ErrorComponent';
@@ -34,9 +34,28 @@ function CourseDetails({ navigation, route, token, userID, username }) {
 
     //ref:https://stackoverflow.com/questions/1885557/simplest-code-for-array-intersection-in-javascript
     const filterArray = dataRoles.course.mods.filter(value => dataRoles.user.roles.map(i => i.name).includes(value.name));
+    const [subscribe] = useMutation(subscribeToCourse, {
+        refetchQueries: getCourseDetails,
+        awaitRefetchQueries: true,
+        onCompleted() {
+            onRefresh();
+        },
+    });
+    const [unsubscribe] = useMutation(unsubscribeFromCourse, {
+        refetchQueries: getCourseDetails,
+        awaitRefetchQueries: true,
+        onCompleted() {
+            onRefresh();
+        },
+    });
 
-    const [subscribe] = useMutation(subscribeToCourse);
-    const [unsubscribe] = useMutation(unsubscribeFromCourse);
+    // Reference: https://stackoverflow.com/questions/1885557/simplest-code-for-array-intersection-in-javascript
+    const filteredArray = dataRoles.course.mods
+        .filter(value => 
+            dataRoles.user.roles
+            .map(i=>i.name)
+            .includes(value.name)
+        );
 
     /**
      * Callback used to inform completion of refresh.

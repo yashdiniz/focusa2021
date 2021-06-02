@@ -110,9 +110,6 @@ export const getCourseDetails = gql`
         isSubscribed(userID: $userID, courseID: $courseID),
         course(id: $courseID) {
             uuid, name, description,
-            # mods {
-            #     uuid, name
-            # },
             posts(offset: $offset) {
                 uuid, text, attachmentURL, time,
                 parent {
