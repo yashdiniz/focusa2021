@@ -19,6 +19,7 @@ function PostDetails({ navigation, route, token }) {
             postID,
             offset: 0,
         },
+        fetchPolicy: 'no-cache'
     });
 
     /**

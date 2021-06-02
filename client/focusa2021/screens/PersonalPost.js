@@ -19,6 +19,7 @@ function PersonalPost({ navigation, route, token, username }) {
             username,
             offset: 0,
         },
+        fetchPolicy: 'no-cache'
     });
 
     /**
