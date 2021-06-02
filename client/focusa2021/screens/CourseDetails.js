@@ -32,8 +32,8 @@ function CourseDetails({ navigation, route, token, userID, username }) {
         }
     });
 
-    //ref:https://stackoverflow.com/questions/1885557/simplest-code-for-array-intersection-in-javascript
-    const filterArray = dataRoles.course.mods.filter(value => dataRoles.user.roles.map(i => i.name).includes(value.name));
+    // //ref:https://stackoverflow.com/questions/1885557/simplest-code-for-array-intersection-in-javascript
+    // const filterArray = dataRoles.course.mods.filter(value => dataRoles.user.roles.map(i => i.name).includes(value.name));
     const [subscribe] = useMutation(subscribeToCourse, {
         refetchQueries: getCourseDetails,
         awaitRefetchQueries: true,
@@ -193,7 +193,7 @@ function CourseDetails({ navigation, route, token, userID, username }) {
                     }
                 />
                 {
-                    (filterArray.length > 0) ? <FAB placement="right"
+                    (filteredArray.length > 0) ? <FAB placement="right"
                         color="red"
                         size="large"
                         icon={{ name: 'create', color: "white" }}
