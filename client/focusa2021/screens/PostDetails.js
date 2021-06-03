@@ -85,6 +85,7 @@ function PostDetails({ navigation, route, token }) {
                         time={data.post.time}
                         attachmentURL={data.post.attachmentURL}
                         navigation={navigation}
+                        onRefresh ={onRefresh }
                     />
                 }
                 ListEmptyComponent={
@@ -105,6 +106,7 @@ function PostDetails({ navigation, route, token }) {
                             time={item.time}
                             attachmentURL={item.attachmentURL}
                             navigation={navigation}
+                            onRefresh={onRefresh}
                         />
                 }
                 ListFooterComponent={
