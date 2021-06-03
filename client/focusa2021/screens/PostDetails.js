@@ -61,7 +61,7 @@ function PostDetails({ navigation, route, token }) {
         return (<ErrorComponent error={error} />);
 
     return (
-        <SafeAreaView style={{ height: Dimensions.get('window').height - 50, justifyContent: 'space-between' }}>
+        <SafeAreaView style={{ height: Dimensions.get('window').height-30}}>
             <FlatList
                 containerStyle={styles.container}
                 refreshControl={
@@ -135,16 +135,15 @@ function PostDetails({ navigation, route, token }) {
                 publishPostVisible={publishPostVisible}
             />
             <TouchableOpacity onPress={toggleOverlayPublishPost} style={{
-                // width: Dimensions.get('screen').width - 20,
-                margin: 20,
+                width: Dimensions.get('screen').width,
+                marginBottom:20,
+                paddingLeft:10,
                 height: 40,
                 backgroundColor: 'white',
-                paddingStart: 10,
-                paddingEnd: 10,
                 flexDirection: 'row',
                 alignItems: 'center',
                 position: 'absolute',
-                bottom: 10,
+                bottom: 15,
             }}>
                 <Avatar
                     size="small"

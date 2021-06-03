@@ -8,7 +8,6 @@ import { connectProps } from '../hooks/store';
 
 function PublishOverlay({ onRefresh, courseID, toggleOverlayPublishPost, publishPostVisible,parentID }) {
     const [text, setText] = useState('');
-
     const [createPostfun] = useMutation(createPost, {
         refetchQueries: getCourseDetails,
         awaitRefetchQueries: true,
@@ -36,7 +35,10 @@ function PublishOverlay({ onRefresh, courseID, toggleOverlayPublishPost, publish
                     height: Dimensions.get('window').height,
                     alignItems: 'center'
                 }}>
-                    <Text style={{ fontSize: 20, fontWeight: 'bold', marginRight: 'auto' }}>Publish Post</Text>
+                    {
+                        (courseID==null)? <Text style={{ fontSize: 20, fontWeight: 'bold', marginRight: 'auto' }}>Publish comment</Text>:
+                        <Text style={{ fontSize: 20, fontWeight: 'bold', marginRight: 'auto' }}>Publish Post</Text>
+                    }
                     <Input
                         placeholder='enter text here...'
                         label="Post Description"
@@ -54,6 +56,7 @@ function PublishOverlay({ onRefresh, courseID, toggleOverlayPublishPost, publish
                             title="Publish"
                             buttonStyle={{ width: 120, marginRight: 15 }}
                             onPress={onPublish}
+                            disabled={(text.trim().length==0?true:false)}
                         />
                         <Button
                             title="Cancel"
