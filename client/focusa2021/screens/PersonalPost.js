@@ -55,8 +55,7 @@ function PersonalPost({ navigation, route, token, username }) {
 
     return (
         <FlatList
-            // style={{backgroundColor:'white'}}
-            containerStyle={styles/*.container*/}
+            containerStyle={styles.container}
             refreshControl={
                 <RefreshControl
                     refreshing={refreshing}
@@ -113,31 +112,11 @@ function PersonalPost({ navigation, route, token, username }) {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
+        // flex: 1,
+        // alignItems: 'center',
+        // justifyContent: 'center',
         marginBottom: 30
     },
-    SujectPageView: {
-        alignContent: 'center',
-        justifyContent: 'center',
-    },
-    SubjectPageHeaderView: {
-        width: Dimensions.get('screen').width,
-        height: 150,
-        backgroundColor: '#C0C0C0',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    SubjectTitle: {
-        marginTop: 10,
-        fontSize: 30
-    },
-    SubjectDescription: {
-        marginTop: 5,
-        fontSize: 15,
-        marginLeft: 10,
-    }
 });
 
 export default connectProps(PersonalPost);

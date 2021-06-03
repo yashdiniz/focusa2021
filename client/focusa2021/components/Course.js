@@ -1,25 +1,10 @@
 import React from 'react';
-import { Alert, StyleSheet, View, Dimensions, TouchableOpacity } from 'react-native';
-import { Card, Text, Button } from 'react-native-elements';
+import { StyleSheet, View, Dimensions } from 'react-native';
+import { Text } from 'react-native-elements';
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 
 function Course({ name, description }) {
     return (
-        // <Card>
-        //         <Text 
-        //             h4
-        //             style={styles.text}
-        //         >
-        //             {name}
-        //         </Text>
-        //     <Card.Divider />
-        //     <Text
-        //         style={styles.text}
-        //     >
-        //         {description}
-        //     </Text>
-        // </Card>
-
         <View style={styles.singleCourseView}>
             <View style={{ flexDirection: 'row', }}>
                 <View>
@@ -41,9 +26,6 @@ function Course({ name, description }) {
 }
 
 const styles = StyleSheet.create({
-    text: {
-        marginBottom: 20,
-    },
     singleCourseView: {
         borderColor: 'grey',
         width: Dimensions.get('screen').width - 15,

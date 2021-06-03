@@ -55,7 +55,7 @@ const formatTime = (time) => {
 function Post({ parent, author, course, time, text, attachmentURL, navigation, uuid, username, onRefresh }) {
 
     const [bottomSheetVisible, makeBottomSheetVisible] = useState(false);
-    const toggleBottomSheet =()=>{
+    const toggleBottomSheet = () => {
         makeBottomSheetVisible(!bottomSheetVisible);
     }
 
@@ -227,14 +227,14 @@ function Post({ parent, author, course, time, text, attachmentURL, navigation, u
             </BottomSheet>
 
             <EditPostOverlay
-                    postID={uuid}
-                    currentText={text}
-                    toggleOverlayEditPost={toggleOverlayEditPost}
-                    editPostVisible={editPostVisible}
-                    toggleBottomSheet={toggleBottomSheet}
-                    onRefresh={onRefresh}
+                postID={uuid}
+                currentText={text}
+                toggleOverlayEditPost={toggleOverlayEditPost}
+                editPostVisible={editPostVisible}
+                toggleBottomSheet={toggleBottomSheet}
+                onRefresh={onRefresh}
             />
-                   
+
 
         </View >
     );

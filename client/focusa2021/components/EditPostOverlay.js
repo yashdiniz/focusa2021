@@ -6,9 +6,9 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { getCourseDetails, editPost} from '../constants/queries';
 import { connectProps } from '../hooks/store';
 
-function EditPostOverlay({ toggleOverlayEditPost, editPostVisible, postID, currentText, onRefresh,toggleBottomSheet}) {
-    const [text,setText] =useState('' + currentText);
-    const [editPostfun] = useMutation(editPost, {
+function EditPostOverlay({ toggleOverlayEditPost, editPostVisible, postID, currentText, onRefresh, toggleBottomSheet }) {
+    const [ text, setText ] =useState('' + currentText);
+    const [ editPostfun ] = useMutation(editPost, {
         refetchQueries: getCourseDetails,
         awaitRefetchQueries: true, 
         onCompleted() {
@@ -16,21 +16,20 @@ function EditPostOverlay({ toggleOverlayEditPost, editPostVisible, postID, curre
         }
     });
 
-    const onEdit = React.useCallback(()=>{
+    const onEdit = React.useCallback(() => {
         editPostfun({
             variables:{
                 postID,
                 text,
             }
-        })
-
-        toggleOverlayEditPost()
-        toggleBottomSheet()
+        });
+        toggleOverlayEditPost();
+        toggleBottomSheet();
     })
 
-    const onCancel = React.useCallback(()=>{
-        toggleOverlayEditPost()
-        toggleBottomSheet()
+    const onCancel = React.useCallback(() => {
+        toggleOverlayEditPost();
+        toggleBottomSheet();
     })
 
     return (
@@ -57,8 +56,9 @@ function EditPostOverlay({ toggleOverlayEditPost, editPostVisible, postID, curre
                         onChangeText={setText}
                         value={text}
                     />
+
+                    {/* Action buttons */}
                     <View style={{ flexDirection: 'row', }}>
-                        
                         <Button
                             title="Save"
                             buttonStyle={{ width: 120, marginRight: 15 }}
