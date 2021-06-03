@@ -57,7 +57,7 @@ function EditPostOverlay({ toggleOverlayEditPost, editPostVisible, postID, curre
                         <Button
                             title="save"
                             buttonStyle={{ width: 120, marginRight: 15 }}
-                            disabled={(currentText.trim().length < 10 ? true : false)}
+                            disabled={(text.trim().length < 10 ? true : false)}
                             onPress={onEdit}
                         />
                         <Button
