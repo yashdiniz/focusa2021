@@ -41,12 +41,12 @@ function EditPostOverlay({ toggleOverlayEditPost, editPostVisible, postID, curre
                     height: Dimensions.get('window').height,
                     alignItems: 'center'
                 }}>
-                       <Text style={{ fontSize: 20, fontWeight: 'bold', marginRight: 'auto' }}>Edit</Text>
+                    <Text style={{ fontSize: 20, fontWeight: 'bold', marginRight: 'auto' }}>Edit</Text>
                     
                     {/* Reference: https://stackoverflow.com/a/34006497/13227113 */}
                     <Input
-                        placeholder='enter text here...'
-                        label='description'
+                        placeholder='Enter text here...'
+                        label='Description'
                         leftIcon={
                             <MaterialCommunityIcons name="pencil" size={24} />
                         }
@@ -60,7 +60,7 @@ function EditPostOverlay({ toggleOverlayEditPost, editPostVisible, postID, curre
                     <View style={{ flexDirection: 'row', }}>
                         
                         <Button
-                            title="save"
+                            title="Save"
                             buttonStyle={{ width: 120, marginRight: 15 }}
                             disabled={(text.trim().length < 10 ? true : false)}
                             onPress={onEdit}
