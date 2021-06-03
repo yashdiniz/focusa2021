@@ -56,7 +56,7 @@ function PublishOverlay({ onRefresh, courseID, toggleOverlayPublishPost, publish
                             title="Publish"
                             buttonStyle={{ width: 120, marginRight: 15 }}
                             onPress={onPublish}
-                            disabled={(text.trim().length==0?true:false)}
+                            disabled={(text.trim().length < 10 ? true : false)}
                         />
                         <Button
                             title="Cancel"
