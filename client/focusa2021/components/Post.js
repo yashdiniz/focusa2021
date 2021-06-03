@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View, Dimensions, TouchableOpacity, Linking } from 'react-native';
-import { Card, Text } from 'react-native-elements';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { BottomSheet, Text, ListItem, Icon } from 'react-native-elements';
+import { Ionicons } from '@expo/vector-icons';
 import { PostDetailsNavigate } from '../constants/screens';
 import { connectProps } from '../hooks/store';
 
@@ -48,98 +48,139 @@ const formatTime = (time) => {
 }
 
 function Post({ parent, author, course, time, text, attachmentURL, navigation, uuid, username }) {
-    // TODO: make provisions for parent and comments!
+
+    const [bottomSheetVisible, makeBottomSheetVisible] = useState(false);
 
     return (
         <View style={styles.PostView}>
-            {
-                parent ? <View style={{ flexDirection: 'row' }}>
-                    <TouchableOpacity
-                        onPress={() => navigation.navigate('PostDetails', {
-                            ...PostDetailsNavigate,
-                            params: { postID: parent }
-                        })}
+
+            {/* The post title View */}
+            <View style={{ flexDirection: 'row' }}>
+                {
+                    parent ?
+                        <TouchableOpacity
+                            onPress={() => navigation.navigate('PostDetails', {
+                                ...PostDetailsNavigate,
+                                params: { postID: parent }
+                            })}
+                        >
+                            <View>
+                                <Text style={{
+                                    ...styles.userName,
+                                    paddingTop: 10,
+                                    fontStyle: 'italic',
+                                    color: 'gray'
+                                }}>
+                                    Comment
+                                </Text>
+                            </View>
+                        </TouchableOpacity> : null
+                }
+                {
+                    course ? <View style={{ flexDirection: 'row' }}>
+                        <Text style={styles.subjectName}>{course}</Text>
+                    </View>
+                        : null
+                }
+                {
+                    (username === author) ? (<TouchableOpacity style={{ marginLeft: 'auto', paddingRight: 15, marginTop: 10 }}
+                        onPress={() => makeBottomSheetVisible(true)}
                     >
-                        <View>
-                            <Text style={{
-                                ...styles.userName,
-                                paddingTop: 10,
-                                fontStyle: 'italic',
-                                color: 'gray'
-                            }}>
-                                Comment
-                    </Text>
-                        </View>
-                    </TouchableOpacity>
+                        <Ionicons name="ellipsis-vertical" size={20} style={{ marginTop: 'auto', paddingStart: 27 }} />
+                    </TouchableOpacity>) : null
+                }
+            </View>
 
-                    {
-                        (username === author) ? (<TouchableOpacity style={{ marginLeft: 'auto', paddingRight: 15, marginTop: 10 }}>
-                            <MaterialCommunityIcons name="dots-vertical" size={25} style={{ marginTop: 'auto', paddingStart: 27 }} />
-                        </TouchableOpacity>) : null
-                    }
-
-
-                </View> : null
-            }
-            {
-                course ? <View style={{ flexDirection: 'row' }}>
-                    <Text style={styles.subjectName}>{course}</Text>
-                    {
-                        (username === author) ? (<TouchableOpacity style={{ marginLeft: 'auto', paddingRight: 15, marginTop: 'auto' }}>
-                            <MaterialCommunityIcons name="dots-vertical" size={25} style={{ marginTop: 'auto', paddingStart: 27 }} />
-                        </TouchableOpacity>) : null
-                    }
-                </View>
-                    : null
-            }
+            {/* The post metadata View */}
             <View style={{ flexDirection: "row" }}>
                 <Text style={styles.userName}
-                // onPress={() => navigation.navigate('Profile', {
-                //     ...ProfileNavigate,
-                //     params: { username: author }
-                // })}
                 >{author}</Text>
                 <Text>  |  </Text>
                 <Text style={styles.time}>{formatTime(time)}</Text>
             </View>
-
+            
+            {/* The post body Text */}
             <Text style={styles.text}>{text}</Text>
 
+            {/* The optional attachment View */}
             {
                 attachmentURL.length > 0 ?
                     <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                         {/* https://stackoverflow.com/a/30540502/13227113 */}
                         <TouchableOpacity style={{ flexDirection: 'row' }} onPress={Linking.openURL(attachmentURL)}>
-                            <MaterialCommunityIcons name="file-document" size={20} style={{ marginTop: 25, paddingStart: 27, }} />
+                            <Ionicons name="document-attach-outline" size={20} style={{ marginTop: 25, paddingStart: 27, }} />
                             <Text style={{ marginTop: 28 }}>View Attachments</Text>
                         </TouchableOpacity>
                     </View>
                     : <></>
             }
 
-            <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 10 }}>
+            {/* The bottom options View */}
+            <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20 }}>
                 {parent ?
                     <></>
-                    : <TouchableOpacity style={{ marginBottom: 10 }}
+                    : <TouchableOpacity 
+                        // style={{ marginBottom: 10 }}
                         onPress={() => navigation.navigate('PostDetails', {
                             ...PostDetailsNavigate,
                             params: { postID: uuid }
                         })}
                     >
-                        <MaterialCommunityIcons name="comment-outline" wi size={25} style={{ marginTop: 'auto', paddingStart: 27 }} />
+                        <Ionicons name="chatbubble-outline" wi size={25} 
+                            style={{ marginTop: 'auto', paddingStart: 27 }} 
+                        />
                     </TouchableOpacity>
                 }
 
-                <TouchableOpacity style={{ marginBottom: 10 }}>
-                    <MaterialCommunityIcons name="arrow-right" size={25} style={{ marginTop: 'auto', paddingStart: 27, }} />
+                <TouchableOpacity 
+                    // style={{ marginBottom: 10 }}
+                >
+                    <Ionicons name="share-social-outline" size={25} 
+                        style={{ marginTop: 'auto', paddingStart: 27, }} 
+                    />
                 </TouchableOpacity>
 
 
-                <TouchableOpacity style={{ marginLeft: 'auto', paddingRight: 15, marginBottom: 10 }}>
-                    <MaterialCommunityIcons name="download" size={25} style={{ marginTop: 'auto', paddingStart: 27 }} />
+                <TouchableOpacity 
+                    // style={{ marginLeft: 'auto', paddingRight: 15, marginBottom: 10 }}
+                >
+                    <Ionicons name="download-outline" size={25} 
+                        style={{ marginTop: 'auto', paddingStart: 27 }} 
+                    />
                 </TouchableOpacity>
             </View>
 
+            {/* The BottomSheet for extra options */}
+            <BottomSheet
+                isVisible={bottomSheetVisible}
+                containerStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
+            >
+                <ListItem
+                    onPress={() => makeBottomSheetVisible(false)}
+                >
+                    <Icon name="edit"/>
+                    <ListItem.Content>
+                        <ListItem.Title>Edit Post</ListItem.Title>
+                    </ListItem.Content>
+                </ListItem>
+                <ListItem
+                    onPress={() => makeBottomSheetVisible(false)}
+                >
+                    <Icon name="delete"/>
+                    <ListItem.Content>
+                        <ListItem.Title>Delete Post</ListItem.Title>
+                    </ListItem.Content>
+                </ListItem>
+                <ListItem
+                    containerStyle={{ backgroundColor: 'red', }}
+                    onPress={() => makeBottomSheetVisible(false)}
+                >   
+                    <Icon name="cancel"/>
+                    <ListItem.Content>
+                        <ListItem.Title style={{color: 'white'}}>Cancel</ListItem.Title>
+                    </ListItem.Content>
+                </ListItem>
+            </BottomSheet>
         </View >
     );
 }
@@ -148,9 +189,9 @@ const styles = StyleSheet.create({
         width: Dimensions.get('screen').width,
         height: 'auto',
         borderColor: 'lightgrey',
-        borderTopWidth: 1,
+        borderTopWidth: 0,
         borderBottomWidth: 1,
-        marginTop: 5,
+        paddingTop: 10,
         backgroundColor: '#ffffff'
     },
     subjectName: {
