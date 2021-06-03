@@ -22,6 +22,7 @@ function Profile({ navigation, route, token, username }) {
         variables: {
             username
         },
+        fetchPolicy: 'no-cache'
     });
 
     /**
@@ -53,7 +54,7 @@ function Profile({ navigation, route, token, username }) {
             </View>
         );
     if (error)
-        return (<ErrorComponent error={error} />);
+        return (<ErrorComponent error={error} refresh={onRefresh} />);
 
     return (
         <FlatList

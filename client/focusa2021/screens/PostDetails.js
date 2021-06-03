@@ -58,7 +58,7 @@ function PostDetails({ navigation, route, token }) {
             </View>
         );
     if (error)
-        return (<ErrorComponent error={error} />);
+        return (<ErrorComponent error={error} refresh={onRefresh} />);
 
     return (
         <SafeAreaView style={{ height: Dimensions.get('window').height-30}}>
@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        marginBottom: 30
+        marginBottom: 100
     },
     SujectPageView: {
         alignContent: 'center',

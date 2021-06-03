@@ -51,7 +51,7 @@ function PersonalPost({ navigation, route, token, username }) {
             </View>
         );
     if (error)
-        return (<ErrorComponent error={error} />);
+        return (<ErrorComponent error={error} refresh={onRefresh} />);
 
     return (
         <FlatList

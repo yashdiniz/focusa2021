@@ -108,7 +108,7 @@ function CourseDetails({ navigation, route, token, userID, username }) {
             </View>
         );
     else if (error)
-        return (<ErrorComponent error={error} />);
+        return (<ErrorComponent error={error} refresh={onRefresh} />);
     else
         return (
             <View style={{ height: Dimensions.get('window').height - 100, justifyContent: 'space-between' }}>

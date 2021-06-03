@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Text } from 'react-native-elements';
+import { Button, Text } from 'react-native-elements';
 
-function ErrorComponent({ error }) {
+function ErrorComponent({ error, refresh }) {
     let message = JSON.stringify(error);
     if (error.message) message = error.message;
     if (error.networkError) {
@@ -23,6 +23,14 @@ function ErrorComponent({ error }) {
             }}>
                 {message}
             </Text>
+            
+            <Button
+                containerStyle={{
+                    marginTop: 30
+                }}
+                onPress={refresh}
+                title={'Retry'}
+            />
         </View>
     );
 }
