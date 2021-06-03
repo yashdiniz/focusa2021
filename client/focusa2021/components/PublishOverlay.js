@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { Text, View, Dimensions, ScrollView } from 'react-native';
-import { Overlay, Input, Button, FAB } from 'react-native-elements';
+import { Overlay, Input, Button } from 'react-native-elements';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { getCourseDetails, createPost, getUserRole } from '../constants/queries';
+import { getCourseDetails, createPost } from '../constants/queries';
 import { connectProps } from '../hooks/store';
 
 function PublishOverlay({ onRefresh, courseID, toggleOverlayPublishPost, publishPostVisible,parentID }) {

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { BackHandler } from 'react-native';
 import { SET_TOKEN, SET_USERNAME, SET_USERID } from '../config';
 import { auth } from './apollo';
 import { store } from './store';
@@ -38,6 +39,7 @@ export const logout = () => {
             store.dispatch({ type: SET_TOKEN, token: '' });
             store.dispatch({ type: SET_USERID, userID: '' });
             store.dispatch({ type: SET_USERNAME, username: '@@' });
+            BackHandler.exitApp();
         })
         .catch(e => console.error(new Date(), 'logout', e));
 }
