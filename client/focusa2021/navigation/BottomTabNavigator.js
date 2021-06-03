@@ -61,13 +61,13 @@ function BottomTabNavigator({ token }) {
                 }}
             />
 
-            <BottomTab.Screen
+            {/* <BottomTab.Screen
                 name="PublishPost"
                 component={PublishPostNavigator}
                 options={{
                     tabBarButton: () => null,
                 }}
-            />
+            /> */}
             <BottomTab.Screen
                 name="PostDetails"
                 component={PostDetailsNavigator}
@@ -197,23 +197,23 @@ function CourseDetailsNavigator({ navigation }) {
     );
 }
 
-const PublishPostStack = createStackNavigator();
-function PublishPostNavigator({ navigation }) {
-    return (
-        <PublishPostStack.Navigator>
-            <PublishPostStack.Screen
-                name="PublishPostScreen"
-                component={PublishPost}
-                options={{
-                    headerTitle: "Publish Post",
-                    headerLeft: () => (<TouchableOpacity style={{ paddingStart: 20 }} onPress={() => navigation.goBack()}>
-                        <TabBarIcon name="arrow-back" color="red" />
-                    </TouchableOpacity>)
-                }}
-            />
-        </PublishPostStack.Navigator>
-    );
-}
+// const PublishPostStack = createStackNavigator();
+// function PublishPostNavigator({ navigation }) {
+//     return (
+//         <PublishPostStack.Navigator>
+//             <PublishPostStack.Screen
+//                 name="PublishPostScreen"
+//                 component={PublishPost}
+//                 options={{
+//                     headerTitle: "Publish Post",
+//                     headerLeft: () => (<TouchableOpacity style={{ paddingStart: 20 }} onPress={() => navigation.goBack()}>
+//                         <TabBarIcon name="arrow-back" color="red" />
+//                     </TouchableOpacity>)
+//                 }}
+//             />
+//         </PublishPostStack.Navigator>
+//     );
+// }
 
 const VideoConferencingStack = createStackNavigator();
 function VideoConferencingNavigator() {
