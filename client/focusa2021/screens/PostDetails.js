@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
 import React, { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, Text, View, StyleSheet, RefreshControl, Dimensions, TouchableOpacity, SafeAreaView  } from 'react-native';
+import { ActivityIndicator, Text, View, StyleSheet, RefreshControl, Dimensions, TouchableOpacity, SafeAreaView } from 'react-native';
 import { Avatar } from 'react-native-elements'
 import { connectProps } from '../hooks/store';
 import Post from '../components/Post';
@@ -8,11 +8,18 @@ import { FlatList } from 'react-native-gesture-handler';
 import ErrorComponent from '../components/ErrorComponent';
 import InfoMessage from '../components/InfoMessage';
 import { getPostComments } from '../constants/queries';
+import PublishOverlay from '../components/PublishOverlay';
 
 function PostDetails({ navigation, route, token }) {
     const postID = route.params?.postID;  // the postID is taken from route params
 
     const [refreshing, setRefreshing] = useState(false);
+
+    //Toggle overlay
+    const [publishPostVisible, setVisiblePublishPost] = useState(false);
+    const toggleOverlayPublishPost = () => {
+        setVisiblePublishPost(!publishPostVisible)
+    }
 
     const { data, error, loading, refetch, fetchMore } = useQuery(getPostComments, {
         variables: {
@@ -54,7 +61,7 @@ function PostDetails({ navigation, route, token }) {
         return (<ErrorComponent error={error} />);
 
     return (
-        <SafeAreaView style={{height:Dimensions.get('window').height-50 ,justifyContent:'space-between'}}>
+        <SafeAreaView style={{ height: Dimensions.get('window').height - 50, justifyContent: 'space-between' }}>
             <FlatList
                 containerStyle={styles.container}
                 refreshControl={
@@ -120,7 +127,14 @@ function PostDetails({ navigation, route, token }) {
                         : <></>
                 }
             />
-            <TouchableOpacity style={{
+
+            <PublishOverlay
+                onRefresh={onRefresh}
+                parentID={postID}
+                toggleOverlayPublishPost={toggleOverlayPublishPost}
+                publishPostVisible={publishPostVisible}
+            />
+            <TouchableOpacity onPress={toggleOverlayPublishPost} style={{
                 // width: Dimensions.get('screen').width - 20,
                 margin: 20,
                 height: 40,
@@ -129,16 +143,16 @@ function PostDetails({ navigation, route, token }) {
                 paddingEnd: 10,
                 flexDirection: 'row',
                 alignItems: 'center',
-                position: 'absolute', 
-                bottom: 10
+                position: 'absolute',
+                bottom: 10,
             }}>
                 <Avatar
                     size="small"
                     rounded
-                    icon={{name: 'user', type: 'font-awesome'}}
+                    icon={{ name: 'user', type: 'font-awesome' }}
                     activeOpacity={0.7}
                     containerStyle={{
-                        backgroundColor:'grey', marginStart: 10, marginEnd:10,
+                        backgroundColor: 'grey', marginStart: 10, marginEnd: 10,
                     }}
                 />
                 <Text style={{ color: 'grey' }}>Post a comment</Text>

@@ -6,7 +6,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { getCourseDetails, createPost, getUserRole } from '../constants/queries';
 import { connectProps } from '../hooks/store';
 
-function PublishOverlay({ onRefresh, courseID, toggleOverlayPublishPost, publishPostVisible }) {
+function PublishOverlay({ onRefresh, courseID, toggleOverlayPublishPost, publishPostVisible,parentID }) {
     const [text, setText] = useState('');
 
     const [createPostfun] = useMutation(createPost, {
@@ -22,6 +22,7 @@ function PublishOverlay({ onRefresh, courseID, toggleOverlayPublishPost, publish
             variables: {
                 text,
                 courseID,
+                parentID,
             }
         })
         toggleOverlayPublishPost();
