@@ -126,7 +126,7 @@ export const getCourseDetails = gql`
     }
 `;
 
-export const getUserRole =gql`
+export const getUserRole = gql`
     query getUserRole($courseID: ID!, $username: String!){
         course(id: $courseID) {
             uuid,
@@ -158,3 +158,11 @@ mutation createPost($text: String!, $courseID: ID, $parentID: ID){
         },
     }
 }`
+
+export const deletePost = gql`
+mutation deletePost($uuid: ID!){
+    deletePost(id:$uuid){
+        uuid,
+    }
+ }
+`

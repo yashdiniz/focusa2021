@@ -192,6 +192,7 @@ function CourseDetails({ navigation, route, token, userID, username }) {
                                 time={item.time}
                                 attachmentURL={item.attachmentURL}
                                 navigation={navigation}
+                                onRefresh={onRefresh}
                             />
                     }
                     ListFooterComponent={

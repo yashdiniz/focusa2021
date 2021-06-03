@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Dimensions, TouchableOpacity, Linking } from 'react-native';
+import { StyleSheet, View, Dimensions, TouchableOpacity, Linking, Alert } from 'react-native';
 import { BottomSheet, Text, ListItem, Icon } from 'react-native-elements';
 import { Ionicons } from '@expo/vector-icons';
 import { PostDetailsNavigate } from '../constants/screens';
 import { connectProps } from '../hooks/store';
+import { useMutation } from '@apollo/client';
+import { deletePost, getCourseDetails } from '../constants/queries';
 
 const formatTime = (time) => {
     var TimeType, hour, minutes, fullTime;
@@ -47,9 +49,30 @@ const formatTime = (time) => {
     }
 }
 
-function Post({ parent, author, course, time, text, attachmentURL, navigation, uuid, username }) {
+
+
+function Post({ parent, author, course, time, text, attachmentURL, navigation, uuid, username,  onRefresh }) {
 
     const [bottomSheetVisible, makeBottomSheetVisible] = useState(false);
+
+    const [deletePostfun] = useMutation(deletePost,{
+        refetchQueries: getCourseDetails,
+            awaitRefetchQueries: true,
+            onCompleted(){
+                onRefresh()
+            }
+    });
+
+    const onDelete = React.useCallback(() => {
+        deletePostfun({
+            variables: {
+                uuid,
+            }
+        })
+       makeBottomSheetVisible(false);
+    });
+
+    
 
     return (
         <View style={styles.PostView}>
@@ -160,15 +183,26 @@ function Post({ parent, author, course, time, text, attachmentURL, navigation, u
                 >
                     <Icon name="edit"/>
                     <ListItem.Content>
-                        <ListItem.Title>Edit Post</ListItem.Title>
+                        <ListItem.Title>{(course==null?'Edit Comment':'Edit Post')}</ListItem.Title>
                     </ListItem.Content>
                 </ListItem>
                 <ListItem
-                    onPress={() => makeBottomSheetVisible(false)}
+                    onPress={()=>Alert.alert(
+                        "Alert",
+                        (course==null?'Delete Comment':'Delete Post'),
+                        [
+                          {
+                            text: "Cancel",
+                            onPress: () => makeBottomSheetVisible(false),
+                            style: "cancel"
+                          },
+                          { text: "OK", onPress: () => onDelete() }
+                        ]
+                      )}
                 >
                     <Icon name="delete"/>
                     <ListItem.Content>
-                        <ListItem.Title>Delete Post</ListItem.Title>
+                        <ListItem.Title>{(course==null?'Delete Comment':'Delete Post')}</ListItem.Title>
                     </ListItem.Content>
                 </ListItem>
                 <ListItem
