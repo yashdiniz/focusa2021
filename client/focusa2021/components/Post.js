@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { PostDetailsNavigate } from '../constants/screens';
 import { connectProps } from '../hooks/store';
 import { useMutation } from '@apollo/client';
+import EditPostOverlay from './EditPostOverlay';
 import { deletePost, getCourseDetails } from '../constants/queries';
 
 const formatTime = (time) => {
@@ -51,16 +52,19 @@ const formatTime = (time) => {
 
 
 
-function Post({ parent, author, course, time, text, attachmentURL, navigation, uuid, username,  onRefresh }) {
+function Post({ parent, author, course, time, text, attachmentURL, navigation, uuid, username, onRefresh }) {
 
     const [bottomSheetVisible, makeBottomSheetVisible] = useState(false);
+    const toggleBottomSheet =()=>{
+        makeBottomSheetVisible(!bottomSheetVisible);
+    }
 
-    const [deletePostfun] = useMutation(deletePost,{
+    const [deletePostfun] = useMutation(deletePost, {
         refetchQueries: getCourseDetails,
-            awaitRefetchQueries: true,
-            onCompleted(){
-                onRefresh()
-            }
+        awaitRefetchQueries: true,
+        onCompleted() {
+            onRefresh()
+        }
     });
 
     const onDelete = React.useCallback(() => {
@@ -69,10 +73,16 @@ function Post({ parent, author, course, time, text, attachmentURL, navigation, u
                 uuid,
             }
         })
-       makeBottomSheetVisible(false);
+        makeBottomSheetVisible(false);
     });
 
-    
+    //Toggle overlay
+    const [editPostVisible, setVisibleEditPost] = useState(false);
+    const toggleOverlayEditPost = () => {
+        setVisibleEditPost(!editPostVisible)
+    }
+
+
 
     return (
         <View style={styles.PostView}>
@@ -121,7 +131,7 @@ function Post({ parent, author, course, time, text, attachmentURL, navigation, u
                 <Text>  |  </Text>
                 <Text style={styles.time}>{formatTime(time)}</Text>
             </View>
-            
+
             {/* The post body Text */}
             <Text style={styles.text}>{text}</Text>
 
@@ -142,33 +152,33 @@ function Post({ parent, author, course, time, text, attachmentURL, navigation, u
             <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20 }}>
                 {parent ?
                     <></>
-                    : <TouchableOpacity 
+                    : <TouchableOpacity
                         // style={{ marginBottom: 10 }}
                         onPress={() => navigation.navigate('PostDetails', {
                             ...PostDetailsNavigate,
                             params: { postID: uuid }
                         })}
                     >
-                        <Ionicons name="chatbubble-outline" wi size={25} 
-                            style={{ marginTop: 'auto', paddingStart: 27 }} 
+                        <Ionicons name="chatbubble-outline" wi size={25}
+                            style={{ marginTop: 'auto', paddingStart: 27 }}
                         />
                     </TouchableOpacity>
                 }
 
-                <TouchableOpacity 
-                    // style={{ marginBottom: 10 }}
+                <TouchableOpacity
+                // style={{ marginBottom: 10 }}
                 >
-                    <Ionicons name="share-social-outline" size={25} 
-                        style={{ marginTop: 'auto', paddingStart: 27, }} 
+                    <Ionicons name="share-social-outline" size={25}
+                        style={{ marginTop: 'auto', paddingStart: 27, }}
                     />
                 </TouchableOpacity>
 
 
-                <TouchableOpacity 
-                    // style={{ marginLeft: 'auto', paddingRight: 15, marginBottom: 10 }}
+                <TouchableOpacity
+                // style={{ marginLeft: 'auto', paddingRight: 15, marginBottom: 10 }}
                 >
-                    <Ionicons name="download-outline" size={25} 
-                        style={{ marginTop: 'auto', paddingStart: 27 }} 
+                    <Ionicons name="download-outline" size={25}
+                        style={{ marginTop: 'auto', paddingStart: 27 }}
                     />
                 </TouchableOpacity>
             </View>
@@ -179,42 +189,53 @@ function Post({ parent, author, course, time, text, attachmentURL, navigation, u
                 containerStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
             >
                 <ListItem
-                    onPress={() => makeBottomSheetVisible(false)}
+                    onPress={() => toggleOverlayEditPost()}
                 >
-                    <Icon name="edit"/>
+                    <Icon name="edit" />
                     <ListItem.Content>
-                        <ListItem.Title>{(course==null?'Edit Comment':'Edit Post')}</ListItem.Title>
+                        <ListItem.Title>{(course == null ? 'Edit Comment' : 'Edit Post')}</ListItem.Title>
                     </ListItem.Content>
                 </ListItem>
                 <ListItem
-                    onPress={()=>Alert.alert(
+                    onPress={() => Alert.alert(
                         "Alert",
-                        (course==null?'Delete Comment':'Delete Post'),
+                        (course == null ? 'Delete Comment?' : 'Delete Post?'),
                         [
-                          {
-                            text: "Cancel",
-                            onPress: () => makeBottomSheetVisible(false),
-                            style: "cancel"
-                          },
-                          { text: "OK", onPress: () => onDelete() }
+                            {
+                                text: "Cancel",
+                                onPress: () => makeBottomSheetVisible(false),
+                                style: "cancel"
+                            },
+                            { text: "OK", onPress: () => onDelete() }
                         ]
-                      )}
+                    )}
                 >
-                    <Icon name="delete"/>
+                    <Icon name="delete" />
                     <ListItem.Content>
-                        <ListItem.Title>{(course==null?'Delete Comment':'Delete Post')}</ListItem.Title>
+                        <ListItem.Title>{(course == null ? 'Delete Comment' : 'Delete Post')}</ListItem.Title>
                     </ListItem.Content>
                 </ListItem>
                 <ListItem
                     containerStyle={{ backgroundColor: 'red', }}
                     onPress={() => makeBottomSheetVisible(false)}
-                >   
-                    <Icon name="cancel"/>
+                >
+                    <Icon name="cancel" />
                     <ListItem.Content>
-                        <ListItem.Title style={{color: 'white'}}>Cancel</ListItem.Title>
+                        <ListItem.Title style={{ color: 'white' }}>Cancel</ListItem.Title>
                     </ListItem.Content>
                 </ListItem>
             </BottomSheet>
+
+            <EditPostOverlay
+                    postID={uuid}
+                    currentText={text}
+                    toggleOverlayEditPost={toggleOverlayEditPost}
+                    editPostVisible={editPostVisible}
+                    toggleBottomSheet={toggleBottomSheet}
+                    onRefresh={onRefresh}
+            />
+                   
+
         </View >
     );
 }

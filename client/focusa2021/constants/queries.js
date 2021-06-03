@@ -166,3 +166,11 @@ mutation deletePost($uuid: ID!){
     }
  }
 `
+
+export const editPost = gql`
+    mutation editPost($postID: ID!, $text: String!){
+        editPost(id:$postID, text:$text){
+            uuid,
+        }
+    }
+`

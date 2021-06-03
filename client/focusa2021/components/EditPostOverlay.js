@@ -1,47 +1,47 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { Text, View, Dimensions, ScrollView } from 'react-native';
 import { Overlay, Input, Button } from 'react-native-elements';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { getCourseDetails, createPost } from '../constants/queries';
+import { getCourseDetails, editPost} from '../constants/queries';
 import { connectProps } from '../hooks/store';
 
-function PublishOverlay({ onRefresh, courseID, toggleOverlayPublishPost, publishPostVisible,parentID}) {
-    const [text, setText] = useState('');
-    const [createPostfun] = useMutation(createPost, {
+function EditPostOverlay({ toggleOverlayEditPost, editPostVisible, postID, currentText, onRefresh,toggleBottomSheet}) {
+    const [text,setText] =useState('' + currentText);
+    const [editPostfun] = useMutation(editPost, {
         refetchQueries: getCourseDetails,
-        awaitRefetchQueries: true,
+        awaitRefetchQueries: true, 
         onCompleted() {
             onRefresh();
         }
-    })
+    });
 
-    const onPublish = React.useCallback(() => {
-        createPostfun({
-            variables: {
+    const onEdit = React.useCallback(()=>{
+        editPostfun({
+            variables:{
+                postID,
                 text,
-                courseID,
-                parentID,
             }
         })
-        toggleOverlayPublishPost();
-    });
+
+        toggleOverlayEditPost()
+        toggleBottomSheet()
+    })
 
     return (
         <>
-            <Overlay isVisible={publishPostVisible}>
+            <Overlay isVisible={editPostVisible}>
                 <ScrollView contentContainerStyle={{
                     width: Dimensions.get('window').width,
                     height: Dimensions.get('window').height,
                     alignItems: 'center'
                 }}>
-                    {
-                        (courseID==null)? <Text style={{ fontSize: 20, fontWeight: 'bold', marginRight: 'auto' }}>Publish comment</Text>:
-                        <Text style={{ fontSize: 20, fontWeight: 'bold', marginRight: 'auto' }}>Publish Post</Text>
-                    }
+                       <Text style={{ fontSize: 20, fontWeight: 'bold', marginRight: 'auto' }}>Edit</Text>
+                    
+                    {/* Reference: https://stackoverflow.com/a/34006497/13227113 */}
                     <Input
                         placeholder='enter text here...'
-                        label={(courseID==null)?'Comment description':'Post description'}
+                        label='description'
                         leftIcon={
                             <MaterialCommunityIcons name="pencil" size={24} />
                         }
@@ -55,15 +55,15 @@ function PublishOverlay({ onRefresh, courseID, toggleOverlayPublishPost, publish
                     <View style={{ flexDirection: 'row', }}>
                         
                         <Button
-                            title="Publish"
+                            title="save"
                             buttonStyle={{ width: 120, marginRight: 15 }}
-                            onPress={onPublish}
-                            disabled={(text.trim().length < 10 ? true : false)}
+                            disabled={(currentText.trim().length < 10 ? true : false)}
+                            onPress={onEdit}
                         />
                         <Button
                             title="Cancel"
                             buttonStyle={{ width: 120, backgroundColor: 'red' }}
-                            onPress={toggleOverlayPublishPost}
+                            onPress={toggleOverlayEditPost}
                         />
                     </View>
                 </ScrollView>
@@ -72,4 +72,4 @@ function PublishOverlay({ onRefresh, courseID, toggleOverlayPublishPost, publish
     );
 }
 
-export default connectProps(PublishOverlay);
+export default connectProps(EditPostOverlay);
