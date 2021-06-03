@@ -28,6 +28,11 @@ function EditPostOverlay({ toggleOverlayEditPost, editPostVisible, postID, curre
         toggleBottomSheet()
     })
 
+    const onCancel = React.useCallback(()=>{
+        toggleOverlayEditPost()
+        toggleBottomSheet()
+    })
+
     return (
         <>
             <Overlay isVisible={editPostVisible}>
@@ -63,7 +68,7 @@ function EditPostOverlay({ toggleOverlayEditPost, editPostVisible, postID, curre
                         <Button
                             title="Cancel"
                             buttonStyle={{ width: 120, backgroundColor: 'red' }}
-                            onPress={toggleOverlayEditPost}
+                            onPress={onCancel}
                         />
                     </View>
                 </ScrollView>
