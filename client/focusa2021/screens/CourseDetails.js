@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from '@apollo/client';
 import React, { useCallback, useEffect, useState } from 'react';
+import { Ionicons } from '@expo/vector-icons';
 import { ActivityIndicator, Text, View, StyleSheet, RefreshControl, Dimensions, TouchableOpacity } from 'react-native';
 import { connectProps } from '../hooks/store';
 import { getCourseDetails, getUserRole, subscribeToCourse, unsubscribeFromCourse } from '../constants/queries';
@@ -7,8 +8,10 @@ import Post from '../components/Post';
 import { FlatList } from 'react-native-gesture-handler';
 import ErrorComponent from '../components/ErrorComponent';
 import InfoMessage from '../components/InfoMessage';
-import { FAB, } from 'react-native-elements';
+import { FAB, BottomSheet, ListItem, Icon } from 'react-native-elements';
 import PublishOverlay from '../components/PublishOverlay';
+import EditCourseOverlay from '../components/EditCourseOverlay';
+
 
 function CourseDetails({ navigation, route, token, userID, username }) {
     const courseID = route.params?.courseID;
@@ -18,6 +21,17 @@ function CourseDetails({ navigation, route, token, userID, username }) {
     const [publishPostVisible, setVisiblePublishPost] = useState(false);
     const toggleOverlayPublishPost = () => {
         setVisiblePublishPost(!publishPostVisible)
+    }
+
+    const [editCourseVisible, setVisibleEditCourse] = useState(false);
+    const toggleOverlayEditCourse = () => {
+        setVisibleEditCourse(!editCourseVisible)
+    }
+
+    //toggle bottom sheet
+    const [bottomSheetVisible, makeBottomSheetVisible] = useState(false);
+    const toggleBottomSheet = () => {
+        makeBottomSheetVisible(!bottomSheetVisible);
     }
 
     const { data, error, loading, refetch, fetchMore } = useQuery(getCourseDetails, {
@@ -120,10 +134,17 @@ function CourseDetails({ navigation, route, token, userID, username }) {
                     }
                     ListHeaderComponent={
                         <View style={styles.SubjectPageHeaderView}>
-                            <Text style={styles.SubjectTitle}>
-                                {data.course.name}
-                            </Text>
 
+                            <View style={{ flexDirection: 'row' }}>
+                                <Text style={styles.SubjectTitle}>
+                                    {data.course.name}
+                                </Text>
+                                <TouchableOpacity style={{  paddingRight: 15, marginTop: 20,position:'absolute', left:165}}
+                                    onPress={() => makeBottomSheetVisible(true)}
+                                >
+                                    <Ionicons name="ellipsis-vertical" size={20} style={{ marginTop: 'auto', paddingStart: 27, color:'white' }} />
+                                </TouchableOpacity>
+                            </View>
 
                             <Text style={styles.SubjectDescription}>
                                 {data.course.description}
@@ -204,11 +225,44 @@ function CourseDetails({ navigation, route, token, userID, username }) {
                             : <></>
                     }
                 />
+                {/* The BottomSheet for extra options */}
+                <BottomSheet
+                    isVisible={bottomSheetVisible}
+                    containerStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
+                >
+                    <ListItem
+                        onPress={() => toggleOverlayEditCourse()}
+                    >
+                        <Icon name="edit" />
+                        <ListItem.Content>
+                            <ListItem.Title>Edit Course</ListItem.Title>
+                        </ListItem.Content>
+                    </ListItem>
+                    <ListItem
+                        containerStyle={{ backgroundColor: 'red', }}
+                        onPress={() => makeBottomSheetVisible(false)}
+                    >
+                        <Icon name="cancel" />
+                        <ListItem.Content>
+                            <ListItem.Title style={{ color: 'white' }}>Cancel</ListItem.Title>
+                        </ListItem.Content>
+                    </ListItem>
+                </BottomSheet>
                 <PublishOverlay
                     onRefresh={onRefresh}
                     courseID={courseID}
                     toggleOverlayPublishPost={toggleOverlayPublishPost}
                     publishPostVisible={publishPostVisible}
+                />
+
+                <EditCourseOverlay
+                    onRefresh={onRefresh}
+                    courseID={courseID}
+                    name={data.course.name}
+                    description={data.course.description}
+                    toggleOverlayEditCourse={toggleOverlayEditCourse}
+                    editCourseVisible={editCourseVisible}
+                    toggleBottomSheet={toggleBottomSheet}
                 />
                 {
                     (filteredArray?.length > 0) ?
@@ -234,20 +288,21 @@ const styles = StyleSheet.create({
     },
     SubjectPageHeaderView: {
         width: Dimensions.get('screen').width,
-        height: 150,
-        backgroundColor: '#C0C0C0',
+        backgroundColor: 'darkred',
         alignItems: 'center',
         justifyContent: 'center',
         height: "auto",
     },
     SubjectTitle: {
         marginTop: 10,
-        fontSize: 30
+        fontSize: 30,
+        color: 'white'
     },
     SubjectDescription: {
         marginTop: 5,
         fontSize: 15,
         marginLeft: 10,
+        color: 'white'
     }
 });
 
