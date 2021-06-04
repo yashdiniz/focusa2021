@@ -85,7 +85,7 @@ function PostDetails({ navigation, route, token }) {
                         time={data.post.time}
                         attachmentURL={data.post.attachmentURL}
                         navigation={navigation}
-                        onRefresh ={onRefresh }
+                        onRefresh ={onRefresh}
                     />
                 }
                 ListEmptyComponent={

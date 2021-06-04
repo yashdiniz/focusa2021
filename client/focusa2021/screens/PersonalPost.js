@@ -85,6 +85,7 @@ function PersonalPost({ navigation, route, token, username }) {
                         time={item.time}
                         attachmentURL={item.attachmentURL}
                         navigation={navigation}
+                        onRefresh={onRefresh}
                     />
             }
             ListFooterComponent={
