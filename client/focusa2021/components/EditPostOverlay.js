@@ -6,9 +6,9 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { getCourseDetails, editPost} from '../constants/queries';
 import { connectProps } from '../hooks/store';
 
-function EditPostOverlay({ toggleOverlayEditPost, editPostVisible, postID, currentText, onRefresh,toggleBottomSheet}) {
-    const [text,setText] =useState('' + currentText);
-    const [editPostfun] = useMutation(editPost, {
+function EditPostOverlay({ toggleOverlayEditPost, editPostVisible, postID, currentText, onRefresh, toggleBottomSheet }) {
+    const [ text, setText ] =useState('' + currentText);
+    const [ editPostfun ] = useMutation(editPost, {
         refetchQueries: getCourseDetails,
         awaitRefetchQueries: true, 
         onCompleted() {
@@ -16,21 +16,20 @@ function EditPostOverlay({ toggleOverlayEditPost, editPostVisible, postID, curre
         }
     });
 
-    const onEdit = React.useCallback(()=>{
+    const onEdit = React.useCallback(() => {
         editPostfun({
             variables:{
                 postID,
                 text,
             }
-        })
-
-        toggleOverlayEditPost()
-        toggleBottomSheet()
+        });
+        toggleOverlayEditPost();
+        toggleBottomSheet();
     })
 
-    const onCancel = React.useCallback(()=>{
-        toggleOverlayEditPost()
-        toggleBottomSheet()
+    const onCancel = React.useCallback(() => {
+        toggleOverlayEditPost();
+        toggleBottomSheet();
     })
 
     return (
@@ -41,12 +40,12 @@ function EditPostOverlay({ toggleOverlayEditPost, editPostVisible, postID, curre
                     height: Dimensions.get('window').height,
                     alignItems: 'center'
                 }}>
-                       <Text style={{ fontSize: 20, fontWeight: 'bold', marginRight: 'auto' }}>Edit</Text>
+                    <Text style={{ fontSize: 20, fontWeight: 'bold', marginRight: 'auto' }}>Edit</Text>
                     
                     {/* Reference: https://stackoverflow.com/a/34006497/13227113 */}
                     <Input
-                        placeholder='enter text here...'
-                        label='description'
+                        placeholder='Enter text here...'
+                        label='Description'
                         leftIcon={
                             <MaterialCommunityIcons name="pencil" size={24} />
                         }
@@ -57,10 +56,11 @@ function EditPostOverlay({ toggleOverlayEditPost, editPostVisible, postID, curre
                         onChangeText={setText}
                         value={text}
                     />
+
+                    {/* Action buttons */}
                     <View style={{ flexDirection: 'row', }}>
-                        
                         <Button
-                            title="save"
+                            title="Save"
                             buttonStyle={{ width: 120, marginRight: 15 }}
                             disabled={(text.trim().length < 10 ? true : false)}
                             onPress={onEdit}

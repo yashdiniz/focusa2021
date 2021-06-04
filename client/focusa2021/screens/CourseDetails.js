@@ -1,15 +1,13 @@
 import { useMutation, useQuery } from '@apollo/client';
 import React, { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, Text, View, StyleSheet, RefreshControl, Dimensions, TouchableOpacity, ScrollView } from 'react-native';
+import { ActivityIndicator, Text, View, StyleSheet, RefreshControl, Dimensions, TouchableOpacity } from 'react-native';
 import { connectProps } from '../hooks/store';
-import { getCourseDetails, getUserRole, subscribeToCourse, unsubscribeFromCourse, createPost } from '../constants/queries';
+import { getCourseDetails, getUserRole, subscribeToCourse, unsubscribeFromCourse } from '../constants/queries';
 import Post from '../components/Post';
 import { FlatList } from 'react-native-gesture-handler';
 import ErrorComponent from '../components/ErrorComponent';
 import InfoMessage from '../components/InfoMessage';
-import { FAB, Overlay, Input, Button } from 'react-native-elements';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { PublishPostNavigate } from '../constants/screens';
+import { FAB, } from 'react-native-elements';
 import PublishOverlay from '../components/PublishOverlay';
 
 function CourseDetails({ navigation, route, token, userID, username }) {
@@ -46,9 +44,6 @@ function CourseDetails({ navigation, route, token, userID, username }) {
                 .includes(value.name)
         );
 
-
-    // //ref:https://stackoverflow.com/questions/1885557/simplest-code-for-array-intersection-in-javascript
-    // const filterArray = dataRoles.course.mods.filter(value => dataRoles.user.roles.map(i => i.name).includes(value.name));
     const [subscribe] = useMutation(subscribeToCourse, {
         refetchQueries: [{
             query: getCourseDetails,
@@ -113,8 +108,6 @@ function CourseDetails({ navigation, route, token, userID, username }) {
         return (
             <View style={{ height: Dimensions.get('window').height - 100, justifyContent: 'space-between' }}>
                 <FlatList
-                    // style={{backgroundColor:'white'}}
-                    containerStyle={styles/*.container*/}
                     refreshControl={
                         <RefreshControl
                             refreshing={refreshing}
@@ -126,10 +119,6 @@ function CourseDetails({ navigation, route, token, userID, username }) {
                         item => item.uuid
                     }
                     ListHeaderComponent={
-                        // <Course
-                        //     name={data.course.name}
-                        //     description={data.course.description}
-                        // />
                         <View style={styles.SubjectPageHeaderView}>
                             <Text style={styles.SubjectTitle}>
                                 {data.course.name}
@@ -229,12 +218,7 @@ function CourseDetails({ navigation, route, token, userID, username }) {
                             size="large"
                             icon={{ name: 'create', color: "white" }}
                             style={{ position: 'absolute', bottom: 0 }}
-                            onPress={
-                                toggleOverlayPublishPost
-                                // () => navigation.navigate('PublishPost', {
-                                //     ...PublishPostNavigate, params: { courseID }
-                                // })
-                            } />
+                            onPress={toggleOverlayPublishPost} />
                         : null
                 }
             </View>
@@ -247,10 +231,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginBottom: 30
-    },
-    SujectPageView: {
-        alignContent: 'center',
-        justifyContent: 'center',
     },
     SubjectPageHeaderView: {
         width: Dimensions.get('screen').width,

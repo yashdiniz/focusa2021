@@ -127,49 +127,49 @@ export const getCourseDetails = gql`
 `;
 
 export const getUserRole = gql`
-    query getUserRole($courseID: ID!, $username: String!){
+    query getUserRole($courseID: ID!, $username: String!) {
         course(id: $courseID) {
             uuid,
             mods {
                 uuid, name
             }
         },
-        user(name: $username){
+        user(name: $username) {
             uuid,
-            roles{
-                uuid,name
+            roles {
+                uuid, name
             }
         }
     }
 `;
 
 export const createPost = gql`
-mutation createPost($text: String!, $courseID: ID, $parentID: ID){
-    createPost(text: $text, course:$courseID, parent:$parentID){
+mutation createPost($text: String!, $courseID: ID, $parentID: ID) {
+    createPost(text: $text, course: $courseID, parent: $parentID) {
         uuid, time, text, attachmentURL,
-        parent{
+        parent {
             uuid
         }, 
-        author{
+        author {
             uuid, name
         }, 
-        course{
+        course {
             uuid, name
         },
     }
 }`
 
 export const deletePost = gql`
-mutation deletePost($uuid: ID!){
-    deletePost(id:$uuid){
+mutation deletePost($uuid: ID!) {
+    deletePost(id: $uuid) {
         uuid,
     }
  }
 `
 
 export const editPost = gql`
-    mutation editPost($postID: ID!, $text: String!){
-        editPost(id:$postID, text:$text){
+    mutation editPost($postID: ID!, $text: String!) {
+        editPost(id: $postID, text: $text) {
             uuid,
         }
     }

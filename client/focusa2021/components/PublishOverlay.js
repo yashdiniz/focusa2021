@@ -6,7 +6,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { getCourseDetails, createPost } from '../constants/queries';
 import { connectProps } from '../hooks/store';
 
-function PublishOverlay({ onRefresh, courseID, toggleOverlayPublishPost, publishPostVisible,parentID}) {
+function PublishOverlay({ onRefresh, courseID, toggleOverlayPublishPost, publishPostVisible, parentID }) {
     const [text, setText] = useState('');
     const [createPostfun] = useMutation(createPost, {
         refetchQueries: getCourseDetails,
@@ -23,7 +23,7 @@ function PublishOverlay({ onRefresh, courseID, toggleOverlayPublishPost, publish
                 courseID,
                 parentID,
             }
-        })
+        });
         toggleOverlayPublishPost();
     });
 
@@ -35,13 +35,10 @@ function PublishOverlay({ onRefresh, courseID, toggleOverlayPublishPost, publish
                     height: Dimensions.get('window').height,
                     alignItems: 'center'
                 }}>
-                    {
-                        (courseID==null)? <Text style={{ fontSize: 20, fontWeight: 'bold', marginRight: 'auto' }}>Publish comment</Text>:
-                        <Text style={{ fontSize: 20, fontWeight: 'bold', marginRight: 'auto' }}>Publish Post</Text>
-                    }
+                    <Text style={{ fontSize: 20, fontWeight: 'bold', marginRight: 'auto' }}>Publish</Text>
                     <Input
-                        placeholder='enter text here...'
-                        label={(courseID==null)?'Comment description':'Post description'}
+                        placeholder='Enter text here...'
+                        label="Description"
                         leftIcon={
                             <MaterialCommunityIcons name="pencil" size={24} />
                         }
@@ -50,10 +47,8 @@ function PublishOverlay({ onRefresh, courseID, toggleOverlayPublishPost, publish
                         containerStyle={{ width: Dimensions.get('window').width, marginTop: 10 }}
                         labelStyle={{ color: 'red' }}
                         onChangeText={setText}
-                        value={text}
                     />
                     <View style={{ flexDirection: 'row', }}>
-                        
                         <Button
                             title="Publish"
                             buttonStyle={{ width: 120, marginRight: 15 }}

@@ -18,7 +18,6 @@ function Settings({ navigation, route, token, username }) {
         },
     ]
     return (
-        //<Text>This is the settings page</Text>
         <View>
 
             {
@@ -42,15 +41,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    avatar: {
-        flex: 2,
-        backgroundColor: '#333',
-        margin: 20
-    },
-    profileText: {
-        textAlign: 'center',
-        color: '#789'
-    }
 });
 
 export default connectProps(Settings);

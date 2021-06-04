@@ -91,33 +91,33 @@ function Profile({ navigation, route, token, username }) {
                         >{data?.user.profile.about}
                         </Text>
                         <Button
-                                title={'View Posts and Comments'}
-                                onPress={() => navigation.navigate('PersonalPost', {
-                                    ...PersonalPostNavigate,
-                                    params: { username }
-                                })
-                                }
-                            />
+                            title={'View Posts and Comments'}
+                            onPress={() => navigation.navigate('PersonalPost', {
+                                ...PersonalPostNavigate,
+                                params: { username }
+                            })
+                            }
+                        />
                     </Card>
                     <View style={{
-                            borderRightColor: "red",
-                            borderRightWidth: 3,
-                            borderTopColor: "red",
-                            borderTopWidth: 3,
-                            width: Dimensions.get('screen').width - 15,
-                            height: 20,
-                            borderTopRightRadius: 10,
-                            marginBottom: 20,
-                            marginTop: 10,
-                            paddingTop: 10,
-                            paddingBottom: 10,
-                            alignItems: 'center',
-                        }}>
-                            <Text style={{
-                                fontWeight: "bold",
-                                fontSize: 18,
-                            }}>Subscribed Courses</Text>
-                        </View>
+                        borderRightColor: "red",
+                        borderRightWidth: 3,
+                        borderTopColor: "red",
+                        borderTopWidth: 3,
+                        width: Dimensions.get('screen').width - 15,
+                        height: 20,
+                        borderTopRightRadius: 10,
+                        marginBottom: 20,
+                        marginTop: 10,
+                        paddingTop: 10,
+                        paddingBottom: 10,
+                        alignItems: 'center',
+                    }}>
+                        <Text style={{
+                            fontWeight: "bold",
+                            fontSize: 18,
+                        }}>Subscribed Courses</Text>
+                    </View>
                 </View>
             }
             ListEmptyComponent={

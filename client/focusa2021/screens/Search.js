@@ -94,7 +94,7 @@ function SearchResults({ refreshControl, GQLQuery, renderItem, tab, changeTab })
             console.error(new Date(), 'Search', JSON.stringify(error));
         }
     });
-    
+
     return (
         <FlatList
             containerStyle={styles.container}
@@ -119,10 +119,10 @@ function SearchResults({ refreshControl, GQLQuery, renderItem, tab, changeTab })
                     <Tab
                         onChange={changeTab}
                         value={tab}
-                        indicatorStyle={{backgroundColor:"red"}}
+                        indicatorStyle={{ backgroundColor: "red" }}
                     >
-                        <Tab.Item title="Courses" containerStyle={{backgroundColor:null}} titleStyle={{color:'black'}}/>
-                        <Tab.Item title="Posts"  containerStyle={{backgroundColor:null}} titleStyle={{color:'black'}}/>
+                        <Tab.Item title="Courses" containerStyle={{ backgroundColor: null }} titleStyle={{ color: 'black' }} />
+                        <Tab.Item title="Posts" containerStyle={{ backgroundColor: null }} titleStyle={{ color: 'black' }} />
                     </Tab>
                 </View>
 
@@ -143,15 +143,6 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-    },
-    avatar: {
-        flex: 2,
-        backgroundColor: '#333',
-        margin: 20
-    },
-    profileText: {
-        textAlign: 'center',
-        color: '#789'
     },
 });
 

@@ -169,27 +169,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginBottom: 100
     },
-    SujectPageView: {
-        alignContent: 'center',
-        justifyContent: 'center',
-    },
-    SubjectPageHeaderView: {
-        width: Dimensions.get('screen').width,
-        height: 150,
-        backgroundColor: '#C0C0C0',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    SubjectTitle: {
-        marginTop: 10,
-        fontSize: 30
-    },
-    SubjectDescription: {
-        marginTop: 5,
-        fontSize: 15,
-        marginLeft: 10,
-    },
-
 });
 
 export default connectProps(PostDetails);
