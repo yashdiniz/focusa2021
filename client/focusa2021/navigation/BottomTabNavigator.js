@@ -13,7 +13,7 @@ import Login from '../screens/Login';
 import Search from '../screens/Search';
 import CourseDetails from '../screens/CourseDetails';
 import Settings from '../screens/Settings';
-import PublishPost from '../screens/PublishPost';
+import EditProfile from '../screens/EditProfile';
 import PersonalPost from '../screens/PersonalPost';
 import VideoConferencing from '../screens/VideoConferencing';
 import { TouchableOpacity } from 'react-native';
@@ -61,13 +61,13 @@ function BottomTabNavigator({ token }) {
                 }}
             />
 
-            {/* <BottomTab.Screen
-                name="PublishPost"
-                component={PublishPostNavigator}
+            <BottomTab.Screen
+                name="EditProfile"
+                component={EditProfileNavigator}
                 options={{
                     tabBarButton: () => null,
                 }}
-            /> */}
+            />
             <BottomTab.Screen
                 name="PostDetails"
                 component={PostDetailsNavigator}
@@ -197,23 +197,23 @@ function CourseDetailsNavigator({ navigation }) {
     );
 }
 
-// const PublishPostStack = createStackNavigator();
-// function PublishPostNavigator({ navigation }) {
-//     return (
-//         <PublishPostStack.Navigator>
-//             <PublishPostStack.Screen
-//                 name="PublishPostScreen"
-//                 component={PublishPost}
-//                 options={{
-//                     headerTitle: "Publish Post",
-//                     headerLeft: () => (<TouchableOpacity style={{ paddingStart: 20 }} onPress={() => navigation.goBack()}>
-//                         <TabBarIcon name="arrow-back" color="red" />
-//                     </TouchableOpacity>)
-//                 }}
-//             />
-//         </PublishPostStack.Navigator>
-//     );
-// }
+const EditProfileStack = createStackNavigator();
+function EditProfileNavigator({ navigation }) {
+    return (
+        <EditProfileStack.Navigator>
+            <EditProfileStack.Screen
+                name="EditProfileScreen"
+                component={EditProfile}
+                options={{
+                    headerTitle: "Edit Profile",
+                    headerLeft: () => (<TouchableOpacity style={{ paddingStart: 20 }} onPress={() => navigation.goBack()}>
+                        <TabBarIcon name="arrow-back" color="red" />
+                    </TouchableOpacity>)
+                }}
+            />
+        </EditProfileStack.Navigator>
+    );
+}
 
 const VideoConferencingStack = createStackNavigator();
 function VideoConferencingNavigator() {

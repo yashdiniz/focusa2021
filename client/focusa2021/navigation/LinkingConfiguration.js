@@ -27,9 +27,9 @@ export default {
               PersonalPostScreen: 'pp',
             },
           },
-          PublishPost: {
+          EditProfile: {
             screens: {
-             PublishPostScreen: 'ppst',
+             EditProfileScreen: 'ep',
             },
           },
           PostDetails: {

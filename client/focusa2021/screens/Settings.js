@@ -9,7 +9,8 @@ function Settings({ navigation, route, token, username }) {
     const list = [
         {
             title: 'Edit Profile',
-            icon: 'person-outline'
+            icon: 'person-outline',
+            onPress: ()=>navigation.navigate('EditProfile')
         },
         {
             title: 'Logout',

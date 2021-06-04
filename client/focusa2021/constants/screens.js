@@ -20,8 +20,8 @@ export const PostDetailsNavigate = {
     screen: 'PostDetailsScreen',
     initial: false,
 };
-export const PublishPostNavigate = {
-    screen: 'PublishPostScreen',
+export const EditProfileNavigate = {
+    screen: 'EditProfileScreen',
     initial: false,
 };
 export const SettingsNavigate = {

@@ -174,3 +174,11 @@ export const editPost = gql`
         }
     }
 `
+
+export const updateProfile = gql`
+    mutation updateProfile($userID: ID!, $fullName: String!, $about: String! ){
+        updateProfile(id:$userID, fullName: $fullName, about: $about, display_pic:" "){
+            userID, fullName, about
+        }
+    }    
+`
