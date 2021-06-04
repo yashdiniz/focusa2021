@@ -1,5 +1,5 @@
-export const graphQLRealm = 'http://192.168.0.105:1896';
-export const authRealm = 'http://192.168.0.105:1897';
+export const graphQLRealm = 'http://192.168.0.102:1896';
+export const authRealm = 'http://192.168.0.102:1897';
 
 // Exporting the REDUX action types from here.
 export const SET_TOKEN = 'SET_TOKEN';
