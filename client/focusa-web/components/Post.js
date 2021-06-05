@@ -21,9 +21,11 @@ function Post({ parent, author, course, time, text, attachmentURL }) {
             <span style={{ color: 'gray' }}>
                 {author} &nbsp; | &nbsp; {formatTime(time)}
             </span>
+            
             <p>
                 {text}
             </p>
+
             {
                 attachmentURL && attachmentURL.length > 0 ?
                     <div>
@@ -31,6 +33,7 @@ function Post({ parent, author, course, time, text, attachmentURL }) {
                     </div>
                     : null
             }
+            <hr/>
         </div>
     );
 }
