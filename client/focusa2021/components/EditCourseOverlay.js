@@ -6,14 +6,16 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { updateCourse,getCourseDetails } from '../constants/queries';
 import { connectProps } from '../hooks/store';
 
-function EditCourseOverlay({ toggleOverlayEditCourse, editCourseVisible, courseID, name, description, onRefresh, toggleBottomSheet }) {
+function EditCourseOverlay({ toggleOverlayEditCourse, editCourseVisible, courseID, name, description, onRefresh, toggleBottomSheet, userID }) {
     const [courseName, setCourseName] = useState('' + name);
     const [courseDescription, setCourseDescription] = useState('' + description);
     const [ updateCoursefun ] = useMutation(updateCourse, {
-        refetchQueries: getCourseDetails,
+        refetchQueries: [{
+            query: getCourseDetails,
+            variables: { userID, courseID, offset: 0 }
+        }],
         awaitRefetchQueries: true, 
         onCompleted() {
-            console.log('completed')
             onRefresh();
         }
     });
@@ -23,8 +25,8 @@ function EditCourseOverlay({ toggleOverlayEditCourse, editCourseVisible, courseI
         updateCoursefun({
             variables: {
                 courseID,
-                name,
-                description,
+                name: courseName,
+                description: courseDescription,
             }
         });
         toggleOverlayEditCourse();
@@ -80,7 +82,7 @@ function EditCourseOverlay({ toggleOverlayEditCourse, editCourseVisible, courseI
                         <Button
                             title="Save"
                             buttonStyle={{ width: 120, marginRight: 15 }}
-                            disabled={(courseName.trim().length < 1||courseDescription.trim().length< 2 ||courseDescription.length>120|| courseName.length>40  ? true : false)}
+                            disabled={(courseName.trim().length < 1 || courseDescription.trim().length < 2 || courseDescription.trim().length > 120 || courseName.trim().length > 40  ? true : false)}
                             onPress={onEdit}
                         />
                         <Button

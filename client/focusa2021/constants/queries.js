@@ -184,8 +184,8 @@ export const updateProfile = gql`
 `
 
 export const updateCourse = gql `
-    mutation updateCourse($courseID: ID!, $name:String, $description: String){
-        updateCourse(id: $courseID, name: $name, description: $description){
+    mutation updateCourse($courseID: ID!, $name: String!, $description: String!) {
+        updateCourse(id: $courseID, name: $name, description: $description) {
             uuid,
         }
     }

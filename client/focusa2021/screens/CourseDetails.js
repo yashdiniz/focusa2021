@@ -134,16 +134,15 @@ function CourseDetails({ navigation, route, token, userID, username }) {
                     }
                     ListHeaderComponent={
                         <View style={styles.SubjectPageHeaderView}>
-
+                            <TouchableOpacity style={{ paddingRight: 20, marginTop: 20, marginStart: 'auto' }}
+                                onPress={() => makeBottomSheetVisible(true)}
+                            >
+                                <Ionicons name="ellipsis-vertical" size={20} style={{ marginTop: 'auto', paddingStart: 27, color: 'white' }} />
+                            </TouchableOpacity>
                             <View style={{ flexDirection: 'row' }}>
                                 <Text style={styles.SubjectTitle}>
                                     {data.course.name}
                                 </Text>
-                                <TouchableOpacity style={{  paddingRight: 15, marginTop: 20,position:'absolute', left:165}}
-                                    onPress={() => makeBottomSheetVisible(true)}
-                                >
-                                    <Ionicons name="ellipsis-vertical" size={20} style={{ marginTop: 'auto', paddingStart: 27, color:'white' }} />
-                                </TouchableOpacity>
                             </View>
 
                             <Text style={styles.SubjectDescription}>
