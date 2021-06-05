@@ -45,7 +45,7 @@ const formatTime = (time) => {
         }
         fullTime = hour.toString() + ':' + minutes.toString() + ' ' + TimeType.toString();
 
-        return (<Text style={{ color: 'grey' }}>{date.getFullYear()}-{date.getMonth()}-{date.getDate()} {fullTime}</Text>)
+        return (<Text style={{ color: 'grey' }}>{date.getFullYear()}-{date.getMonth()+1}-{date.getDate()} {fullTime}</Text>)
 
     } catch (e) {
         return 'Invalid Time';
