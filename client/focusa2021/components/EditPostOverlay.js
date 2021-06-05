@@ -7,7 +7,7 @@ import { getCourseDetails, editPost} from '../constants/queries';
 import { connectProps } from '../hooks/store';
 
 function EditPostOverlay({ toggleOverlayEditPost, editPostVisible, postID, currentText, onRefresh, toggleBottomSheet }) {
-    const [ text, setText ] =useState('' + currentText);
+    const [ text, setText ] = useState(currentText);
     const [ editPostfun ] = useMutation(editPost, {
         refetchQueries: getCourseDetails,
         awaitRefetchQueries: true, 

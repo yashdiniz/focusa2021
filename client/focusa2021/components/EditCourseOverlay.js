@@ -7,8 +7,8 @@ import { updateCourse,getCourseDetails } from '../constants/queries';
 import { connectProps } from '../hooks/store';
 
 function EditCourseOverlay({ toggleOverlayEditCourse, editCourseVisible, courseID, name, description, onRefresh, toggleBottomSheet, userID }) {
-    const [courseName, setCourseName] = useState('' + name);
-    const [courseDescription, setCourseDescription] = useState('' + description);
+    const [courseName, setCourseName] = useState(name);
+    const [courseDescription, setCourseDescription] = useState(description);
     const [ updateCoursefun ] = useMutation(updateCourse, {
         refetchQueries: [{
             query: getCourseDetails,
@@ -36,8 +36,8 @@ function EditCourseOverlay({ toggleOverlayEditCourse, editCourseVisible, courseI
     const onCancel = React.useCallback(() => {
         toggleOverlayEditCourse();
         toggleBottomSheet();
-        setCourseName(''+name)
-        setCourseDescription(''+description)
+        setCourseName(name);
+        setCourseDescription(description);
     })
 
     return (

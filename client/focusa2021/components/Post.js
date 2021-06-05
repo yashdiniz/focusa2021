@@ -7,6 +7,8 @@ import { connectProps } from '../hooks/store';
 import { useMutation } from '@apollo/client';
 import EditPostOverlay from './EditPostOverlay';
 import { deletePost, getCourseDetails } from '../constants/queries';
+import Markdown from 'react-native-markdown-package';
+import markdownStyle from '../constants/markdownStyle';
 
 const formatTime = (time) => {
     var TimeType, hour, minutes, fullTime;
@@ -133,7 +135,14 @@ function Post({ parent, author, course, time, text, attachmentURL, navigation, u
             </View>
 
             {/* The post body Text */}
-            <Text style={styles.text}>{text}</Text>
+            <View style={styles.text}>
+                <Markdown
+                    styles={markdownStyle.collectiveMd}
+                    onLink={(url) => Linking.openURL(url)}
+                >
+                    {text}
+                </Markdown>
+            </View>
 
             {/* The optional attachment View */}
             {
@@ -265,13 +274,14 @@ const styles = StyleSheet.create({
         textAlign: 'left',
     },
     text: {
-        marginTop: 20,
+        marginTop: 15,
         paddingStart: 15,
+        paddingEnd: 15,
         fontSize: 15,
         color: 'black',
         width: Dimensions.get('screen').width - 8,
         height: "auto",
     },
-})
+});
 
 export default connectProps(React.memo(Post));
