@@ -1,4 +1,4 @@
-import { gql, useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import React, { useCallback, useState } from 'react';
 import { View, Text, Dimensions, ActivityIndicator } from 'react-native';
 import { getProfileData, updateProfile } from '../constants/queries';
@@ -6,7 +6,6 @@ import { connectProps } from '../hooks/store';
 import { Input, Button } from 'react-native-elements';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ProfileNavigate } from '../constants/screens';
-import color from 'color';
 
 function EditProfile({ route, token, navigation, username, userID }) {
     const { data, error, loading } = useQuery(getProfileData, {
@@ -96,8 +95,6 @@ function EditProfile({ route, token, navigation, username, userID }) {
                     onPress={() => navigation.goBack()}
                 />
             </View>
-
-
             <Text style={{color:'grey', padding:15}}>NOTE: Profile updates will take some time to reflect across all users.</Text>
         </View>
     );

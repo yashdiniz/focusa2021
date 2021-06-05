@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { Text, View, Dimensions, ScrollView } from 'react-native';
 import { Overlay, Input, Button } from 'react-native-elements';

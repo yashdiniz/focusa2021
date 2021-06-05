@@ -71,6 +71,23 @@ function EditPostOverlay({ toggleOverlayEditPost, editPostVisible, postID, curre
                             onPress={onCancel}
                         />
                     </View>
+
+                    <View style={{
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        margin: 30
+                    }}>
+                        <MaterialCommunityIcons name="language-markdown-outline" size={30} />
+                        <Text style={{ color:'gray' }}>
+                            Posts also support Markdown!
+                        </Text>
+                        <Text style={{ color:'blue', textDecorationLine: 'underline' }}
+                            onPress={() => Linking.openURL('https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet')}
+                        >
+                            Click here to learn more.
+                            
+                        </Text>
+                    </View>
                 </ScrollView>
             </Overlay>
         </>

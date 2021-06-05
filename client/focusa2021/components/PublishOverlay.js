@@ -5,6 +5,7 @@ import { Overlay, Input, Button } from 'react-native-elements';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { getCourseDetails, createPost } from '../constants/queries';
 import { connectProps } from '../hooks/store';
+import { Linking } from 'react-native';
 
 function PublishOverlay({ onRefresh, courseID, toggleOverlayPublishPost, publishPostVisible, parentID }) {
     const [text, setText] = useState('');
@@ -60,6 +61,23 @@ function PublishOverlay({ onRefresh, courseID, toggleOverlayPublishPost, publish
                             buttonStyle={{ width: 120, backgroundColor: 'red' }}
                             onPress={toggleOverlayPublishPost}
                         />
+                    </View>
+
+                    <View style={{
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        margin: 30
+                    }}>
+                        <MaterialCommunityIcons name="language-markdown-outline" size={30} />
+                        <Text style={{ color:'gray' }}>
+                            Posts also support Markdown!
+                        </Text>
+                        <Text style={{ color:'blue', textDecorationLine: 'underline' }}
+                            onPress={() => Linking.openURL('https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet')}
+                        >
+                            Click here to learn more.
+                            
+                        </Text>
                     </View>
                 </ScrollView>
             </Overlay>
