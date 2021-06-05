@@ -1,4 +1,5 @@
 import Link from "next/link";
+import ReactMarkdown from 'react-markdown';
 
 function Post({ parent, author, course, time, text, attachmentURL }) {
     return (
@@ -23,7 +24,9 @@ function Post({ parent, author, course, time, text, attachmentURL }) {
             </span>
             
             <p>
-                {text}
+                <ReactMarkdown>
+                    {text}
+                </ReactMarkdown>
             </p>
 
             {
