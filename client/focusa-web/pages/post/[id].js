@@ -8,7 +8,7 @@ export default function PostDetails({ uuid }) {
         <>
             <Head>
                 <title>FOCUSA: Post Details View</title>
-                <MetaTags 
+                <MetaTags
                     title="Post on FOCUSA"
                     description="Discuss and learn on FOCUSA! Welcome to the community!"
                 />
@@ -16,6 +16,7 @@ export default function PostDetails({ uuid }) {
             <Layout>
                 <span>Current post uuid passed: {uuid}</span>
                 <Post
+                    key={uuid}
                     author='admin'
                     course='Random Dummy Course name'
                     time={Date.now()}
