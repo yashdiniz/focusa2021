@@ -3,8 +3,8 @@
  */
 import { Observable } from 'apollo-link';
 
-export default promise =>
-    new Observable((subscriber) => {
+export default function promiseToObservable(promise) {
+    return new Observable((subscriber) => {
         promise.then(
             (value) => {
                 if (subscriber.closed) return;
@@ -15,3 +15,4 @@ export default promise =>
         );
         return subscriber; // this line can removed
     });
+};

@@ -2,13 +2,13 @@ import { configureStore } from '@reduxjs/toolkit';
 import { connect } from 'react-redux';
 import { SET_TOKEN, SET_USERID, SET_USERNAME } from '../config';
 
-export let store = configureStore({ reducer });
-
 const initState = {
     token: '',
     username: '@@',
     userID: '',
 };
+
+export let store = configureStore({ reducer });
 
 function reducer(state, action) {
     if (!state) state = initState;
@@ -34,7 +34,7 @@ export const getToken = () => {
     return store.getState() ? store.getState().token : '';
 }
 
-const mapStateToProps = (state) => {
+export const mapStateToProps = (state) => {
     if (!state) state = initState;
     return state;
 }

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { SET_TOKEN, SET_USERNAME, SET_USERID } from '../config';
+import { authRealm, SET_TOKEN, SET_USERNAME, SET_USERID } from '../config';
 import { store } from './store';
 import { create } from 'axios';
 
@@ -14,25 +14,21 @@ export const auth = create({
  * @param {string} password The password to login with.
  */
 export const authenticate = (username, password) => {
-    const [token, setToken] = useState('');
+    // const params = new URLSearchParams();
+    // params.append('username', username);
+    // params.append('password', password);
 
-    const params = new URLSearchParams();
-    params.append('username', username);
-    params.append('password', password);
-
-    useEffect(() => {
-        auth.post('/login', { params })
-            .then(res => {
-                setToken(res.data.token);
-                store.dispatch({ type: SET_USERID, userID: res.data.uuid });
-                store.dispatch({ type: SET_TOKEN, token: res.data.token });
-                store.dispatch({ type: SET_USERNAME, username: res.data.name });
-                return token;
-            })
-            .catch(e => console.error(new Date(), 'authenticate Error', e));
-    }, []);
-
-    return token;
+    return auth.get('/login', {
+        params: { username, password }
+    })
+    .then(res => {
+        setToken(res.data.token);
+        store.dispatch({ type: SET_USERID, userID: res.data.uuid });
+        store.dispatch({ type: SET_TOKEN, token: res.data.token });
+        store.dispatch({ type: SET_USERNAME, username: res.data.name });
+        return token;
+    })
+    .catch(e => console.error(new Date(), 'authenticate Error', e));
 }
 
 /**
