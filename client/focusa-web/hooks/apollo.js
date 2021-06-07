@@ -46,6 +46,6 @@ const errorLink = onError(({ graphQLErrors, otherErrors, operation, forward }) =
 });
 
 export const apolloClient = new ApolloClient({
-    cache: new InMemoryCache(/*{ typePolicies }*/), // TODO: switch to another cache for offline use
+    cache: new InMemoryCache({ typePolicies }), // TODO: switch to another cache for offline use
     link: from([errorLink, asyncAuthLink, httpLink]),
 });
