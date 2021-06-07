@@ -12,7 +12,7 @@ export default function Home() {
 
       <main>
         <h1 className="title">
-          Read <Link href='/post/testURL'>Posts</Link>
+          Go to <Link href='/post/testURL'>Posts</Link>
         </h1>
 
         <p className="description">

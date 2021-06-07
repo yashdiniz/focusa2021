@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Markdown from 'react-markdown';
 
 function Post({ parent, author, course, time, text, attachmentURL }) {
     return (
@@ -21,10 +22,10 @@ function Post({ parent, author, course, time, text, attachmentURL }) {
             <span style={{ color: 'gray' }}>
                 {author} &nbsp; | &nbsp; {formatTime(time)}
             </span>
-            
-            <p>
+
+            <Markdown>
                 {text}
-            </p>
+            </Markdown>
 
             {
                 attachmentURL && attachmentURL.length > 0 ?
@@ -33,7 +34,7 @@ function Post({ parent, author, course, time, text, attachmentURL }) {
                     </div>
                     : null
             }
-            <hr/>
+            <hr />
         </div>
     );
 }

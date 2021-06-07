@@ -13,6 +13,7 @@ const { ensureAuthenticated } = require('./ensureAuthenticated');
 const { getUserById, userExists, getRoleById, roleExists, getRolesOfUser, getUsersOfRole, createUser, giveRole, userHasRole, updateUser, deleteUser, createRole, deleteRole } = require('./functions');
 const jwt = require('../jwt');
 const { isRxDocument } = require('rxdb');
+const { authRealm } = require('../../config');
 
 process.title = 'FOCUSA authenticator service';
 
@@ -48,6 +49,13 @@ passport.deserializeUser((sess, done) => done(null, sess));
 passport.use(localStrategy);
 
 app.use(require('helmet')());
+
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", authRealm); // update to match the domain you will make the request from
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header('Access-Control-Allow-Credentials', true);
+    next();
+  });
 
 /**
  * NOTE: BASIC AUTH CHECKS THE Authorization header(for base64 username:password)
