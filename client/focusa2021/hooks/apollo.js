@@ -1,28 +1,13 @@
 import { ApolloClient, HttpLink, InMemoryCache, from } from '@apollo/client';
 import { setContext } from '@apollo/link-context';
 import { onError } from "@apollo/client/link/error";
-import { create } from 'axios';
-import { graphQLRealm, authRealm, SET_TOKEN } from '../config';
+import { graphQLRealm } from '../config';
 import promiseToObservable from './promiseToObservable';
-import { getToken, store } from './store';
+import { getToken } from './store';
 import typePolicies from '../constants/typePolicies';
-
-export const auth = create({
-    baseURL: authRealm,
-    withCredentials: true, // enable use of cookies outside web browser
-});
+import { refresh } from './authenticate';
 
 const GRAPHQL_API_URL = graphQLRealm;
-
-/**
- * 
- * @returns Promise with refreshed token.
- */
-export const refresh = () => {
-    return auth.get('/refresh')
-        .then(res => store.dispatch({ type: SET_TOKEN, token: res.data.token }))
-        .catch(e => console.error(new Date(), 'refresh', e));
-}
 
 const asyncAuthLink = setContext(() => {
     return {

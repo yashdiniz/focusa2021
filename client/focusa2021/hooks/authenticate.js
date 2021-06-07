@@ -1,8 +1,13 @@
 import { useEffect, useState } from 'react';
 import { BackHandler } from 'react-native';
-import { SET_TOKEN, SET_USERNAME, SET_USERID } from '../config';
-import { auth } from './apollo';
+import { authRealm, SET_TOKEN, SET_USERNAME, SET_USERID } from '../config';
 import { store } from './store';
+import { create } from 'axios';
+
+export const auth = create({
+    baseURL: authRealm,
+    withCredentials: true, // enable use of cookies outside web browser
+});
 
 /**
  * 
@@ -26,6 +31,16 @@ export const authenticate = (username, password) => {
     }, []);
 
     return token;
+}
+
+/**
+ * 
+ * @returns Promise with refreshed token.
+ */
+ export const refresh = () => {
+    return auth.get('/refresh')
+        .then(res => store.dispatch({ type: SET_TOKEN, token: res.data.token }))
+        .catch(e => console.error(new Date(), 'refresh', e));
 }
 
 /**
