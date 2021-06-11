@@ -19,4 +19,4 @@ COPY . .
 
 EXPOSE 1896
 EXPOSE 1897
-CMD ['node', 'server.js']
+CMD ["node", "server.js"]
