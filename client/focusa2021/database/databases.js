@@ -5,7 +5,7 @@ import HTTPPouch from 'pouchdb-adapter-http';
 import SQLite from 'react-native-sqlite-2';
 import SQLiteAdapterFactory from 'pouchdb-adapter-react-native-sqlite';
 
-import { } from './polyfills';   // executing polyfills to base64 functions
+import './polyfills';   // executing polyfills to base64 functions
 
 // add the adapters required by RxDB to use SQLite.
 addRxPlugin(SQLiteAdapterFactory(SQLite));
