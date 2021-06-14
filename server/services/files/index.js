@@ -26,7 +26,7 @@ const upload = multer({
 app.use('/file', express.static(filesPath));
 
 // TODO: Fix all issues!
-// Support file deletion, make sure to rename files on upload, 
+// Support file deletion, 
 // Put upload limits, and most importantly, keep authentication checks!
 app.patch('/upload', jwt.ensureLoggedIn, upload.single('attachment'), (req, res) => {
     console.log(new Date(), 'Files service:', req.file, /*req.body*/);
