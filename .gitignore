@@ -17,6 +17,10 @@ omit*.*
 db/
 !db/keepdir
 
+# ignore the files inside the files folder
+filesDir/
+!filesDir/keepdir
+
 # LaTeX auxiliaries
 *.aux
 *.bbl
