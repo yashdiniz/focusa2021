@@ -47,3 +47,4 @@ require('./services/profile/index');    // import the profile service
 require('./services/courses/index');// importing the courses service
 require('./services/posts/index');
 require('./services/notifications/index');
+require('./services/files/index');
