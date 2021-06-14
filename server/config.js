@@ -20,7 +20,9 @@ const webrtcPort = 5000;
 const graphiql = !production;  // essentially, run graphiql at graphql endpoint
 const postPort = port + 4;
 const postRealm = "http://localhost:" + postPort;
-const libp2pPort = port + 5;
+const filesPort = port + 5;
+const filesRealm = "http://localhost:" + filesPort;
+const libp2pPort = port + 6;
 const libp2pRealm = `/ip4/127.0.0.1/tcp/${libp2pPort}/ws`; // could be /dnsaddr/notif.herokuapp.com/tcp/80/ws
 // the dev secret which will be used for most crypto operations.
 const secret = process.env['SECRET'] || 'FOCUSA secret is here';
@@ -81,6 +83,9 @@ const pageLimit = 10,
     minPostBodyLength = 5,
     maxPostBodyLength = 65536;
 
+// files related
+const filesPath = path.join(projectRoot, 'filesDir/');
+
 module.exports = { 
     port, authPort, authRealm, serviceAuthPass, webrtcPort, profilePort, profileRealm,
     projectRoot, graphiql, secret, realm, remote, postRealm, coursesPort, coursesRealm,
@@ -89,4 +94,5 @@ module.exports = {
     minPasswordLength, usernamePattern, maxModRolesforCourse, maxNameLength, maxMiscNameLength, maxMiscDescLength, minMiscLength,
     defaultProfilePic, defaultfullName, defaultAbout, pageLimit, postPort,
     minPostBodyLength, UUIDpattern, libp2pRealm, keystorePath, maxPostBodyLength,
+    filesPath, filesPort, filesRealm,
 };
