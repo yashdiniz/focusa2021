@@ -39,6 +39,7 @@
     "libp2p-noise": "^2.0.5",
     "libp2p-tcp": "^0.15.4",
     "libp2p-websockets": "^0.15.6",
+    "multer": "^1.4.2",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
     "pouchdb": "^7.2.2",

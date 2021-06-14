@@ -8,6 +8,7 @@ WORKDIR /app/focusa
 # Reference: https://linuxhint.com/dockerfile_volumes/
 VOLUME /app/focusa/db
 VOLUME /app/focusa/certs
+VOLUME /app/focusa/files
 
 # install app dependencies
 COPY package*.json ./
@@ -17,6 +18,8 @@ RUN npm i
 # Bundle app source
 COPY . .
 
+# expose graphql, auth and files respectively...
 EXPOSE 1896
 EXPOSE 1897
+EXPOSE 1901
 CMD ["node", "server.js"]
