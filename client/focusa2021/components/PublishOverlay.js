@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
-import { Text, View, Dimensions, ScrollView } from 'react-native';
+import { Text, View, Dimensions, ScrollView, Linking } from 'react-native';
 import { Overlay, Input, Button } from 'react-native-elements';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { getCourseDetails, createPost } from '../constants/queries';
 import { connectProps } from '../hooks/store';
-import { Linking } from 'react-native';
+import { uploadFile } from '../hooks/FileSystem';
 
 function PublishOverlay({ onRefresh, courseID, toggleOverlayPublishPost, publishPostVisible, parentID }) {
     const [text, setText] = useState('');
@@ -51,6 +51,13 @@ function PublishOverlay({ onRefresh, courseID, toggleOverlayPublishPost, publish
                     />
                     <View style={{ flexDirection: 'row', }}>
                         <Button
+                            title="Upload"
+                            buttonStyle={{ width: 255, marginBottom: 20 }}
+                            onPress={uploadFile}
+                        />
+                    </View>
+                    <View style={{ flexDirection: 'row', }}>
+                        <Button
                             title="Publish"
                             buttonStyle={{ width: 120, marginRight: 15 }}
                             onPress={onPublish}
@@ -76,7 +83,6 @@ function PublishOverlay({ onRefresh, courseID, toggleOverlayPublishPost, publish
                             onPress={() => Linking.openURL('https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet')}
                         >
                             Click here to learn more.
-                            
                         </Text>
                     </View>
                 </ScrollView>

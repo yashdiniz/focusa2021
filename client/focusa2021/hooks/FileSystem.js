@@ -1,6 +1,8 @@
-import { StorageAccessFramework, getInfoAsync, makeDirectoryAsync, downloadAsync, deleteAsync } from 'expo-file-system';
+import { StorageAccessFramework, getInfoAsync, makeDirectoryAsync, downloadAsync, deleteAsync, uploadAsync, FileSystemUploadType } from 'expo-file-system';
 import { ToastAndroid } from 'react-native';
+import { getDocumentAsync } from 'expo-document-picker';
 import { directory, filesRealm } from '../config';
+import { getToken } from './store';
 
 
 // Reference: https://docs.expo.io/versions/latest/sdk/filesystem/
@@ -62,5 +64,21 @@ export async function deleteFromCache(filename) {
 export async function uploadFile() {
     // something
     // Reference: FilePicker https://docs.expo.io/versions/v41.0.0/sdk/document-picker/
-    return;
+
+    let file = await getDocumentAsync();
+
+    if(file.type === 'success') {
+        console.log(new Date(), "File picked", file);
+        let result = await uploadAsync(filesRealm + '/upload', file.uri, {
+            headers: {
+                authorization: getToken(),
+            },
+            httpMethod: 'POST',
+            uploadType: FileSystemUploadType.MULTIPART,
+            fieldName: 'attachment',
+        });
+        console.log(new Date(), 'Upload result', result);
+    }
+
+    
 }
