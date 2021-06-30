@@ -1,6 +1,8 @@
-import { StorageAccessFramework, getInfoAsync, makeDirectoryAsync, downloadAsync, deleteAsync } from 'expo-file-system';
+import { StorageAccessFramework, getInfoAsync, makeDirectoryAsync, downloadAsync, deleteAsync, uploadAsync, FileSystemUploadType } from 'expo-file-system';
+import { getDocumentAsync } from 'expo-document-picker';
 import { ToastAndroid } from 'react-native';
 import { directory, filesRealm } from '../config';
+import { getToken } from './store';
 
 
 // Reference: https://docs.expo.io/versions/latest/sdk/filesystem/
@@ -22,7 +24,7 @@ async function ensureDirExists() {
             25,
             50
         );
-        throw new Error("Please grant STORAGE permissions...");
+        throw new Error("Please grant us the STORAGE permission to work effectively...");
     }
 
     const dirInfo = await getInfoAsync(directory);
@@ -59,8 +61,41 @@ export async function deleteFromCache(filename) {
     await deleteAsync(fileUri);
 }
 
+
+// Reference: FilePicker https://docs.expo.io/versions/v41.0.0/sdk/document-picker/
 export async function uploadFile() {
-    // something
-    // Reference: FilePicker https://docs.expo.io/versions/v41.0.0/sdk/document-picker/
-    return;
+
+
+    const URL = filesRealm + '/upload';
+    const authorization = `Bearer ${getToken()}`;
+
+    // wait for user to select a file
+    const documentSelected = await getDocumentAsync();
+    // nothing to upload if user presses cancel
+    if(documentSelected.type === 'cancel') return '';
+
+    // also prevent upload if the file size is too large (only client side check lol)
+    // TODO: put a server side check to prevent an attack!
+    if(documentSelected.size > (25 * (1>>20))) {
+        ToastAndroid.showWithGravityAndOffset(
+            "The file being uploaded is too large. We do not support files larger than 25MB unless through a cloud drive.",
+            ToastAndroid.LONG,
+            ToastAndroid.BOTTOM,
+            25,
+            50
+        );
+    }
+
+    const fileUri = documentSelected.uri;   // get URI of the file if successful.
+
+    const uploadResult = await uploadAsync(URL, fileUri, {
+        headers: {
+            authorization,
+        },
+        httpMethod: 'PATCH',
+        uploadType: FileSystemUploadType.MULTIPART,
+        fieldName: 'attachment',
+    });
+
+    uploadResult.status; // ?
 }

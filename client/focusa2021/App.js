@@ -13,6 +13,7 @@ export default function App() {
   return (
     <ApolloProvider client={apolloClient}>
       <Provider store={store}>
+        {/* TODO: Try and see if login can be rendered conditionally here */}
         <Navigation colorScheme={colorScheme} />
         <StatusBar style="auto" />
       </Provider>
