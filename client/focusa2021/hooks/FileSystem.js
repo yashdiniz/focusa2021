@@ -78,7 +78,9 @@ export async function uploadFile() {
             fieldName: 'attachment',
         });
         console.log(new Date(), 'Upload result', result);
+        return result;
     }
+    
 
     
 }

@@ -8,6 +8,7 @@ import { connectProps } from '../hooks/store';
 import { uploadFile } from '../hooks/FileSystem';
 
 function PublishOverlay({ onRefresh, courseID, toggleOverlayPublishPost, publishPostVisible, parentID }) {
+    const [uploaded, setUploaded]=useState(false);
     const [text, setText] = useState('');
     const [createPostfun] = useMutation(createPost, {
         refetchQueries: getCourseDetails,
@@ -26,7 +27,18 @@ function PublishOverlay({ onRefresh, courseID, toggleOverlayPublishPost, publish
             }
         });
         toggleOverlayPublishPost();
+        setUploaded(false);
     });
+
+    const onUpload = React.useCallback(()=>{
+        uploadFile()
+        .then(res=>res?setUploaded(true):null);
+    })
+
+    const onCancel = React.useCallback(()=>{
+        toggleOverlayPublishPost();
+        setUploaded(false);
+    })
 
     return (
         <>
@@ -50,11 +62,15 @@ function PublishOverlay({ onRefresh, courseID, toggleOverlayPublishPost, publish
                         onChangeText={setText}
                     />
                     <View style={{ flexDirection: 'row', }}>
-                        <Button
-                            title="Upload"
-                            buttonStyle={{ width: 255, marginBottom: 20 }}
-                            onPress={uploadFile}
-                        />
+                      {
+                            (uploaded ? <Text style={{marginBottom: 20}}>File attached Successfully.</Text> :                      
+                                <Button
+                                   title="Upload"
+                                   buttonStyle={{ width: 255, marginBottom: 20 }}
+                                   onPress={onUpload}
+                               />)
+                      }
+  
                     </View>
                     <View style={{ flexDirection: 'row', }}>
                         <Button
@@ -66,7 +82,7 @@ function PublishOverlay({ onRefresh, courseID, toggleOverlayPublishPost, publish
                         <Button
                             title="Cancel"
                             buttonStyle={{ width: 120, backgroundColor: 'red' }}
-                            onPress={toggleOverlayPublishPost}
+                            onPress={onCancel}
                         />
                     </View>
 
