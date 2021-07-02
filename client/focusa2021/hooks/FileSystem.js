@@ -1,6 +1,6 @@
 import { StorageAccessFramework, getInfoAsync, makeDirectoryAsync, downloadAsync, deleteAsync, uploadAsync, FileSystemUploadType } from 'expo-file-system';
-import { ToastAndroid } from 'react-native';
 import { getDocumentAsync } from 'expo-document-picker';
+import { ToastAndroid } from 'react-native';
 import { directory, filesRealm } from '../config';
 import { getToken } from './store';
 
@@ -24,7 +24,7 @@ async function ensureDirExists() {
             25,
             50
         );
-        throw new Error("Please grant STORAGE permissions...");
+        throw new Error("Please grant us the STORAGE permission to work effectively...");
     }
 
     const dirInfo = await getInfoAsync(directory);
@@ -61,15 +61,29 @@ export async function deleteFromCache(filename) {
     await deleteAsync(fileUri);
 }
 
+
+// Reference: FilePicker https://docs.expo.io/versions/v41.0.0/sdk/document-picker/
 export async function uploadFile() {
-    // something
-    // Reference: FilePicker https://docs.expo.io/versions/v41.0.0/sdk/document-picker/
+    const URL = filesRealm + '/upload';
+    let documentSelected = await getDocumentAsync();
 
-    let file = await getDocumentAsync();
+    // nothing to upload if user presses cancel
+    if(documentSelected.type === 'cancel') return '';
 
-    if(file.type === 'success') {
-        console.log(new Date(), "File picked", file);
-        let result = await uploadAsync(filesRealm + '/upload', file.uri, {
+    // also prevent upload if the file size is too large
+    if(documentSelected.size > (25 * (1>>20))) {
+        ToastAndroid.showWithGravityAndOffset(
+            "The file being uploaded is too large. We do not support files larger than 25MB unless through a cloud drive.",
+            ToastAndroid.LONG,
+            ToastAndroid.BOTTOM,
+            25,
+            50
+        );
+        return '';
+    }
+
+    if(documentSelected.type === 'success') {
+        let result = await uploadAsync(URL, documentSelected.uri, {
             headers: {
                 authorization: getToken(),
             },
@@ -80,7 +94,4 @@ export async function uploadFile() {
         console.log(new Date(), 'Upload result', result);
         return result;
     }
-    
-
-    
 }

@@ -20,7 +20,8 @@
     "base-64": "^1.0.0",
     "expo": "~41.0.1",
     "expo-cli": "^4.4.7",
-    "expo-document-picker": "~9.1.2",
+    "expo-document-picker": "^9.1.2",
+    "expo-file-system": "~11.0.2",
     "expo-linking": "^2.2.3",
     "expo-splash-screen": "~0.10.2",
     "expo-status-bar": "~1.0.4",
@@ -43,8 +44,7 @@
     "react-native-web": "~0.13.12",
     "react-redux": "^7.2.4",
     "rxdb": "^9.19.0",
-    "rxjs": "^7.0.1",
-    "expo-file-system": "~11.0.2"
+    "rxjs": "^7.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",

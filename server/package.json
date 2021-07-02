@@ -29,6 +29,8 @@
     "express-session-level": "^1.0.0",
     "graphql": "^15.5.0",
     "helmet": "^4.4.1",
+    "ipfs-http-client": "^50.1.2",
+    "it-to-buffer": "^2.0.0",
     "jsonwebtoken": "^8.5.1",
     "leveldown": "^5.6.0",
     "libp2p": "^0.30.12",
