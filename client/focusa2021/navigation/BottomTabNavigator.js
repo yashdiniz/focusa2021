@@ -34,8 +34,8 @@ function BottomTabNavigator({ token }) {
                 name="Login"
                 component={LoginNavigator}
                 options={{
-                    tabBarIcon: ({ color }) => <TabBarIcon name="videocam-outline" color={color} />,
                     tabBarButton: () => null,
+                    tabBarVisible: false,
                 }}
             />
             <BottomTab.Screen
