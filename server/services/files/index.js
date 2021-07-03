@@ -2,7 +2,7 @@
 const express = require('express');
 const fs = require('fs');
 const app = express();
-const { filesPath, filesPort } = require('../../config');
+const { filesPath, filesPort, serviceAudience } = require('../../config');
 const jwt = require('../jwt');
 const multer = require('multer');
 
@@ -26,12 +26,12 @@ const upload = multer({
     })
 });
 
-// static serve files from here...
-app.use('/file', express.static(filesPath));
+// static serve files from here, not needed since /ipfs takes care of it...
+// app.use('/file', express.static(filesPath));
 
-app.get('/ipfs', jwt.ensureLoggedIn, async (req, res) => {
+app.get('/ipfs', /*jwt.ensureLoggedIn,*/ async (req, res) => {
     // Content ID (CID) and filename are required!
-    if(req.user && req.query.name && req.query.cid) {
+    if(req.query.name && req.query.cid) {
         const hash = req.query.cid;
         const stream = ipfs.cat(hash);
         const stat = await ipfs.files.stat(`/ipfs/${hash}`);
@@ -45,21 +45,42 @@ app.get('/ipfs', jwt.ensureLoggedIn, async (req, res) => {
         res.writeHead(200, { "Content-Length": stat.size });
         do { // do until entire file contents transferred
             let chunk = await stream.next();    // wait for next chunk from IPFS
-            if (!res.write(chunk.value, // write the chunk to HTTP stream
-                err => err ? console.error(new Date(), 'File stream error', err) : ''
-            ))
-                await drain;    // if failed to write chunk, wait for res to drain
+            if (chunk.value)
+                if (!res.write(chunk.value, // write the chunk to HTTP stream
+                    err => err ? console.error(new Date(), 'File stream error', err) : ''
+                ))
+                    await drain;    // if failed to write chunk, wait for res to drain
 
             if(chunk.done) break;   // quit loop when stream ends
-        } while(true);   // will be true at last chunk
+        } while(true);
         res.end();  // end the stream after the file is done transferring
 
     } else res.status(404).json({ message: 'Bad User Input.' });
 });
 
-// GO IPFS!
-// /pin/ (microservice only)
-// /unpin/ (microservice only)
+app.get('/pin', jwt.ensureLoggedIn, async (req, res) => {
+    if (req.user?.aud === serviceAudience) { // only if microservice
+        if (req.query.cid) {
+            const hash = req.query.cid;
+            const body = await ipfs.pin.add(hash);
+            res.json({
+                body
+            });
+        } else res.status(404).json({ message: 'Bad User input.' });
+    } else res.status(404).json({ message: 'not authorized.' });
+});
+
+app.get('/unpin', jwt.ensureLoggedIn, async (req, res) => {
+    if (req.user?.aud === serviceAudience) { // only if microservice
+        if (req.query.cid) {
+            const hash = req.query.cid;
+            const body = await ipfs.pin.rm(hash);
+            res.json({
+                body
+            });
+        } else res.status(404).json({ message: 'Bad User input.' });
+    } else res.status(404).json({ message: 'not authorized.' });
+});
 
 // TODO: Fix all issues!
 // Support file deletion, Put upload limits!
@@ -69,7 +90,7 @@ app.post('/upload', jwt.ensureLoggedIn, upload.single('attachment'), async (req,
     if (req.user && req.file) {
         const stream = fs.createReadStream(req.file.path);
         const content = await ipfs.add(stream); // also make sure to add the file
-        fs.unlink(req.file.path);
+        fs.unlink(req.file.path, e => e);
         res.json({
             path: content.path,
             name: req.file.filename,
