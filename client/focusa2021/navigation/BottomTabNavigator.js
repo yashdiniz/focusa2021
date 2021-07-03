@@ -253,6 +253,9 @@ function LoginNavigator() {
             <LoginStack.Screen
                 name="LoginScreen"
                 component={Login}
+                options={{
+                    header: () => null
+                }}
             />
         </LoginStack.Navigator>
     );
