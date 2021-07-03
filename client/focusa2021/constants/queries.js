@@ -144,8 +144,8 @@ export const getUserRole = gql`
 `;
 
 export const createPost = gql`
-mutation createPost($text: String!, $courseID: ID, $parentID: ID) {
-    createPost(text: $text, course: $courseID, parent: $parentID) {
+mutation createPost($text: String!, $courseID: ID, $parentID: ID, $attachmentURL: String) {
+    createPost(text: $text, course: $courseID, parent: $parentID, attachmentURL: $attachmentURL) {
         uuid, time, text, attachmentURL,
         parent {
             uuid
