@@ -1,11 +1,15 @@
 import { BackHandler } from 'react-native';
 import { authRealm, SET_TOKEN, SET_USERNAME, SET_USERID } from '../config';
+import CookieManager from 'react-native-cookies';
 import { store } from './store';
 import { create } from 'axios';
+import { getCookie, setCookie } from './storage';
+
+// Reference: https://build.affinity.co/persisting-sessions-with-react-native-4c46af3bfd83
 
 export const auth = create({
     baseURL: authRealm,
-    withCredentials: true, // enable use of cookies outside web browser
+    withCredentials: false, // enable use of cookies outside web browser
 });
 
 /**
@@ -17,6 +21,7 @@ export const authenticate = (username, password) => {
     return auth.get('/login', {
         params: { username, password }
     }).then(res => {
+        // CookieManager.clearAll().then(() => setCookie(res.headers));
         store.dispatch({ type: SET_USERID, userID: res.data.uuid });
         store.dispatch({ type: SET_TOKEN, token: res.data.token });
         store.dispatch({ type: SET_USERNAME, username: res.data.name });
@@ -28,7 +33,10 @@ export const authenticate = (username, password) => {
  * @returns Promise with refreshed token.
  */
  export const refresh = () => {
-    return auth.get('/refresh')
+    const cookie = getCookie();
+    return auth.get('/refresh', {
+        headers: { cookie }
+    })
         .then(res => store.dispatch({ type: SET_TOKEN, token: res.data.token }))
         .catch(e => console.error(new Date(), 'refresh', e));
 }
