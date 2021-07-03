@@ -2,6 +2,7 @@ import { StorageAccessFramework, getInfoAsync, makeDirectoryAsync, downloadAsync
 import { getDocumentAsync } from 'expo-document-picker';
 import { ToastAndroid } from 'react-native';
 import { directory, filesRealm } from '../config';
+import { refresh } from '../hooks/authenticate';
 import { getToken } from './store';
 
 
@@ -64,6 +65,8 @@ export async function deleteFromCache(filename) {
 
 // Reference: FilePicker https://docs.expo.io/versions/v41.0.0/sdk/document-picker/
 export async function uploadFile() {
+    refresh();  // need to refresh the token to upload
+    
     const URL = filesRealm + '/upload';
     let documentSelected = await getDocumentAsync();
 
@@ -71,7 +74,7 @@ export async function uploadFile() {
     if(documentSelected.type === 'cancel') return '';
 
     // also prevent upload if the file size is too large
-    if(documentSelected.size > (25 * (1>>20))) {
+    if(documentSelected.size > (25 * (1<<20))) {
         ToastAndroid.showWithGravityAndOffset(
             "The file being uploaded is too large. We do not support files larger than 25MB unless through a cloud drive.",
             ToastAndroid.LONG,
