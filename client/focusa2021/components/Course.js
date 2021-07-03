@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Dimensions } from 'react-native';
 import { Text } from 'react-native-elements';
-import { MaterialCommunityIcons } from '@expo/vector-icons'
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 function Course({ name, description }) {
     return (
@@ -18,10 +18,7 @@ function Course({ name, description }) {
                 <MaterialCommunityIcons name="chevron-right" size={30} color="red"
                     style={{ marginTop: 20, paddingStart: 27, marginStart: 'auto', paddingEnd: 20, alignSelf: "auto" }} />
             </View>
-
         </View>
-
-
     );
 }
 
