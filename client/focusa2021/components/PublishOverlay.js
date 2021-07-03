@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
-import { Text, View, Dimensions, ScrollView, Linking } from 'react-native';
+import { Text, View, Dimensions, ScrollView, Linking, ActivityIndicator } from 'react-native';
 import { Overlay, Input, Button } from 'react-native-elements';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { getCourseDetails, createPost } from '../constants/queries';
@@ -8,7 +8,8 @@ import { connectProps } from '../hooks/store';
 import { uploadFile } from '../hooks/FileSystem';
 
 function PublishOverlay({ onRefresh, courseID, toggleOverlayPublishPost, publishPostVisible, parentID }) {
-    const [uploaded, setUploaded]=useState(false);
+    const [uploading, setUploading] = useState(false);
+    const [uploaded, setUploaded]=useState('');
     const [text, setText] = useState('');
     const [createPostfun] = useMutation(createPost, {
         refetchQueries: getCourseDetails,
@@ -24,20 +25,33 @@ function PublishOverlay({ onRefresh, courseID, toggleOverlayPublishPost, publish
                 text,
                 courseID,
                 parentID,
+                attachmentURL: uploaded,
             }
         });
         toggleOverlayPublishPost();
-        setUploaded(false);
+        setUploaded('');
     });
 
     const onUpload = React.useCallback(()=>{
+        setUploading(true); // show the activity indicator
         uploadFile()
-        .then(res=>res?setUploaded(true):null);
+        .then(res => {
+            let body = JSON.parse(res.body);
+            setUploading(false);    // stop showing the activity indicator
+            let hash = body.path;
+            let name = body.name;
+            console.log(hash && name);
+            let url = hash && name ? `/ipfs?cid=${hash}&name=${name}` : '';
+
+            res && url ? setUploaded(url) : null;
+            console.log(res);
+        });
     })
 
     const onCancel = React.useCallback(()=>{
         toggleOverlayPublishPost();
-        setUploaded(false);
+        setUploading(false);
+        setUploaded('');
     })
 
     return (
@@ -61,17 +75,23 @@ function PublishOverlay({ onRefresh, courseID, toggleOverlayPublishPost, publish
                         labelStyle={{ color: 'red' }}
                         onChangeText={setText}
                     />
-                    <View style={{ flexDirection: 'row', }}>
-                      {
-                            (uploaded ? <Text style={{marginBottom: 20}}>File attached Successfully.</Text> :                      
-                                <Button
-                                   title="Upload"
-                                   buttonStyle={{ width: 255, marginBottom: 20 }}
-                                   onPress={onUpload}
-                               />)
-                      }
-  
-                    </View>
+                    {
+                        uploading ?
+                        <View style={{ flexDirection: 'row', alignItems: "center", justifyContent: "center", marginBottom: 20 }}>
+                            <ActivityIndicator  color={'#333'} />
+                        </View>
+                        :
+                        <View style={{ flexDirection: 'row', }}>
+                        {
+                              (uploaded ? <Text style={{marginBottom: 20}}>File attached Successfully.</Text> :                      
+                                  <Button
+                                     title="Upload"
+                                     buttonStyle={{ width: 255, marginBottom: 20 }}
+                                     onPress={onUpload}
+                                 />)
+                        }
+                        </View>
+                    }
                     <View style={{ flexDirection: 'row', }}>
                         <Button
                             title="Publish"

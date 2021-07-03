@@ -9,6 +9,7 @@ import EditPostOverlay from './EditPostOverlay';
 import { deletePost, getCourseDetails } from '../constants/queries';
 import Markdown from 'react-native-markdown-package';
 import markdownStyle from '../constants/markdownStyle';
+import { filesRealm } from '../config';
 
 const formatTime = (time) => {
     var TimeType, hour, minutes, fullTime;
@@ -149,7 +150,7 @@ function Post({ parent, author, course, time, text, attachmentURL, navigation, u
                 attachmentURL.length > 0 ?
                     <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                         {/* https://stackoverflow.com/a/30540502/13227113 */}
-                        <TouchableOpacity style={{ flexDirection: 'row' }} onPress={Linking.openURL(attachmentURL)}>
+                        <TouchableOpacity style={{ flexDirection: 'row' }} onPress={() => Linking.openURL(`${filesRealm}${attachmentURL}`)}>
                             <Ionicons name="document-attach-outline" size={20} style={{ marginTop: 25, paddingStart: 27, }} />
                             <Text style={{ marginTop: 28 }}>View Attachments</Text>
                         </TouchableOpacity>
