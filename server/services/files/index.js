@@ -29,10 +29,10 @@ const upload = multer({
 // static serve files from here, not needed since /ipfs takes care of it...
 // app.use('/file', express.static(filesPath));
 
-app.get('/ipfs', /*jwt.ensureLoggedIn,*/ async (req, res) => {
+app.get('/ipfs/:cid/:name', /*jwt.ensureLoggedIn,*/ async (req, res) => {
     // Content ID (CID) and filename are required!
-    if(req.query.name && req.query.cid) {
-        const hash = req.query.cid;
+    if(req.params.name && req.params.cid) {
+        const hash = req.params.cid;
         const stream = ipfs.cat(hash);
         const stat = await ipfs.files.stat(`/ipfs/${hash}`);
 
