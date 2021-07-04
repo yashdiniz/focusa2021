@@ -41,7 +41,7 @@ function PublishOverlay({ onRefresh, courseID, toggleOverlayPublishPost, publish
             let hash = body.path;
             let name = body.name;
             console.log(hash && name);
-            let url = hash && name ? `/ipfs?cid=${hash}&name=${name}` : '';
+            let url = hash && name ? `/ipfs/${hash}/${name}` : '';  // TODO: trusting that the client will always put the correct URL
 
             res && url ? setUploaded(url) : null;
             console.log(res);

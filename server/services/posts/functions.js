@@ -3,9 +3,9 @@
  * Posts collection in CRUD fashion.
  * author: @PranavParanjape
  */
-
-const {focusa, assert, generateUUID} = require('../databases');
-const { authRealm, serviceAuthPass, JWTsignOptions, pageLimit, minPostBodyLength, UUIDpattern, maxPostBodyLength, coursesRealm } = require('../../config');
+const { focusa, assert, generateUUID } = require('../databases');
+const path = require('path');
+const { authRealm, serviceAuthPass, JWTsignOptions, pageLimit, minPostBodyLength, UUIDpattern, maxPostBodyLength, coursesRealm, filesRealm } = require('../../config');
 const { PubSub } = require('../../libp2p-pubsub');
 
 const noSuchPost = new Error('Post with such id does not exist');
@@ -15,7 +15,7 @@ const noSuchCourse = new Error('There is no course with the given name');
 
 const notification = new PubSub();   // creating a notification publisher
 
-const {create} = require('axios');
+const { create } = require('axios');
 let token = '';
 const auth = create({
     baseURL: `${authRealm}`,
@@ -25,21 +25,25 @@ const courses = create({
     baseURL: `${coursesRealm}`,
     timeout: 5000,
 });
+const files = create({
+    baseURL: `${filesRealm}`,
+    timeout: 5000,
+});
 
 let loginDetails = Buffer.from(`posts:${serviceAuthPass}`).toString('base64');
 auth.get('/', {
-    headers: {authorization: `Basic ${loginDetails}`}
-    }).then(res => token = res.data.token);
+    headers: { authorization: `Basic ${loginDetails}` }
+}).then(res => token = res.data.token);
 setInterval(() => auth.get('/', {
-headers: {authorization:`Basic ${loginDetails}`}
+    headers: { authorization: `Basic ${loginDetails}` }
 })
-.then(res => token = res.data.token), (JWTsignOptions.expiresIn-10)*1000);
+    .then(res => token = res.data.token), (JWTsignOptions.expiresIn - 10) * 1000);
 
 /**
  * Attempt to build a TF-IDF index for post text.
  * Will be used in searchPosts
  */
- focusa.then(f => f.courses.pouch.search({
+focusa.then(f => f.courses.pouch.search({
     fields: ['text'],
     build: true,
 })).catch(console.error);
@@ -52,16 +56,16 @@ headers: {authorization:`Basic ${loginDetails}`}
  */
 const getPostById = async (uuid) => {
     assert(typeof uuid === 'string'
-        && UUIDpattern.test(uuid), 
-    "Invalid post ID at getPostById.");
+        && UUIDpattern.test(uuid),
+        "Invalid post ID at getPostById.");
 
     let f = await focusa;
-    
+
     return await f.posts.findOne(uuid).exec()
-    .then(async doc => {
-        if(doc) return doc;
-        else throw noSuchPost;
-    });
+        .then(async doc => {
+            if (doc) return doc;
+            else throw noSuchPost;
+        });
 }
 
 /**
@@ -70,19 +74,28 @@ const getPostById = async (uuid) => {
  */
 const deletePost = async (uuid) => {
     assert(typeof uuid === 'string'
-        && UUIDpattern.test(uuid), 
-    "Invalid post ID at deletePost.");
+        && UUIDpattern.test(uuid),
+        "Invalid post ID at deletePost.");
 
     let f = await focusa;
 
     return await f.posts.findOne(uuid).exec()
-    .then(async doc => {
-        if(doc) {
-            doc.remove();
-            return doc;
-        }
-        else throw noSuchPost;
-    });
+        .then(async doc => {
+            if (doc) {
+                if (doc.attachmentURL) {
+                    let parsedURL = new URL(path.join(filesRealm, doc.attachmentURL));
+                    files.get('/unpin', {
+                        params: { cid: parsedURL.searchParams.get('cid') },
+                        headers: { authorization: token }
+                    }).then(res => res.data)
+                        .catch(e => console.error(new Date(), e));
+                }
+
+                doc.remove();
+                return doc;
+            }
+            else throw noSuchPost;
+        });
 }
 
 /**
@@ -95,12 +108,12 @@ const deletePost = async (uuid) => {
  */
 const createPost = async (text, author, course, attachmentURL, parent) => {
     assert(typeof text === 'string'
-        && typeof author === 'string' 
-        && typeof course === 'string' 
-        && typeof attachmentURL === 'string' 
-        && typeof parent === 'string', 
+        && typeof author === 'string'
+        && typeof course === 'string'
+        && typeof attachmentURL === 'string'
+        && typeof parent === 'string',
         "Invalid arguments for createPost.");
-    assert(!(parent.length > 0 && course.length > 0), 
+    assert(!(parent.length > 0 && course.length > 0),
         "Comments cannot have a course.");
     assert(parent.length == 0 || await getPostById(parent).catch(e => false),
         "Parent post does not exist.");
@@ -121,8 +134,17 @@ const createPost = async (text, author, course, attachmentURL, parent) => {
         params: { id: author },
         headers: { authorization: token }
     }).then(res => res.data)
-    .then(data => notification.publish(generateUUID(), 'postAdded', course, `${data.name} has posted!`, `post/${uuid}`))
-    .catch(console.error);
+        .then(data => notification.publish(generateUUID(), 'postAdded', course, `${data.name} has posted!`, `post/${uuid}`))
+        .catch(console.error);
+
+    if (attachmentURL) {
+        const parsedURL = new URL(path.join(filesRealm, attachmentURL));
+        files.get('/pin', {
+            params: { cid: parsedURL.searchParams.get('cid') },
+            headers: { authorization: token }
+        }).then(res => res.data)
+            .catch(e => console.error(new Date(), e));
+    }
 
     return await f.posts.insert({
         uuid, parent, text, course, author,
@@ -136,19 +158,19 @@ const createPost = async (text, author, course, attachmentURL, parent) => {
  * @param {string} text the new contents of the post
  */
 const editPost = async (uuid, text) => {
-    assert(typeof uuid === 'string' 
-        && typeof text === 'string' 
+    assert(typeof uuid === 'string'
+        && typeof text === 'string'
         && UUIDpattern.test(uuid),
         "Invalid arguments for editPost.");
     assert(text.length >= minPostBodyLength, "Post content is too short.");
     assert(text.length <= maxPostBodyLength, "Post content is too long.");
 
     let f = await focusa;
-    
+
     return await f.posts.findOne(uuid).exec()
-    .then(doc => doc.atomicPatch({
-        text, time: Date.now()
-    }));
+        .then(doc => doc.atomicPatch({
+            text, time: Date.now()
+        }));
 }
 
 /**
@@ -164,12 +186,12 @@ const searchPosts = async (query, offset) => {
     return await f.posts.pouch.search({
         query,
         fields: ['text'],
-        include_docs: true, 
+        include_docs: true,
         mm: '50%',
         limit: pageLimit, skip: offset,
     })
-    .then(async o => await f.posts.findByIds(o.rows.map(e => e.doc?._id))) // to convert to RxDocuments
-    .then(docs => Array.from(docs, ([key, value]) => value));
+        .then(async o => await f.posts.findByIds(o.rows.map(e => e.doc?._id))) // to convert to RxDocuments
+        .then(docs => Array.from(docs, ([key, value]) => value));
 }
 /**
  * Searches for all posts made by a particular author
@@ -178,18 +200,18 @@ const searchPosts = async (query, offset) => {
  */
 const getPostsByAuthor = async (authorID, offset) => {
     assert(typeof authorID === 'string'
-        && UUIDpattern.test(authorID), 
-    "Invalid arguments for getPostsByAuthor.");
+        && UUIDpattern.test(authorID),
+        "Invalid arguments for getPostsByAuthor.");
     let f = await focusa;
     return await f.posts.find().where('author').eq(authorID)
-    .where('reported').eq(0)
-    .where('approved').eq(1)
-    .sort({ time: 'desc' })
-    .skip(offset).limit(pageLimit).exec()
-    .then(async docs => {
-        if(docs) return docs;
-        else throw noSuchAuthor;
-    });
+        .where('reported').eq(0)
+        .where('approved').eq(1)
+        .sort({ time: 'desc' })
+        .skip(offset).limit(pageLimit).exec()
+        .then(async docs => {
+            if (docs) return docs;
+            else throw noSuchAuthor;
+        });
 }
 
 /**
@@ -199,18 +221,18 @@ const getPostsByAuthor = async (authorID, offset) => {
  */
 const getPostsByCourse = async (courseID, offset) => {
     assert(typeof courseID === 'string'
-        && UUIDpattern.test(courseID), 
-    "Invalid arguments for getPostsByCourse.");
+        && UUIDpattern.test(courseID),
+        "Invalid arguments for getPostsByCourse.");
     let f = await focusa;
     return await f.posts.find().where('course').eq(courseID)
-    .where('reported').eq(0)
-    .where('approved').eq(1)
-    .sort({ time: 'desc' })
-    .skip(offset).limit(pageLimit).exec()
-    .then(async docs => {
-        if(docs) return docs;
-        else throw noSuchCourse;
-    });
+        .where('reported').eq(0)
+        .where('approved').eq(1)
+        .sort({ time: 'desc' })
+        .skip(offset).limit(pageLimit).exec()
+        .then(async docs => {
+            if (docs) return docs;
+            else throw noSuchCourse;
+        });
 }
 
 /**
@@ -220,21 +242,21 @@ const getPostsByCourse = async (courseID, offset) => {
  */
 const getPostsByParent = async (parentID, offset) => {
     assert(typeof parentID === 'string'
-        && UUIDpattern.test(parentID), 
-    "Invalid arguments for getPostsByParent.");
+        && UUIDpattern.test(parentID),
+        "Invalid arguments for getPostsByParent.");
     let f = await focusa;
     return await f.posts.find().where('parent').eq(parentID)
-    .where('reported').eq(0)
-    .where('approved').eq(1)
-    .sort({ time: 'desc' })
-    .skip(offset).limit(pageLimit).exec()
-    .then(async docs => {
-        if(docs) return docs;
-        else throw noSuchPost;
-    });
+        .where('reported').eq(0)
+        .where('approved').eq(1)
+        .sort({ time: 'desc' })
+        .skip(offset).limit(pageLimit).exec()
+        .then(async docs => {
+            if (docs) return docs;
+            else throw noSuchPost;
+        });
 }
 
 // TODO: Add provision for reporting and approving posts. Future scope?
 // TODO: Also provision for searching reported and unapproved posts?
 
-module.exports = {getPostById, deletePost, createPost, editPost, searchPosts, getPostsByAuthor, getPostsByCourse, getPostsByParent };
+module.exports = { getPostById, deletePost, createPost, editPost, searchPosts, getPostsByAuthor, getPostsByCourse, getPostsByParent };

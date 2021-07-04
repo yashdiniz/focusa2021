@@ -37,13 +37,14 @@ async function ensureDirExists() {
 
 /**
  * Gets the file and stores it in cache.
+ * @param {string} hash
  * @param {string} filename 
  * @returns {string} File URI on local device.
  */
-export async function getFile(filename) {
+export async function getFile(hash, filename) {
     await ensureDirExists();
     const fileUri = directory + filename;
-    const URL = filesRealm + '/file/' + filename;
+    const URL = filesRealm + '/ipfs/' + hash + '/' + filename;
     const fileInfo = await getInfoAsync(fileUri);
     if (!fileInfo.exists) {
         console.log(`The file ${fileUri} isn't cached locally. Downloading...`);
