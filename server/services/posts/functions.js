@@ -69,6 +69,19 @@ const getPostById = async (uuid) => {
 }
 
 /**
+ * Extracts and returns Qmhash from a URL: eg. http://localhost/ipfs/Qmhash/file.pdf
+ * @param {string} url The URL to extract the CID
+ * @returns {string} The CID.
+ */
+function parseCIDFromURL(url) {
+    let parsedURL = new URL(url);
+    let parsedPath = parsedURL.pathname.replace('/ipfs/', '').split('/');
+    // eg. pathname: /ipfs/Qmhash/file.pdf
+    // parsedPath: [ 'Qmhash', 'file.pdf' ]
+    return parsedPath[0];
+}
+
+/**
  * Delete an existing post from the database.
  * @param {string} uuid uuid of the post.
  */
@@ -83,9 +96,8 @@ const deletePost = async (uuid) => {
         .then(async doc => {
             if (doc) {
                 if (doc.attachmentURL) {
-                    let parsedURL = new URL(path.join(filesRealm, doc.attachmentURL));
                     files.get('/unpin', {
-                        params: { cid: parsedURL.searchParams.get('cid') },
+                        params: { cid: parseCIDFromURL(path.join(filesRealm, doc.attachmentURL)) },
                         headers: { authorization: token }
                     }).then(res => res.data)
                         .catch(e => console.error(new Date(), e));
@@ -138,9 +150,8 @@ const createPost = async (text, author, course, attachmentURL, parent) => {
         .catch(console.error);
 
     if (attachmentURL) {
-        const parsedURL = new URL(path.join(filesRealm, attachmentURL));
         files.get('/pin', {
-            params: { cid: parsedURL.searchParams.get('cid') },
+            params: { cid: parseCIDFromURL(path.join(filesRealm, doc.attachmentURL)) },
             headers: { authorization: token }
         }).then(res => res.data)
             .catch(e => console.error(new Date(), e));
