@@ -9,6 +9,7 @@ import ErrorComponent from '../components/ErrorComponent';
 import InfoMessage from '../components/InfoMessage';
 import { PersonalPostNavigate, CourseDetailsNavigate } from '../constants/screens';
 import Course from '../components/Course';
+import { refresh } from '../hooks/authenticate';
 
 function Profile({ navigation, route, token, username }) {
     // TODO: Add a settings component which allows the user to edit various preferences.
@@ -41,7 +42,8 @@ function Profile({ navigation, route, token, username }) {
 
     useEffect(() => {
         // if JWT is too short, it is usually because it is invalid.
-        if (!token || token.length < 20) navigation.navigate('Login');
+        if (!token || token.length < 20) refresh()
+            .catch(() => navigation.navigate('Login'));
         if (error) {
             console.error(new Date(), 'Profile', JSON.stringify(error));
         }

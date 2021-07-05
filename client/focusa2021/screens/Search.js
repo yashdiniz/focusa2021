@@ -24,7 +24,8 @@ function Search({ navigation, route, token, username }) {
 
     useEffect(() => {
         // if JWT is too short, it is usually because it is invalid.
-        if (!token || token.length < 20) navigation.navigate('Login');
+        if (!token || token.length < 20) refresh()
+            .catch(() => navigation.navigate('Login'));
     });
 
     return (
