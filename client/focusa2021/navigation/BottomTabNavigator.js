@@ -19,6 +19,7 @@ import VideoConferencing from '../screens/VideoConferencing';
 import { TouchableOpacity } from 'react-native';
 import PostDetails from '../screens/PostDetails';
 import { connectProps } from '../hooks/store';
+import OfflinePost from '../screens/OfflinePost';
 
 
 const BottomTab = createBottomTabNavigator();
@@ -38,13 +39,15 @@ function BottomTabNavigator({ token }) {
                     tabBarVisible: false,
                 }}
             />
+
             <BottomTab.Screen
-                name="Profile"
-                component={ProfileNavigator}
+                name="Meetings"
+                component={VideoConferencingNavigator}
                 options={{
-                    tabBarIcon: ({ color }) => <TabBarIcon name="person-outline" color={color} />,
+                    tabBarIcon: ({ color }) => <TabBarIcon name="videocam-outline" color={color} />,
                 }}
             />
+
             <BottomTab.Screen
                 name="Search"
                 component={SearchNavigator}
@@ -52,6 +55,23 @@ function BottomTabNavigator({ token }) {
                     tabBarIcon: ({ color }) => <TabBarIcon name="search" color={color} />,
                 }}
             />
+
+            <BottomTab.Screen
+                name="Offline Post"
+                component={OfflinePostNavigator}
+                options={{
+                    tabBarIcon: ({ color }) => <TabBarIcon name="bookmark-outline" color={color} />,
+                }}
+            />
+
+            <BottomTab.Screen
+                name="Profile"
+                component={ProfileNavigator}
+                options={{
+                    tabBarIcon: ({ color }) => <TabBarIcon name="person-outline" color={color} />,
+                }}
+            />
+
 
             <BottomTab.Screen
                 name="PersonalPost"
@@ -77,13 +97,9 @@ function BottomTabNavigator({ token }) {
                 }}
             />
 
-            <BottomTab.Screen
-                name="Meetings"
-                component={VideoConferencingNavigator}
-                options={{
-                    tabBarIcon: ({ color }) => <TabBarIcon name="videocam-outline" color={color} />,
-                }}
-            />
+
+
+
             <BottomTab.Screen
                 name="CourseDetails"
                 component={CourseDetailsNavigator}
@@ -212,6 +228,24 @@ function EditProfileNavigator({ navigation }) {
                 }}
             />
         </EditProfileStack.Navigator>
+    );
+}
+
+const OfflinePostStack = createStackNavigator();
+function OfflinePostNavigator({ navigation }) {
+    return (
+        <OfflinePostStack.Navigator>
+            <OfflinePostStack.Screen
+                name="OfflinePostScreen"
+                component={OfflinePost}
+                options={{
+                    headerTitle: "Offline Post",
+                    headerLeft: () => (<TouchableOpacity style={{ paddingStart: 20 }} onPress={() => navigation.goBack()}>
+                        <TabBarIcon name="arrow-back" color="red" />
+                    </TouchableOpacity>)
+                }}
+            />
+        </OfflinePostStack.Navigator>
     );
 }
 
