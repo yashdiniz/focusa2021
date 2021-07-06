@@ -10,6 +10,7 @@ import { deletePost, getCourseDetails } from '../constants/queries';
 import Markdown from 'react-native-markdown-package';
 import markdownStyle from '../constants/markdownStyle';
 import { filesRealm } from '../config';
+import { savePost } from '../database/post';
 
 const formatTime = (time) => {
     var TimeType, hour, minutes, fullTime;
@@ -175,19 +176,20 @@ function Post({ parent, author, course, time, text, attachmentURL, navigation, u
                     </TouchableOpacity>
                 }
 
-                <TouchableOpacity
+                {/* <TouchableOpacity
                 // style={{ marginBottom: 10 }}
                 >
                     <Ionicons name="share-social-outline" size={25}
                         style={{ marginTop: 'auto', paddingStart: 27, }}
                     />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
 
 
                 <TouchableOpacity
                 // style={{ marginLeft: 'auto', paddingRight: 15, marginBottom: 10 }}
+                onPress={ () => savePost(uuid, text, course, author, time, attachmentURL) }
                 >
-                    <Ionicons name="download-outline" size={25}
+                    <Ionicons name="bookmark-outline" size={25}
                         style={{ marginTop: 'auto', paddingStart: 27 }}
                     />
                 </TouchableOpacity>
