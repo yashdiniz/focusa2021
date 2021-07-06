@@ -7,6 +7,7 @@ import Post from '../components/Post';
 import { FlatList } from 'react-native-gesture-handler';
 import ErrorComponent from '../components/ErrorComponent';
 import InfoMessage from '../components/InfoMessage';
+import { refresh } from '../hooks/authenticate';
 
 function PersonalPost({ navigation, route, token, username }) {
     username = route.params?.username ? // the screen will show posts based on username of profile.

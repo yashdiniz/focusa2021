@@ -9,6 +9,7 @@ import ErrorComponent from '../components/ErrorComponent';
 import InfoMessage from '../components/InfoMessage';
 import { getPostComments } from '../constants/queries';
 import PublishOverlay from '../components/PublishOverlay';
+import { refresh } from '../hooks/authenticate';
 
 function PostDetails({ navigation, route, token }) {
     const postID = route.params?.postID;  // the postID is taken from route params

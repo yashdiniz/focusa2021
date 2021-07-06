@@ -11,6 +11,7 @@ import InfoMessage from '../components/InfoMessage';
 import { FAB, BottomSheet, ListItem, Icon } from 'react-native-elements';
 import PublishOverlay from '../components/PublishOverlay';
 import EditCourseOverlay from '../components/EditCourseOverlay';
+import { refresh } from '../hooks/authenticate';
 
 
 function CourseDetails({ navigation, route, token, userID, username }) {

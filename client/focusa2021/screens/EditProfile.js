@@ -6,6 +6,7 @@ import { connectProps } from '../hooks/store';
 import { Input, Button } from 'react-native-elements';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ProfileNavigate } from '../constants/screens';
+import { refresh } from '../hooks/authenticate';
 
 function EditProfile({ route, token, navigation, username, userID }) {
     const { data, error, loading } = useQuery(getProfileData, {
@@ -43,6 +44,15 @@ function EditProfile({ route, token, navigation, username, userID }) {
         navigation.navigate('Profile', ProfileNavigate);
     });
 
+    useEffect(() => {
+        // if JWT is too short, it is usually because it is invalid.
+        if (!token || token.length < 20) refresh()
+            .catch(() => navigation.navigate('Login'));
+        if (error) {
+            console.error(new Date(), 'EditProfile', JSON.stringify(error));
+        }
+    });
+
     const [fullName, setFullName] = useState('');
     const [about, setAbout] = useState('');
 
@@ -52,7 +62,6 @@ function EditProfile({ route, token, navigation, username, userID }) {
                 <ActivityIndicator color={'#333'} />
             </View>
         );
-    if (error) console.error(error);
     return (
         <View style={{ alignItems: "center" }}>
             <Input

@@ -9,6 +9,7 @@ import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { CourseDetailsNavigate } from '../constants/screens';
 import InfoMessage from '../components/InfoMessage';
 import Post from '../components/Post';
+import { refresh } from '../hooks/authenticate';
 
 function Search({ navigation, route, token, username }) {
     const [refreshing, setRefreshing] = useState(false);    // state updates when screen is refreshing
@@ -22,11 +23,11 @@ function Search({ navigation, route, token, username }) {
         setTimeout(() => setRefreshing(false), 500);
     });
 
-    useEffect(() => {
-        // if JWT is too short, it is usually because it is invalid.
-        if (!token || token.length < 20) refresh()
-            .catch(() => navigation.navigate('Login'));
-    });
+    // useEffect(() => {
+    //     // if JWT is too short, it is usually because it is invalid.
+    //     if (!token || token.length < 20) refresh()
+    //         .catch(() => navigation.navigate('Login'));
+    // });
 
     return (
         <SearchResults
