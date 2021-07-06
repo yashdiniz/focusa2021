@@ -1,0 +1,114 @@
+\chapter{Implementation}
+
+% Just added a stub.
+% TODO: Complete and fill up the implementation chapter!
+
+% Include experiments and observations from the neural network experiment.
+% Also include the process of creating microservices: 1. CRUD. 2. REST. 3. GraphQL.
+% Also include the methods of test cases performed.
+% Also include the Kubernetes and other deployment stuff.
+% Talk about how we are implementing the couchDB distributed DBs.
+
+\section{Overview of the Technologies used}
+
+\subsection{Backend Technologies}
+
+    \subsubsection{PouchDB}
+    PouchDB is an open-source JavaScript database inspired by Apache CouchDB 
+    that is designed to run well within the browser.
+    It enables applications to store data locally while offline, 
+    then synchronize it with CouchDB and compatible servers when the application is back online, keeping the user's data in sync 
+    no matter where they next login.
+
+    \subsubsection{RxDB}
+    RxDB (short for Reactive Database) is a NoSQL-database for JavaScript Applications like Websites, 
+    hybrid Apps, Electron-Apps, Progressive Web Apps and NodeJs. Reactive means that you can not only 
+    query the current state, but subscribe to all state changes like the result of a query or even a 
+    single field of a document. This is great for UI-based realtime applications in way that makes it 
+    easy to develop and also has great performance benefits. To replicate data between your clients and server,
+    RxDB provides modules for realtime replication with any CouchDB compliant endpoint and also with custom GraphQL endpoints. 
+
+    \subsubsection{NodeJS}
+    Node. js is a platform built on Chrome's JavaScript runtime for easily building fast and scalable network applications. 
+    Node. js uses an event-driven, non-blocking I/O model that makes it lightweight and efficient, perfect for data-intensive 
+    real-time applications that run across distributed devices.
+
+    \subsubsection{Express JS}
+    Express.js, or simply Express, is a back end web application framework for Node.js, released as free and open-source software under the MIT License. 
+    It is designed for building web applications and APIs.
+    It has been called the de facto standard server framework for Node.js.
+
+    \subsubsection{GraphQL}
+    GraphQL is a query language for APIs and a runtime for fulfilling those queries with your existing data. 
+    GraphQL provides a complete and understandable description of the data in your API, gives clients the power to ask for exactly what they need and nothing more, 
+    makes it easier to evolve APIs over time, and enables powerful developer tools.
+
+    \subsubsection{Apollo Server}
+    Apollo Server is an open-source, spec-compliant GraphQL server that's compatible with any GraphQL client, including Apollo Client. 
+    It's the best way to build a production-ready, self-documenting GraphQL API that can use data from any source.
+
+    \subsubsection{Apollo Client}
+    Apollo Client is a comprehensive state management library for JavaScript that enables you to manage both local and remote data with GraphQL.
+    Use it to fetch, cache, and modify application data, all while automatically updating your UI.
+    Apollo Client helps you structure code in an economical, predictable, and declarative way that's consistent with modern development practices. 
+
+    \subsubsection{Apollo Link}
+    The Apollo Link library helps you customize the flow of data between Apollo Client and your GraphQL server.
+
+    \subsubsection{Docker}
+    Docker is an open platform for developing, shipping, and running applications. 
+    Docker enables you to separate your applications from your infrastructure so you can deliver software quickly. 
+    With Docker, you can manage your infrastructure in the same ways you manage your applications. 
+    By taking advantage of Docker’s methodologies for shipping, testing, and deploying code quickly, 
+    you can significantly reduce the delay between writing code and running it in production.
+
+    \subsubsection{IPFS}
+    The InterPlanetary File System (IPFS) is a protocol and peer-to-peer network for storing and sharing data in a distributed file system. 
+    IPFS uses content-addressing to uniquely identify each file in a global namespace connecting all computing devices.
+
+    \subsubsection{Multer}
+    Multer is a node. js middleware for handling multipart/form-data , 
+    which is primarily used for uploading files. It is written on top of busboy for maximum efficiency.
+
+\subsection{Front-end Technologies}
+
+    \subsubsection{Redux}
+    Redux is a predictable state container for JavaScript apps.
+    It helps you write applications that behave consistently, run in different environments 
+    (client, server, and native), and are easy to test. On top of that, it provides a great developer experience, 
+    such as live code editing combined with a time traveling debugger.
+    
+    \subsubsection{React JS}
+    React is a declarative, efficient, and flexible JavaScript library for building user interfaces. 
+    It lets you compose complex UIs from small and isolated pieces of code called “components”.
+
+    \subsubsection{React Native}
+    React Native is an open-source mobile application framework created by Facebook, Inc.
+    It is used to develop applications for Android, Android TV, iOS, macOS, tvOS, Web, Windows and UWP by enabling 
+    developers to use React's framework along with native platform capabilities.
+
+    \subsubsection{Expo}
+    Expo is a framework and a platform for universal React applications. 
+    It is a set of tools and services built around React Native and native platforms that help you develop, build, 
+    deploy, and quickly iterate on iOS, Android, and web apps from the same JavaScript/TypeScript codebase.
+
+\subsection{Other Technologies}
+
+    \subsubsection{WebRTC}
+    With WebRTC, you can add real-time communication capabilities to your application that works on top of an open standard. 
+    It supports video, voice, and generic data to be sent between peers, allowing developers to build powerful 
+    voice- and video-communication solutions. The technology is available on all modern browsers as well as on native clients 
+    for all major platforms. The technologies behind WebRTC are implemented as an open web standard and available as regular JavaScript APIs 
+    in all major browsers. For native clients, like Android and iOS applications, a library is available that provides the same functionality.
+
+    \subsubsection{Jitsi}
+
+    Jitsi is a collection of free and open-source multiplatform voice (VoIP), video conferencing and instant messaging applications for the web platform, 
+    Windows, Linux, macOS, iOS and Android.
+
+    \subsubsection{TensorFlow}
+    TensorFlow is an end-to-end open source platform for machine learning. It has a comprehensive, flexible ecosystem of tools, 
+    libraries and community resources that lets researchers push the state-of-the-art in ML and developers easily build and deploy ML powered applications.
+
+    \subsubsection{Keras}
+    Keras is an open-source software library that provides a Python interface for artificial neural networks. Keras acts as an interface for the TensorFlow library. 
