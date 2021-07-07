@@ -20,7 +20,7 @@ The approach we used was signing a \textbf{cryptographic token called a JWT (JSO
 The authentication service plays the role of signing these tokens and sending them to the client with a "refresh cookie". The client then attaches this token to every future request made to any service in our project domain. It is possible because the JWT contains 
 ALL the session data as a JSON payload, encrypted and entrusted to the client. None of the services (except the authentication service) store session data.
 
-It is dangerous to trust the client with storing session data. \emph{Can a client generate a JSON payload on their own and impersonate a user?} No. (See https://hasura.io/blog/best-practices-of-using-jwt-with-graphql/)
+It is dangerous to trust the client with storing session data. \emph{Can a client generate a JSON payload on their own and impersonate a user?} No.~\cite{JWTBestPractices}
 
 JWTs also contain a digital signature. However, similar to a session cookie, the services cannot distinguish between a valid client and a client impersonating a user solely using their JWTs. Since all our services depend on the session state written in the JWT, shared by the client, we carefully adhered to these rules for handling JWTs throughout development:
 
@@ -80,7 +80,7 @@ this system operates on an event loop.
 Initially, we had decided to deploy it on the Heroku cloud. Heroku provides virtual containers called dynos. Each free tier dyno by itself has very few resources allocated to it. An account is allowed to operate multiple dynos. Each service ran very efficiently, 
 with latencies as low as 70ms per request.
 
-This strategy quickly hit a roadblock when we noticed that data isn't persisting at the dynos (See https://devcenter.heroku.com/articles/active-storage-on-heroku). 
+This strategy quickly hit a roadblock when we noticed that data isn't persisting at the dynos~\cite{HerokuActiveStorage}. 
 Heroku provides ephemeral storage to dynos. The data is volatile and gets purged/reallocated after inactivity.
 We need to integrate custom AWS S3 storage to the dyno if we want persistent storage. 
 
