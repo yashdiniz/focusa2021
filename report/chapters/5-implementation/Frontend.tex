@@ -1,0 +1,40 @@
+The Focusa application is purely based on React Native, and has been created using the Expo Command Line Interface. 
+Running the application initially requires installing an npm package. After executing the preliminary commands, the development server starts as a result of which the application starts running.
+
+The front-end construction of the Focusa application is segmented into several folders to maintain proper documentation.
+
+The Components folder contains all the components created as part of the construction of the User Interface.
+The Post component incorporates the design of a typical post, comprising of attributes like the name of the course, the name of the course moderator, the date and time indicating when the post was published, and the content to be displayed. The component also includes features that allow the user to comment, share or download a post.
+the Course component consists of attributes like the course name and the course description. The user also has a supplementary option to subscribe to a course on the click of a button.
+The Error component generates an error message in cases where there is an error. For example, a network issue, or incorrect input of credentials.
+Publish Overlay component permits the moderator to publish a new post.
+The Edit Post Overlay component enables the moderator to edit a post they had published.
+The Edit Course Overlay component allows the moderator to edit course detail. In particular, the course name and the course description.
+
+The Screens folder is a collection of the different screens the 
+user will experience first-hand while browsing the application. 
+Each screen created contains reusable components from the Components folder.
+The Login screen provides the platform for user
+authentication, wherein the user will have to enter their login
+credentials to access the application. 
+The Post Details screen will display a series of post components in a vertical format.
+The Course Details screen displays attributes such as the course name and the course description, under which the posts that have been published by the moderator will be displayed. 
+The Search screen facilitates the userâ€™s ability to either search for a course or post of their choice.
+The Profile screen displays the userâ€™s profile details, i.e, the display picture and the bio, followed by a list of courses that have been subscribed to.
+The Edit Profile screen is a form that allows the user to
+edit their profile details whenever required.
+The Personal Post screen displays all the posts the user has 
+interacted with. In particular, posts on which the user has commented on.
+The Settings screen provides options to either edit their profile or log out of their account.
+The Meeting screen provides an interface to either join a video conference meeting, or independently create a meeting of their own.
+
+The Assets folder includes images that have been incorporated into the application, along with fonts that have been used to represent the text.
+
+The Navigation folder consists of code that was used to construct the navigation bar. The navigation bar in the Focusa application facilitates the userâ€™s ability to switch between the profile, search, and meeting screens effortlessly.
+
+The React Native Hooks folder contains: the Apollo integration, the auth server integration and the file sys integration, all three of which have been amalgamated with the system back-end.
+
+
+The Focusa Application Login workflow:
+On accessing the application, the profile screen appears by default. The redux store detects that the JSON Web Token (JWT) is not set and hence, it attempts to refresh the JWT. However, it also finds that the refresh cookie is not set. It then displays the login screen and sets both, the JWT and the refresh cookie, after which it resumes normal application flow by directing the user to the profile screen.
+If the steps mentioned above are successful, the application will direct the user to the profile screen without the login screen having to be displayed.
