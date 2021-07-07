@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@apollo/client';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { View, Text, Dimensions, ActivityIndicator } from 'react-native';
 import { getProfileData, updateProfile } from '../constants/queries';
 import { connectProps } from '../hooks/store';
