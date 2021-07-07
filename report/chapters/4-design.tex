@@ -242,7 +242,8 @@ The project, FOCUSA includes the following microservices. Refer to figure \ref{f
     \item \textbf{Profiles:} Each user has a unique profile, containing details like the user display picture, username, and the various courses the user has subscribed to.
     \item \textbf{Courses:}  returns the details of the courses which includes the course title and the different users subscribed to the course, as well as a provision for new users to subscribe to the course. Only users with certain roles can moderate their respective courses.
     \item \textbf{Posts:} refers to posts posted by the course moderators. The moderators are able to perform CRUD operations on these posts
-    \item \textbf{Notifications:}  pushes notifications to the user devices and also monitors the database for changes.
+    \item \textbf{Notifications:}  sends notifications to the user devices and also monitors the database for changes.
+    \item \textbf{Storage:} performs all functions related to file upload, download, and streaming.
 \end{itemize}
 
 \subsection{Using GraphQL with the Microservices}
