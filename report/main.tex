@@ -7,6 +7,7 @@
 \usepackage{graphicx}
 \usepackage{amsmath}
 \usepackage{subcaption}
+\usepackage{fancyhdr}
 
 \usepackage[bookmarks=true,pdftex]{hyperref}
 \usepackage{bookmark}
@@ -30,8 +31,9 @@
 % perform the 1.5 line-spacing for the entire document
 \spacing{1.5}
 
+
 \begin{document}
-%\maketitle
+% \maketitle
 % begin page numbering before chapters as roman numerals
 \pagenumbering{roman}
 % \input{chapters/title.tex}
@@ -42,7 +44,7 @@
 \tableofcontents
 \pdfbookmark{\contentsname}{Contents} % add a bookmark to Table of contents
 \listoffigures
-%\listoftables
+% \listoftables
 
 \input{chapters/1-introduction.tex}
 \input{chapters/2-litsurvey.tex}
