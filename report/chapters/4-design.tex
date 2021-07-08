@@ -161,8 +161,7 @@ with greater confidence and resilience than ever before.~\cite{JAMstack}
 
 \subsection{Why use JAMstack?}
 
-These are the core concepts that makes JAMstack deliver fast, secure, high-performing, 
-resilient, and efficient infrastructure:
+The following core concepts make JAMstack fast, secure, high-performing, resilient, and efficient infrastructure:
 
 \subsubsection{Speed}
 
@@ -248,7 +247,7 @@ The project, FOCUSA includes the following microservices. Refer to figure \ref{f
 
 \subsection{Using GraphQL with the Microservices}
 
-The projext will make use of a single GraphQL Schema as an API Gateway to all the microservices, 
+The project will make use of a single GraphQL Schema as an API Gateway to all the microservices, 
 integrating it under a single application. This enables easy integration of data from the different services.
 
 One of the main benefits of having everything behind a single endpoint, is that data can be routed more 
@@ -274,7 +273,7 @@ The credentials put in by the user are validated by the system through the authe
 If the credentials are found to be incorrect, the system runs the error handler to address the error occurred.
 If the user still is not able to produce the correct credentials, the process ends and the user is not allowed to use the app.
 
-If the user has been validated and is found to be genuine, is directed to the home/main page of the app where he can 
+If the user has been validated and is found to be genuine, they are directed to the home/main page of the app where they can 
 choose to request for the News Feed, User Profile, Courses or launch video conferencing.
 All these requests can be made through the navigation panel provided in the app and are accessed as parallel activities.
 
@@ -300,7 +299,7 @@ The user is also logged out of the app the session times out.
     \label{fig:schema}
 \end{figure}
 
-A database schema represents a \textbf{blueprint} or \textbf{architecture} of how the data will look. 
+A database schema represents a \textbf{blueprint} or \textbf{architecture} of how the data storage will look. 
 It describes the shape of the data and how it might relate to other tables or models. Refer to figure \ref{fig:schema}.
 
 The \textbf{Collections} and their respective \textbf{Document Attributes} are:
@@ -363,4 +362,44 @@ The User will then request for a session refresh, and a new signed JWT will be g
 
 On logout the JWT is simply discarded by deleting the object from memory.
 
-% Neural Network architecture diagram.
+\section{Data Flow Diagram}
+
+The Data Flow Diagram \ref{fig:dfd} gives clarity on data flowing between all the services in our project. 
+Our system contains three major exposed services:
+\begin{itemize}
+    \item \textbf{Auth Service}, which is mainly used for authentication and JWT session maintenance.
+    \item \textbf{File Service}, better known as Storage service, manages the file streams and storage of file attachments.
+    \item \textbf{GraphQL gateway}, which serves as a gateway, to simplify transactions between all the other services.
+\end{itemize}
+
+\begin{figure}[h!]
+    \begin{center}
+        \includegraphics[width=15cm]{DFD-FOCUSA.png}
+    \end{center}
+    \caption{Level 1 Data Flow Diagram. This diagram contains two major entities: student and teacher. 
+    They act as both data source and sink.}
+    \label{fig:dfd}
+\end{figure}
+
+GraphQL API is used to parse GraphQL queries and intelligently resolve requests to the required services. 
+It also composes a digested and optimised version of JSON response messages to reduce the load on the client's network connection.
+
+\textbf{The Auth Service} is a data sink, maintaining JWT sessions and user details for both the external clients, and internal services. 
+Our approach will be to ensure authentication of communication between services as well, not trusting a De-militarized zone (DMZ).
+DMZ is a special network barrier added at a network gateway, acting as a firewall and packet inspector. We have assumed not trusting 
+the DMZ.
+
+\textbf{The Post Service} communicates with the Auth service, file service and notification service for validating post authors, attaching files to posts, 
+and publishing notifications.
+
+\textbf{The Profile Service} communicates with the Auth service to maintain a one-to-one relationship between user profiles and user details. 
+This one-to-one relationship is essential to prevent orphaned profiles and dangling references.
+
+\textbf{The Course Service} communicates with the Auth service to ensure that a valid moderator is performing sensitive actions such as create, edit and delete course. 
+
+\textbf{The File Service} acts as a bridge between the IPFS file store and the external entities. 
+It communicates with the IPFS file store to perform operations like file pinning, unpinning, download streaming, and uploading.
+
+\textbf{The notifications Service} operates over the Libp2p PubSub protocol, and allows for a distributed Publish-Subscribe architecture. 
+Clients request for persistent subscription sockets with the GraphQL API. This system allows for an asymmetric connection between 
+the services, and the client, bridged through the GraphQL gateway.
