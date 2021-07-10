@@ -1,6 +1,6 @@
 const { PubSub } = require('../../libp2p-pubsub');
 
-const { addNotification } = require('./functions');
+// const { addNotification } = require('./functions');
 
 const server = true;
 const notification = new PubSub(server);
