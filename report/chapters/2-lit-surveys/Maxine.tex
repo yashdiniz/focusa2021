@@ -2,13 +2,10 @@
 
 NVIDIA Maxine is a fully accelerated platform SDK for developers of video 
 conferencing services to build and deploy AI-powered features that use state-of-the-art 
-models in their cloud. Video conferencing applications based on Maxine can reduce video 
-bandwidth usage down to one-tenth of H.264 using AI video compression, dramatically reducing costs.
+models in their cloud. Video conferencing applications based on Maxine can reduce video bandwidth usage down to one-tenth of H.264 using AI video compression, dramatically reducing costs.
 
 Maxine includes APIs for the latest innovations from NVIDIA research such as face alignment, 
-gaze correction, face re-lighting and real time translation in addition to capabilities such 
-as super-resolution, noise removal, closed captioning and virtual assistants. These capabilities are 
-fully accelerated on NVIDIA GPUs to run in real time video streaming applications in the cloud.
+gaze correction, face re-lighting, and real-time translation in addition to capabilities such as super-resolution, noise removal, closed captioning, and virtual assistants. These capabilities are fully accelerated on NVIDIA GPUs to run in real-time video streaming applications in the cloud.
 
 Maxine-based applications let service providers offer the same features to every user on any device,
 including computers, tablets, and phones. Applications built with Maxine can easily be deployed as 
@@ -34,7 +31,7 @@ microservices that scale to hundreds of thousands of streams in a Kubernetes env
     With AI-based video compression technology running on \textbf{NVIDIA GPUs}, 
     developers can reduce bandwidth use down to one-tenth of the bandwidth needed 
     for the H.264 video compression standard. This cuts costs for providers and 
-    delivers a smoother video conferencing experience for end users, who can enjoy 
+    delivers a smoother video conferencing experience for end-users, who can enjoy 
     more AI-powered services while streaming less data on their computers, tablets, and phones.
     
     \item \textbf{Face Re-Animation}:
@@ -47,12 +44,12 @@ microservices that scale to hundreds of thousands of streams in a Kubernetes env
     to help simulate eye contact, even if a person’s camera isn’t aligned with their screen.
     
     Developers can also add features that allow call participants to choose their
-    own avatars that are realistically animated in real time by their voice and emotional tone.
+    own avatars that are realistically animated in real-time by their voice and emotional tone.
 
     \item \textbf{Video and Audio Effects}:
     AI-based super-resolution and artifact reduction can convert lower resolutions to higher
-    resolution videos in real time which helps to lower the bandwidth requirements for video 
-    conference providers, as well as improves the call experience for users with lower bandwidth. 
+    resolution videos in real-time which help to lower the bandwidth requirements for video 
+    conference providers, as well as improve the call experience for users with lower bandwidth. 
     Developers can add features to filter out common background noise and frame the camera on a user’s 
     face for a more personal and engaging conversation.
     
@@ -60,21 +57,19 @@ microservices that scale to hundreds of thousands of streams in a Kubernetes env
 
     \item \textbf{Conversational AI}:
     Maxine-based applications can use NVIDIA Jarvis, a fully accelerated conversational
-    AI framework with state-of-the-art models optimized for real time performance. Using Jarvis, 
-    developers can integrate virtual assistants to take notes, set action items, and answer questions 
-    in human-like voices.
+    AI framework with state-of-the-art models optimized for real-time performance. Using Jarvis, 
+    developers can integrate virtual assistants to take notes, set action items, and answer questions in human-like voices.
     
-    Additional conversational AI services such as translations, closed captioning and transcriptions help 
-    ensure everyone can understand what’s being discussed on the call.
+    Additional conversational AI services such as translations, closed captioning and transcriptions help ensure everyone can understand what’s being discussed on the call.
 \end{itemize}
 
 \subsubsection{Observation}
 
 NVIDIA Maxine needs all of its devices to have NVIDIA hardware or access to the NVIDIA cloud. 
-This reduces the customer base because of its cost and huge unavailability of GPUs.
+This reduces the customer base because of its cost and the huge unavailability of GPUs.
 
 It is therefore important to understand that dependence on compute-intensive hardware could
-currently be the only barrier to building effective applications using Neural Networks.
+currently, be the only barrier to building effective applications using Neural Networks.
 
 \subsection{Comfort Noise}
 
@@ -84,13 +79,9 @@ The issues of receiving prolonged periods of artificial silence would include:
 
 \begin{itemize}
     \item The listener disconnecting prematurely believing transmission has been lost.
-    \item The speech does not sound smooth, since the voice activity detector would 
-    abruptly cut the signal as an attempt to save bandwidth, but this would give the 
-    listener a perception that the voice quality has worsened.
-    \item The sudden changes in voice amplitude, punctuated by repeated gaps of silence 
-    would be jarring to the listener.
+    \item The speech does not sound smooth, since the voice activity detector would abruptly cut the signal as an attempt to save bandwidth, but this would give the listener a perception that the voice quality has worsened.
+    \item The sudden changes in voice amplitude, punctuated by repeated gaps of silence would be jarring to the listener.
 \end{itemize}
 
-As can be observed, the above issues are not technical. Engineers arrived at a simple solution which involved adding 
-comfort noise to the communication. This noise is added at the receiving end of the communication, and not transmitted.~\cite{ComfortNoise}
+As can be observed, the above issues are not technical. Engineers arrived at a simple solution that involved adding comfort noise to the communication. This noise is added at the receiving end of the communication, and not transmitted.~\cite{ComfortNoise}
 Such a setup helps save bandwidth while also circumventing the issues described above.

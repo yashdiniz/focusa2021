@@ -3,7 +3,7 @@
 TF-IDF stands for Term Frequency-Inverse Document Frequency. 
 The TF-IDF weight is a weight often used in information 
 retrieval and text mining. Variations of the TF-IDF weighting 
-scheme are often used by search engines in scoring and ranking 
+the scheme is often used by search engines in scoring and ranking 
 a document’s relevance given a query. 
 This weight is a statistical measure used to evaluate how 
 important a word is to a document in a collection or corpus. 
@@ -13,8 +13,7 @@ of the word in the corpus.
 
 TF-IDF is a weighting scheme that assigns each term in a 
 document a weight based on its Term Frequency (TF) and 
-Inverse Document Frequency (IDF). The terms with higher 
-weight scores are considered to be more important.
+Inverse Document Frequency (IDF). The terms with higher weight scores are considered to be more important.
 
 Typically, the TF-IDF weight is composed by two terms:
 \begin{enumerate}
@@ -64,20 +63,16 @@ The TF-IDF vector is now computed for each document like so~\cite{tfidfExample}:
     \includegraphics[width=10cm]{tfidf-example.png}
 \end{figure}
 
-\subsection{Compare query against a document}
+\subsection{Compare query against document}
 \begin{enumerate}
     \item Find the TF-IDF vector for the document. This should be an easy, $O(1)$ lookup since the TF-IDF vector was already computed.
     \item Compute the TF-IDF vector for the query. (Note: technically, the query is treated as if it were a new document. 
     However, the IDF values need not be recomputed: just use the ones computed earlier.)
     \item Compute the cosine similarity between the document vector and the query vector.
-    \item This can be done by comparing the TF-IDF vector for the query against all the document TF-IDF vectors and compute how similar 
-    the query vector is to each document by exploiting properties of the cosine function and the dot product.
+    \item This can be done by comparing the TF-IDF vector for the query against all the document TF-IDF vectors and compute how similar the query vector is to each document by exploiting properties of the cosine function and the dot product.
 \end{enumerate}
 
-The $K$ documents of the collection with the highest vector space 
-scores on the query $q$ need to be determined. Typically, these $K$ top documents ordered by 
-score in decreasing order is what is needed; for instance many search engines use $K = 10$ to retrieve 
-and rank-order the first page of the ten best results.~\cite{tfidfExample}
+The $K$ documents of the collection with the highest vector space scores on the query $q$ need to be determined. Typically, these $K$ top documents ordered by the score in decreasing order is what is needed; for instance, many search engines use $K = 10$ to retrieve and rank-order the first page of the ten best results.~\cite{tfidfExample}
 
 \subsubsection{Time Complexity}
 
@@ -89,6 +84,6 @@ The time complexity of this algorithm is:
 where $|Q|$ is considered fixed, $Q$ is the set of words in the query and $D$ is the set of all documents.
 
 Also, if the $D$ is the set of only the matching documents, then
-since scores is a priority queue (at least in doc-at-time-scheme) built on heap, 
+since scores is a priority queue (at least in doc-at-time-scheme) built on the heap, 
 putting every $d$ into takes $\log K$. Therefore, an estimate can be $O(|D| \log K )$.~\cite{tfidfComplexity}
 
