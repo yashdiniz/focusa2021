@@ -43,7 +43,7 @@ setInterval(() => auth.get('/', {
  * Attempt to build a TF-IDF index for post text.
  * Will be used in searchPosts
  */
-focusa.then(f => f.courses.pouch.search({
+focusa.then(f => f.posts.pouch.search({
     fields: ['text'],
     build: true,
 })).catch(console.error);
