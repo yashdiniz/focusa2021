@@ -1,18 +1,17 @@
 \section{Neural Discrete Representation Learning}
 
-Recent advances in generative modelling of images, audio and videos have yielded impressive
-samples and applications. At the same time the challenges that follow these tasks are few-shot
-learning, domain adaptation, or reinforcement learning heavily rely on learnt representations from raw data.
+Recent advances in generative modeling of images, audio, and videos have yielded impressive
+samples and applications. At the same time, the challenges that follow these tasks are few-shot
+learning, domain adaptation, or reinforcement learning heavily rely on learned representations from raw data.
 
-Learning representations with continuous features have been used in many previous 
-work but discrete representations  are potentially more natural fit for many applications. 
-Discrete representations are a natural fit for complex reasoning, planning and predictive learning
+Learning representations with continuous features have been used in much previous work but discrete representations are a potentially more natural fit for many applications. 
+Discrete representations are a natural fit for complex reasoning, planning, and predictive learning
 (e.g., if it rains, I will use an umbrella).
 
 This concept of discrete representation gave rise to the Vector Quantization-Variational Autoencoder. 
 This model relies on Vector Quantization with the combination of Variational Autoencoder framework with 
-discrete latent representations through a novel parameterisation of the posterior distribution of (discrete) 
-latents given an observation.~\cite{oord2018neural}
+discrete latent representations through a novel parameterization of the posterior distribution of (discrete) 
+latent given an observation.~\cite{oord2018neural}
 
 \subsection{Vector Quantization - Variational Autoencoder (VQ-VAE)}
 
@@ -20,11 +19,8 @@ VAEs consist of the following parts: an encoder network which parameterised a po
 distribution $q(z|x)$ of discrete latent random variables $z$ given the input data $x$, a prior
 distribution $p(z)$, and a decoder with a distribution $p(x|z)$ over input data.
 
-Typically, the posteriors and priors in VAEs are assumed normally distributed with diagonal 
-covariance. Extensions include autoregressive prior and posterior models, normalising flows, 
-and inverse autoregressive posteriors . VQ-VAE uses discrete latent variables which is  
-a new way of training, by using vector quantisation (VQ). The posterior and prior distributions are 
-categorical, and the samples drawn from these distributions index an embedding table. These embeddings
+Typically, the posteriors and priors in VAEs are assumed normally distributed with diagonal covariance. Extensions include autoregressive prior and posterior models, normalizing flows, 
+and inverse autoregressive posteriors. VQ-VAE uses discrete latent variables which is a new way of training, by using vector quantization (VQ). The posterior and prior distributions are categorical, and the samples were drawn from these distributions index an embedding table. These embeddings
 are then used as input into the decoder network.
 
 \subsection{Discrete Latent Variables}
@@ -65,13 +61,13 @@ The input to the decoder is the corresponding embedding vector $e _k$ as given i
     \label{fig:vqvae}
 \end{figure}
 
-During forward computation the nearest embedding $z _q(x)$ is passed to the decoder,
-and during the backwards pass the gradient $\nabla _z L$ is passed unaltered to the encoder. 
+During forwarding computation, the nearest embedding $z _q(x)$ is passed to the decoder,
+and during the backward pass, the gradient $\nabla _z L$ is passed unaltered to the encoder. 
 Since the output representation of the encoder and the input to the decoder share the same $D$
 dimensional space, the gradients contain useful information for how the encoder has to change its 
 output to lower the reconstruction loss.
 
-As seen on figure \ref{fig:vqvae} (right), the gradient can push the encoder’s output to be discretized 
+As seen in figure \ref{fig:vqvae} (right), the gradient can push the encoder’s output to be discretized 
 differently in the next forward pass, because the assignment in equation \ref{eqn:discrete} will be different
 
 The log-likelihood of the complete model $\log p(x)$ can be evaluated as follows:
@@ -92,6 +88,5 @@ Thus, the authors concluded.~\cite{razavi2019generating, oord2018neural}
 \subsection{Prior}
 
 The author also stated a prior distribution can be made autoregressive by depending on $z$ 
-in the feature map as it is a categorical distribution over the discrete latents $p(z)$. 
-While training the VQ-VAE the prior is kept constant and uniform. After training, fit 
-an autoregressive distribution over $z$, $p(z)$, so that it can generate $x$ via ancestral sampling.
+in the feature map as it is a categorical distribution over the discrete latent $p(z)$. 
+While training the VQ-VAE the prior is kept constant and uniform. After training, fit an autoregressive distribution over $z$, $p(z)$, so that it can generate $x$ via ancestral sampling.

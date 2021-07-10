@@ -2,63 +2,49 @@
 
 \section{Discussion}
 Distributed databases like CouchDB operate with eventual consistency. The CAP theorem proves beyond doubt that it is close to impossible 
-to actually achieve consistency, availability and partition tolerance simultaneously, unless we manage to build successful quantum communication.
+to achieve consistency, availability, and partition tolerance simultaneously, unless we manage to build successful quantum communication.
 
-Microservices are containerized and isolated, allowing for loosely coupled, highly scalable and secure architectures. The slight learning curve required 
-to use message passing over shared memory and APIs is large, but beneficial, since message passing can be used when building any application, even if it is 
+Microservices are containerized and isolated, allowing for loosely coupled, highly scalable, and secure architectures. The slight learning curve required 
+to use message passing over shared memory and APIs is large, but beneficial since message passing can be used when building any application, even if it is 
 not a microservice application.
 
-Microservices by themselves do not manage data storage, but only processing and interfacing. Thus, the use of an efficient, distributed and easy 
-to synchronise database like CouchDB, and file server like IPFS allows for efficient scaling and replication, along with support for sharding. This means that the system can 
-easily implement a RAID-style disk management, but at the application layer, with faster and easier scaling.
+Microservices by themselves do not manage data storage, but only processing and interfacing. Thus, the use of an efficient, distributed, and easy to synchronize database like CouchDB, and a file server like IPFS allows for efficient scaling and replication, along with support for sharding. This means that the system can 
+easily implement RAID-style disk management, but at the application layer, with faster and easier scaling.
 
-Cross-platform tools like React Native for building a mobile app frontend really simplify the development of User Interfaces. Problems still exist when 
-trying cross-compatibility features, and algorithms mostly perform worse than a direct native code. With Expo SDK, support for multiple platforms, including 
-the web (through Expo Snack) make React Native a go-to solution for building UIs.
+Cross-platform tools like React Native for building a mobile app frontend simplify the development of User Interfaces. Problems still exist when trying cross-compatibility features, and algorithms mostly perform worse than direct native code. With Expo SDK, support for multiple platforms, including 
+the web (through Expo Snack) makes React Native a go-to solution for building UIs.
 
 Finally, GANs (Generative Adversarial Networks) perform better than VAEs (Variational Auto-Encoders) for video conferencing codecs. 
-Neural networks designed solely for encoding tasks perform poorly because of the way they are trained. Most loss functions like MSE tend to give an average probability 
-distribution instead of a reconstruction. GANs perform much better at generative and reconstructive tasks due to their min-max training algorithm, and are well-suited for codecs.
+Neural networks designed solely for encoding tasks perform poorly because of the way they are trained. Most loss functions like MSE tend to give an average probability distribution instead of a reconstruction. GANs perform much better at generative and reconstructive tasks due to their min-max training algorithm and are well-suited for codecs.
 
-The only bottleneck for neural network codecs is currently the massive amount of computation resources required for smooth operation. This is mainly because 
-most research models are not knowledge distilled. Knowledge distillation can help ease the computation requirements, reduce the model sizes and still stay at 
-par with the original model's performance. Knowledge distillation will surely bring in the commercialization of neural network codecs. NVIDIA Maxine may have tried neural 
-network optimisations and cloud processing, but it defeats the purpose of offline functionailty and overall reduced network bandwidth usage.
+The only bottleneck for neural network codecs is currently the massive amount of computing resources required for smooth operation. This is mainly because most research models are not knowledge distilled. Knowledge distillation can help ease the computation requirements, reduce the model sizes and still stay at par with the original model's performance. Knowledge distillation will surely bring in the commercialization of neural network codecs. NVIDIA Maxine may have tried neural 
+network optimizations and cloud processing, but it defeats the purpose of offline functionality and overall reduced network bandwidth usage.
 
 \section{Conclusion}
 Our project delivered the following:
 \begin{itemize}
     \item A Learning Management System built on an offline-first supported architecture, using file and post caching.
-    \item A GraphQL API backend, with greatly reduced network requirements. It can operate independent of a reliable 
-    and high bandwidth connection.
-    \item A truly peer to peer notification service which operates using a pull notification PubSub architecture, 
+    \item A GraphQL API backend, with greatly reduced network requirements. It can operate independently of a reliable and high bandwidth connection.
+    \item A truly peer-to-peer notification service that operates using a pull notification PubSub architecture, 
     transferring data using binary streams and protocol buffers.
     \item Multiple video conferencing implementations, each operating on different strategies, 
     and working with various open source technologies.
-    \item A Proof of Concept illustrating an implementation of a neural network as a realtime video codec for video conferencing.
+    \item A Proof of Concept illustrating an implementation of a neural network as a real-time video codec for video conferencing.
 \end{itemize}
 
 Our Proof of Concept successfully used the pre-trained First Order Motion Model (FOMM) to illustrate reduces
-network bandwidth usage. It also showcased the possibility of a neural network being potentially used as a codec 
-for video conferencing whenever computers are capable enough.
+network bandwidth usage. It also showcased the possibility of a neural network being potentially used as a codec for video conferencing whenever computers are capable enough.
 
 \section{Future Scope}
-In hindsight, our project has large scope. The team feels fulfilled for having arrived at the current state of the project. 
-However, we do not want to stop here. There are a lot of things we would like to do in the future, and eventually convert this 
-project into a commercially viable product. The project is far from over.
+In hindsight, our project has a large scope. The team feels fulfilled for having arrived at the current state of the project. 
+However, we do not want to stop here. There are a lot of things we would like to do in the future, and eventually, convert this project into a commercially viable product. The project is far from over.
 
-The first major requirement would be to actually train a distilled neural network as a video conferencing codec, and commercially 
-integrate it in to an existing video conferencing application, like Jitsi. The major bottlenecks would include obtaining a video training dataset 
+The first major requirement would be to train a distilled neural network as a video conferencing codec and commercially integrate it into an existing video conferencing application, like Jitsi. The major bottlenecks would include obtaining a video training dataset 
 (the one we needed was licensed and closed behind a paywall, while also being around 300GB in size, and needed manual web scraping), and also a very powerful computer to train multiple networks in parallel. 
-Ultimately, distilled networks will operate in a highly optimised manner, but require massive amounts of training to do so.
+Ultimately, distilled networks will operate in a highly optimized manner, but require massive amounts of training to do so.
 
-Finally, we noticed that the current industrial standards for building nodeJS microservice applications do not have the level of transparency and 
-distributed nature as would be desired by us. While serverless architectures do exist, they still suffer from various bottlenecks like ephemeral 
-data storage. Libp2p is a standard library created by the IPFS team which allows for cross-protocol communication in a truly distributed manner, 
-allowing for dynamic transfers of location, concurrency, replication, and migration. Libp2p however does not have an official RPC implementation 
-which can be publicly used. We would like to venture into contributing this feature to libp2p as it would really help in commercial DevOps.
+Finally, we noticed that the current industrial standards for building nodeJS microservice applications do not have the level of transparency and distributed nature as would be desired by us. While serverless architectures do exist, they still suffer from various bottlenecks like ephemeral data storage. Libp2p is a standard library created by the IPFS team which allows for cross-protocol communication in a truly distributed manner, 
+allowing for dynamic transfers of location, concurrency, replication, and migration. Libp2p however does not have an official RPC implementation that can be publicly used. We would like to venture into contributing this feature to libp2p as it would help in commercial DevOps.
 
-GraphQL API allows for very efficient querying of data using resolvers, with support for fine-grained interospection and optimizations like caching 
-on both the server and client. Using GraphQL over a new protocol stack like the upcoming HTTP/3 (QUIC protocol), or simply using protocol buffers over 
-HTTP. These steps alone can reduce the internet bandwidth requirements by almost 60 percent. We believe that using a truly distributed architecture at the 
-server side, and efficient data transfer to client side can double our application performance and experience.
+GraphQL API allows for very efficient querying of data using resolvers, with support for fine-grained introspection and optimizations like caching on both the server and client. Using GraphQL over a new protocol stack like the upcoming HTTP/3 (QUIC protocol), or simply using protocol buffers over 
+HTTP. These steps alone can reduce the internet bandwidth requirements by almost 60 percent. We believe that using a truly distributed architecture at the server-side, and efficient data transfer to the client-side can double our application performance and experience.

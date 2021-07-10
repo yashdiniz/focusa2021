@@ -1,6 +1,6 @@
 \chapter{\centering Design}
 
-% SDLC model. Agile SDLC, pros and cons, sprints, CI/CD etc.
+% SDLC model. Agile SDLC, pros and cons, sprints, CI/CD, etc.
 \section{Agile SDLC}
 
 \begin{figure}[h!]
@@ -15,45 +15,38 @@ The philosophy of Agile is that every project needs to be handled differently an
 need to be tailored to best suit the project requirements. To deliver specific features for a 
 release the tasks are divided into time boxes (small time frames).
 
-Agile uses an iterative approach and  working software build is delivered after each iteration. 
-Each build is incremental in terms of features; the final build holds all the features required 
-by the customer. Refer to figure \ref{fig:agile}.
+Agile uses an iterative approach and working software build is delivered after each iteration. 
+Each build is incremental in terms of features; the final build holds all the features required by the customer. Refer to figure \ref{fig:agile}.
 
 Following are the Agile Manifesto principles:
 
 \begin{itemize}
     \item \textbf{Working software:} The best means of communication with the customers to understand
-    their requirements is by using demo working software, instead of just depending on documentation.
+    their requirement is by using demo working software, instead of just depending on documentation.
      
     \item \textbf{Customer collaboration:} Continuous customer interaction is very important to get proper
-    requirements, as the requirements cannot be gathered completely in the beginning of the project due 
+    requirements, like the requirements, cannot be gathered completely at the beginning of the project due 
     to various factors.
 
-    \item \textbf{Responding to change:} The focus is on quick response to changes and 
-    continuous development in agile development.
+    \item \textbf{Responding to change:} The focus is on quick response to changes and continuous development in agile development.
 \end{itemize}
 
 \subsection{Agile v/s traditional SDLC Models}
 
-Traditional SDLC models are based on a predictive approach. Teams in traditional SDLC models 
-usually work with detailed planning and have a complete view of the exact tasks and features 
-to be delivered during the product life cycle. These models entirely depend on the requirement 
-analysis and planning done in the beginning of the product life cycle. Any changes to be done go 
+Traditional SDLC models are based on a predictive approach. Teams in traditional SDLC models usually work with detailed planning and have a complete view of the exact tasks and features to be delivered during the product life cycle. These models entirely depend on the requirement analysis and planning done at the beginning of the product life cycle. Any changes to be done go 
 through a strict change control management and prioritization.~\cite{agile}
 
-On the other hand Agile uses an adaptive approach where there is no detailed planning and clarity
-of what features need to be developed in future. The team adapts to the  changing product requirements 
-dynamically. Agile has minimum failure as the product is tested frequently through the release iterations.
+On the other hand, Agile uses an adaptive approach where there is no detailed planning and clarity
+of what features need to be developed in the future. The team adapts to the changing product requirements dynamically. Agile has minimum failure as the product is tested frequently through the release iterations.
 
-The backbone of agile methodology is customer interaction  and open communication with minimum 
-documentation are the typical features of agile. The teams in agile methodology are in close collaboration 
+The backbone of agile methodology is customer interaction and open communication with minimum documentation are the typical features of agile. The teams in agile methodology are in close collaboration 
 with each other and are often based in the same geographical location.
 
 \subsubsection{Pros}
 
 \begin{itemize}
     \item Agile is a very realistic approach to software development.
-    \item Functionality can be developed, rapidly demonstrated and promotes teamwork and cross training. 
+    \item Functionality can be developed, rapidly demonstrated, and promotes teamwork and cross-training. 
     \item Resource requirements are minimum.
     \item It delivers early partial working solutions and is suitable for fixed or changing requirements.
     \item Good model for environments that change steadily.
@@ -64,11 +57,10 @@ with each other and are often based in the same geographical location.
 \subsubsection{Cons}
 
 \begin{itemize}
-    \item Not suitable for handling complex dependencies and more risk of sustainability, maintainability and extensibility.
+    \item Not suitable for handling complex dependencies and more risk of sustainability, maintainability, and extensibility.
     \item Strict delivery management dictates the scope, functionality to be delivered, and adjustments to meet the deadlines.
     \item Depends heavily on customer interaction, so if the customer is not clear, the team can be driven in the wrong direction.
-    \item Has a very high individual dependency, since there is minimum documentation generated and transfer of technology to new 
-    team members may be quite challenging due to lack of documentation.
+    \item Has a very high individual dependency since there is minimum documentation generated and transfer of technology to new team members may be quite challenging due to lack of documentation.
 \end{itemize}
 
 \subsection{Why Agile?}
@@ -76,14 +68,13 @@ with each other and are often based in the same geographical location.
 Flexibility and time management are important factors to consider when working on projects.
 Working iteratively, as Agile necessitates, allows a project team to deliver operational solutions in incremental builds.
 Each incremental change made to the code repository is thus maintained, and product releases are thus ensured to have minimal errors.
-Furthermore, tests are also performed prior to every product release, which help find bugs and mitigate errors which 
+Furthermore, tests are also performed before every product release, which helps find bugs and mitigate errors which 
 could have crept into the product during development.
 
 It is also important to note that the JAMstack, which is the technology stack used to implement the project, 
-has features which include loose-coupling between modules, and a very wide community of developers. Each module, 
-called a microservice, can be easily maintained by individual developers. Since each microservice delivers a limited 
-set of functions, documentation for each module can be minimised. JAMstack approaches project development in a 
-similar way to Agile, and thus can be a perfect fit.
+has features that include loose coupling between modules, and a very wide community of developers. Each module, 
+called a microservice, can be easily maintained by individual developers. Since each microservice delivers a limited set of functions, documentation for each module can be minimized. JAMstack approaches project development in a 
+similar way to Agile and thus can be a perfect fit.
 
 \section{CI/CD pipeline}
 
@@ -93,12 +84,9 @@ and safely deploys a new version of the application (CD).
 \subsection{CI and CD}
 
 CI stands for Continuous Integration. It is a development process in which the developers merge
-their code changes multiple times a day in a central repository. With CI, each change in code 
-triggers an automated build and test sequence.
+their code changes multiple times a day in a central repository. With CI, each change in code triggers an automated build and test sequence.
 
-CD stands for Continuous Delivery which on top of continuous integration adds the practice of 
-automating the entire software release process. CD includes infrastructure provisioning and deployment 
-which may be manual and consists of multiple stages.~\cite{CICD}
+CD stands for Continuous Delivery which on top of continuous integration adds the practice of automating the entire software release process. CD includes infrastructure provisioning and deployment which may be manual and consists of multiple stages.~\cite{CICD}
 
 \subsection{Elements of CI/CD}
 
@@ -113,14 +101,14 @@ which may be manual and consists of multiple stages.~\cite{CICD}
 \subsubsection{Source Stage}
 
 Source repository triggers a pipeline run. A notification is triggered to the CI/CD tool 
-which runs the corresponding pipeline if there is a change in code. 
+which runs the corresponding pipeline if there is a code change. 
 
 \subsubsection{Build Stage}
 
-To build a runnable instance of the product that which can potentially be shipped to end users  
+To build a runnable instance of the product that can potentially be shipped to end-users  
 the source code and its dependencies will need to undergo a build stage. 
-Programs written in languages such as Java, C/C++, or Go need 
-to be compiled, whereas Ruby, Python and JavaScript programs work without this step.
+Programs are written in languages such as Java, C/C++, or Go need 
+to be compiled, whereas Ruby, Python, and JavaScript programs work without this step.
 
 Regardless of the language, cloud-native software is typically deployed with Docker, in which case this 
 stage of the CI/CD pipeline builds the Docker containers.
@@ -130,7 +118,7 @@ stage, and it’s best to address the problems immediately.
 
 \subsubsection{Test Stage}
 
-Automated tests can be run to validate the code and the behaviour of the product. This stage acts as a safety
+Automated tests can be run to validate the code and the behavior of the product. This stage acts as a safety
 net that does not allow the bugs to reach the end-users.
 
 This stage can last from seconds to hours depending on the complexity of the project.
@@ -154,7 +142,7 @@ automatically deploy approved changes from the master branch to production.
 Jamstack is an architecture designed to make the web faster, more secure, and easier to scale. 
 It builds on many of the tools and workflows which bring maximum productivity.
 
-It adheres to the following components : Javascript, APIs and Markup.
+It adheres to the following components: Javascript, APIs, and Markup.
 
 The core principles of pre-rendering and decoupling, enable sites and applications to be delivered 
 with greater confidence and resilience than ever before.~\cite{JAMstack}
@@ -165,13 +153,12 @@ The following core concepts make JAMstack fast, secure, high-performing, resilie
 
 \subsubsection{Speed}
 
-Serving JAMstack apps as static files directly from a Content Delivery Network makes it 
-likely apps will load faster. Therefore the server need not spend time building the page 
+Serving JAMstack apps as static files directly from a Content Delivery Network makes it likely apps will load faster. Therefore the server need not spend time building the page 
 before responding; all as a result of pre-rendering. 
 
 \subsubsection{Cost}
 
-More often than not, JAMstack sites are going to run cheaper than their server side counterparts. 
+More often than not, JAMstack sites are going to run cheaper than their server-side counterparts. 
 Hosting static assets is cheap and now the pages are being served at the same rate.
 
 \subsubsection{Scalability}
@@ -186,13 +173,12 @@ Static HTML, CSS, and JS are maintained headache-free on an automated, distribut
 
 \subsubsection{Security}
 
-With JAMstack, there is no need to lockdown all the services as a central organisation, instead, 
-each service can be locked in separate containerised services, leading to easier management and isolation.
+With JAMstack, there is no need to lock down all the services as a central organization, instead, 
+each service can be locked in separate containerized services, leading to easier management and isolation.
 
 \subsection{A Comparison with  the Traditional Web Architecture}
 
-Jamstack is the new standard architecture for the web. Using Git workflows and modern build tools, pre-rendered content 
-is served to a CDN and made dynamic through APIs and serverless functions. Technologies in the stack include JavaScript frameworks, 
+Jamstack is the new standard architecture for the web. Using Git workflows and modern build tools, pre-rendered content is served to a CDN and made dynamic through APIs and serverless functions. Technologies in the stack include JavaScript frameworks, 
 Static Site Generators, Headless CMSs, and CDNs. Refer to figure \ref{fig:jamstack}
 
 \begin{figure}[h!]
@@ -223,15 +209,11 @@ application as a collection of services that are
 The microservice architecture enables the rapid, frequent and reliable delivery of large, complex applications.
 The benefits of decomposing an application into different, smaller services are:
 \begin{itemize}
-    \item \textbf{Modularity:} This makes the application easier to understand, develop, test, and 
-    become more resilient to architecture erosion.
-    \item \textbf{Scalability:} Since microservices are implemented and deployed independently of 
-    each other, i.e. they run within independent processes, they can be monitored and scaled independently.
+    \item \textbf{Modularity:} This makes the application easier to understand, develop, test, and become more resilient to architecture erosion.
+    \item \textbf{Scalability:} Since microservices are implemented and deployed independently of each other, i.e. they run within independent processes, they can be monitored and scaled independently.
     \item \textbf{Integration of heterogeneous and legacy systems:} Microservices are considered as a 
-    viable mean for modernizing existing monolithic software application.
-    \item \textbf{Distributed development:} It parallelizes development by enabling small autonomous teams to
-    develop, deploy and scale their respective services independently. It also allows the architecture of 
-    an individual service to emerge through continuous refactoring.
+    viable means for modernizing existing monolithic software applications.
+    \item \textbf{Distributed development:} It parallelizes development by enabling small autonomous teams to develop, deploy and scale their respective services independently. It also allows the architecture of an individual service to emerge through continuous refactoring.
 \end{itemize}
 
 The project, FOCUSA includes the following microservices. Refer to figure \ref{fig:highlevel}:
@@ -240,7 +222,7 @@ The project, FOCUSA includes the following microservices. Refer to figure \ref{f
     \item \textbf{Roles:}  returns the roles that a user belongs to. It depicts the different roles that different admins perform.
     \item \textbf{Profiles:} Each user has a unique profile, containing details like the user display picture, username, and the various courses the user has subscribed to.
     \item \textbf{Courses:}  returns the details of the courses which includes the course title and the different users subscribed to the course, as well as a provision for new users to subscribe to the course. Only users with certain roles can moderate their respective courses.
-    \item \textbf{Posts:} refers to posts posted by the course moderators. The moderators are able to perform CRUD operations on these posts
+    \item \textbf{Posts:} refers to posts posted by the course moderators. The moderators can perform CRUD operations on these posts
     \item \textbf{Notifications:}  sends notifications to the user devices and also monitors the database for changes.
     \item \textbf{Storage:} performs all functions related to file upload, download, and streaming.
 \end{itemize}
@@ -250,8 +232,8 @@ The project, FOCUSA includes the following microservices. Refer to figure \ref{f
 The project will make use of a single GraphQL Schema as an API Gateway to all the microservices, 
 integrating it under a single application. This enables easy integration of data from the different services.
 
-One of the main benefits of having everything behind a single endpoint, is that data can be routed more 
-effectively than if each request had its own service. 
+One of the main benefits of having everything behind a single endpoint is that data can be routed more 
+effectively than if each request had its service. 
 
 The microservices handle the business logic themselves, while the GraphQL platform interacts with the 
 clients to process the queries by consulting the services using REST API, thus allowing for easier isolation 
@@ -268,9 +250,9 @@ and horizontal scaling.
     \label{fig:activity}
 \end{figure}
 
-Refer to figure \ref{fig:activity}. The user logs in to the app by putting in the valid credentials.
+Refer to figure \ref{fig:activity}. The user logs in to the app by putting invalid credentials.
 The credentials put in by the user are validated by the system through the authentication mechanism on the server.
-If the credentials are found to be incorrect, the system runs the error handler to address the error occurred.
+If the credentials are found to be incorrect, the system runs the error handler to address the error that occurred.
 If the user still is not able to produce the correct credentials, the process ends and the user is not allowed to use the app.
 
 If the user has been validated and is found to be genuine, they are directed to the home/main page of the app where they can 
@@ -278,14 +260,14 @@ choose to request for the News Feed, User Profile, Courses or launch video confe
 All these requests can be made through the navigation panel provided in the app and are accessed as parallel activities.
 
 Once the user requests for a service, the request is sent to the system as a query which is then resolved by the GraphQL 
-to extract the specific requested data from the backend and the response returned is then displayed to the user in structured format.
+to extract the specifically requested data from the backend and the response returned is then displayed to the user in a structured format.
 
-If the user requests to launch the video conferencing, the system estblishes a peer to peer connection with the requested user 
-system, asks the user to grant access to the camera and audio and starts transfering bi-directional vectors as the secure connection is established.
+If the user requests to launch the video conferencing, the system establishes a peer to peer connection with the requested user 
+the system, asks the user to grant access to the camera and audio and starts transferring bi-directional vectors as the secure connection is established.
 These bi-directional vectors are worked upon by the algorithm used to reduce the bandwidth usage and the output is displayed in the form of video.
 
 If the user decides to log out of the app, it can be accomplished via the corresponding UI component and as a result all the 
-parallel activities combine to close and the user is logged out of the app safely .
+parallel activities combine to close and the user is logged out of the app safely.
 The user is also logged out of the app the session times out.
 
 % Schema diagram.
@@ -317,15 +299,14 @@ The core \textbf{relationships} between the attributes are:
 \begin{enumerate}
     \item Each user publishes many posts. One-to-many relationship.
     \item Many users have many roles. Many-to-many relationship.
-    \item Each user has a profile. One-to-one relationship with total cardinality.
+    \item Each user has a profile. A one-to-one relationship with total cardinality.
     \item Many comment posts have one parent post. Many-to-one relationship.
     \item Each post belongs to one course. Many-to-one relationship.
     \item Each course is moderated by many roles. One-to-many relationship.
     \item Each profile subscribes to many courses. One-to-many relationship.
 \end{enumerate}
 
-The Posts collection functionally stores all posts and comment documents as simple trees. This data structure can easily support 
-and manage a hierarchy similar to tweets in Twitter. However, the moderators will be able to setup a limit to the depth of comments.
+The Posts collection functionally stores all posts and comment documents as simple trees. This data structure can easily support and manage a hierarchy similar to tweets on Twitter. However, the moderators will be able to set up a limit to the depth of comments.
 
 \section{Sequence Diagram}
 
@@ -340,27 +321,27 @@ and manage a hierarchy similar to tweets in Twitter. However, the moderators wil
 
 Refer to figure \ref{fig:sequence}.
 The User initiates with a request to login to the Authenticator along with their credentials ie; name and password.
-On receiving the credentials, the Authenticator verifies them, creates a session and generates a refresh cookie.
-Auth also generates a signed JWT(JSON Web Token) conatining the IP, username and session details of the User.
+On receiving the credentials, the Authenticator verifies them, creates a session, and generates a refresh cookie.
+Auth also generates a signed JWT(JSON Web Token) containing the IP, username, and session details of the User.
 
-This JWT is stored in the User's device memory. This JWT is synonymous to an ID card which can be used by 
+This JWT is stored in the User's device memory. This JWT is synonymous with an ID card which can be used by 
 the User to directly work with the GraphQL and Services without needing to disturb the Authenticator repeatedly.
 
 The User can now communicate with GraphQL by sharing the JWT.
 GraphQL makes a request and forwards JWT to the Services. Services here refer to all the microservices that form the system.
 The Services validate the signed JWT received from the GraphQL (by checking its digital signature) 
 and if found valid execute the query and return response data to GraphQL.
-GraphQL then converts the recevied response into the format requested by the User, and sends it to the User.
+GraphQL then converts the received response into the format requested by the User and sends it to the User.
 
 However, if the Services find the JWT to be invalid, a failure response is sent to
-GraphQL which then returns a failure response to the User.
+GraphQL then returns a failure response to the User.
 The User now needs to request the Authenticator for a session refresh upon which the Authenticator
 returns a new signed JWT along with the refresh cookie.
 
 If the User accidentally refreshes their browser, the JWT will get deleted from memory. 
 The User will then request for a session refresh, and a new signed JWT will be generated.
 
-On logout the JWT is simply discarded by deleting the object from memory.
+On logout, the JWT is simply discarded by deleting the object from memory.
 
 \section{Data Flow Diagram}
 
@@ -382,24 +363,24 @@ Our system contains three major exposed services:
 \end{figure}
 
 GraphQL API is used to parse GraphQL queries and intelligently resolve requests to the required services. 
-It also composes a digested and optimised version of JSON response messages to reduce the load on the client's network connection.
+It also composes a digested and optimized version of JSON response messages to reduce the load on the client's network connection.
 
-\textbf{The Auth Service} is a data sink, maintaining JWT sessions and user details for both the external clients, and internal services. 
-Our approach will be to ensure authentication of communication between services as well, not trusting a De-militarized zone (DMZ).
+\textbf{Auth Service} is a data sink, maintaining JWT sessions and user details for both the external clients and internal services. 
+Our approach will be to ensure the authentication of communication between services as well, not trusting a De-militarized zone (DMZ).
 DMZ is a special network barrier added at a network gateway, acting as a firewall and packet inspector. We have assumed not trusting 
 the DMZ.
 
-\textbf{The Post Service} communicates with the Auth service, file service and notification service for validating post authors, attaching files to posts, 
+\textbf{Post Service} communicates with the Auth service, file service, and notification service for validating post authors, attaching files to posts, 
 and publishing notifications.
 
-\textbf{The Profile Service} communicates with the Auth service to maintain a one-to-one relationship between user profiles and user details. 
+\textbf{Profile Service} communicates with the Auth service to maintain a one-to-one relationship between user-profiles and user details. 
 This one-to-one relationship is essential to prevent orphaned profiles and dangling references.
 
-\textbf{The Course Service} communicates with the Auth service to ensure that a valid moderator is performing sensitive actions such as create, edit and delete course. 
+\textbf{Course Service} communicates with the Auth service to ensure that a valid moderator is performing sensitive actions such as create, edit and delete a course. 
 
-\textbf{The File Service} acts as a bridge between the IPFS file store and the external entities. 
+\textbf{File Service} acts as a bridge between the IPFS file store and the external entities. 
 It communicates with the IPFS file store to perform operations like file pinning, unpinning, download streaming, and uploading.
 
-\textbf{The notifications Service} operates over the Libp2p PubSub protocol, and allows for a distributed Publish-Subscribe architecture. 
-Clients request for persistent subscription sockets with the GraphQL API. This system allows for an asymmetric connection between 
+\textbf{The notifications Service} operates over the Libp2p PubSub protocol and allows for a distributed Publish-Subscribe architecture. 
+Clients request persistent subscription sockets with the GraphQL API. This system allows for an asymmetric connection between 
 the services, and the client, bridged through the GraphQL gateway.

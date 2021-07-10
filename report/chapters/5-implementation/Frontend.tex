@@ -1,26 +1,21 @@
 \section{FOCUSA Frontend}
 The backend was designed to support practically any frontend that can communicate over the TCP/IP stack.
-For the purpose of the project however, the FOCUSA frontend is purely based on React Native, 
-and has been created using the Expo Standard Development Kit. 
+For the project, however, the FOCUSA frontend is purely based on React Native and has been created using the Expo Standard Development Kit. 
 % Running the application initially requires installing an npm package. 
 % After executing the preliminary commands, the development server starts as a result of which the application starts running.
 
 We have broken the frontend into several components, to help simplify integration with the backend, 
-and also to allow for easy task distribution. The app construction is thus segmented into several folders 
-also to maintain proper documentation.
+and also to allow for easy task distribution. The app construction is thus segmented into several folders also to maintain proper documentation.
 
 \subsection{Components}
-ReactJS components are simple blocks of User Interface which support runtime rendering based on passed props, 
+ReactJS components are simple blocks of User Interface that support runtime rendering based on passed props, 
 or procedurally generated states.
 The Components folder contains all the reusable ReactJS components used while building the User Interface. 
 Each component is briefly described below:
 \begin{itemize}
-    \item \textbf{Post component} incorporates the design of a typical post, comprising of attributes like the 
-    name of the course, the name of the course moderator, the date and time indicating when the post was 
-    published, and the content to be displayed. The component also includes features that allow the user 
-    to comment, share or download a post.
+    \item \textbf{Post component} incorporates the design of a typical post, comprising of attributes like the name of the course, the name of the course moderator, the date and time indicating when the post was published, and the content to be displayed. The component also includes features that allow the user to comment, share or download a post.
     \item \textbf{Course component} consists of attributes like the course name and the course description. 
-    The user also has a supplementary option to subscribe to a course on the click of a button.
+    The user also has a supplementary option to subscribe to a course at the click of a button.
     \item \textbf{Error component} gets displayed whenever there's an error message. Errors include network issues, 
     incorrect user credentials, or even server failure.
     \item \textbf{Publish Overlay component} allows a moderator to publish a new post to a specific course by showing a 
@@ -30,38 +25,35 @@ Each component is briefly described below:
 \end{itemize}
 
 \subsection{Screens}
-In React Native, a screen is an optimised React Native component. Users can typically navigate between screens based on various actions, 
+In React Native, a screen is an optimized React Native component. Users can typically navigate between screens based on various actions, 
 and the navigate command used is surprisingly flexible and useful for conditional navigation.
 The Screens folder contains code describing the different screens the user will experience first-hand while browsing through the application. 
 Each screen created contains and heavily uses the reusable components from the Components folder. Each screen is briefly described below: 
 \begin{itemize}
-    \item \textbf{The Login screen} provides the platform for user authentication, wherein the user will have to enter their login credentials 
-    to access the application. 
+    \item \textbf{The Login screen} provides the platform for user authentication, wherein the user will have to enter their login credentials to access the application. 
     \item \textbf{The Post Details screen} display a series of post components in a vertical format.
-    \item \textbf{The Course Details screen} displays attributes such as the course name and the course description, under which the posts 
-    that have been published by the moderator will be displayed. 
+    \item \textbf{The Course Details screen} displays attributes such as the course name and the course description, under which the posts that have been published by the moderator will be displayed. 
     \item \textbf{The Search screen} facilitates the user's ability to either search for a course or post of their choice.
     \item \textbf{The Profile screen} displays the user's profile details, i.e, the display picture and the bio, 
     followed by a list of courses that have subscribed to.
     \item \textbf{The Edit Profile screen} allows the user to edit their profile name, among other details whenever required.
     \item \textbf{The Personal Post screen} displays all the posts the user has interacted with. In particular, posts on which the user has commented.
     \item \textbf{The Settings screen} provides options to either edit their profile or log out of their account.
-    \item \textbf{The Meeting screen} provides an interface to either join a video conference meeting, or independently create a meeting of their own.
+    \item \textbf{The Meeting screen} provides an interface to either join a video conference meeting or independently create a meeting of their own.
 \end{itemize}
 
 \subsection{Navigation}
-In a multi-screen React Native application like FOCUSA, stack navigators help maintain a history of all the screens viewed, 
-and allow the user to navigate back and forth intuitively through the applcation. Furthermore, our app also uses a Bottom Tab 
-Navigator which allows to jump between multiple navigations based on the highlighted screen.
+In a multi-screen React Native application like FOCUSA, stack navigators help maintain a history of all the screens viewed and allow the user to navigate back and forth intuitively through the application. Furthermore, our app also uses a Bottom Tab 
+Navigator which allows jumping between multiple navigations based on the highlighted screen.
 The Navigation folder consists of code that was used to construct the navigation bar. 
 The navigation bar in the FOCUSA application facilitates the user's ability to switch 
-between the profile, search, offline post cache and meeting screens effortlessly.
+between the profile, search, offline post cache, and meeting screens effortlessly.
 
 \subsection{Hooks}
-ReactJS Hooks are used to integrate normal JavaScript components into ReactJS components. 
+ReactJS Hooks are used to integrating normal JavaScript components into ReactJS components. 
 ReactJS monitors states for updates, automatically re-rendering the components.
-The React Native Hooks folder contains: the Apollo GraphQL server integration, 
-the authentication server integration, the file server and offline cache integration, 
+The React Native Hooks folder contains the Apollo GraphQL server integration, 
+the authentication server integration, the file server, and offline cache integration, 
 all three of which have been amalgamated with the system back-end.
 
 \subsection{Assets}
@@ -70,14 +62,13 @@ This folder has been added to the app to reduce the static asset dependency from
 
 \subsection{Login Workflow}
 When the user opens the application, the profile screen appears by default. 
-If the user has a proper refresh cookie, the application requests for a JWT refresh. 
+If the user has a proper refresh cookie, the application requests a JWT refresh. 
 
 However, if the user has opened the app for the first time (or logged in after more 
 than 30 days), the following occurs: 
 \begin{itemize}
     \item The redux store detects that the JSON Web Token (JWT) is not set.
-    \item An attempt to refresh the JWT is made, but fails since the refresh cookie also is not set.
-    \item This failure triggers the display of the login screen, which asks the user for their login 
-    credentials. These credentials are then submitted to the server to obtain a JWT and refresh cookie, 
+    \item An attempt to refresh the JWT is made but fails since the refresh cookie also is not set.
+    \item This failure triggers the display of the login screen, which asks the user for their login credentials. These credentials are then submitted to the server to obtain a JWT and refresh cookie, 
     and normal application flow is resumed.
 \end{itemize}
