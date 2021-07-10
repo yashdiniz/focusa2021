@@ -151,7 +151,7 @@ const createPost = async (text, author, course, attachmentURL, parent) => {
 
     if (attachmentURL) {
         files.get('/pin', {
-            params: { cid: parseCIDFromURL(path.join(filesRealm, doc.attachmentURL)) },
+            params: { cid: parseCIDFromURL(path.join(filesRealm, attachmentURL)) },
             headers: { authorization: token }
         }).then(res => res.data)
             .catch(e => console.error(new Date(), e));
