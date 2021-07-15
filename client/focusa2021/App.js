@@ -10,6 +10,8 @@ import { store } from './hooks/store';
 export default function App() {
   const colorScheme = useColorScheme();
 
+  console.disableYellowBox = true
+
   return (
     <ApolloProvider client={apolloClient}>
       <Provider store={store}>
