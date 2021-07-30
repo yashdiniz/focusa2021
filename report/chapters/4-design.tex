@@ -199,7 +199,7 @@ Static Site Generators, Headless CMSs, and CDNs. Refer to figure \ref{fig:jamsta
 \end{figure}
 
 Microservices, also known as the microservice architecture, is an architectural style that structures an 
-application as a collection of services that are
+application as a collection of services that are;
 \begin{itemize}
     \item Highly maintainable and testable
     \item Loosely coupled
@@ -222,7 +222,7 @@ The project, FOCUSA includes the following microservices. Refer to figure \ref{f
     \item \textbf{Roles:}  returns the roles that a user belongs to. It depicts the different roles that different admins perform.
     \item \textbf{Profiles:} Each user has a unique profile, containing details like the user display picture, username, and the various courses the user has subscribed to.
     \item \textbf{Courses:}  returns the details of the courses which includes the course title and the different users subscribed to the course, as well as a provision for new users to subscribe to the course. Only users with certain roles can moderate their respective courses.
-    \item \textbf{Posts:} refers to posts posted by the course moderators. The moderators can perform CRUD operations on these posts
+    \item \textbf{Posts:} refers to posts posted by the course moderators. The moderators can perform CRUD operations on these posts.
     \item \textbf{Notifications:}  sends notifications to the user devices and also monitors the database for changes.
     \item \textbf{Storage:} performs all functions related to file upload, download, and streaming.
 \end{itemize}
@@ -262,8 +262,8 @@ All these requests can be made through the navigation panel provided in the app 
 Once the user requests for a service, the request is sent to the system as a query which is then resolved by the GraphQL 
 to extract the specifically requested data from the backend and the response returned is then displayed to the user in a structured format.
 
-If the user requests to launch the video conferencing, the system establishes a peer to peer connection with the requested user 
-the system, asks the user to grant access to the camera and audio and starts transferring bi-directional vectors as the secure connection is established.
+If the user requests to launch video conferencing, a peer to peer connection between the user and 
+the system is established, and the user is asked to grant access to their camera and audio to start transferring bi-directional vectors over a secure connection.
 These bi-directional vectors are worked upon by the algorithm used to reduce the bandwidth usage and the output is displayed in the form of video.
 
 If the user decides to log out of the app, it can be accomplished via the corresponding UI component and as a result all the 

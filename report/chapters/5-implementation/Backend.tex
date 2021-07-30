@@ -77,7 +77,7 @@ this system operates on an event loop.
 
 \subsection{Deployment}
 
-Initially, we had decided to deploy it on the Heroku cloud. Heroku provides virtual containers called dynos. Each free tier dyno by itself has very few resources allocated to it. An account is allowed to operate multiple dynos. Each service ran very efficiently, 
+Initially, we had decided to deploy the project on the Heroku cloud. Heroku provides virtual containers called dynos. Each free tier dyno by itself has very few resources allocated to it. An account is allowed to operate multiple dynos. Each service ran very efficiently, 
 with latencies as low as 70ms per request.
 
 This strategy quickly hit a roadblock when we noticed that data isn't persisting at the dynos~\cite{HerokuActiveStorage}. 
