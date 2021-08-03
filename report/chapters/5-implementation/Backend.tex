@@ -1,7 +1,7 @@
 \section{FOCUSA Backend}
 
 % TODO: bibliography!!
-The FOCUSA backend is one of the many deliverables our project delivers.
+The FOCUSA backend is one of the many deliverables the project delivers.
 During design, the project was broken into multiple isolated, loosely coupled and horizontally scalable modules. 
 Called the microservice architecture, this breaks code into small and manageable pieces which can be rapidly implemented and quickly tested.
 
@@ -14,15 +14,15 @@ even geographical transparency)
 The same service can have multiple instances, independently governed by one or more load balancers.
 
 Any communication with a microservice operates \textbf{over a stateless protocol}, like HTTP.
-There isn't any specific full-duplex session maintenance mechanism in the TCP/IP suite, and thus a token must be attached to every packet. This token references a session. We observed a single point of failure when trying to solve session management by using a centralised service.
+There isn't any specific full-duplex session maintenance mechanism in the TCP/IP suite, and thus a token must be attached to every packet. This token references a session. A single point of failure is observed when trying to solve session management by using a centralised service.
 
-The approach we used was signing a \textbf{cryptographic token called a JWT (JSON Web Token)}. 
-The authentication service plays the role of signing these tokens and sending them to the client with a "refresh cookie". The client then attaches this token to every future request made to any service in our project domain. It is possible because the JWT contains 
+The approach used was signing a \textbf{cryptographic token called a JWT (JSON Web Token)}. 
+The authentication service plays the role of signing these tokens and sending them to the client with a "refresh cookie". The client then attaches this token to every future request made to any service in the project domain. It is possible because the JWT contains 
 ALL the session data as a JSON payload, encrypted and entrusted to the client. None of the services (except the authentication service) store session data.
 
 It is dangerous to trust the client with storing session data. \emph{Can a client generate a JSON payload on their own and impersonate a user?} No.~\cite{JWTBestPractices}
 
-JWTs also contain a digital signature. However, similar to a session cookie, the services cannot distinguish between a valid client and a client impersonating a user solely using their JWTs. Since all our services depend on the session state written in the JWT, shared by the client, we carefully adhered to these rules for handling JWTs throughout development:
+JWTs also contain a digital signature. However, similar to a session cookie, the services cannot distinguish between a valid client and a client impersonating a user solely using their JWTs. Since all the services in this project depend on the session state written in the JWT, shared by the client, these rules for handling JWTs throughout development were carefully adhered to:
 
 \begin{itemize}
     \item Every JWT has a validity window, after which it expires. Always keep this window small. 
@@ -32,7 +32,7 @@ JWTs also contain a digital signature. However, similar to a session cookie, the
     \item Protect the JWT from being stolen. Also, reduce the risk of session hijacking if the JWT gets stolen.
 \end{itemize}
 
-Our approach uses an asymmetric-key digital signature standard called RS256. Here, the authentication service signs the JWT using a private key. The other services keep the public key. This way, any service can verify the signature of the JWT shared by the client. The other services will only accept the JWT when signed by the authentication service. 
+The approach uses an asymmetric-key digital signature standard called RS256. Here, the authentication service signs the JWT using a private key. The other services keep the public key. This way, any service can verify the signature of the JWT shared by the client. The other services will only accept the JWT when signed by the authentication service. 
 Failure to provide a valid JWT will lead to an intentional Denial of Service since the service will assume a malicious user is playing with the system.
 
 As listed in the Design chapter, the FOCUSA backend contains the following major services:
@@ -46,7 +46,7 @@ As listed in the Design chapter, the FOCUSA backend contains the following major
     \item \textbf{Storage:} performs all functions related to file upload, download, and streaming.
 \end{itemize}
 
-The following sections will describe our workflow and an overview of our deployment strategy.
+The following sections will describe the workflow and an overview of the deployment strategy.
 
 \subsection{Workflow}
 
@@ -65,23 +65,23 @@ Every service in the FOCUSA backend has three major layers:
     \begin{center}
         \includegraphics[width=8cm]{Microservice.png}
     \end{center}
-    \caption{Our layered approach to building each microservice.}
+    \caption{A layered approach to building each microservice.}
     \label{fig:microservice}
 \end{figure}
 
 All microservices were built in three layers, as shown in \ref{fig:microservice}, following this layered architecture for each service. 
 
-It is important to note that our notification service uses a pull-notification technique. It uses a 
+It is important to note that the notification service uses a pull-notification technique. It uses a 
 publisher-subscriber architecture which only transfers a digest of messages whenever the client asks for them. Unlike polling, 
 this system operates on an event loop.
 
 \subsection{Deployment}
 
-Initially, we had decided to deploy the project on the Heroku cloud. Heroku provides virtual containers called dynos. Each free tier dyno by itself has very few resources allocated to it. An account is allowed to operate multiple dynos. Each service ran very efficiently, 
+Initial steps were taken to deploy the project on the Heroku cloud. Heroku provides virtual containers called dynos. Each free tier dyno by itself has very few resources allocated to it. An account is allowed to operate multiple dynos. Each service ran very efficiently, 
 with latencies as low as 70ms per request.
 
-This strategy quickly hit a roadblock when we noticed that data isn't persisting at the dynos~\cite{HerokuActiveStorage}. 
+This strategy quickly hit a roadblock when data was not persisting at the dynos~\cite{HerokuActiveStorage}. 
 Heroku provides ephemeral storage to dynos. The data is volatile and gets purged/reallocated after inactivity.
-We need to integrate custom AWS S3 storage to the dyno if we want persistent storage. 
+To get persistent storage, the integration of a custom AWS S3 storage to the dyno was needed.
 
-We ultimately decided to operate on self-hosted Docker containers. Docker was easier to customize. The only issue with self-hosting is server availability. Hosting on AWS services is a long-term goal.
+Ultimately the project is operated on self-hosted Docker containers. Docker was easier to customize. The only issue with self-hosting is server availability. Hosting on AWS services is a long-term goal.

@@ -22,12 +22,12 @@ observing frame pairs extracted from the driving video, relatively displacing th
 
 As can be seen in figure \ref{fig:FOMMoverview}, the neural network has two major components, the motion module, and the generation module. 
 The data transferred between both modules consists of a set of jacobian matrices which contain the displacement of the main key points. 
-Our approach transfers a compressed version of these jacobian matrices over the internet, reducing the network overhead. It follows these basic steps: 
+This approach transfers a compressed version of these jacobian matrices over the internet, reducing the network overhead. It follows these basic steps: 
 
 \begin{itemize}
     \item First record a video of the user as if they were using a video-conferencing application. 
     \item The first frame recorded by the webcam is used as the keyframe, which is fed as the source image to the First Order Motion Model.
     \item The remaining frames of the video are then sent as the driving video to the First Order Motion Model.
-    \item The model then generates the jacobians and we measure the amount of data being transferred.
+    \item The model then generates the jacobians and the amount of data being transferred gets measured.
     \item The jacobians are then used to generate a final image, which gets viewed at the other side of the video conferencing conversation.
 \end{itemize}

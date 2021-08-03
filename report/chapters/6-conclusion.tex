@@ -2,7 +2,7 @@
 
 \section{Discussion}
 Distributed databases like CouchDB operate with eventual consistency. The CAP theorem proves beyond doubt that it is close to impossible 
-to achieve consistency, availability, and partition tolerance simultaneously, unless we manage to build successful quantum communication.
+to achieve consistency, availability, and partition tolerance simultaneously, unless a successful quantum communication system gets built.
 
 Microservices are containerized and isolated, allowing for loosely coupled, highly scalable, and secure architectures. The slight learning curve required 
 to use message passing over shared memory and APIs is large, but beneficial since message passing can be used when building any application, even if it is 
@@ -21,7 +21,7 @@ The only bottleneck for neural network codecs is currently the massive amount of
 network optimizations and cloud processing, but it defeats the purpose of offline functionality and overall reduced network bandwidth usage.
 
 \section{Conclusion}
-Our project delivered the following:
+The project delivered the following:
 \begin{itemize}
     \item A Learning Management System built on an offline-first supported architecture, using file and post caching.
     \item A GraphQL API backend, with greatly reduced network requirements. It can operate independently of a reliable and high bandwidth connection.
@@ -32,19 +32,20 @@ Our project delivered the following:
     \item A Proof of Concept illustrating an implementation of a neural network as a real-time video codec for video conferencing.
 \end{itemize}
 
-Our Proof of Concept successfully used the pre-trained First Order Motion Model (FOMM) to illustrate reduced
+The Proof of Concept successfully used the pre-trained First Order Motion Model (FOMM) to illustrate reduced
 network bandwidth usage. It also showcased the possibility of a neural network being potentially used as a codec for video conferencing whenever computers are capable enough.
 
 \section{Future Scope}
-In hindsight, our project has a large scope. The team feels fulfilled for having arrived at the current state of the project. 
-However, we do not want to stop here. There are a lot of things we would like to do in the future, and eventually, convert this project into a commercially viable product. The project is far from over.
+In hindsight, the project has a large scope. The team feels fulfilled for having arrived at the current state of the project. 
+However, it does not stop here. There are a lot of things that can be done to eventually convert this project into a commercially viable product. The project is far from over.
 
 The first major requirement would be to train a distilled neural network as a video conferencing codec and commercially integrate it into an existing video conferencing application, like Jitsi. The major bottlenecks would include obtaining a video training dataset 
-(the one we needed was licensed and closed behind a paywall, while also being around 300GB in size, and needed manual web scraping), and also a very powerful computer to train multiple networks in parallel. 
+(the KTH dataset was licensed and closed behind a paywall, while also being around 300GB in size. It needed manual web scraping), and also a very powerful computer to train multiple networks in parallel. 
 Ultimately, distilled networks will operate in a highly optimized manner, but require massive amounts of training to do so.
 
-Finally, we noticed that the current industrial standards for building nodeJS microservice applications do not have the level of transparency and distributed nature as would be desired by us. While serverless architectures do exist, they still suffer from various bottlenecks like ephemeral data storage. Libp2p is a standard library created by the IPFS team which allows for cross-protocol communication in a truly distributed manner, 
-allowing for dynamic transfers of location, concurrency, replication, and migration. Libp2p however does not have an official RPC implementation that can be publicly used. We would like to venture into contributing this feature to libp2p as it would help in commercial DevOps.
+Finally, the current industrial standards for building nodeJS microservice applications do not have the level of transparency and distributed nature as would be desired by us. While serverless architectures do exist, they still suffer from various bottlenecks like ephemeral data storage. 
+Libp2p is a standard library created by the IPFS team which allows for cross-protocol communication in a truly distributed manner, 
+allowing for dynamic transfers of location, concurrency, replication, and migration. Libp2p however does not have an official RPC implementation that can be publicly used. The team would like to venture into contributing this feature to libp2p as it would help in commercial DevOps.
 
 GraphQL API allows for very efficient querying of data using resolvers, with support for fine-grained introspection and optimizations like caching on both the server and client. Using GraphQL over a new protocol stack like the upcoming HTTP/3 (QUIC protocol), or simply using protocol buffers over 
-HTTP can greatly improve network throughput and reduce network latency~\cite{ModifiedQUIC}, which means reduced and improved network bandwidth usage. We believe that using a truly distributed architecture at the server-side, and efficient data transfer to the client-side can double our application performance and experience.
+HTTP can greatly improve network throughput and reduce network latency~\cite{ModifiedQUIC}, which means reduced and improved network bandwidth usage. Thus, using a truly distributed architecture at the server-side, and efficient data transfer to the client-side can double the application performance and experience.

@@ -345,8 +345,8 @@ On logout, the JWT is simply discarded by deleting the object from memory.
 
 \section{Data Flow Diagram}
 
-The Data Flow Diagram (refer figure \ref{fig:dfd}) gives clarity on data flowing between all the services in our project. 
-Our system contains three major exposed services:
+The Data Flow Diagram (refer figure \ref{fig:dfd}) gives clarity on data flowing between all the services in the project. 
+The system contains three major exposed services:
 \begin{itemize}
     \item \textbf{Auth Service}, which is mainly used for authentication and JWT session maintenance.
     \item \textbf{File Service}, better known as Storage service, manages the file streams and storage of file attachments.
@@ -366,9 +366,8 @@ GraphQL API is used to parse GraphQL queries and intelligently resolve requests 
 It also composes a digested and optimized version of JSON response messages to reduce the load on the client's network connection.
 
 \textbf{Auth Service} is a data sink, maintaining JWT sessions and user details for both the external clients and internal services. 
-Our approach will be to ensure the authentication of communication between services as well, not trusting a De-militarized zone (DMZ).
-DMZ is a special network barrier added at a network gateway, acting as a firewall and packet inspector. We have assumed not trusting 
-the DMZ.
+The approach will be to ensure the authentication of communication between services as well, not trusting a De-militarized zone (DMZ).
+DMZ is a special network barrier added at a network gateway, acting as a firewall and packet inspector. It is safer to assume the absence of a DMZ.
 
 \textbf{Post Service} communicates with the Auth service, file service, and notification service for validating post authors, attaching files to posts, 
 and publishing notifications.

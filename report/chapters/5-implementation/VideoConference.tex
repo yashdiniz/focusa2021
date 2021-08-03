@@ -1,17 +1,17 @@
 \section{Video Conferencing}
-As part of deliverables for our final year project, we offer a video conferencing solution which aims to operate at 
-lower internet bandwidth connections, by utilising a neural network-based video compression technique. 
-However, for the scope of our project, we produced a proof of concept of the neural network, and a video 
-conferencing platform without neural network integration.
+As part of deliverables for the final year project, a video conferencing solution which aims to operate at 
+lower internet bandwidth connections is promised, by utilising a neural network-based video compression technique. 
+However, for the project's scope, a proof of concept of the neural network, and a video 
+conferencing platform without neural network integration was created.
 
-We focussed on two ways going about developing a video conferencing solution, one being a ground-up approach using peer 
+There are two ways developing a video conferencing solution, one being a ground-up approach using peer 
 to peer communication(Mesh) using webRTC and the other one using a pre-built video conferencing API’s of Jitsi 
 (an open-source video conferencing software).
 
 \subsection{Thought process}
 
 The reason to go for a ground-up approach or an open-source solution was to be able to access the entire code 
-base and therefore be able to integrate our neural network compression technique in the future and also to be able to
+base and therefore be able to integrate the neural network compression technique in the future and also to be able to
 customize the user interface for varied business needs and setups.
 
 % ref(PeerJS documentation): https://peerjs.com/docs.html#peerconnect-options
@@ -21,7 +21,7 @@ In a peer-to-peer connection, one client communicates with another client direct
 For multiple clients though, it becomes necessary to have a central server managing all the connections of clients.
 One approach of using peer-to-peer communication for multiple users/clients is a Mesh approach in which each client sends and receives data streams to and from all the other clients in a room.
 Even though there exist better approaches towards video conferencing including the SFU (Simple Forwarding Unit), 
-mesh approach would give us a worst-case scenario to test out our neural network solution and would become a benchmark for other approaches.
+mesh approach would give us a worst-case scenario to test out the neural network solution and would become a benchmark for other approaches.
 
 \begin{figure}
     \begin{center}
