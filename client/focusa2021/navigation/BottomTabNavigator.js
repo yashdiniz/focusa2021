@@ -55,14 +55,14 @@ function BottomTabNavigator({ token }) {
                     tabBarIcon: ({ color }) => <TabBarIcon name="search" color={color} />,
                 }}
             />
-
+{/* 
             <BottomTab.Screen
                 name="Offline Post"
                 component={OfflinePostNavigator}
                 options={{
                     tabBarIcon: ({ color }) => <TabBarIcon name="bookmark-outline" color={color} />,
                 }}
-            />
+            /> */}
 
             <BottomTab.Screen
                 name="Profile"
@@ -231,23 +231,23 @@ function EditProfileNavigator({ navigation }) {
     );
 }
 
-const OfflinePostStack = createStackNavigator();
-function OfflinePostNavigator({ navigation }) {
-    return (
-        <OfflinePostStack.Navigator>
-            <OfflinePostStack.Screen
-                name="OfflinePostScreen"
-                component={OfflinePost}
-                options={{
-                    headerTitle: "Offline Post",
-                    headerLeft: () => (<TouchableOpacity style={{ paddingStart: 20 }} onPress={() => navigation.goBack()}>
-                        <TabBarIcon name="arrow-back" color="red" />
-                    </TouchableOpacity>)
-                }}
-            />
-        </OfflinePostStack.Navigator>
-    );
-}
+// const OfflinePostStack = createStackNavigator();
+// function OfflinePostNavigator({ navigation }) {
+//     return (
+//         <OfflinePostStack.Navigator>
+//             <OfflinePostStack.Screen
+//                 name="OfflinePostScreen"
+//                 component={OfflinePost}
+//                 options={{
+//                     headerTitle: "Offline Post",
+//                     headerLeft: () => (<TouchableOpacity style={{ paddingStart: 20 }} onPress={() => navigation.goBack()}>
+//                         <TabBarIcon name="arrow-back" color="red" />
+//                     </TouchableOpacity>)
+//                 }}
+//             />
+//         </OfflinePostStack.Navigator>
+//     );
+// }
 
 const VideoConferencingStack = createStackNavigator();
 function VideoConferencingNavigator() {
