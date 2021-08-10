@@ -1,8 +1,8 @@
 import { documentDirectory } from 'expo-file-system';
 
-export const graphQLRealm = 'http://192.168.0.107:1896';
-export const authRealm = 'http://192.168.0.107:1897';
-export const filesRealm = 'http://192.168.0.107:1901';
+export const graphQLRealm = 'http://focusa.duckdns.org:1896';
+export const authRealm = 'http://focusa.duckdns.org:1897';
+export const filesRealm = 'http://focusa.duckdns.org:1901';
 
 // Exporting the REDUX action types from here.
 export const SET_TOKEN = 'SET_TOKEN';
