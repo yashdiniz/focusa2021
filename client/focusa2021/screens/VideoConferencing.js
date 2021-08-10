@@ -7,10 +7,11 @@ import Course from '../components/Course';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { CourseDetailsNavigate } from '../constants/screens';
 import InfoMessage from '../components/InfoMessage';
+import { WebView } from 'react-native-webview';
 
 function VideoConferencing({ navigation, route, token, username }) {
     return (
-        <Text>This is the video conferencing Screen.</Text>
+        <WebView source={{ uri: 'https://jitsi.focusa.duckdns.org/' }} />
     );
 }
 
